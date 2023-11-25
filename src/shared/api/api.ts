@@ -1,8 +1,6 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-import { getToken } from './token';
-
-const BACKEND_URL = 'https://camera-shop.accelerator.pages.academy';
+const BACKEND_URL = 'http://194.58.97.43:8401/api/calc/manufacturers';
 const REQUEST_TIMEOUT = 5000;
 
 export const createAPI = (): AxiosInstance => {
@@ -10,18 +8,6 @@ export const createAPI = (): AxiosInstance => {
     baseURL: BACKEND_URL,
     timeout: REQUEST_TIMEOUT,
   });
-
-  api.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-      const token = getToken();
-
-      if (token && config.headers) {
-        config.headers['x-token'] = token;
-      }
-
-      return config;
-    },
-  );
 
   return api;
 };

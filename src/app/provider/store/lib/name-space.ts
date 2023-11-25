@@ -1,3 +1,5 @@
 export enum NameSpace {
-  Placeholder = 'Placeholder',
+  Manufacturer = 'Manufacturer',
+  Model = 'Model',
+  Specification = 'Specification',
 }
