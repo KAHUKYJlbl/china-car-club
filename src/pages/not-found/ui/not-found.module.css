@@ -1,0 +1,79 @@
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* I. Containers */
+.figure404 {
+  font-size: 6px;
+  margin: auto;
+  padding: 4em 0;
+  width: 64em;
+}
+
+.figcaption404 {
+  color: #7575e2;
+  display: flex;
+  align-content: space-between;
+  flex-wrap: wrap;
+  height: 17em;
+}
+
+.figcaption404 span:before {
+  content: "";
+  display: block;
+  width: 1em;
+  height: 1em;
+  transform: translate(-1em,-1em);
+}
+
+.figcaption404 span {
+  display: inline-block;
+  margin: 0 2em;
+  width: 4em;
+  height: 6em;
+}
+
+.container404 {
+  height: 100vh;
+  padding-top: 35vh;
+}
+
+._0:before {
+  box-shadow: 2em 1em, 3em 1em, 1em 2em, 1em 3em, 1em 4em, 1em 5em, 4em 2em, 4em 3em, 4em 4em, 4em 5em, 2em 4em, 3em 3em, 2em 6em, 3em 6em;
+}
+
+._4:before {
+  box-shadow: 1em 1em, 1em 2em, 1em 3em, 1em 4em, 4em 1em, 4em 2em, 4em 3em, 4em 4em, 2em 4em, 3em 4em, 4em 5em, 4em 6em;
+}
+
+.d:before {
+  box-shadow: 1em 1em, 2em 1em, 3em 1em, 1em 2em, 4em 2em, 1em 3em, 4em 3em, 1em 4em, 4em 4em, 1em 5em, 4em 5em, 1em 6em, 2em 6em, 3em 6em;
+}
+
+.e:before {
+  box-shadow: 1em 1em, 2em 1em, 3em 1em, 4em 1em, 1em 2em, 1em 3em, 2em 3em, 3em 3em, 1em 4em, 1em 5em, 1em 6em, 2em 6em, 3em 6em, 4em 6em;
+}
+
+.f:before {
+  box-shadow: 1em 1em, 2em 1em, 3em 1em, 4em 1em, 1em 2em, 1em 3em, 2em 3em, 3em 3em, 1em 4em, 1em 5em, 1em 6em;
+}
+
+.n:before {
+  box-shadow: 1em 1em, 1em 2em, 1em 3em, 1em 4em, 1em 5em, 1em 6em, 4em 1em, 4em 2em, 4em 3em, 4em 4em, 4em 5em, 4em 6em, 2em 3em, 3em 4em;
+}
+
+.o:before {
+  box-shadow: 2em 1em, 3em 1em, 1em 2em, 1em 3em, 1em 4em, 1em 5em, 4em 2em, 4em 3em, 4em 4em, 4em 5em, 2em 6em, 3em 6em;
+}
+.r:before {
+  box-shadow: 1em 1em, 2em 1em, 3em 1em, 4em 2em, 1em 2em, 1em 3em, 1em 4em, 2em 3em, 3em 3em, 1em 5em, 1em 6em, 4em 4em, 4em 5em, 4em 6em;
+}
+.t:before {
+  box-shadow: 1em 1em, 2em 1em, 3em 1em, 2em 2em, 2em 3em, 2em 4em, 2em 5em, 2em 6em;
+}
+.u:before{
+  box-shadow: 1em 1em, 1em 2em, 1em 3em, 1em 4em, 1em 5em, 4em 1em, 4em 2em, 4em 3em, 4em 4em, 4em 5em, 2em 6em, 3em 6em;
+}
