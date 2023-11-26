@@ -2,6 +2,7 @@ import { Route, createBrowserRouter, createRoutesFromElements } from 'react-rout
 
 import { MainPage } from '../../../../pages/main-page';
 import { NotFound } from '../../../../pages/not-found';
+import { CalcPage } from '../../../../pages/calc-page';
 
 import { AppRoute } from '../lib/routes';
 
@@ -12,6 +13,12 @@ export const AppRouter = createBrowserRouter(
         path={AppRoute.Main}
         element={
           <MainPage />
+        }
+      />
+      <Route
+        path={AppRoute.Calc}
+        element={
+          <CalcPage />
         }
       />
       <Route

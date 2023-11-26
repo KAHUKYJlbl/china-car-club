@@ -1,6 +1,10 @@
+import { Layout } from '../../../widgets/layout'
+
 const CalcPage = (): JSX.Element => {
   return (
-    <div>Calc</div>
+    <Layout>
+      <div>Calc</div>
+    </Layout>
   )
 }
 
