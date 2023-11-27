@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { Gallery } from '../../../shared/ui/gallery';
 import { fetchManufacturers } from '../../../entities/manufacturer';
 import { Currency } from '../../../entities/currency';
 import { ChooseModel } from '../../../features/choose-model';
 import { ChooseSpecification } from '../../../features/choose-specification';
+import { ChooseDelivery } from '../../../features/choose-delivery';
+import { Filter } from '../../../features/filter';
 
 import classes from './calculator.module.sass';
 
@@ -30,15 +33,15 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       <div className={classes.delivery}>
-        Delivery
+        <ChooseDelivery />
       </div>
 
       <div className={classes.filter}>
-        Filter
+        <Filter />
       </div>
 
       <div className={classes.gallery}>
-        Gallery
+        <Gallery />
       </div>
     </div>
   )
