@@ -1,10 +1,22 @@
+import { useEffect } from 'react';
+
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+
 import classes from './calculator.module.sass';
+import { fetchManufacturers } from '../../../entities/manufacturer';
+import { ChooseModel } from '../../../features/choose-model';
 
 export const Calculator = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchManufacturers());
+  }, []);
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.model}>
-        Model
+        <ChooseModel />
       </div>
 
       <div className={classes.price}>
