@@ -21,3 +21,12 @@ export const getManufacturersLoadingStatus = createSelector(
     isFailed: status === FetchStatus.Failed,
   })
 );
+
+export const getManuacturersList = createSelector(
+  getManufacturers,
+  (manufacturers) => (
+    manufacturers?.manufacturers.map((manufacturer) => (
+      manufacturer.name.ru || manufacturer.name.ch
+    ))
+  )
+);

@@ -1,1 +1,1 @@
-export { ChooseModel } from './choose-model';
+export { ChooseModel } from './ui/choose-model';

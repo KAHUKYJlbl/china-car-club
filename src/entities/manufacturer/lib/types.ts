@@ -23,5 +23,5 @@ export type ManufacturerDataType = {
 };
 
 export type ManufacturersType = CarsCountType & {
-  manufacturersList: ManufacturerDataType[];
+  manufacturers: ManufacturerDataType[];
 };
