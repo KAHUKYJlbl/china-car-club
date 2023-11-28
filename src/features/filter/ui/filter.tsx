@@ -31,9 +31,39 @@ export const Filter = (): JSX.Element => {
     dispatch(fetchFiltered(newFilters));
   };
 
+  const handleClearFilterClick = () => {
+    const newFilters = {
+      ...activeFilters,
+      [currentFilter]: [],
+    };
+
+    setActiveFilters((current) => ({
+      ...current,
+      ...newFilters
+    }));
+
+    dispatch(fetchFiltered(newFilters));
+  }
+
+  const handleClearAllFiltersClick = () => {
+    const newFilters = {};
+
+    setActiveFilters(newFilters);
+
+    dispatch(fetchFiltered(newFilters));
+  }
+
   return (
     <div className={classes.wrapper}>
-      <p>Фильтр автомобилей</p>
+      <div className={classes.headerRow}>
+        <p>Фильтр автомобилей</p>
+
+        <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+          <svg width="16" height="16" aria-hidden="true">
+            <use xlinkHref="#x" />
+          </svg>
+        </button>
+      </div>
 
       <div className={classes.row}>
         {
@@ -69,6 +99,12 @@ export const Filter = (): JSX.Element => {
             </div>
           ))
         }
+
+        <button className={classes.xButton} onClick={handleClearFilterClick}>
+          <svg width="16" height="16" aria-hidden="true">
+            <use xlinkHref="#x" />
+          </svg>
+        </button>
       </div>
     </div>
   )
