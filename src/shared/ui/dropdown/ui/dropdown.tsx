@@ -11,6 +11,9 @@ type DropdownProps = {
 export const Dropdown = ({current, placeholder, list}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
 
+  console.log(list);
+  console.log(isOpen);
+
   const toggleOpen = () => {
     setIsOpen((current) => !current);
   }
