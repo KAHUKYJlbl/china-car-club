@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { NameSpace, State } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-const getManufacturers = (state: State) => state[NameSpace.Manufacturer].manufacturers;
+export const getManufacturers = (state: State) => state[NameSpace.Manufacturer].manufacturers;
 
 export const getCarsCount = createSelector(
   getManufacturers,
@@ -25,8 +25,26 @@ export const getManufacturersLoadingStatus = createSelector(
 export const getManuacturersList = createSelector(
   getManufacturers,
   (manufacturers) => (
-    manufacturers?.manufacturers.map((manufacturer) => (
-      manufacturer.name.ru || manufacturer.name.ch
-    ))
+    manufacturers?.manufacturers.map((manufacturer) => ({
+      name: manufacturer.name.ru || manufacturer.name.ch,
+      id: manufacturer.id,
+    }))
+  )
+);
+
+export const getModelsList = createSelector(
+  [
+    getManufacturers,
+    (state: State, id: number | null) => id
+  ],
+  (manufacturers, id) => (
+    id
+    ? manufacturers?.manufacturers.find((manufacturer) => (
+        manufacturer.id === id
+      ))?.seriesList.map((model) => ({
+        name: model.name.ru || model.name.ch,
+        id: model.id,
+      }))
+    : null
   )
 );

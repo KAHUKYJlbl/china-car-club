@@ -3,12 +3,13 @@ import { useState } from 'react';
 import classes from './dropdown.module.sass';
 
 type DropdownProps = {
-  current?: string;
+  current: number | null;
+  setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
-  list: string[];
+  list?: {name: string, id: number}[] | null;
 };
 
-export const Dropdown = ({current, placeholder, list}: DropdownProps): JSX.Element => {
+export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
 
   console.log(list);
@@ -18,13 +19,43 @@ export const Dropdown = ({current, placeholder, list}: DropdownProps): JSX.Eleme
     setIsOpen((current) => !current);
   }
 
-  return (
-    <div className={classes.wrapper}>
-      {current || placeholder}
+  const handleItemClick = (id: number) => {
+    setCurrent(id);
+    setIsOpen(false);
+  }
 
-      <svg className={classes.arrow} onClick={toggleOpen} width="8" height="7" aria-hidden="true">
-        <use xlinkHref="#dropdown" />
-      </svg>
-    </div>
+  return (
+    <>
+      <div className={classes.wrapper}>
+        {
+          (list && current)
+          ? list.find((item) => item.id === current)?.name
+          : placeholder
+        }
+
+        <svg className={classes.arrow} onClick={toggleOpen} width="8" height="7" aria-hidden="true">
+          <use xlinkHref="#dropdown" />
+        </svg>
+
+        {isOpen && list &&
+          <div className={classes.listWrapper}>
+            <ul className={classes.list}>
+              {
+                list.map((item) => (
+                  <li
+                    key={item.id}
+                    className={classes.listItem}
+                    onClick={() => handleItemClick(item.id)}
+                  >
+                    {item.name}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        }
+      </div>
+
+    </>
   )
 }
