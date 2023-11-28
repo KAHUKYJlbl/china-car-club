@@ -44,6 +44,11 @@ export const Filter = (): JSX.Element => {
               onClick={() => setCurrentFilter(filter as FilterId)}
             >
               { FILTERS[filter as FilterId].name }
+
+              {
+                activeFilters[filter as FilterId] !== undefined
+                && activeFilters[filter as FilterId]?.length !== 0
+                && <div className={classes.activeFilter} />}
             </div>
           ))
         }
@@ -55,7 +60,7 @@ export const Filter = (): JSX.Element => {
             <div
               key={element.elementId}
               className={cn(
-                classes.filterButton,
+                classes.filterElementButton,
                 { [classes.active]: activeFilters[currentFilter]?.includes( element.elementId ) }
               )}
               onClick={() => handleActiveFiltersClick(currentFilter, element.elementId)}
