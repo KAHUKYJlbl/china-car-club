@@ -3,9 +3,10 @@ import { Navigate } from 'react-router-dom';
 import { AppRoute } from '../../../app/provider/router';
 
 import classes from './oops.module.sass';
+import { fetchManufacturers } from '../../../entities/manufacturer';
 
 type OopsProps = {
-  type: 'error-boundary';
+  type: 'error-boundary' | 'manufacturers';
 }
 
 export function Oops({type}: OopsProps): JSX.Element {

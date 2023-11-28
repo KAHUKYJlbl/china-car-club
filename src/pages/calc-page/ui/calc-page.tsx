@@ -1,6 +1,14 @@
+import { Calculator } from '../../../widgets/calculator';
+import { Header } from '../../../widgets/header';
+import { Layout } from '../../../widgets/layout'
+
 const CalcPage = (): JSX.Element => {
   return (
-    <div>Calc</div>
+    <Layout>
+      <Header />
+
+      <Calculator />
+    </Layout>
   )
 }
 
