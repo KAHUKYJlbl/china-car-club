@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
+import { fetchFiltered } from './api-actions/fetch-filtered';
 import { fetchManufacturers } from './api-actions/fetch-manufacturers';
 import { ManufacturersType } from '../lib/types';
 
@@ -32,5 +33,15 @@ export const manufacturerSlice = createSlice({
     .addCase(fetchManufacturers.rejected, (state) => {
       state.manufacturersLoadingStatus = FetchStatus.Failed;
     })
+    .addCase(fetchFiltered.fulfilled, (state, action) => {
+      state.manufacturers = action.payload;
+      state.manufacturersLoadingStatus = FetchStatus.Success;
+    })
+    .addCase(fetchFiltered.pending, (state) => {
+      state.manufacturersLoadingStatus = FetchStatus.Pending;
+    })
+    .addCase(fetchFiltered.rejected, (state) => {
+      state.manufacturersLoadingStatus = FetchStatus.Failed;
+    });
   },
 });

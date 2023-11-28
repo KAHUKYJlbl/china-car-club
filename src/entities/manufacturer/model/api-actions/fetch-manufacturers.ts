@@ -11,7 +11,7 @@ export const fetchManufacturers = createAsyncThunk<ManufacturersType, undefined,
   state: State;
   extra: AxiosInstance;
 }>(
-  'Manufacturer/getManufacturers',
+  'Manufacturer/fetchManufacturers',
   async (_arg, {extra: axios}) => {
     try {
       const { data } = await axios.get<ManufacturersType>(APIRoute.Catalog);

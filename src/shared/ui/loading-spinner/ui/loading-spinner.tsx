@@ -5,16 +5,16 @@ const spinnerTypes = {
   page: {
     height: '240',
     width: '240',
-    color: '#7575e2',
+    color: '#7E7E7E',
     wrapperStyle: {
       height: '100vh',
     },
   },
   widget: {
-    height: '240',
-    width: '240',
+    height: '50',
+    width: '50',
     wrapperHeight: '100%',
-    color: '#7575e2',
+    color: '#7E7E7E',
     wrapperStyle: {
       padding: '40px',
       height: '100%'
