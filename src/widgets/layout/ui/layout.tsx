@@ -13,7 +13,9 @@ type LayoutProps = {
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>): JSX.Element => {
   return (
     <div className={classes.wrapper}>
-      <Helmet><title>{title}</title></Helmet>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
 
       <SvgSprite />
 
