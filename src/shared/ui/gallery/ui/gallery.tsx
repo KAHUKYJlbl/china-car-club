@@ -5,7 +5,7 @@ export const Gallery = (): JSX.Element => {
   return (
     <div
       className={classes.wrapper}
-      style={{backgroundImage: "url('./src/assets/images/gallery/car.jpg')"}}
+      style={{backgroundImage: "url('./images/gallery/car.jpg')"}}
     >
       <div>
         <GalleryPagination count={6} />
