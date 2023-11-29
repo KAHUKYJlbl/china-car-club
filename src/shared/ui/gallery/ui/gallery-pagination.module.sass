@@ -1,3 +1,5 @@
+@use '../../../../assets/styles/_variables' as *
+
 .wrapper
   display: flex
   gap: 16px
@@ -15,5 +17,10 @@
   height: 4px
   background-color: white
 
+  cursor: pointer
+
   @media screen and (max-width: 640px)
     height: 2px
+
+.current
+  background-color: $primary
