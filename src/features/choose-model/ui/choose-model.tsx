@@ -21,6 +21,8 @@ export const ChooseModel = (): JSX.Element => {
   const manufacturersList = useAppSelector(getManuacturersList);
   const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
 
+  useEffect(() => {setCurrentModel(null)}, [currentManufacturer]);
+
   useEffect(() => {
     setCurrentManufacturer(null);
     setCurrentModel(null);
