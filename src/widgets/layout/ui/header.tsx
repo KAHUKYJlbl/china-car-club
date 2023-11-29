@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import classes from './header.module.sass';
 
 export const Header = (): JSX.Element => {
-  const isDesktop = useMediaQuery({ query: '(min-width: 1280px)' });
+  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   return (
