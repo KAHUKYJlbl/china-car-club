@@ -31,9 +31,39 @@ export const Filter = (): JSX.Element => {
     dispatch(fetchFiltered(newFilters));
   };
 
+  const handleClearFilterClick = () => {
+    const newFilters = {
+      ...activeFilters,
+      [currentFilter]: [],
+    };
+
+    setActiveFilters((current) => ({
+      ...current,
+      ...newFilters
+    }));
+
+    dispatch(fetchFiltered(newFilters));
+  }
+
+  const handleClearAllFiltersClick = () => {
+    const newFilters = {};
+
+    setActiveFilters(newFilters);
+
+    dispatch(fetchFiltered(newFilters));
+  }
+
   return (
     <div className={classes.wrapper}>
-      <p>Фильтр автомобилей</p>
+      <div className={classes.headerRow}>
+        <p>Фильтр автомобилей</p>
+
+        <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+          <svg width="16" height="16" aria-hidden="true">
+            <use xlinkHref="#x" />
+          </svg>
+        </button>
+      </div>
 
       <div className={classes.row}>
         {
@@ -44,6 +74,11 @@ export const Filter = (): JSX.Element => {
               onClick={() => setCurrentFilter(filter as FilterId)}
             >
               { FILTERS[filter as FilterId].name }
+
+              {
+                activeFilters[filter as FilterId] !== undefined
+                && activeFilters[filter as FilterId]?.length !== 0
+                && <div className={classes.activeFilter} />}
             </div>
           ))
         }
@@ -55,7 +90,7 @@ export const Filter = (): JSX.Element => {
             <div
               key={element.elementId}
               className={cn(
-                classes.filterButton,
+                classes.filterElementButton,
                 { [classes.active]: activeFilters[currentFilter]?.includes( element.elementId ) }
               )}
               onClick={() => handleActiveFiltersClick(currentFilter, element.elementId)}
@@ -64,6 +99,12 @@ export const Filter = (): JSX.Element => {
             </div>
           ))
         }
+
+        <button className={classes.xButton} onClick={handleClearFilterClick}>
+          <svg width="16" height="16" aria-hidden="true">
+            <use xlinkHref="#x" />
+          </svg>
+        </button>
       </div>
     </div>
   )

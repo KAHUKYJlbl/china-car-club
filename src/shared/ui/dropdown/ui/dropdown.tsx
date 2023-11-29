@@ -1,30 +1,62 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import classes from './dropdown.module.sass';
+import useClickOutside from '../../../lib/hooks/use-click-outside';
 
 type DropdownProps = {
-  current?: string;
+  current: number | null;
+  setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
-  list: string[];
+  list?: {name: string, id: number}[] | null;
 };
 
-export const Dropdown = ({current, placeholder, list}: DropdownProps): JSX.Element => {
+export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
-  console.log(list);
-  console.log(isOpen);
+  useClickOutside(listRef, () => setIsOpen(false));
 
   const toggleOpen = () => {
     setIsOpen((current) => !current);
   }
 
-  return (
-    <div className={classes.wrapper}>
-      {current || placeholder}
+  const handleItemClick = (id: number) => {
+    setCurrent(id);
+    setIsOpen(false);
+  }
 
-      <svg className={classes.arrow} onClick={toggleOpen} width="8" height="7" aria-hidden="true">
-        <use xlinkHref="#dropdown" />
-      </svg>
-    </div>
+  return (
+    <>
+      <div className={classes.wrapper}>
+        {
+          (list && current)
+          ? list.find((item) => item.id === current)?.name
+          : placeholder
+        }
+
+        <svg className={classes.arrow} onClick={toggleOpen} width="8" height="7" aria-hidden="true">
+          <use xlinkHref="#dropdown" />
+        </svg>
+
+        {isOpen && list && Boolean(list.length) &&
+          <div className={classes.listWrapper} ref={listRef}>
+            <ul className={classes.list}>
+              {
+                list.map((item) => (
+                  <li
+                    key={item.id}
+                    className={classes.listItem}
+                    onClick={() => handleItemClick(item.id)}
+                  >
+                    {item.name}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        }
+      </div>
+
+    </>
   )
 }
