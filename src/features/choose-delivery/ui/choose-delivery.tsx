@@ -13,8 +13,18 @@ export const ChooseDelivery = (): JSX.Element => {
       </p>
 
       <div className={classes.controls}>
-        <Dropdown current={undefined} placeholder='Страна получения авто' list={['Россия']} />
-        <Dropdown current={undefined} placeholder='Город получения авто' list={['Москва']} />
+        <Dropdown
+          current={null}
+          setCurrent={() => null}
+          placeholder='Страна получения авто'
+          list={[{ name:'Россия', id: 1 }]}
+        />
+        <Dropdown
+          current={null}
+          setCurrent={() => null}
+          placeholder='Город получения авто'
+          list={[{ name:'Москва', id: 1 }]}
+        />
       </div>
 
       <button className={classes.button}>Быстрый онлайн-расчет под ключ</button>

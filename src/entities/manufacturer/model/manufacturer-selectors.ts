@@ -35,7 +35,7 @@ export const getManuacturersList = createSelector(
 export const getModelsList = createSelector(
   [
     getManufacturers,
-    (state: State, id: number | null) => id
+    (_state: State, id: number | null) => id
   ],
   (manufacturers, id) => (
     id
