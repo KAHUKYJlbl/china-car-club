@@ -32,6 +32,7 @@ export const Gallery = (): JSX.Element => {
 
   return (
     <div
+      key={currentImage}
       className={classes.wrapper}
       style={{backgroundImage: `url('./images/gallery/car-${currentImage + 1}.jpg')`}}
       {...handlers}
