@@ -20,8 +20,16 @@ export const Calculator = (): JSX.Element => {
 
   return (
     <div className={classes.wrapper}>
+      <div className={classes.gallery}>
+        <Gallery />
+      </div>
+
       <div className={classes.model}>
         <ChooseModel />
+      </div>
+
+      <div className={classes.filter}>
+        <Filter />
       </div>
 
       <div className={classes.price}>
@@ -34,14 +42,6 @@ export const Calculator = (): JSX.Element => {
 
       <div className={classes.delivery}>
         <ChooseDelivery />
-      </div>
-
-      <div className={classes.filter}>
-        <Filter />
-      </div>
-
-      <div className={classes.gallery}>
-        <Gallery />
       </div>
     </div>
   )

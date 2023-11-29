@@ -26,6 +26,10 @@ export const ChooseModel = (): JSX.Element => {
     setCurrentModel(null);
   }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
 
+  useEffect(() => {
+    setCurrentModel(null);
+  }, [currentManufacturer]);
+
   if (loadingStatus.isLoading || !manufacturersList) {
     return <LoadingSpinner spinnerType='widget' />
   }
