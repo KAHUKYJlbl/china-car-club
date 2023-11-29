@@ -13,11 +13,14 @@ type DropdownProps = {
 export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const fieldRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(listRef, () => setIsOpen(false));
+  useClickOutside([listRef, fieldRef], () => setIsOpen(false));
 
   const toggleOpen = () => {
-    setIsOpen((current) => !current);
+    if ( list && Boolean(list.length) ) {
+      setIsOpen((current) => !current);
+    }
   }
 
   const handleItemClick = (id: number) => {
@@ -27,18 +30,25 @@ export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps
 
   return (
     <>
-      <div className={classes.wrapper}>
+      <div className={classes.wrapper} ref={fieldRef}>
         {
           (list && current)
           ? list.find((item) => item.id === current)?.name
           : placeholder
         }
 
-        <svg className={classes.arrow} onClick={toggleOpen} width="8" height="7" aria-hidden="true">
+        <svg
+          className={classes.arrow}
+          onClick={toggleOpen}
+          width="8"
+          height="7"
+          aria-hidden="true"
+          style={isOpen ? {transform: 'rotate(180deg)', transitionDuration: '100ms'} : {transitionDuration: '100ms'}}
+        >
           <use xlinkHref="#dropdown" />
         </svg>
 
-        {isOpen && list && Boolean(list.length) &&
+        {isOpen && list &&
           <div className={classes.listWrapper} ref={listRef}>
             <ul className={classes.list}>
               {
