@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import classes from './dropdown.module.sass';
+import useClickOutside from '../../../lib/hooks/use-click-outside';
 
 type DropdownProps = {
   current: number | null;
@@ -11,9 +12,9 @@ type DropdownProps = {
 
 export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
-  console.log(list);
-  console.log(isOpen);
+  useClickOutside(listRef, () => setIsOpen(false));
 
   const toggleOpen = () => {
     setIsOpen((current) => !current);
@@ -37,8 +38,8 @@ export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps
           <use xlinkHref="#dropdown" />
         </svg>
 
-        {isOpen && list &&
-          <div className={classes.listWrapper}>
+        {isOpen && list && Boolean(list.length) &&
+          <div className={classes.listWrapper} ref={listRef}>
             <ul className={classes.list}>
               {
                 list.map((item) => (
