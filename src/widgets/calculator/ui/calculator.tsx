@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { Gallery } from '../../../shared/ui/gallery';
@@ -13,6 +13,7 @@ import classes from './calculator.module.sass';
 
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const [ currentModel, setCurrentModel ] = useState<number | null>(null);
 
   useEffect(() => {
     dispatch(fetchManufacturers());
@@ -25,7 +26,7 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       <div className={classes.model}>
-        <ChooseModel />
+        <ChooseModel currentModel={currentModel} setCurrentModel={setCurrentModel} />
       </div>
 
       <div className={classes.filter}>
@@ -33,7 +34,7 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       <div className={classes.price}>
-        <ChooseSpecification />
+        <ChooseSpecification currentModel={currentModel} />
       </div>
 
       <div className={classes.currency}>

@@ -1,6 +1,6 @@
 import { FilterId, FilterType } from './types';
 
-export const FILTERS: Record<FilterId, FilterType> = {
+export const FILTERS: Partial<Record<FilterId, FilterType>> = {
   price: {
     name: 'Цена в России',
     elements: [
@@ -168,6 +168,31 @@ export const FILTERS: Record<FilterId, FilterType> = {
       {
         elementId: 5,
         name: 'Китай',
+      },
+    ],
+  },
+  other: {
+    name: 'Отличие',
+    elements: [
+      {
+        filterId: 'seats',
+        elementId: 2,
+        name: 'Больше 5 мест',
+      },
+      {
+        filterId: 'powerReserve',
+        elementId: 3,
+        name: 'Запас хода 600+ км',
+      },
+      {
+        filterId: 'acceleration',
+        elementId: 4,
+        name: '0-100 до 7 секунд',
+      },
+      {
+        filterId: 'date',
+        elementId: 5,
+        name: 'Свежее поколение',
       },
     ],
   },

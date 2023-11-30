@@ -73,12 +73,22 @@ export const Filter = (): JSX.Element => {
               className={cn(classes.filterButton, {[classes.active]: filter === currentFilter})}
               onClick={() => setCurrentFilter(filter as FilterId)}
             >
-              { FILTERS[filter as FilterId].name }
+              { FILTERS[filter as FilterId]?.name }
 
               {
-                activeFilters[filter as FilterId] !== undefined
-                && activeFilters[filter as FilterId]?.length !== 0
-                && <div className={classes.activeFilter} />}
+                ((
+                  activeFilters[filter as FilterId] !== undefined
+                  && activeFilters[filter as FilterId]?.length !== 0
+                )
+                || (filter === 'other' && FILTERS.other?.elements.some((element) =>
+                  (
+                    element.filterId
+                    && (activeFilters[element.filterId] !== undefined)
+                    && (activeFilters[element.filterId]?.length !== 0)
+                  )
+                )))
+                && <div className={classes.activeFilter} />
+              }
             </div>
           ))
         }
@@ -86,14 +96,21 @@ export const Filter = (): JSX.Element => {
 
       <div className={classes.row}>
         {
-          FILTERS[currentFilter].elements.map((element) => (
+          FILTERS[currentFilter]?.elements.map((element) => (
             <div
               key={element.elementId}
               className={cn(
                 classes.filterElementButton,
-                { [classes.active]: activeFilters[currentFilter]?.includes( element.elementId ) }
+                { [classes.active]: activeFilters[currentFilter]?.includes( element.elementId ) },
+                { [classes.active]:
+                  (
+                    currentFilter === 'other'
+                    && element.filterId
+                    && activeFilters[element.filterId]?.some((filter) => filter === element.elementId)
+                  )
+                }
               )}
-              onClick={() => handleActiveFiltersClick(currentFilter, element.elementId)}
+              onClick={() => handleActiveFiltersClick(element.filterId || currentFilter, element.elementId)}
             >
               { element.name }
             </div>

@@ -37,14 +37,17 @@ export const Dropdown = ({current, setCurrent, placeholder, list, disabled = fal
         className={classes.wrapper}
         ref={fieldRef}
         style={disabled ? {color: "lightgrey"} : {}}
-        onClick={disabled ? () => null : toggleOpen}>
-        {
-          (list && current)
-          ? list.find((item) => item.id === current)?.name
-          : disabled
-            ? 'Загрузка ...'
-            : placeholder
-        }
+        onClick={disabled ? () => null : toggleOpen}
+      >
+        <p className={classes.currentElement}>
+          {
+            (list && current)
+            ? list.find((item) => item.id === current)?.name
+            : disabled
+              ? 'Загрузка ...'
+              : placeholder
+          }
+        </p>
 
         <svg
           className={classes.arrow}

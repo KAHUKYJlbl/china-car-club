@@ -15,10 +15,14 @@ import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import classes from './choose-model.module.sass';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
-export const ChooseModel = (): JSX.Element => {
+type ChooseModelProps = {
+  currentModel: number | null;
+  setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+}
+
+export const ChooseModel = ({currentModel, setCurrentModel}: ChooseModelProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
-  const [ currentModel, setCurrentModel ] = useState<number | null>(null);
 
   const carsCount = useAppSelector(getCarsCount);
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
