@@ -6,19 +6,19 @@ import { APIRoute } from '../../../../shared/api/routes';
 
 import { ManufacturersWithSpecsCountType } from '../../lib/types';
 
-export const fetchManufacturers = createAsyncThunk<ManufacturersWithSpecsCountType, undefined, {
+export const fetchManufacturersWithSpectsCount = createAsyncThunk<ManufacturersWithSpecsCountType, number, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
-  'Manufacturer/fetchManufacturers',
-  async (_arg, {extra: axios}) => {
+  'Manufacturer/fetchManufacturersWithSpecsCount',
+  async (manufacturerId, {extra: axios}) => {
     try {
-      const { data } = await axios.get<ManufacturersWithSpecsCountType>(APIRoute.Catalog);
+      const { data } = await axios.get<ManufacturersWithSpecsCountType>(APIRoute.Filters + APIRoute.Models + manufacturerId);
 
       return data;
     } catch (err) {
-      throw Error('Unable to fetch Manufacturers');
+      throw Error('Unable to fetch Manufacturers with Specs');
     }
   },
 );

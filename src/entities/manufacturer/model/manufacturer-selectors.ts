@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+
 import { NameSpace, State } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
@@ -22,12 +23,22 @@ export const getManufacturersLoadingStatus = createSelector(
   })
 );
 
+export const getSpecsLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Manufacturer].specsLoadingStatus,
+  (status) => ({
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+
 export const getManuacturersList = createSelector(
   getManufacturers,
   (manufacturers) => (
-    manufacturers?.manufacturers.map((manufacturer) => ({
+    manufacturers?.manufacturers?.map((manufacturer) => ({
       name: manufacturer.name.ru || manufacturer.name.ch,
       id: manufacturer.id,
+      sublistLength: manufacturer.seriesList.length,
     }))
   )
 );
@@ -39,11 +50,12 @@ export const getModelsList = createSelector(
   ],
   (manufacturers, id) => (
     id
-    ? manufacturers?.manufacturers.find((manufacturer) => (
+    ? manufacturers?.manufacturers?.find((manufacturer) => (
         manufacturer.id === id
       ))?.seriesList.map((model) => ({
         name: model.name.ru || model.name.ch,
         id: model.id,
+        sublistLength: manufacturers.specificationsCountBySeries ? manufacturers.specificationsCountBySeries[model.id] : null,
       }))
     : null
   )

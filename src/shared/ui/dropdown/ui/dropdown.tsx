@@ -7,10 +7,11 @@ type DropdownProps = {
   current: number | null;
   setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
-  list?: {name: string, id: number}[] | null;
+  list?: {name: string, id: number, sublistLength?: number | null}[] | null;
+  disabled?: boolean;
 };
 
-export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps): JSX.Element => {
+export const Dropdown = ({current, setCurrent, placeholder, list, disabled = false}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -23,23 +24,30 @@ export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps
     }
   }
 
-  const handleItemClick = (id: number) => {
+  const handleItemClick = (id: number, e: React.MouseEvent<HTMLLIElement>) => {
+    e.stopPropagation();
+
     setCurrent(id);
     setIsOpen(false);
   }
 
   return (
     <>
-      <div className={classes.wrapper} ref={fieldRef}>
+      <div
+        className={classes.wrapper}
+        ref={fieldRef}
+        style={disabled ? {color: "lightgrey"} : {}}
+        onClick={disabled ? () => null : toggleOpen}>
         {
           (list && current)
           ? list.find((item) => item.id === current)?.name
-          : placeholder
+          : disabled
+            ? 'Загрузка ...'
+            : placeholder
         }
 
         <svg
           className={classes.arrow}
-          onClick={toggleOpen}
           width="8"
           height="7"
           aria-hidden="true"
@@ -56,9 +64,9 @@ export const Dropdown = ({current, setCurrent, placeholder, list}: DropdownProps
                   <li
                     key={item.id}
                     className={classes.listItem}
-                    onClick={() => handleItemClick(item.id)}
+                    onClick={(e) => handleItemClick(item.id, e)}
                   >
-                    {item.name}
+                    {item.name + ( item.sublistLength ? ` (${item.sublistLength})` : '' )}
                   </li>
                 ))
               }

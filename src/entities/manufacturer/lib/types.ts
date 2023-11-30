@@ -1,7 +1,7 @@
 export type CarsCountType = {
-  manufacturersCount: number;
-  seriesCount: number;
-  specificationsCount: number;
+  manufacturersCount?: number;
+  seriesCount?: number;
+  specificationsCount?: number;
 };
 
 export type seriesDataType = {
@@ -23,5 +23,9 @@ export type ManufacturerDataType = {
 };
 
 export type ManufacturersType = CarsCountType & {
-  manufacturers: ManufacturerDataType[];
+  manufacturers?: ManufacturerDataType[];
+};
+
+export type ManufacturersWithSpecsCountType = ManufacturersType & {
+  specificationsCountBySeries?: Record<number, number> | null;
 };

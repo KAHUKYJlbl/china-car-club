@@ -5,9 +5,9 @@ import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 import { FilterId } from '../../../../features/filter';
 
-import { ManufacturersType } from '../../lib/types';
+import { ManufacturersWithSpecsCountType } from '../../lib/types';
 
-export const fetchFiltered = createAsyncThunk<ManufacturersType, Partial<Record<FilterId, number[]>>, {
+export const fetchFiltered = createAsyncThunk<ManufacturersWithSpecsCountType, Partial<Record<FilterId, number[]>>, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
@@ -24,7 +24,7 @@ export const fetchFiltered = createAsyncThunk<ManufacturersType, Partial<Record<
       ).join('&');
 
     try {
-      const { data } = await axios.get<ManufacturersType>(`${APIRoute.Filters}${filtersQuery}`);
+      const { data } = await axios.get<ManufacturersWithSpecsCountType>(`${APIRoute.Filters}${filtersQuery}`);
 
       return data;
     } catch (err) {
