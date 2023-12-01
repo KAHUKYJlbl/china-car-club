@@ -11,16 +11,18 @@ import {
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector'
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-
-import classes from './choose-model.module.sass';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+
+import { FilterId } from '../../filter/lib/types';
+import classes from './choose-model.module.sass';
 
 type ChooseModelProps = {
   currentModel: number | null;
+  activeFilters: Partial< Record< FilterId, number[] > >;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-export const ChooseModel = ({currentModel, setCurrentModel}: ChooseModelProps): JSX.Element => {
+export const ChooseModel = ({currentModel, setCurrentModel, activeFilters}: ChooseModelProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
 
@@ -34,7 +36,10 @@ export const ChooseModel = ({currentModel, setCurrentModel}: ChooseModelProps): 
     setCurrentModel(null);
 
     if (currentManufacturer) {
-      dispatch(fetchManufacturersWithSpectsCount(currentManufacturer));
+      dispatch(fetchManufacturersWithSpectsCount({
+        manufacturerId: currentManufacturer,
+        filters: activeFilters,
+      }));
     }
   }, [currentManufacturer]);
 

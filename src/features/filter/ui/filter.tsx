@@ -8,10 +8,14 @@ import { FILTERS } from '../lib/filters';
 import { FilterId } from '../lib/types';
 import classes from './filter.module.sass';
 
-export const Filter = (): JSX.Element => {
+type FolterProps = {
+  activeFilters: Partial< Record< FilterId, number[] > >;
+  setActiveFilters: React.Dispatch<React.SetStateAction<Partial<Record<FilterId, number[]>>>>;
+}
+
+export const Filter = ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
-  const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
 
   const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
     const newFilters = {

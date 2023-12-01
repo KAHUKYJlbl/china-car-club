@@ -12,7 +12,7 @@ export const getSpecifications = createSelector(
 );
 
 export const getSpecificationsLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.Manufacturer].manufacturersLoadingStatus,
+  (state: State): FetchStatus => state[NameSpace.Specification].specificationsLoadingStatus,
   (status) => ({
     isLoading: [FetchStatus.Idle, FetchStatus.Pending].includes(status),
     isSuccess: status === FetchStatus.Success,

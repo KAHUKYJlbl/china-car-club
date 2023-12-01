@@ -11,12 +11,14 @@ import {
 } from '../../../entities/specification';
 
 import classes from './choose-specification.module.sass';
+import { FilterId } from '../../filter';
 
 type ChooseSpecificationProps = {
   currentModel: number | null;
+  activeFilters: Partial< Record< FilterId, number[] > >;
 };
 
-export const ChooseSpecification = ({currentModel}: ChooseSpecificationProps): JSX.Element => {
+export const ChooseSpecification = ({ currentModel, activeFilters }: ChooseSpecificationProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
@@ -26,14 +28,17 @@ export const ChooseSpecification = ({currentModel}: ChooseSpecificationProps): J
     SetCurrentSpecification(null);
 
     if (currentModel) {
-      dispatch(fetchSpecifications(currentModel));
+      dispatch(fetchSpecifications({
+        modelId: currentModel,
+        filters: activeFilters,
+      }));
     }
   }, [currentModel]);
 
   return (
     <div className={classes.wrapper}>
       {
-        ( currentModel && specificationsLoadingStatus.isSuccess )
+        currentModel
         ? <>
           <Dropdown
             current={currentSpecification}

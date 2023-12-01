@@ -7,12 +7,13 @@ import { Currency } from '../../../entities/currency';
 import { ChooseModel } from '../../../features/choose-model';
 import { ChooseSpecification } from '../../../features/choose-specification';
 import { ChooseDelivery } from '../../../features/choose-delivery';
-import { Filter } from '../../../features/filter';
+import { Filter, FilterId } from '../../../features/filter';
 
 import classes from './calculator.module.sass';
 
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
 
   useEffect(() => {
@@ -26,15 +27,15 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       <div className={classes.model}>
-        <ChooseModel currentModel={currentModel} setCurrentModel={setCurrentModel} />
+        <ChooseModel activeFilters={activeFilters} currentModel={currentModel} setCurrentModel={setCurrentModel} />
       </div>
 
       <div className={classes.filter}>
-        <Filter />
+        <Filter activeFilters={activeFilters} setActiveFilters={setActiveFilters} />
       </div>
 
       <div className={classes.price}>
-        <ChooseSpecification currentModel={currentModel} />
+        <ChooseSpecification currentModel={currentModel} activeFilters={activeFilters} />
       </div>
 
       <div className={classes.currency}>

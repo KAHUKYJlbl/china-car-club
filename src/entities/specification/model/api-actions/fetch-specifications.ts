@@ -3,18 +3,30 @@ import { AxiosInstance } from 'axios';
 
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
+import { FilterId } from '../../../../features/filter';
+import { getFiltersQuery } from '../../../manufacturer';
+
 import { ManufacturersWithSpecificationsType, SpecificationType } from '../../lib/types';
 
 
-export const fetchSpecifications = createAsyncThunk<SpecificationType[], number, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
+export const fetchSpecifications = createAsyncThunk<
+  SpecificationType[],
+  {
+    modelId: number;
+    filters: Partial< Record< FilterId, number[] > >;
+  },
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+> (
   'Specifications/fetchSpecifications',
-  async (modelId, {extra: axios}) => {
+  async ( { modelId, filters }, {extra: axios}) => {
     try {
-      const { data: { specificationsBySeriesId } } = await axios.get<ManufacturersWithSpecificationsType>(APIRoute.Filters + APIRoute.Specifications + modelId);
+      const { data: { specificationsBySeriesId } } = await axios.get<ManufacturersWithSpecificationsType>(
+          APIRoute.Filters + APIRoute.Specifications + modelId + '&' + getFiltersQuery(filters)
+        );
 
       return specificationsBySeriesId;
     } catch (err) {
