@@ -23,7 +23,7 @@ export const Calculator = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery />
+        <Gallery isPrice={true} />
       </div>
 
       <div className={classes.model}>

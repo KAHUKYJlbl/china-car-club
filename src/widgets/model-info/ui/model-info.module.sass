@@ -1,3 +1,5 @@
+@use '../../../assets/styles/_variables' as *
+
 .wrapper
   display: grid
   grid-template-rows: min-content 8fr 6fr 1fr 4fr
@@ -9,3 +11,45 @@
   @media screen and (max-width: 1280px)
     display: flex
     flex-direction: column
+
+.gallery
+  grid-area: 2 / 2 / 6 / 3
+
+  border-radius: 16px
+  background-color: $secondary
+
+.info
+  grid-area: 1 / 2 / 2 / 3
+
+  border-radius: 16px
+  background-color: $primary
+
+.specification
+  grid-area: 1 / 1 / 2 / 2
+
+  border-radius: 16px
+  background-color: $primary
+
+.prices
+  grid-area: 2 / 1 / 3 / 2
+
+  border-radius: 16px
+  background-color: $primary
+
+.add-options
+  grid-area: 3 / 1 / 4 / 2
+
+  border-radius: 16px
+  background-color: $secondary
+
+.currency
+  grid-area: 4 / 1 / 5 / 2
+
+  border-radius: 16px
+  background-color: $secondary
+
+.buttons
+  grid-area: 5 / 1 / 6 / 2
+
+  border-radius: 16px
+  background-color: $secondary
