@@ -38,7 +38,7 @@ export const Gallery = ({ isPrice = false }: GalleryProps): JSX.Element => {
     <div
       key={currentImage}
       className={classes.wrapper}
-      style={{backgroundImage: `url('./images/gallery/car-${currentImage + 1}.jpg')`}}
+      style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
       {...handlers}
     >
       <div>

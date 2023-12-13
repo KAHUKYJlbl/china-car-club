@@ -1,8 +1,9 @@
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
 import { Gallery } from '../../../shared/ui/gallery';
-import { InfoBar } from '../../../shared/ui/info-bar';
 
+import { InfoBar } from './info-bar';
+import { Prices } from './prices';
 import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
@@ -20,11 +21,11 @@ export const ModelInfo = (): JSX.Element => {
         <SpecificationInfo />
       </div>
 
-      {/* <div className={classes.prices}>
+      <div className={classes.prices}>
         <Prices />
       </div>
 
-      <div className={classes.addOptions}>
+      {/* <div className={classes.addOptions}>
         <AddOptions />
       </div> */}
 

@@ -83,6 +83,7 @@
   "devDependencies": {
     "@types/humps": "^2.0.6",
     "@types/js-cookie": "^3.0.3",
+    "@types/node": "^20.10.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-helmet-async": "^1.0.3",
