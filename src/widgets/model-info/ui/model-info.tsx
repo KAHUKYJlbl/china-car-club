@@ -5,6 +5,7 @@ import { Gallery } from '../../../shared/ui/gallery';
 
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
+import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
@@ -34,9 +35,9 @@ export const ModelInfo = (): JSX.Element => {
         <Currency />
       </div>
 
-      {/* <div className={classes.buttons}>
+      <div className={classes.buttons}>
         <OrderButtons />
-      </div> */}
+      </div>
     </div>
   )
 }
