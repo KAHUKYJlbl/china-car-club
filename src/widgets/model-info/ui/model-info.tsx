@@ -1,3 +1,4 @@
+import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
 import { Gallery } from '../../../shared/ui/gallery';
@@ -25,9 +26,9 @@ export const ModelInfo = (): JSX.Element => {
         <Prices />
       </div>
 
-      {/* <div className={classes.addOptions}>
-        <AddOptions />
-      </div> */}
+      <div className={classes.addOptions}>
+        <ChooseOptions />
+      </div>
 
       <div className={classes.currency}>
         <Currency />
