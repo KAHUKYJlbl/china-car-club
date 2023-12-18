@@ -16,7 +16,7 @@ export const Prices = (): JSX.Element => {
 
         <div className={classes.row}>
           <p>Цена под ключ на границе Китая</p>
-          <p>0 ₽</p>
+          <p>000 000 000 ₽</p>
         </div>
 
         <div className={classes.row}>

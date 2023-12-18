@@ -1,3 +1,5 @@
+import { useMediaQuery } from 'react-responsive';
+
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
@@ -9,15 +11,20 @@ import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
+  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
         <Gallery />
       </div>
 
-      <div className={classes.info}>
-        <InfoBar />
-      </div>
+      {
+        true &&
+        <div className={classes.info}>
+          <InfoBar />
+        </div>
+      }
 
       <div className={classes.specification}>
         <SpecificationInfo />
