@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import {
   fetchManufacturersWithSpectsCount,
@@ -22,58 +22,60 @@ type ChooseModelProps = {
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-export const ChooseModel = ({currentModel, setCurrentModel, activeFilters}: ChooseModelProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
+export const ChooseModel = memo(
+  ({currentModel, setCurrentModel, activeFilters}: ChooseModelProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+    const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
 
-  const carsCount = useAppSelector(getCarsCount);
-  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
-  const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
-  const manufacturersList = useAppSelector(getManuacturersList);
-  const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
+    const carsCount = useAppSelector(getCarsCount);
+    const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+    const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
+    const manufacturersList = useAppSelector(getManuacturersList);
+    const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
 
-  useEffect(() => {
-    setCurrentModel(null);
+    useEffect(() => {
+      setCurrentModel(null);
 
-    if (currentManufacturer) {
-      dispatch(fetchManufacturersWithSpectsCount({
-        manufacturerId: currentManufacturer,
-        filters: activeFilters,
-      }));
+      if (currentManufacturer) {
+        dispatch(fetchManufacturersWithSpectsCount({
+          manufacturerId: currentManufacturer,
+          filters: activeFilters,
+        }));
+      }
+    }, [currentManufacturer]);
+
+    useEffect(() => {
+      setCurrentManufacturer(null);
+      setCurrentModel(null);
+    }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
+
+    if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
+      return <LoadingSpinner spinnerType='widget' />
     }
-  }, [currentManufacturer]);
 
-  useEffect(() => {
-    setCurrentManufacturer(null);
-    setCurrentModel(null);
-  }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
+    return (
+      <div className={classes.wrapper}>
+        <div className={classes.count}>
+          {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
+        </div>
 
-  if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
-    return <LoadingSpinner spinnerType='widget' />
+        <div className={classes.controls}>
+          <Dropdown
+            current={currentManufacturer}
+            setCurrent={setCurrentManufacturer}
+            placeholder={'Марка'}
+            list={manufacturersList}
+          />
+
+          <Dropdown
+            current={currentModel}
+            setCurrent={setCurrentModel}
+            placeholder={'Модель'}
+            list={modelsList}
+            disabled={specsLoadingStatus.isLoading}
+          />
+        </div>
+      </div>
+    );
   }
-
-  return (
-    <div className={classes.wrapper}>
-      <div className={classes.count}>
-        {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
-      </div>
-
-      <div className={classes.controls}>
-        <Dropdown
-          current={currentManufacturer}
-          setCurrent={setCurrentManufacturer}
-          placeholder={'Марка'}
-          list={manufacturersList}
-        />
-
-        <Dropdown
-          current={currentModel}
-          setCurrent={setCurrentModel}
-          placeholder={'Модель'}
-          list={modelsList}
-          disabled={specsLoadingStatus.isLoading}
-        />
-      </div>
-    </div>
-  )
-}
+);

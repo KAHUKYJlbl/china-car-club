@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import cn from 'classnames';
 
 import classes from './gallery-pagination.module.sass';
@@ -8,18 +9,20 @@ type GalleryPaginationProps = {
   onClick: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const GalleryPagination = ({ count, current, onClick }: GalleryPaginationProps): JSX.Element => {
-  return (
-    <div className={classes.wrapper}>
-      {
-        Array(count).fill('').map((value, index) => (
-          <div
-            className={ cn(classes.bar, {[classes.current]: index === current}) }
-            onClick={() => onClick(index)}
-            key={ value + index }
-          />
-        ))
-      }
-    </div>
-  )
-}
+export const GalleryPagination = memo(
+  ({ count, current, onClick }: GalleryPaginationProps): JSX.Element => {
+    return (
+      <div className={classes.wrapper}>
+        {
+          Array(count).fill('').map((value, index) => (
+            <div
+              className={ cn(classes.bar, {[classes.current]: index === current}) }
+              onClick={() => onClick(index)}
+              key={ value + index }
+            />
+          ))
+        }
+      </div>
+    )
+  }
+)

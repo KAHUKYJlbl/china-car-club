@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import { GalleryPagination } from './gallery-pagination';
@@ -11,70 +11,77 @@ type GalleryProps = {
   isPrice?: boolean;
 }
 
-export const Gallery = ({ isPrice = false }: GalleryProps): JSX.Element => {
-  const [ currentImage, setCurrentImage ] = useState(0);
-  const handlers = useSwipeable({
-    onSwipedLeft: handleNext,
-    onSwipedRight: handlePrev,
-  });
+export const Gallery = memo(
+  ({ isPrice = false }: GalleryProps): JSX.Element => {
+    const [ currentImage, setCurrentImage ] = useState(0);
+    const handlers = useSwipeable({
+      onSwipedLeft: handleNext,
+      onSwipedRight: handlePrev,
+    });
 
-  function handleNext () {
-    setCurrentImage((current) =>
-      current + 1 === IMAGES_NAMES.length
-      ? 0
-      : current + 1
-    )
-  };
+    function handleNext () {
+      setCurrentImage((current) =>
+        current + 1 === IMAGES_NAMES.length
+        ? 0
+        : current + 1
+      )
+    };
 
-  function handlePrev () {
-    setCurrentImage((current) =>
-      current === 0
-      ? IMAGES_NAMES.length - 1
-      : current - 1
-    )
-  };
+    function handlePrev () {
+      setCurrentImage((current) =>
+        current === 0
+        ? IMAGES_NAMES.length - 1
+        : current - 1
+      )
+    };
 
-  return (
-    <div
-      key={currentImage}
-      className={classes.wrapper}
-      style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
-      {...handlers}
-    >
-      <div>
-        <GalleryPagination
-          count={IMAGES_COUNT}
-          current={currentImage}
-          onClick={setCurrentImage}
-        />
+    const handlePagination = useCallback(
+      setCurrentImage,
+      []
+    );
 
-        <p>
-          LiXiang L9
-        </p>
-      </div>
+    return (
+      <div
+        key={currentImage}
+        className={classes.wrapper}
+        style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
+        {...handlers}
+      >
+        <div>
+          <GalleryPagination
+            count={IMAGES_COUNT}
+            current={currentImage}
+            onClick={handlePagination}
+          />
 
-      <div className={classes.controls}>
-        <div className={classes.arrows}>
-          <button onClick={handlePrev}>
-            <svg width="9" height="8" aria-hidden="true">
-              <use xlinkHref="#arrow-left" />
-            </svg>
-          </button>
-
-          <button onClick={handleNext}>
-            <svg width="9" height="8" aria-hidden="true">
-              <use xlinkHref="#arrow-right" />
-            </svg>
-          </button>
+          <p>
+            LiXiang L9
+          </p>
         </div>
 
-        {
-          isPrice &&
-          <button>
-            Рассчитать спеццену
-          </button>
-        }
+        <div className={classes.controls}>
+          <div className={classes.arrows}>
+            <button onClick={handlePrev}>
+              <svg width="9" height="8" aria-hidden="true">
+                <use xlinkHref="#arrow-left" />
+              </svg>
+            </button>
+
+            <button onClick={handleNext}>
+              <svg width="9" height="8" aria-hidden="true">
+                <use xlinkHref="#arrow-right" />
+              </svg>
+            </button>
+          </div>
+
+          {
+            isPrice &&
+            <button>
+              Рассчитать спеццену
+            </button>
+          }
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+);

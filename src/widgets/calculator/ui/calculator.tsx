@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { Gallery } from '../../../shared/ui/gallery';
@@ -20,6 +20,16 @@ export const Calculator = (): JSX.Element => {
     dispatch(fetchManufacturers());
   }, []);
 
+const handleModelChange = useCallback(
+  setCurrentModel,
+  []
+);
+
+const handleFiltersChange = useCallback(
+  setActiveFilters,
+  []
+);
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
@@ -27,11 +37,15 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       <div className={classes.model}>
-        <ChooseModel activeFilters={activeFilters} currentModel={currentModel} setCurrentModel={setCurrentModel} />
+        <ChooseModel
+          activeFilters={activeFilters}
+          currentModel={currentModel}
+          setCurrentModel={handleModelChange}
+        />
       </div>
 
       <div className={classes.filter}>
-        <Filter activeFilters={activeFilters} setActiveFilters={setActiveFilters} />
+        <Filter activeFilters={activeFilters} setActiveFilters={handleFiltersChange} />
       </div>
 
       <div className={classes.price}>
