@@ -20,7 +20,7 @@ export const ModelInfo = (): JSX.Element => {
       </div>
 
       {
-        true &&
+        isDesktop &&
         <div className={classes.info}>
           <InfoBar />
         </div>
