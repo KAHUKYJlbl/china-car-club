@@ -1,0 +1,46 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  height: 100%
+  padding: 12px
+  overflow: hidden
+
+.specs
+  font-size: 14px
+  line-height: 18px
+  font-weight: 500
+
+  margin-bottom: 12px
+
+.row
+  display: flex
+  flex-direction: row
+  gap: 2px
+
+  overflow-x: scroll
+  margin-top: 10px
+
+  -ms-overflow-style: none
+  scrollbar-width: none
+
+.button
+  position: relative
+  display: flex
+  justify-content: center
+  align-items: center
+
+  padding: 14px 12px
+  min-width: max-content
+
+  border-radius: 12px
+  background-color: $secondary
+  cursor: pointer
+
+  font-size: 12px
+  line-height: 13px
+
+.button:hover
+  opacity: 0.8

@@ -22,10 +22,10 @@ export const ChooseSpecification = ({ currentModel, activeFilters }: ChooseSpeci
   const dispatch = useAppDispatch();
   const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-  const [ currentSpecification, SetCurrentSpecification ] = useState<number | null>(null);
+  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
-    SetCurrentSpecification(null);
+    setCurrentSpecification(null);
 
     if (currentModel) {
       dispatch(fetchSpecifications({
@@ -42,7 +42,7 @@ export const ChooseSpecification = ({ currentModel, activeFilters }: ChooseSpeci
         ? <>
           <Dropdown
             current={currentSpecification}
-            setCurrent={SetCurrentSpecification}
+            setCurrent={setCurrentSpecification}
             placeholder='Комплектация'
             list={specifications}
             disabled={specificationsLoadingStatus.isLoading}

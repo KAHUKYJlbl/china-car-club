@@ -7,7 +7,11 @@ import classes from './gallery.module.sass';
 const IMAGES_COUNT = 6;
 const IMAGES_NAMES = Array<string>(IMAGES_COUNT).fill('').map(( e, i ) => e + i)
 
-export const Gallery = (): JSX.Element => {
+type GalleryProps = {
+  isPrice?: boolean;
+}
+
+export const Gallery = ({ isPrice = false }: GalleryProps): JSX.Element => {
   const [ currentImage, setCurrentImage ] = useState(0);
   const handlers = useSwipeable({
     onSwipedLeft: handleNext,
@@ -34,7 +38,7 @@ export const Gallery = (): JSX.Element => {
     <div
       key={currentImage}
       className={classes.wrapper}
-      style={{backgroundImage: `url('./images/gallery/car-${currentImage + 1}.jpg')`}}
+      style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
       {...handlers}
     >
       <div>
@@ -64,9 +68,12 @@ export const Gallery = (): JSX.Element => {
           </button>
         </div>
 
-        <button>
-          Рассчитать спеццену
-        </button>
+        {
+          isPrice &&
+          <button>
+            Рассчитать спеццену
+          </button>
+        }
       </div>
     </div>
   )
