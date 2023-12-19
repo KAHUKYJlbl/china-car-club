@@ -20,10 +20,10 @@ export const Calculator = (): JSX.Element => {
     dispatch(fetchManufacturers());
   }, []);
 
-const handleModelChange = useCallback(
-  setCurrentModel,
-  []
-);
+// const handleModelChange = useCallback(
+//   setCurrentModel,
+//   []
+// );
 
 const handleFiltersChange = useCallback(
   setActiveFilters,
@@ -40,7 +40,7 @@ const handleFiltersChange = useCallback(
         <ChooseModel
           activeFilters={activeFilters}
           currentModel={currentModel}
-          setCurrentModel={handleModelChange}
+          setCurrentModel={setCurrentModel}
         />
       </div>
 

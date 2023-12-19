@@ -42,7 +42,7 @@ export const ChooseSpecification = memo(
           currentModel
           ? <>
             <Dropdown
-              current={currentSpecification}
+              currentElement={currentSpecification}
               setCurrent={setCurrentSpecification}
               placeholder='Комплектация'
               list={specifications}

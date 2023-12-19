@@ -19,7 +19,7 @@ export const ChooseOptions = memo(
     return (
       <div className={classes.wrapper}>
         <Dropdown
-          current={currentDelivery}
+          currentElement={currentDelivery}
           setCurrent={setCurrentDelivery}
           list={[{name: 'Москва и города ЦФО', id: 0}]}
           placeholder='Выберите регион доставки'

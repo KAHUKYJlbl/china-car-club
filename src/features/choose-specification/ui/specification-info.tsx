@@ -49,7 +49,7 @@ export const SpecificationInfo = memo(
           </p>
 
           <Dropdown
-            current={currentSpecification}
+            currentElement={currentSpecification}
             setCurrent={setCurrentSpecification}
             placeholder='Комплектация'
             list={specifications}

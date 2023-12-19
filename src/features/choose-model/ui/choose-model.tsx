@@ -61,14 +61,14 @@ export const ChooseModel = memo(
 
         <div className={classes.controls}>
           <Dropdown
-            current={currentManufacturer}
+            currentElement={currentManufacturer}
             setCurrent={setCurrentManufacturer}
             placeholder={'Марка'}
             list={manufacturersList}
           />
 
           <Dropdown
-            current={currentModel}
+            currentElement={currentModel}
             setCurrent={setCurrentModel}
             placeholder={'Модель'}
             list={modelsList}

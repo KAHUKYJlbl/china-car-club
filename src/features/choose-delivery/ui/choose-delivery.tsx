@@ -18,13 +18,13 @@ export const ChooseDelivery = memo(
 
         <div className={classes.controls}>
           <Dropdown
-            current={null}
+            currentElement={null}
             setCurrent={() => null}
             placeholder='Страна получения авто'
             list={[{ name:'Россия', id: 1 }]}
           />
           <Dropdown
-            current={null}
+            currentElement={null}
             setCurrent={() => null}
             placeholder='Город получения авто'
             list={[{ name:'Москва', id: 1 }]}

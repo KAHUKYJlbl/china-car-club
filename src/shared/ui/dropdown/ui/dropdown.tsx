@@ -1,20 +1,43 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import classes from './dropdown.module.sass';
 import useClickOutside from '../../../lib/hooks/use-click-outside';
 
 type DropdownProps = {
-  current: number | null;
+  currentElement: number | null;
   setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
   list?: {name: string, id: number, sublistLength?: number | null}[] | null;
   disabled?: boolean;
 };
 
-export const Dropdown = ({current, setCurrent, placeholder, list, disabled = false}: DropdownProps): JSX.Element => {
+export const Dropdown = ({currentElement, setCurrent, placeholder, list, disabled = false}: DropdownProps): JSX.Element => {
   const [ isOpen, setIsOpen ] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
+  const [ currentValue, setCurrentValue ] = useState('');
+  const [ currentFilter, setCurrentFilter ] = useState('');
+
+  useEffect(() => {
+    setCurrentFilter('');
+    setCurrentValue('');
+
+    if (list && currentElement) {
+      setCurrentValue(list.find((item) => item.id === currentElement)?.name || '');
+    }
+  }, [currentElement, isOpen, disabled]);
+
+  const displayedList = list
+    ?.toSorted((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      } else if (a.name < b.name) {
+        return -1;
+      } else {
+        return 0;
+      }
+    })
+    .filter((element) => element.name.toLowerCase().startsWith(currentFilter.toLowerCase()));
 
   useClickOutside([listRef, fieldRef], () => setIsOpen(false));
 
@@ -31,6 +54,11 @@ export const Dropdown = ({current, setCurrent, placeholder, list, disabled = fal
     setIsOpen(false);
   }
 
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentValue(e.target.value);
+    setCurrentFilter(e.target.value);
+  }
+
   return (
     <>
       <div
@@ -39,15 +67,13 @@ export const Dropdown = ({current, setCurrent, placeholder, list, disabled = fal
         style={disabled ? {color: "lightgrey"} : {}}
         onClick={disabled ? () => null : toggleOpen}
       >
-        <p className={classes.currentElement}>
-          {
-            (list && current)
-            ? list.find((item) => item.id === current)?.name
-            : disabled
-              ? 'Загрузка ...'
-              : placeholder
-          }
-        </p>
+        <input
+          className={classes.currentElement}
+          placeholder={disabled ? 'Загрузка...' : placeholder}
+          disabled={disabled}
+          value={currentValue}
+          onChange={(e) => handleInput(e)}
+        />
 
         <svg
           className={classes.arrow}
@@ -59,11 +85,11 @@ export const Dropdown = ({current, setCurrent, placeholder, list, disabled = fal
           <use xlinkHref="#dropdown" />
         </svg>
 
-        {isOpen && list &&
+        {isOpen && displayedList &&
           <div className={classes.listWrapper} ref={listRef}>
             <ul className={classes.list}>
               {
-                list.map((item) => (
+                displayedList.map((item) => (
                   <li
                     key={item.id}
                     className={classes.listItem}
