@@ -1,20 +1,8 @@
 @use '../../../../assets/styles/_variables' as *
 
 .wrapper
-  display: flex
-  flex-direction: column
-  justify-content: space-between
-
+  position: relative
   height: 100%
-  padding: 16px
-
-  border-radius: 16px
-  background-size: cover
-  background-position: center center
-  background-repeat: no-repeat
-
-  animation-duration: 650ms
-  animation-name: pages
 
   @media screen and (max-width: 1280px)
     height: 432px
@@ -33,6 +21,35 @@
       font-size: 12px
       line-height: 15px
 
+.background
+  position: absolute
+  left: 0
+  top: 0
+
+  height: 100%
+  width: 100%
+
+  border-radius: 16px
+  background-size: cover
+  background-position: center center
+  background-repeat: no-repeat
+
+  animation-duration: 650ms
+  animation-name: pages
+
+
+.overlay
+  position: relative
+  z-index: 2
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+
+  padding: 16px
+  height: 100%
+  border-radius: 16px
+
+
 .controls
   display: flex
   justify-content: space-between
@@ -50,8 +67,22 @@
   gap: 4px
 
 @keyframes pages
-  from
-    opacity: 0.25
+  0%
+    opacity: 0.4
+    filter: grayscale(0.7)
 
-  to
+  25%
+    opacity: 0.5
+    filter: grayscale(0.45)
+
+  50%
+    opacity: 0.65
+    filter: grayscale(0.25)
+
+  75%
+    opacity: 0.85
+    filter: grayscale(0.1)
+
+  100%
     opacity: 1
+    filter: grayscale(0)

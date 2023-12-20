@@ -44,42 +44,48 @@ export const Gallery = memo(
       <div
         key={currentImage}
         className={classes.wrapper}
-        style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
         {...handlers}
-      >
-        <div>
-          <GalleryPagination
-            count={IMAGES_COUNT}
-            current={currentImage}
-            onClick={handlePagination}
-          />
+        >
+        <div
+          className={classes.background}
+          style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
+        />
 
-          <p>
-            LiXiang L9
-          </p>
-        </div>
+        <div className={classes.overlay}>
+          <div>
+            <GalleryPagination
+              count={IMAGES_COUNT}
+              current={currentImage}
+              onClick={handlePagination}
+            />
 
-        <div className={classes.controls}>
-          <div className={classes.arrows}>
-            <button onClick={handlePrev}>
-              <svg width="9" height="8" aria-hidden="true">
-                <use xlinkHref="#arrow-left" />
-              </svg>
-            </button>
-
-            <button onClick={handleNext}>
-              <svg width="9" height="8" aria-hidden="true">
-                <use xlinkHref="#arrow-right" />
-              </svg>
-            </button>
+            <p>
+              LiXiang L9
+            </p>
           </div>
 
-          {
-            isPrice &&
-            <button>
-              Рассчитать спеццену
-            </button>
-          }
+          <div className={classes.controls}>
+            <div className={classes.arrows}>
+              <button onClick={handlePrev}>
+                <svg width="9" height="8" aria-hidden="true">
+                  <use xlinkHref="#arrow-left" />
+                </svg>
+              </button>
+
+              <button onClick={handleNext}>
+                <svg width="9" height="8" aria-hidden="true">
+                  <use xlinkHref="#arrow-right" />
+                </svg>
+              </button>
+            </div>
+
+            {
+              isPrice &&
+              <button>
+                Рассчитать спеццену
+              </button>
+            }
+          </div>
         </div>
       </div>
     )
