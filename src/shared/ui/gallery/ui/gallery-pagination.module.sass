@@ -13,14 +13,33 @@
     gap: 4px
 
 .bar
+  position: relative
   flex-grow: 1
   height: 4px
-  background-color: white
+  border-radius: 2px
+  background-color: $primary
 
   cursor: pointer
 
   @media screen and (max-width: 640px)
     height: 2px
 
+.past
+  background-color: white
+
 .current
-  background-color: $primary
+  position: absolute
+  left: 0
+  top: 0
+  height: 100%
+  width: 100%
+  background-color: white
+  animation-duration: 15000ms
+  animation-name: timer
+
+@keyframes timer
+  from
+    transform: translate(-50%, 0) scale(0, 1)
+
+  to
+    transform: translate(0, 0) scale(1, 1)
