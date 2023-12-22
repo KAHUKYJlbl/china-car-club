@@ -20,11 +20,6 @@ export const Calculator = (): JSX.Element => {
     dispatch(fetchManufacturers());
   }, []);
 
-// const handleModelChange = useCallback(
-//   setCurrentModel,
-//   []
-// );
-
 const handleFiltersChange = useCallback(
   setActiveFilters,
   []
