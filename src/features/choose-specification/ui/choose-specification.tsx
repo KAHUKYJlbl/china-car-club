@@ -14,12 +14,13 @@ import classes from './choose-specification.module.sass';
 import { FilterId } from '../../filter';
 
 type ChooseSpecificationProps = {
+  currentManufacturer: number | null;
   currentModel: number | null;
   activeFilters: Partial< Record< FilterId, number[] > >;
 };
 
 export const ChooseSpecification = memo(
-  ({ currentModel, activeFilters }: ChooseSpecificationProps): JSX.Element => {
+  ({ currentModel, activeFilters, currentManufacturer }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
@@ -28,8 +29,9 @@ export const ChooseSpecification = memo(
     useEffect(() => {
       setCurrentSpecification(null);
 
-      if (currentModel) {
+      if (currentModel && currentManufacturer) {
         dispatch(fetchSpecifications({
+          manufacturerId: currentManufacturer,
           modelId: currentModel,
           filters: activeFilters,
         }));

@@ -15,6 +15,8 @@ export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
+  const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
+
 
   useEffect(() => {
     dispatch(fetchManufacturers());
@@ -33,6 +35,8 @@ const handleFiltersChange = useCallback(
 
       <div className={classes.model}>
         <ChooseModel
+          currentManufacturer={currentManufacturer}
+          setCurrentManufacturer={setCurrentManufacturer}
           activeFilters={activeFilters}
           currentModel={currentModel}
           setCurrentModel={setCurrentModel}
@@ -44,7 +48,11 @@ const handleFiltersChange = useCallback(
       </div>
 
       <div className={classes.price}>
-        <ChooseSpecification currentModel={currentModel} activeFilters={activeFilters} />
+        <ChooseSpecification
+          currentManufacturer={currentManufacturer}
+          currentModel={currentModel}
+          activeFilters={activeFilters}
+        />
       </div>
 
       <div className={classes.currency}>

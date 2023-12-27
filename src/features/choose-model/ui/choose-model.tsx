@@ -17,15 +17,22 @@ import { FilterId } from '../../filter/lib/types';
 import classes from './choose-model.module.sass';
 
 type ChooseModelProps = {
+  currentManufacturer: number | null;
+  setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
-  activeFilters: Partial< Record< FilterId, number[] > >;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+  activeFilters: Partial< Record< FilterId, number[] > >;
 }
 
 export const ChooseModel = memo(
-  ({currentModel, setCurrentModel, activeFilters}: ChooseModelProps): JSX.Element => {
+  ({
+    currentManufacturer,
+    setCurrentManufacturer,
+    currentModel,
+    setCurrentModel,
+    activeFilters
+  }: ChooseModelProps): JSX.Element => {
     const dispatch = useAppDispatch();
-    const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
 
     const carsCount = useAppSelector(getCarsCount);
     const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);

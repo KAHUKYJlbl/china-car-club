@@ -37,7 +37,7 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
         return 0;
       }
     })
-    .filter((element) => element.name.toLowerCase().startsWith(currentFilter.toLowerCase()));
+    .filter((element) => element.name.toLowerCase().includes(currentFilter.toLowerCase()));
 
   useClickOutside([listRef, fieldRef], () => setIsOpen(false));
 
@@ -59,6 +59,12 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
     setCurrentFilter(e.target.value);
   }
 
+  const handleInputBlur = () => {
+    if (list && currentElement) {
+      setCurrentValue(list.find((item) => item.id === currentElement)?.name || '');
+    }
+  }
+
   return (
     <>
       <div
@@ -73,6 +79,7 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
           disabled={disabled}
           value={currentValue}
           onChange={(e) => handleInput(e)}
+          onBlur={handleInputBlur}
         />
 
         <svg
