@@ -1,5 +1,4 @@
 import { memo, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import {
   fetchManufacturersWithSpectsCount,
@@ -26,7 +25,6 @@ type ChooseModelProps = {
 export const ChooseModel = memo(
   ({currentModel, setCurrentModel, activeFilters}: ChooseModelProps): JSX.Element => {
     const dispatch = useAppDispatch();
-    const [searchParams, setSearchParams] = useSearchParams();
     const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
 
     const carsCount = useAppSelector(getCarsCount);
@@ -39,7 +37,6 @@ export const ChooseModel = memo(
       setCurrentModel(null);
 
       if (currentManufacturer) {
-        handleManufacturerChange(currentManufacturer);
         dispatch(fetchManufacturersWithSpectsCount({
           manufacturerId: currentManufacturer,
           filters: activeFilters,
@@ -51,12 +48,6 @@ export const ChooseModel = memo(
       setCurrentManufacturer(null);
       setCurrentModel(null);
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
-
-    const handleManufacturerChange = (id: number) => {
-      setSearchParams({
-        manufacturer: id.toString(),
-      });
-    }
 
     if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
       return <LoadingSpinner spinnerType='widget' />
