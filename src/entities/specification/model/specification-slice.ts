@@ -5,6 +5,7 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 import { SpecificationType } from '../lib/types';
 import { fetchSpecifications } from './api-actions/fetch-specifications';
+import { fetchSpecificationsInfo } from './api-actions/fetch-specification-info';
 
 type InitialState = {
   specifications: SpecificationType[];
@@ -22,15 +23,25 @@ export const specificationSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-    .addCase(fetchSpecifications.fulfilled, (state, action) => {
-      state.specifications = action.payload;
-      state.specificationsLoadingStatus = FetchStatus.Success;
-    })
-    .addCase(fetchSpecifications.pending, (state) => {
-      state.specificationsLoadingStatus = FetchStatus.Pending;
-    })
-    .addCase(fetchSpecifications.rejected, (state) => {
-      state.specificationsLoadingStatus = FetchStatus.Failed;
-    });
+      .addCase(fetchSpecifications.fulfilled, (state, action) => {
+        state.specifications = action.payload;
+        state.specificationsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecifications.pending, (state) => {
+        state.specificationsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecifications.rejected, (state) => {
+        state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationsInfo.fulfilled, (state, action) => {
+        state.specifications = action.payload;
+        state.specificationsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationsInfo.pending, (state) => {
+        state.specificationsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationsInfo.rejected, (state) => {
+        state.specificationsLoadingStatus = FetchStatus.Failed;
+      });
   },
 });

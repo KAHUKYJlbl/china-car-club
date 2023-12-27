@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
-  fetchSpecifications,
+  fetchSpecificationsInfo,
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
@@ -24,7 +24,7 @@ export const SpecificationInfo = memo(
       setCurrentSpecification(null);
 
       if (modelId) {
-        dispatch(fetchSpecifications({
+        dispatch(fetchSpecificationsInfo({
           modelId: +modelId,
           filters: {},
         }));
