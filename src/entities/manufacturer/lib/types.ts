@@ -20,6 +20,7 @@ export type ManufacturerDataType = {
     ru?: string;
   };
   seriesList: seriesDataType[];
+  top: boolean;
 };
 
 export type ManufacturersType = CarsCountType & {

@@ -21,6 +21,9 @@
   text-overflow: ellipsis
   outline: none
 
+.current-element:disabled::placeholder
+  opacity: 1
+
 .arrow
   cursor: pointer
 
@@ -38,10 +41,20 @@
   border-radius: 8px
   border: 2px solid $secondary
 
+.list-header
+  padding: 16px 16px
+
+  border-bottom: 1px solid $secondary
+
+  color: $text-secondary
+  text-transform: uppercase
+
 .list
   list-style: none
 
 .list-item
+  display: flex
+  justify-content: space-between
   padding: 8px 16px
 
   font-size: 14px
@@ -52,3 +65,7 @@
 
 .list-item:hover
   background-color: $primary
+
+.list-item-count
+  font-size: 12px
+  color: $text-secondary

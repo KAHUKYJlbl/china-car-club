@@ -130,7 +130,7 @@ export const Filter = memo(
           }
 
           {
-            activeFilters[currentFilter]?.length !== 0 &&
+            activeFilters[currentFilter] && activeFilters[currentFilter]?.length !== 0 &&
             <button className={classes.xButton} onClick={handleClearFilterClick}>
               <svg width="16" height="16" aria-hidden="true">
                 <use xlinkHref="#x" />

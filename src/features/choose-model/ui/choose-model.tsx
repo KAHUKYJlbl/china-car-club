@@ -74,6 +74,10 @@ export const ChooseModel = memo(
             setCurrent={setCurrentManufacturer}
             placeholder={'Марка'}
             list={manufacturersList}
+            extraListHeader={{
+              basicListHeader: 'Все марки',
+              extraListHeader: 'Популярные',
+            }}
           />
 
           <Dropdown

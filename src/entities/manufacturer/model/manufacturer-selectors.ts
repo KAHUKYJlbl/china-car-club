@@ -39,6 +39,7 @@ export const getManuacturersList = createSelector(
       name: manufacturer.name.ru || manufacturer.name.ch,
       id: manufacturer.id,
       sublistLength: manufacturer.seriesList.length,
+      isHighlight: manufacturer.top,
     }))
   )
 );
