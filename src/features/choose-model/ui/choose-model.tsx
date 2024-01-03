@@ -63,7 +63,9 @@ export const ChooseModel = memo(
     return (
       <div className={classes.wrapper}>
         <div className={classes.count}>
-          {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
+          <p>
+            {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
+          </p>
         </div>
 
         <div className={classes.controls}>

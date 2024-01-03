@@ -63,11 +63,13 @@ export const Filter = memo(
         <div className={classes.headerRow}>
           <p>Фильтр автомобилей</p>
 
-          <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
-            <svg width="16" height="16" aria-hidden="true">
-              <use xlinkHref="#x" />
-            </svg>
-          </button>
+          <div className={classes.buttonWrapper}>
+            <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+              <svg width="16" height="16" aria-hidden="true">
+                <use xlinkHref="#x" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className={classes.row}>
