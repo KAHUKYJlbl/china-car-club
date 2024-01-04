@@ -38,6 +38,12 @@ export const ChooseSpecification = memo(
       }
     }, [currentModel]);
 
+    useEffect(() => {
+      if (specifications && specifications.length !== 0) {
+        setCurrentSpecification(specifications[0].id);
+      }
+    }, [specifications[0]]);
+
     return (
       <div className={classes.wrapper}>
         {
