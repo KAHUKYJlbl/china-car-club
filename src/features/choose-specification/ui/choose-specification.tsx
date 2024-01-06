@@ -16,15 +16,16 @@ import { FilterId } from '../../filter';
 type ChooseSpecificationProps = {
   currentManufacturer: number | null;
   currentModel: number | null;
+  currentSpecification: number | null;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial< Record< FilterId, number[] > >;
 };
 
 export const ChooseSpecification = memo(
-  ({ currentModel, activeFilters, currentManufacturer }: ChooseSpecificationProps): JSX.Element => {
+  ({ currentManufacturer, currentModel, currentSpecification, setCurrentSpecification, activeFilters }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-    const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
     useEffect(() => {
       setCurrentSpecification(null);

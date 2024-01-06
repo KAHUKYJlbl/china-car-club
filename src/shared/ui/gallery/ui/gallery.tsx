@@ -8,11 +8,12 @@ const IMAGES_COUNT = 6;
 const IMAGES_NAMES = Array<string>(IMAGES_COUNT).fill('').map(( e, i ) => e + i)
 
 type GalleryProps = {
-  isPrice?: boolean;
+  isPromo?: boolean;
+  specificationId: number | null;
 }
 
 export const Gallery = memo(
-  ({ isPrice = false }: GalleryProps): JSX.Element => {
+  ({ isPromo = false, specificationId }: GalleryProps): JSX.Element => {
     const [ currentImage, setCurrentImage ] = useState(0);
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
@@ -45,11 +46,15 @@ export const Gallery = memo(
         key={currentImage}
         className={classes.wrapper}
         {...handlers}
-        >
-        <div
-          className={classes.background}
-          style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
-        />
+      >
+        <div className={classes.background} >
+          <img
+            src={currentImage
+              ? `${process.env.STATIC_URL}${specificationId}.jpg`
+              : `/images/gallery/car-${currentImage + 1}.jpg`
+            }
+          />
+        </div>
 
         <div className={classes.overlay}>
           <div>
@@ -80,7 +85,7 @@ export const Gallery = memo(
             </div>
 
             {
-              isPrice &&
+              isPromo &&
               <button>
                 Рассчитать спеццену
               </button>

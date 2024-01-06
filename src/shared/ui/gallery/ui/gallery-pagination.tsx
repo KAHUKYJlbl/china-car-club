@@ -25,7 +25,6 @@ export const GalleryPagination = memo(
               className={ cn(
                 classes.bar,
                 {
-                  // [classes.current]: index === current,
                   [classes.past]: index < current
                 }
               )}
