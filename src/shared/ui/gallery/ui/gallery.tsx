@@ -1,28 +1,39 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import { GalleryPagination } from './gallery-pagination';
 import classes from './gallery.module.sass';
-
-const IMAGES_COUNT = 6;
-const IMAGES_NAMES = Array<string>(IMAGES_COUNT).fill('').map(( e, i ) => e + i)
+import PROMO_GALLERY from '../../../../app/settings/gallery';
 
 type GalleryProps = {
   isPromo?: boolean;
-  specificationId: number | null;
+  specificationId?: number | null;
 }
 
 export const Gallery = memo(
-  ({ isPromo = false, specificationId }: GalleryProps): JSX.Element => {
+  ({ specificationId, isPromo = false }: GalleryProps): JSX.Element => {
     const [ currentImage, setCurrentImage ] = useState(0);
+    const [ gallery, setGallery ] = useState(PROMO_GALLERY);
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
       onSwipedRight: handlePrev,
     });
 
+    useEffect(() => {
+      setCurrentImage(0);
+    }, [specificationId]);
+
+    useEffect(() => {
+      if (specificationId) {
+        setGallery([specificationId]);
+      } else {
+        setGallery(PROMO_GALLERY);
+      }
+    }, [specificationId]);
+
     function handleNext () {
       setCurrentImage((current) =>
-        current + 1 === IMAGES_NAMES.length
+        current + 1 === gallery.length
         ? 0
         : current + 1
       )
@@ -31,15 +42,12 @@ export const Gallery = memo(
     function handlePrev () {
       setCurrentImage((current) =>
         current === 0
-        ? IMAGES_NAMES.length - 1
+        ? gallery.length - 1
         : current - 1
       )
     };
 
-    const handlePagination = useCallback(
-      setCurrentImage,
-      []
-    );
+    const handlePagination = useCallback( setCurrentImage, [] );
 
     return (
       <div
@@ -48,42 +56,45 @@ export const Gallery = memo(
         {...handlers}
       >
         <div className={classes.background} >
-          <img
-            src={currentImage
-              ? `${process.env.STATIC_URL}${specificationId}.jpg`
-              : `/images/gallery/car-${currentImage + 1}.jpg`
-            }
-          />
+          <img src={`${process.env.STATIC_URL}${gallery[currentImage]}.jpg`} />
         </div>
 
         <div className={classes.overlay}>
           <div>
-            <GalleryPagination
-              count={IMAGES_COUNT}
-              current={currentImage}
-              onClick={handlePagination}
-            />
+            {
+              gallery.length > 1 &&
+              <GalleryPagination
+                count={gallery.length}
+                current={currentImage}
+                onClick={handlePagination}
+              />
+            }
 
+{/* TODO: Add name */}
             <p>
               LiXiang L9
             </p>
           </div>
 
           <div className={classes.controls}>
-            <div className={classes.arrows}>
-              <button onClick={handlePrev}>
-                <svg width="9" height="8" aria-hidden="true">
-                  <use xlinkHref="#arrow-left" />
-                </svg>
-              </button>
+            {
+              gallery.length > 1 &&
+              <div className={classes.arrows}>
+                <button onClick={handlePrev}>
+                  <svg width="9" height="8" aria-hidden="true">
+                    <use xlinkHref="#arrow-left" />
+                  </svg>
+                </button>
 
-              <button onClick={handleNext}>
-                <svg width="9" height="8" aria-hidden="true">
-                  <use xlinkHref="#arrow-right" />
-                </svg>
-              </button>
-            </div>
+                <button onClick={handleNext}>
+                  <svg width="9" height="8" aria-hidden="true">
+                    <use xlinkHref="#arrow-right" />
+                  </svg>
+                </button>
+              </div>
+            }
 
+{/* TODO: Add redirect */}
             {
               isPromo &&
               <button>

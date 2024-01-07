@@ -14,8 +14,8 @@ import classes from './calculator.module.sass';
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
-  const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
+  const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
@@ -30,16 +30,20 @@ const handleFiltersChange = useCallback(
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery isPromo={false} specificationId={currentSpecification} />
+        <Gallery
+          isPromo={!currentModel}
+          specificationId={currentSpecification}
+        />
       </div>
 
       <div className={classes.model}>
         <ChooseModel
           currentManufacturer={currentManufacturer}
           setCurrentManufacturer={setCurrentManufacturer}
-          activeFilters={activeFilters}
           currentModel={currentModel}
           setCurrentModel={setCurrentModel}
+          setCurrentSpecification={setCurrentSpecification}
+          activeFilters={activeFilters}
         />
       </div>
 

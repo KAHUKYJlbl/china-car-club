@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import cn from 'classnames';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -28,7 +28,7 @@ export const ChooseSpecification = memo(
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
     useEffect(() => {
-      setCurrentSpecification(null);
+      // setCurrentSpecification(null);
 
       if (currentModel && currentManufacturer) {
         dispatch(fetchSpecifications({

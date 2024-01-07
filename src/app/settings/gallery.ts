@@ -1,0 +1,3 @@
+const PROMO_GALLERY = [63999, 63837, 63842, 63838, 78703];
+
+export default PROMO_GALLERY;
