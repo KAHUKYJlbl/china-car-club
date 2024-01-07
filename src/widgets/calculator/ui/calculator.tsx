@@ -19,6 +19,7 @@ export const Calculator = (): JSX.Element => {
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
+    setCurrentSpecification(null);
     dispatch(fetchManufacturers());
   }, []);
 
