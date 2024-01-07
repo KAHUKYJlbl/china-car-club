@@ -17,7 +17,6 @@ export const Calculator = (): JSX.Element => {
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
 
-
   useEffect(() => {
     dispatch(fetchManufacturers());
   }, []);
@@ -60,7 +59,7 @@ const handleFiltersChange = useCallback(
       </div>
 
       <div className={classes.delivery}>
-        <ChooseDelivery />
+        <ChooseDelivery model={currentModel} />
       </div>
     </div>
   )

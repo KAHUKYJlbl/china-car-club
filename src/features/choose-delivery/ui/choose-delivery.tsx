@@ -1,11 +1,25 @@
 import { memo } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import { AppRoute } from '../../../app/provider/router';
 import { Dropdown } from '../../../shared/ui/dropdown';
 
 import classes from './choose-delivery.module.sass';
 
+type ChooseDeliveryProps = {
+  model: number | null;
+}
+
 export const ChooseDelivery = memo(
-  (): JSX.Element => {
+  ({ model }: ChooseDeliveryProps): JSX.Element => {
+    const navigate = useNavigate();
+
+    const buttonClickHandler = () => {
+      if (model) {
+        navigate( generatePath( AppRoute.Model, {modelId: model.toString()} ) )
+      }
+    }
+
     return (
       <div className={classes.wrapper}>
         <p>
@@ -31,7 +45,12 @@ export const ChooseDelivery = memo(
           />
         </div>
 
-        <button className={classes.button}>Быстрый онлайн-расчет под ключ</button>
+        <button
+          className={classes.button}
+          onClick={ buttonClickHandler }
+        >
+          Быстрый онлайн-расчет под ключ
+        </button>
 
         <p className={classes.small}>
           Нажимая кнопку, даю согласие на обработку моих персональных данных в соответствии с политикой конфиденциальности
