@@ -1,9 +1,15 @@
+import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { useParams } from 'react-router-dom';
 
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
+import { fetchSpecificationsInfo, getSpecifications, getSpecificationsLoadingStatus } from '../../../entities/specification';
 import { Gallery } from '../../../shared/ui/gallery';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
@@ -11,12 +17,33 @@ import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const { modelId } = useParams();
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
+
+  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
+  const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const specifications = useAppSelector(getSpecifications);
+
+  useEffect(() => {
+    setCurrentSpecification(specifications[0].id);
+
+    if (modelId) {
+      dispatch(fetchSpecificationsInfo({
+        modelId: +modelId,
+        filters: {},
+      }));
+    }
+  }, [modelId]);
+
+  if (specificationsLoadingStatus.isLoading) {
+    return <LoadingSpinner spinnerType='page' />
+  }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery />
+        <Gallery specificationId={currentSpecification} />
       </div>
 
       {
@@ -27,7 +54,10 @@ export const ModelInfo = (): JSX.Element => {
       }
 
       <div className={classes.specification}>
-        <SpecificationInfo />
+        <SpecificationInfo
+          currentSpecification={currentSpecification}
+          setCurrentSpecification={setCurrentSpecification}
+        />
       </div>
 
       <div className={classes.prices}>
