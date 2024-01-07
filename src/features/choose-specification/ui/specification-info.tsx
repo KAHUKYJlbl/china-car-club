@@ -1,35 +1,23 @@
-import { memo, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { memo } from 'react';
 
 import {
-  fetchSpecificationsInfo,
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Dropdown } from '../../../shared/ui/dropdown';
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './specification-info.module.sass';
 
+type SpecificationInfoProps = {
+  currentSpecification: number | null;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
+};
+
 export const SpecificationInfo = memo(
-  (): JSX.Element => {
-    const dispatch = useAppDispatch();
-    const { modelId } = useParams();
+  ({ currentSpecification, setCurrentSpecification }: SpecificationInfoProps): JSX.Element => {
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-    const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
-
-    useEffect(() => {
-      setCurrentSpecification(null);
-
-      if (modelId) {
-        dispatch(fetchSpecificationsInfo({
-          modelId: +modelId,
-          filters: {},
-        }));
-      }
-    }, [modelId]);
 
     return (
       <div className={classes.wrapper}>

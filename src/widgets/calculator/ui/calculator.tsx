@@ -66,7 +66,7 @@ const handleFiltersChange = useCallback(
       </div>
 
       <div className={classes.delivery}>
-        <ChooseDelivery />
+        <ChooseDelivery model={currentModel} />
       </div>
     </div>
   )
