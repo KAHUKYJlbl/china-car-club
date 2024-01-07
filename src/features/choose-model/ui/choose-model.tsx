@@ -21,6 +21,7 @@ type ChooseModelProps = {
   setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial< Record< FilterId, number[] > >;
 }
 
@@ -30,7 +31,8 @@ export const ChooseModel = memo(
     setCurrentManufacturer,
     currentModel,
     setCurrentModel,
-    activeFilters
+    setCurrentSpecification,
+    activeFilters,
   }: ChooseModelProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
@@ -42,6 +44,7 @@ export const ChooseModel = memo(
 
     useEffect(() => {
       setCurrentModel(null);
+      setCurrentSpecification(null);
 
       if (currentManufacturer) {
         dispatch(fetchManufacturersWithSpectsCount({
@@ -74,6 +77,10 @@ export const ChooseModel = memo(
             setCurrent={setCurrentManufacturer}
             placeholder={'Марка'}
             list={manufacturersList}
+            extraListHeader={{
+              basicListHeader: 'Все марки',
+              extraListHeader: 'Популярные',
+            }}
           />
 
           <Dropdown

@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { fetchFiltered } from '../../../entities/manufacturer';
 
+import useActiveFilters from '../lib/hooks/use-active-filters';
 import { FILTERS } from '../lib/filters';
 import { FilterId } from '../lib/types';
 import classes from './filter.module.sass';
@@ -16,6 +17,7 @@ type FolterProps = {
 export const Filter = memo(
   ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
     const dispatch = useAppDispatch();
+    const isActiveFilters = useActiveFilters(activeFilters);
     const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
 
     const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
@@ -63,13 +65,16 @@ export const Filter = memo(
         <div className={classes.headerRow}>
           <p>Фильтр автомобилей</p>
 
-          <div className={classes.buttonWrapper}>
-            <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
-              <svg width="16" height="16" aria-hidden="true">
-                <use xlinkHref="#x" />
-              </svg>
-            </button>
-          </div>
+          {
+            isActiveFilters &&
+            <div className={classes.buttonWrapper}>
+              <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+                <svg width="16" height="16" aria-hidden="true">
+                  <use xlinkHref="#x" />
+                </svg>
+              </button>
+            </div>
+          }
         </div>
 
         <div className={classes.row}>
@@ -124,11 +129,14 @@ export const Filter = memo(
             ))
           }
 
-          <button className={classes.xButton} onClick={handleClearFilterClick}>
-            <svg width="16" height="16" aria-hidden="true">
-              <use xlinkHref="#x" />
-            </svg>
-          </button>
+          {
+            activeFilters[currentFilter] && activeFilters[currentFilter]?.length !== 0 &&
+            <button className={classes.xButton} onClick={handleClearFilterClick}>
+              <svg width="16" height="16" aria-hidden="true">
+                <use xlinkHref="#x" />
+              </svg>
+            </button>
+          }
         </div>
       </div>
     )
