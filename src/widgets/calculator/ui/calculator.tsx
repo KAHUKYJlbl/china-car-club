@@ -10,6 +10,7 @@ import { ChooseDelivery } from '../../../features/choose-delivery';
 import { Filter, FilterId } from '../../../features/filter';
 
 import classes from './calculator.module.sass';
+import useFilters from '../lib/hooks/use-filters';
 
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,10 @@ export const Calculator = (): JSX.Element => {
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
+  useFilters(activeFilters);
+
   useEffect(() => {
+    setCurrentSpecification(null);
     dispatch(fetchManufacturers());
   }, []);
 

@@ -17,25 +17,24 @@ type FolterProps = {
 export const Filter = memo(
   ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
     const dispatch = useAppDispatch();
-    const isActiveFilters = useActiveFilters(activeFilters);
     const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
+    const isActiveFilters = useActiveFilters(activeFilters);
 
     const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
       const newFilters = {
         ...activeFilters,
-        [filter]: activeFilters[filter]
-          ? activeFilters[filter]?.includes(elementId)
-            ? activeFilters[filter]?.filter((element) => element !== elementId)
-            : activeFilters[filter]?.concat(elementId)
-          : [elementId]
+        [filter]:
+          activeFilters[filter]
+            ? activeFilters[filter]?.includes(elementId)
+              ? activeFilters[filter]?.filter((element) => element !== elementId)
+              : activeFilters[filter]?.concat(elementId)
+            : [elementId]
       };
 
       setActiveFilters((current) => ({
         ...current,
         ...newFilters
       }));
-
-      dispatch(fetchFiltered(newFilters));
     };
 
     const handleClearFilterClick = () => {
