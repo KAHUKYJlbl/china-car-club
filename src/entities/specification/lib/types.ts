@@ -7,6 +7,11 @@ export type SpecificationType = {
     ch: string;
     ru: string;
   };
+  stateId: number;
+  priceWithLogisticsByCurrentDay: {
+    specificationId: number;
+    price: number;
+  };
 };
 
 export type ManufacturersWithSpecificationsType = ManufacturersType & {

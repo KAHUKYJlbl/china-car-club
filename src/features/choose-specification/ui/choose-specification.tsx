@@ -3,15 +3,19 @@ import cn from 'classnames';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { Dropdown } from '../../../shared/ui/dropdown';
+import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
 import {
   fetchSpecifications,
+  getPrice,
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 
-import classes from './choose-specification.module.sass';
 import { FilterId } from '../../filter';
+import classes from './choose-specification.module.sass';
+import priceFormat from '../../../shared/lib/utils/price-format';
 
 type ChooseSpecificationProps = {
   currentManufacturer: number | null;
@@ -27,9 +31,11 @@ export const ChooseSpecification = memo(
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
-    useEffect(() => {
-      // setCurrentSpecification(null);
+    const price = useAppSelector((state) => getPrice(state, currentSpecification));
+    const currency = useAppSelector(getCurrency);
+    const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
+    useEffect(() => {
       if (currentModel && currentManufacturer) {
         dispatch(fetchSpecifications({
           manufacturerId: currentManufacturer,
@@ -44,6 +50,10 @@ export const ChooseSpecification = memo(
         setCurrentSpecification(specifications[0].id);
       }
     }, [specifications[0]]);
+
+    if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
+      return <LoadingSpinner spinnerType='widget' />
+    }
 
     return (
       <div className={classes.wrapper}>
@@ -64,16 +74,39 @@ export const ChooseSpecification = memo(
 
             <div className={classes.priceWrapper}>
               <div className={classes.priceList}>
-                <p className={classes.price}><b>0 000 000 ¥</b></p>
+                <p className={classes.price}>
+                  <b>
+                    {
+                      price
+                        ? `${priceFormat( price.toString() )} ¥`
+                        : 'Цена уточняется'
+                    }
+                  </b>
+                </p>
 
-                <p className={classes.price}><b>0 000 000 ₽</b></p>
+                <p className={cn(classes.discountPrice, classes.price)}>
+                  <b>0 000 000 ₽</b>
+                </p>
 
-                <p className={cn(classes.price, classes.grey)}>0 000 000 ₽</p>
+                <p className={cn(classes.price, classes.grey)}>
+                  {
+                    price
+                      ? `${priceFormat( (price! * currency.cny).toFixed() )} ₽`
+                      : 'Цена уточняется'
+                  }
+                </p>
 
-                <p className={cn(classes.price, classes.grey)}>0 000 000 $</p>
+                <p className={cn(classes.price, classes.grey)}>
+                  {
+                    price
+                      ? `${priceFormat( (price! * currency.cny / currency.usd).toFixed() )} $`
+                      : 'Цена уточняется'
+                  }
+                </p>
 
-
-                <p className={cn(classes.small, classes.grey, classes.discount)}>Действующая скидка на автомобиль у дилера</p>
+                <p className={cn(classes.small, classes.grey, classes.discount)}>
+                  Действующая скидка на автомобиль у дилера
+                </p>
               </div>
             </div>
           </>

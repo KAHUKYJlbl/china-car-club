@@ -40,7 +40,7 @@ export const Currency = memo(
           USD = {currency.usd.toFixed(2)}₽
         </p>
 
-        <p>{dayjs().locale('ru').format('D MMM YY').toLowerCase()}</p>
+        <p>{dayjs().locale('ru').format('D MMM YYYY').toLowerCase()}</p>
       </div>
     )
   }
