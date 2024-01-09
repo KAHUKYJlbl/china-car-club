@@ -13,6 +13,7 @@ import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
+import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
 
@@ -20,13 +21,12 @@ export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { modelId } = useParams();
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
-
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
-  const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const specifications = useAppSelector(getSpecifications);
+  const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const [ isPrices, setIsPrices ] = useState(true);
 
   useEffect(() => {
-    setCurrentSpecification(specifications[0].id);
 
     if (modelId) {
       dispatch(fetchSpecificationsInfo({
@@ -35,6 +35,12 @@ export const ModelInfo = (): JSX.Element => {
       }));
     }
   }, [modelId]);
+
+  useEffect(() => {
+    if (specificationsLoadingStatus.isSuccess) {
+      setCurrentSpecification(specifications[0].id);
+    }
+  }, [specificationsLoadingStatus]);
 
   if (specificationsLoadingStatus.isLoading) {
     return <LoadingSpinner spinnerType='page' />
@@ -55,14 +61,22 @@ export const ModelInfo = (): JSX.Element => {
 
       <div className={classes.specification}>
         <SpecificationInfo
+          isPrices={isPrices}
+          setIsPrices={setIsPrices}
           currentSpecification={currentSpecification}
           setCurrentSpecification={setCurrentSpecification}
         />
       </div>
 
-      <div className={classes.prices}>
-        <Prices />
-      </div>
+      {
+        isPrices
+        ? <div className={classes.prices}>
+          <Prices />
+        </div>
+        : <div className={classes.prices}>
+          <Techs />
+        </div>
+      }
 
       <div className={classes.addOptions}>
         <ChooseOptions />

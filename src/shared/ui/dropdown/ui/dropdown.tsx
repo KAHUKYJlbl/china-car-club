@@ -20,7 +20,14 @@ type DropdownProps = {
   disabled?: boolean;
 };
 
-export const Dropdown = ({currentElement, setCurrent, placeholder, list, extraListHeader, disabled = false}: DropdownProps): JSX.Element => {
+export const Dropdown = ({
+  currentElement,
+  setCurrent,
+  list,
+  extraListHeader,
+  placeholder,
+  disabled = false,
+}: DropdownProps): JSX.Element => {
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const [ isOpen, setIsOpen ] = useState(false);
@@ -66,6 +73,7 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, extraLi
   }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsOpen(true);
     setCurrentValue(e.target.value);
     setCurrentFilter(e.target.value);
   }
@@ -111,7 +119,7 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, extraLi
           isOpen && displayedList &&
           <div className={classes.listWrapper} ref={listRef}>
             {
-              extraListHeader && extraList &&
+              extraListHeader && extraList && extraList.length !== 0 && !currentValue &&
               <>
                 <p className={classes.listHeader}>{extraListHeader.extraListHeader}</p>
 
@@ -133,22 +141,24 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, extraLi
             }
 
             {
-              extraListHeader &&
+              extraListHeader && extraList && extraList.length !== 0 && !currentValue &&
               <p className={classes.listHeader}>{extraListHeader.basicListHeader}</p>
             }
 
             <ul className={classes.list}>
               {
-                displayedList.map((item) => (
-                  <li
-                    key={item.id}
-                    className={classes.listItem}
-                    onClick={(e) => handleItemClick(item.id, e)}
-                  >
-                    <span>{item.name}</span>
-                    <span className={classes.listItemCount}>{ item.sublistLength }</span>
-                  </li>
-                ))
+                displayedList.length === 0
+                  ? <li className={classes.listItem}>Ничего не найдено</li>
+                  : displayedList.map((item) => (
+                    <li
+                      key={item.id}
+                      className={classes.listItem}
+                      onClick={(e) => handleItemClick(item.id, e)}
+                    >
+                      <span>{item.name}</span>
+                      <span className={classes.listItemCount}>{ item.sublistLength }</span>
+                    </li>
+                  ))
               }
             </ul>
           </div>

@@ -1,9 +1,6 @@
 import { memo, useState } from 'react';
 import cn from 'classnames';
 
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { fetchFiltered } from '../../../entities/manufacturer';
-
 import useActiveFilters from '../lib/hooks/use-active-filters';
 import { FILTERS } from '../lib/filters';
 import { FilterId } from '../lib/types';
@@ -16,7 +13,6 @@ type FolterProps = {
 
 export const Filter = memo(
   ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
-    const dispatch = useAppDispatch();
     const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
     const isActiveFilters = useActiveFilters(activeFilters);
 
@@ -47,16 +43,12 @@ export const Filter = memo(
         ...current,
         ...newFilters
       }));
-
-      dispatch(fetchFiltered(newFilters));
     }
 
     const handleClearAllFiltersClick = () => {
       const newFilters = {};
 
       setActiveFilters(newFilters);
-
-      dispatch(fetchFiltered(newFilters));
     }
 
     return (

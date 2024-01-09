@@ -34,7 +34,7 @@ export const Header = (): JSX.Element => {
           {
             isDesktop
             ? <>
-              <div className={classes.navItem}>Журнал</div>
+              {/* <div className={classes.navItem}>Журнал</div> */}
               <div className={classes.navItem}>Контакты</div>
               <div className={classes.navItem}>О компании</div>
             </>

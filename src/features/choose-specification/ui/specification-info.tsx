@@ -10,12 +10,14 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import classes from './specification-info.module.sass';
 
 type SpecificationInfoProps = {
+  isPrices: boolean;
+  setIsPrices: React.Dispatch<React.SetStateAction<boolean>>;
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const SpecificationInfo = memo(
-  ({ currentSpecification, setCurrentSpecification }: SpecificationInfoProps): JSX.Element => {
+  ({ currentSpecification, setCurrentSpecification, setIsPrices, isPrices }: SpecificationInfoProps): JSX.Element => {
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
@@ -26,8 +28,8 @@ export const SpecificationInfo = memo(
             LiXang L9
           </h2>
 
-          <button>
-            О машине
+          <button onClick={() => setIsPrices((current) => !current)}>
+            {isPrices ? 'О машине' : 'К ценам'}
           </button>
         </div>
 
