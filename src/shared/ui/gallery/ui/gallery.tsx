@@ -1,80 +1,109 @@
-import { useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import { GalleryPagination } from './gallery-pagination';
 import classes from './gallery.module.sass';
-
-const IMAGES_COUNT = 6;
-const IMAGES_NAMES = Array<string>(IMAGES_COUNT).fill('').map(( e, i ) => e + i)
+import PROMO_GALLERY from '../../../../app/settings/gallery';
 
 type GalleryProps = {
-  isPrice?: boolean;
+  isPromo?: boolean;
+  specificationId?: number | null;
 }
 
-export const Gallery = ({ isPrice = false }: GalleryProps): JSX.Element => {
-  const [ currentImage, setCurrentImage ] = useState(0);
-  const handlers = useSwipeable({
-    onSwipedLeft: handleNext,
-    onSwipedRight: handlePrev,
-  });
+export const Gallery = memo(
+  ({ specificationId, isPromo = false }: GalleryProps): JSX.Element => {
+    const [ currentImage, setCurrentImage ] = useState(0);
+    const [ gallery, setGallery ] = useState(PROMO_GALLERY);
+    const handlers = useSwipeable({
+      onSwipedLeft: handleNext,
+      onSwipedRight: handlePrev,
+    });
 
-  function handleNext () {
-    setCurrentImage((current) =>
-      current + 1 === IMAGES_NAMES.length
-      ? 0
-      : current + 1
-    )
-  };
+    useEffect(() => {
+      setCurrentImage(0);
+    }, [specificationId]);
 
-  function handlePrev () {
-    setCurrentImage((current) =>
-      current === 0
-      ? IMAGES_NAMES.length - 1
-      : current - 1
-    )
-  };
+    useEffect(() => {
+      if (specificationId) {
+        setGallery([specificationId]);
+      } else {
+        setGallery(PROMO_GALLERY);
+      }
+    }, [specificationId]);
 
-  return (
-    <div
-      key={currentImage}
-      className={classes.wrapper}
-      style={{backgroundImage: `url('/images/gallery/car-${currentImage + 1}.jpg')`}}
-      {...handlers}
-    >
-      <div>
-        <GalleryPagination
-          count={IMAGES_COUNT}
-          current={currentImage}
-          onClick={setCurrentImage}
-        />
+    function handleNext () {
+      setCurrentImage((current) =>
+        current + 1 === gallery.length
+        ? 0
+        : current + 1
+      )
+    };
 
-        <p>
-          LiXiang L9
-        </p>
-      </div>
+    function handlePrev () {
+      setCurrentImage((current) =>
+        current === 0
+        ? gallery.length - 1
+        : current - 1
+      )
+    };
 
-      <div className={classes.controls}>
-        <div className={classes.arrows}>
-          <button onClick={handlePrev}>
-            <svg width="9" height="8" aria-hidden="true">
-              <use xlinkHref="#arrow-left" />
-            </svg>
-          </button>
+    const handlePagination = useCallback( setCurrentImage, [] );
 
-          <button onClick={handleNext}>
-            <svg width="9" height="8" aria-hidden="true">
-              <use xlinkHref="#arrow-right" />
-            </svg>
-          </button>
+    return (
+      <div
+        key={currentImage}
+        className={classes.wrapper}
+        {...handlers}
+      >
+        <div className={classes.background} >
+          <img src={`${process.env.STATIC_URL}${gallery[currentImage]}.jpg`} />
         </div>
 
-        {
-          isPrice &&
-          <button>
-            Рассчитать спеццену
-          </button>
-        }
+        <div className={classes.overlay}>
+          <div>
+            {
+              gallery.length > 1 &&
+              <GalleryPagination
+                count={gallery.length}
+                current={currentImage}
+                onClick={handlePagination}
+              />
+            }
+
+{/* TODO: Add name */}
+            <p>
+              LiXiang L9
+            </p>
+          </div>
+
+          <div className={classes.controls}>
+            {
+              gallery.length > 1 &&
+              <div className={classes.arrows}>
+                <button onClick={handlePrev}>
+                  <svg width="9" height="8" aria-hidden="true">
+                    <use xlinkHref="#arrow-left" />
+                  </svg>
+                </button>
+
+                <button onClick={handleNext}>
+                  <svg width="9" height="8" aria-hidden="true">
+                    <use xlinkHref="#arrow-right" />
+                  </svg>
+                </button>
+              </div>
+            }
+
+{/* TODO: Add redirect */}
+            {
+              isPromo &&
+              <button>
+                Рассчитать спеццену
+              </button>
+            }
+          </div>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+);

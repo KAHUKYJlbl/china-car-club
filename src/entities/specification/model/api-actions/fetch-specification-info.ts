@@ -9,10 +9,9 @@ import { getFiltersQuery } from '../../../manufacturer';
 import { ManufacturersWithSpecificationsType, SpecificationType } from '../../lib/types';
 
 
-export const fetchSpecifications = createAsyncThunk<
+export const fetchSpecificationsInfo = createAsyncThunk<
   SpecificationType[],
   {
-    manufacturerId: number;
     modelId: number;
     filters: Partial< Record< FilterId, number[] > >;
   },
@@ -22,11 +21,11 @@ export const fetchSpecifications = createAsyncThunk<
     extra: AxiosInstance;
   }
 > (
-  'Specifications/fetchSpecifications',
-  async ( { modelId, filters, manufacturerId }, {extra: axios}) => {
+  'Specifications/fetchSpecificationsInfo',
+  async ( { modelId, filters }, {extra: axios}) => {
     try {
       const { data: { specificationsBySeriesId } } = await axios.get<ManufacturersWithSpecificationsType>(
-          APIRoute.Filters + APIRoute.Models + manufacturerId + '&' + APIRoute.Specifications + modelId + '&' + getFiltersQuery(filters)
+          APIRoute.Filters + APIRoute.Specifications + modelId + '&' + getFiltersQuery(filters)
         );
 
       return specificationsBySeriesId;

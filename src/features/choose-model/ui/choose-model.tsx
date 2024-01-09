@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 
 import {
   fetchManufacturersWithSpectsCount,
@@ -17,63 +17,81 @@ import { FilterId } from '../../filter/lib/types';
 import classes from './choose-model.module.sass';
 
 type ChooseModelProps = {
+  currentManufacturer: number | null;
+  setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
-  activeFilters: Partial< Record< FilterId, number[] > >;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
+  activeFilters: Partial< Record< FilterId, number[] > >;
 }
 
-export const ChooseModel = ({currentModel, setCurrentModel, activeFilters}: ChooseModelProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
+export const ChooseModel = memo(
+  ({
+    currentManufacturer,
+    setCurrentManufacturer,
+    currentModel,
+    setCurrentModel,
+    setCurrentSpecification,
+    activeFilters,
+  }: ChooseModelProps): JSX.Element => {
+    const dispatch = useAppDispatch();
 
-  const carsCount = useAppSelector(getCarsCount);
-  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
-  const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
-  const manufacturersList = useAppSelector(getManuacturersList);
-  const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
+    const carsCount = useAppSelector(getCarsCount);
+    const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+    const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
+    const manufacturersList = useAppSelector(getManuacturersList);
+    const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
 
-  useEffect(() => {
-    setCurrentModel(null);
+    useEffect(() => {
+      setCurrentModel(null);
+      setCurrentSpecification(null);
 
-    if (currentManufacturer) {
-      dispatch(fetchManufacturersWithSpectsCount({
-        manufacturerId: currentManufacturer,
-        filters: activeFilters,
-      }));
+      if (currentManufacturer) {
+        dispatch(fetchManufacturersWithSpectsCount({
+          manufacturerId: currentManufacturer,
+          filters: activeFilters,
+        }));
+      }
+    }, [currentManufacturer]);
+
+    useEffect(() => {
+      setCurrentManufacturer(null);
+      setCurrentModel(null);
+    }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
+
+    if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
+      return <LoadingSpinner spinnerType='widget' />
     }
-  }, [currentManufacturer]);
 
-  useEffect(() => {
-    setCurrentManufacturer(null);
-    setCurrentModel(null);
-  }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
+    return (
+      <div className={classes.wrapper}>
+        <div className={classes.count}>
+          <p>
+            {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
+          </p>
+        </div>
 
-  if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
-    return <LoadingSpinner spinnerType='widget' />
+        <div className={classes.controls}>
+          <Dropdown
+            currentElement={currentManufacturer}
+            setCurrent={setCurrentManufacturer}
+            placeholder={'Марка'}
+            list={manufacturersList}
+            extraListHeader={{
+              basicListHeader: 'Все марки',
+              extraListHeader: 'Популярные',
+            }}
+          />
+
+          <Dropdown
+            currentElement={currentModel}
+            setCurrent={setCurrentModel}
+            placeholder={'Модель'}
+            list={modelsList}
+            disabled={specsLoadingStatus.isLoading}
+          />
+        </div>
+      </div>
+    );
   }
-
-  return (
-    <div className={classes.wrapper}>
-      <div className={classes.count}>
-        {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
-      </div>
-
-      <div className={classes.controls}>
-        <Dropdown
-          current={currentManufacturer}
-          setCurrent={setCurrentManufacturer}
-          placeholder={'Марка'}
-          list={manufacturersList}
-        />
-
-        <Dropdown
-          current={currentModel}
-          setCurrent={setCurrentModel}
-          placeholder={'Модель'}
-          list={modelsList}
-          disabled={specsLoadingStatus.isLoading}
-        />
-      </div>
-    </div>
-  )
-}
+);

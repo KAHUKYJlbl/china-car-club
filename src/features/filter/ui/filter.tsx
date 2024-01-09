@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import cn from 'classnames';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { fetchFiltered } from '../../../entities/manufacturer';
 
+import useActiveFilters from '../lib/hooks/use-active-filters';
 import { FILTERS } from '../lib/filters';
 import { FilterId } from '../lib/types';
 import classes from './filter.module.sass';
@@ -13,33 +14,34 @@ type FolterProps = {
   setActiveFilters: React.Dispatch<React.SetStateAction<Partial<Record<FilterId, number[]>>>>;
 }
 
-export const Filter = ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
+export const Filter = memo(
+  ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+    const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
+    const isActiveFilters = useActiveFilters(activeFilters);
 
-  const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
-    const newFilters = {
-      ...activeFilters,
-      [filter]: activeFilters[filter]
-        ? activeFilters[filter]?.includes(elementId)
-          ? activeFilters[filter]?.filter((element) => element !== elementId)
-          : activeFilters[filter]?.concat(elementId)
-        : [elementId]
+    const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
+      const newFilters = {
+        ...activeFilters,
+        [filter]:
+          activeFilters[filter]
+            ? activeFilters[filter]?.includes(elementId)
+              ? activeFilters[filter]?.filter((element) => element !== elementId)
+              : activeFilters[filter]?.concat(elementId)
+            : [elementId]
+      };
+
+      setActiveFilters((current) => ({
+        ...current,
+        ...newFilters
+      }));
     };
 
-    setActiveFilters((current) => ({
-      ...current,
-      ...newFilters
-    }));
-
-    dispatch(fetchFiltered(newFilters));
-  };
-
-  const handleClearFilterClick = () => {
-    const newFilters = {
-      ...activeFilters,
-      [currentFilter]: [],
-    };
+    const handleClearFilterClick = () => {
+      const newFilters = {
+        ...activeFilters,
+        [currentFilter]: [],
+      };
 
       setActiveFilters((current) => ({
         ...current,
@@ -47,82 +49,91 @@ export const Filter = ({ activeFilters, setActiveFilters }: FolterProps): JSX.El
       }));
     }
 
-  const handleClearAllFiltersClick = () => {
-    const newFilters = {};
+    const handleClearAllFiltersClick = () => {
+      const newFilters = {};
 
       setActiveFilters(newFilters);
     }
 
-  return (
-    <div className={classes.wrapper}>
-      <div className={classes.headerRow}>
-        <p>Фильтр автомобилей</p>
+    return (
+      <div className={classes.wrapper}>
+        <div className={classes.headerRow}>
+          <p>Фильтр автомобилей</p>
 
-        <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#x" />
-          </svg>
-        </button>
-      </div>
-
-      <div className={classes.row}>
-        {
-          Object.keys(FILTERS).map((filter) => (
-            <div
-              key={filter}
-              className={cn(classes.filterButton, {[classes.active]: filter === currentFilter})}
-              onClick={() => setCurrentFilter(filter as FilterId)}
-            >
-              { FILTERS[filter as FilterId]?.name }
-
-              {
-                ((
-                  activeFilters[filter as FilterId] !== undefined
-                  && activeFilters[filter as FilterId]?.length !== 0
-                )
-                || (filter === 'other' && FILTERS.other?.elements.some((element) =>
-                  (
-                    element.filterId
-                    && (activeFilters[element.filterId] !== undefined)
-                    && (activeFilters[element.filterId]?.length !== 0)
-                  )
-                )))
-                && <div className={classes.activeFilter} />
-              }
+          {
+            isActiveFilters &&
+            <div className={classes.buttonWrapper}>
+              <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+                <svg width="16" height="16" aria-hidden="true">
+                  <use xlinkHref="#x" />
+                </svg>
+              </button>
             </div>
-          ))
-        }
-      </div>
+          }
+        </div>
 
-      <div className={classes.row}>
-        {
-          FILTERS[currentFilter]?.elements.map((element) => (
-            <div
-              key={element.elementId}
-              className={cn(
-                classes.filterElementButton,
-                { [classes.active]: activeFilters[currentFilter]?.includes( element.elementId ) },
-                { [classes.active]:
-                  (
-                    currentFilter === 'other'
-                    && element.filterId
-                    && activeFilters[element.filterId]?.some((filter) => filter === element.elementId)
+        <div className={classes.row}>
+          {
+            Object.keys(FILTERS).map((filter) => (
+              <div
+                key={filter}
+                className={cn(classes.filterButton, {[classes.active]: filter === currentFilter})}
+                onClick={() => setCurrentFilter(filter as FilterId)}
+              >
+                { FILTERS[filter as FilterId]?.name }
+
+                {
+                  ((
+                    activeFilters[filter as FilterId] !== undefined
+                    && activeFilters[filter as FilterId]?.length !== 0
                   )
+                  || (filter === 'other' && FILTERS.other?.elements.some((element) =>
+                    (
+                      element.filterId
+                      && (activeFilters[element.filterId] !== undefined)
+                      && (activeFilters[element.filterId]?.length !== 0)
+                    )
+                  )))
+                  && <div className={classes.activeFilter} />
                 }
-              )}
-              onClick={() => handleActiveFiltersClick(element.filterId || currentFilter, element.elementId)}
-            >
-              { element.name }
-            </div>
-          ))
-        }
+              </div>
+            ))
+          }
+        </div>
 
-        <button className={classes.xButton} onClick={handleClearFilterClick}>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#x" />
-          </svg>
-        </button>
+        <div className={classes.row}>
+          {
+            FILTERS[currentFilter]?.elements.map((element) => (
+              <div
+                key={element.elementId}
+                className={cn(
+                  classes.filterElementButton,
+                  { [classes.active]: activeFilters[currentFilter]?.includes( element.elementId ) },
+                  { [classes.active]:
+                    (
+                      currentFilter === 'other'
+                      && element.filterId
+                      && activeFilters[element.filterId]?.some((filter) => filter === element.elementId)
+                    )
+                  }
+                )}
+                onClick={() => handleActiveFiltersClick(element.filterId || currentFilter, element.elementId)}
+              >
+                { element.name }
+              </div>
+            ))
+          }
+
+          {
+            activeFilters[currentFilter] && activeFilters[currentFilter]?.length !== 0 &&
+            <button className={classes.xButton} onClick={handleClearFilterClick}>
+              <svg width="16" height="16" aria-hidden="true">
+                <use xlinkHref="#x" />
+              </svg>
+            </button>
+          }
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+);
