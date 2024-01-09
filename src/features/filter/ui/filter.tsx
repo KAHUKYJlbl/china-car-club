@@ -47,16 +47,12 @@ export const Filter = memo(
         ...current,
         ...newFilters
       }));
-
-      dispatch(fetchFiltered(newFilters));
     }
 
     const handleClearAllFiltersClick = () => {
       const newFilters = {};
 
       setActiveFilters(newFilters);
-
-      dispatch(fetchFiltered(newFilters));
     }
 
     return (
