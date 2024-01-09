@@ -7,11 +7,36 @@ import { Gallery } from '../../../shared/ui/gallery';
 
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
+import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
+  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
+  const specifications = useAppSelector(getSpecifications);
+  const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const [ isPrices, setIsPrices ] = useState(true);
+
+  useEffect(() => {
+
+    if (modelId) {
+      dispatch(fetchSpecificationsInfo({
+        modelId: +modelId,
+        filters: {},
+      }));
+    }
+  }, [modelId]);
+
+  useEffect(() => {
+    if (specificationsLoadingStatus.isSuccess) {
+      setCurrentSpecification(specifications[0].id);
+    }
+  }, [specificationsLoadingStatus]);
+
+  if (specificationsLoadingStatus.isLoading) {
+    return <LoadingSpinner spinnerType='page' />
+  }
 
   return (
     <div className={classes.wrapper}>
@@ -27,12 +52,23 @@ export const ModelInfo = (): JSX.Element => {
       }
 
       <div className={classes.specification}>
-        <SpecificationInfo />
+        <SpecificationInfo
+          isPrices={isPrices}
+          setIsPrices={setIsPrices}
+          currentSpecification={currentSpecification}
+          setCurrentSpecification={setCurrentSpecification}
+        />
       </div>
 
-      <div className={classes.prices}>
-        <Prices />
-      </div>
+      {
+        isPrices
+        ? <div className={classes.prices}>
+          <Prices />
+        </div>
+        : <div className={classes.prices}>
+          <Techs />
+        </div>
+      }
 
       <div className={classes.addOptions}>
         <ChooseOptions />

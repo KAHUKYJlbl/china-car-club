@@ -41,21 +41,17 @@ export const Filter = ({ activeFilters, setActiveFilters }: FolterProps): JSX.El
       [currentFilter]: [],
     };
 
-    setActiveFilters((current) => ({
-      ...current,
-      ...newFilters
-    }));
-
-    dispatch(fetchFiltered(newFilters));
-  }
+      setActiveFilters((current) => ({
+        ...current,
+        ...newFilters
+      }));
+    }
 
   const handleClearAllFiltersClick = () => {
     const newFilters = {};
 
-    setActiveFilters(newFilters);
-
-    dispatch(fetchFiltered(newFilters));
-  }
+      setActiveFilters(newFilters);
+    }
 
   return (
     <div className={classes.wrapper}>

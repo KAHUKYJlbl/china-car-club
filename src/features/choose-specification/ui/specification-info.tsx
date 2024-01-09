@@ -12,23 +12,17 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './specification-info.module.sass';
 
-export const SpecificationInfo = (): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const { modelId } = useParams();
-  const specifications = useAppSelector(getSpecifications);
-  const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
+type SpecificationInfoProps = {
+  isPrices: boolean;
+  setIsPrices: React.Dispatch<React.SetStateAction<boolean>>;
+  currentSpecification: number | null;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
+};
 
-  useEffect(() => {
-    setCurrentSpecification(null);
-
-    if (modelId) {
-      dispatch(fetchSpecifications({
-        modelId: +modelId,
-        filters: {},
-      }));
-    }
-  }, [modelId]);
+export const SpecificationInfo = memo(
+  ({ currentSpecification, setCurrentSpecification, setIsPrices, isPrices }: SpecificationInfoProps): JSX.Element => {
+    const specifications = useAppSelector(getSpecifications);
+    const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
   return (
     <div className={classes.wrapper}>
@@ -37,10 +31,10 @@ export const SpecificationInfo = (): JSX.Element => {
           LiXang L9
         </h2>
 
-        <button>
-          О машине
-        </button>
-      </div>
+          <button onClick={() => setIsPrices((current) => !current)}>
+            {isPrices ? 'О машине' : 'К ценам'}
+          </button>
+        </div>
 
       <div className={classes.bottom}>
         <p className={classes.label}>
