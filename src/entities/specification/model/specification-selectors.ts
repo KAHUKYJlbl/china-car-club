@@ -25,6 +25,15 @@ export const getPrice = createSelector(
   )
 )
 
+export const getCheapestSpecification = createSelector(
+  getRawSpecifications,
+  (specifications) => (
+    specifications.toSorted(
+      (a, b) => a.priceWithLogisticsByCurrentDay.price - b.priceWithLogisticsByCurrentDay.price
+    )[0]
+  )
+)
+
 export const getSpecificationsLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Specification].specificationsLoadingStatus,
   (status) => ({

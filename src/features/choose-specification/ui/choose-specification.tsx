@@ -8,6 +8,7 @@ import { Dropdown } from '../../../shared/ui/dropdown';
 import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
 import {
   fetchSpecifications,
+  getCheapestSpecification,
   getPrice,
   getSpecifications,
   getSpecificationsLoadingStatus
@@ -29,6 +30,7 @@ export const ChooseSpecification = memo(
   ({ currentManufacturer, currentModel, currentSpecification, setCurrentSpecification, activeFilters }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
+    const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
     const price = useAppSelector((state) => getPrice(state, currentSpecification));
@@ -47,9 +49,9 @@ export const ChooseSpecification = memo(
 
     useEffect(() => {
       if (specifications && specifications.length !== 0) {
-        setCurrentSpecification(specifications[0].id);
+        setCurrentSpecification(cheapest?.id);
       }
-    }, [specifications[0]]);
+    }, [cheapest?.id]);
 
     if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
       return <LoadingSpinner spinnerType='widget' />
