@@ -3,15 +3,20 @@ import cn from 'classnames';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { Dropdown } from '../../../shared/ui/dropdown';
+import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
 import {
   fetchSpecifications,
+  getCheapestSpecification,
+  getPrice,
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 
-import classes from './choose-specification.module.sass';
 import { FilterId } from '../../filter';
+import classes from './choose-specification.module.sass';
+import priceFormat from '../../../shared/lib/utils/price-format';
 
 type ChooseSpecificationProps = {
   currentManufacturer: number | null;
@@ -25,11 +30,14 @@ export const ChooseSpecification = memo(
   ({ currentManufacturer, currentModel, currentSpecification, setCurrentSpecification, activeFilters }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
+    const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
-    useEffect(() => {
-      // setCurrentSpecification(null);
+    const price = useAppSelector((state) => getPrice(state, currentSpecification));
+    const currency = useAppSelector(getCurrency);
+    const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
+    useEffect(() => {
       if (currentModel && currentManufacturer) {
         dispatch(fetchSpecifications({
           manufacturerId: currentManufacturer,
@@ -41,9 +49,13 @@ export const ChooseSpecification = memo(
 
     useEffect(() => {
       if (specifications && specifications.length !== 0) {
-        setCurrentSpecification(specifications[0].id);
+        setCurrentSpecification(cheapest?.id);
       }
-    }, [specifications[0]]);
+    }, [cheapest?.id]);
+
+    if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
+      return <LoadingSpinner spinnerType='widget' />
+    }
 
     return (
       <div className={classes.wrapper}>
@@ -74,7 +86,9 @@ export const ChooseSpecification = memo(
                   </b>
                 </p>
 
-                <p className={classes.price}><b>0 000 000 ₽</b></p>
+                <p className={cn(classes.discountPrice, classes.price)}>
+                  <b>0 000 000 ₽</b>
+                </p>
 
                 <p className={cn(classes.price, classes.grey)}>
                   {
@@ -92,8 +106,9 @@ export const ChooseSpecification = memo(
                   }
                 </p>
 
-
-                <p className={cn(classes.small, classes.grey, classes.discount)}>Действующая скидка на автомобиль у дилера</p>
+                <p className={cn(classes.small, classes.grey, classes.discount)}>
+                  Действующая скидка на автомобиль у дилера
+                </p>
               </div>
             </div>
           </>

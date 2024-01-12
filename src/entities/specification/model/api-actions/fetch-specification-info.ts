@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
+import queryString from 'query-string';
 
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
@@ -24,9 +25,15 @@ export const fetchSpecificationsInfo = createAsyncThunk<
   'Specifications/fetchSpecificationsInfo',
   async ( { modelId, filters }, {extra: axios}) => {
     try {
-      const { data: { specificationsBySeriesId } } = await axios.get<ManufacturersWithSpecificationsType>(
-          APIRoute.Filters + APIRoute.Specifications + modelId + '&' + getFiltersQuery(filters)
-        );
+      const { data: { specificationsBySeriesId } } = await axios.get<ManufacturersWithSpecificationsType>([
+        APIRoute.Catalog,
+        queryString.stringifyUrl({
+          url: '',
+          query: {seriesId: modelId},
+        }),
+        '&',
+        getFiltersQuery(filters),
+      ].join(''));
 
       return specificationsBySeriesId;
     } catch (err) {

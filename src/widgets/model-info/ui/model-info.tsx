@@ -73,26 +73,32 @@ export const ModelInfo = (): JSX.Element => {
       </div>
 
       {
-        isPrices
-        ? <div className={classes.prices}>
-          <Prices />
-        </div>
-        : <div className={classes.prices}>
+        !isPrices &&
+        <div className={classes.techs}>
           <Techs />
         </div>
       }
 
-      <div className={classes.addOptions}>
-        <ChooseOptions />
-      </div>
+      {
+        isPrices &&
+        <>
+          <div className={classes.prices}>
+            <Prices />
+          </div>
 
-      <div className={classes.currency}>
-        <Currency />
-      </div>
+          <div className={classes.addOptions}>
+            <ChooseOptions />
+          </div>
 
-      <div className={classes.buttons}>
-        <OrderButtons />
-      </div>
+          <div className={classes.currency}>
+            <Currency />
+          </div>
+
+          <div className={classes.buttons}>
+            <OrderButtons />
+          </div>
+        </>
+      }
     </div>
   )
 }
