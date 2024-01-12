@@ -5,7 +5,11 @@ import { useParams } from 'react-router-dom';
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
-import { fetchSpecificationsInfo, getSpecifications, getSpecificationsLoadingStatus } from '../../../entities/specification';
+import {
+  fetchSpecificationsInfo,
+  getSpecifications,
+  getSpecificationsLoadingStatus
+} from '../../../entities/specification';
 import { Gallery } from '../../../shared/ui/gallery';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';

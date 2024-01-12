@@ -64,13 +64,33 @@ export const ChooseSpecification = memo(
 
             <div className={classes.priceWrapper}>
               <div className={classes.priceList}>
-                <p className={classes.price}><b>0 000 000 ¥</b></p>
+                <p className={classes.price}>
+                  <b>
+                    {
+                      price
+                        ? `${priceFormat( price.toString() )} ¥`
+                        : 'Уточним цену'
+                    }
+                  </b>
+                </p>
 
                 <p className={classes.price}><b>0 000 000 ₽</b></p>
 
-                <p className={cn(classes.price, classes.grey)}>0 000 000 ₽</p>
+                <p className={cn(classes.price, classes.grey)}>
+                  {
+                    price
+                      ? `${priceFormat( (price! * currency.cny).toFixed() )} ₽`
+                      : 'Уточним цену'
+                  }
+                </p>
 
-                <p className={cn(classes.price, classes.grey)}>0 000 000 $</p>
+                <p className={cn(classes.price, classes.grey)}>
+                  {
+                    price
+                      ? `${priceFormat( (price! * currency.cny / currency.usd).toFixed() )} $`
+                      : 'Уточним цену'
+                  }
+                </p>
 
 
                 <p className={cn(classes.small, classes.grey, classes.discount)}>Действующая скидка на автомобиль у дилера</p>
