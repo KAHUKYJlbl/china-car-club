@@ -61,3 +61,51 @@ export const getModelsList = createSelector(
     : null
   )
 );
+
+export const getName = createSelector(
+  [
+    getManufacturers,
+    (_state: State, id: number | null) => id
+  ],
+  (manufacturers, id) => {
+    if (id) {
+      const manufacturer = manufacturers?.manufacturers?.find((manufacturer) =>
+        manufacturer.seriesList.some((series) =>
+          series.id === id
+        )
+      );
+
+      if (manufacturer) {
+        const manufacturerName = manufacturer.name.ru || manufacturer.name.ch;
+
+        const model = manufacturer.seriesList.find((series) => series.id === id);
+
+        if (model) {
+          const modelName = model.name.ru || model.name.ch;
+
+          return `${manufacturerName} ${modelName}`
+        }
+      }
+    }
+
+    return null;
+  }
+);
+
+export const getManufacturerByModel = createSelector(
+  [
+    getManufacturers,
+    (_state: State, id: number | null) => id
+  ],
+  (manufacturers, id) => {
+    if (id) {
+      return manufacturers?.manufacturers?.find((manufacturer) =>
+        manufacturer.seriesList.some((series) =>
+          series.id === id
+        )
+      )?.id
+    }
+
+    return null;
+  }
+);

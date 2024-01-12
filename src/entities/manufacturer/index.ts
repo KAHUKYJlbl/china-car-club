@@ -5,6 +5,8 @@ export { fetchManufacturers } from './model/api-actions/fetch-manufacturers';
 export { fetchFiltered } from './model/api-actions/fetch-filtered';
 export { fetchManufacturersWithSpectsCount } from './model/api-actions/fetch-specs';
 export {
+  getName,
+  getManufacturerByModel,
   getCarsCount,
   getManufacturers,
   getManufacturersLoadingStatus,

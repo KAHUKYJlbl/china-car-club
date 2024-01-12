@@ -1,19 +1,27 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
+import PROMO_GALLERY from '../../../../app/settings/gallery';
+import { useAppSelector } from '../../../lib/hooks/use-app-selector';
+import { getManufacturerByModel, getName } from '../../../../entities/manufacturer';
+
 import { GalleryPagination } from './gallery-pagination';
 import classes from './gallery.module.sass';
-import PROMO_GALLERY from '../../../../app/settings/gallery';
 
 type GalleryProps = {
-  isPromo?: boolean;
-  specificationId?: number | null;
+  handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void) | null;
+  galleryId: {
+    specificationId: number | null,
+    modelId: number | null,
+  };
 }
 
 export const Gallery = memo(
-  ({ specificationId, isPromo = false }: GalleryProps): JSX.Element => {
+  ({ galleryId, handlePromo }: GalleryProps): JSX.Element => {
     const [ currentImage, setCurrentImage ] = useState(0);
     const [ gallery, setGallery ] = useState(PROMO_GALLERY);
+    const name = useAppSelector((state) => getName(state, gallery[currentImage].modelId));
+    const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, gallery[currentImage].modelId));
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
       onSwipedRight: handlePrev,
@@ -21,15 +29,18 @@ export const Gallery = memo(
 
     useEffect(() => {
       setCurrentImage(0);
-    }, [specificationId]);
+    }, [galleryId.specificationId]);
 
     useEffect(() => {
-      if (specificationId) {
-        setGallery([specificationId]);
+      if (galleryId.specificationId && galleryId.modelId) {
+        setGallery([{
+          specificationId: galleryId.specificationId,
+          modelId: galleryId.modelId,
+        }]);
       } else {
         setGallery(PROMO_GALLERY);
       }
-    }, [specificationId]);
+    }, [galleryId.specificationId]);
 
     function handleNext () {
       setCurrentImage((current) =>
@@ -49,6 +60,15 @@ export const Gallery = memo(
 
     const handlePagination = useCallback( setCurrentImage, [] );
 
+    const handlePromoClick = () => {
+      if (handlePromo && manufacturerId) {
+        handlePromo(manufacturerId, gallery[currentImage].modelId, gallery[currentImage].specificationId);
+        // isPromo.manufacturerCallback(manufacturerId);
+
+        // setTimeout(() => isPromo.modelCallback(gallery[currentImage].modelId), 50)
+      }
+    }
+
     return (
       <div
         key={currentImage}
@@ -56,7 +76,7 @@ export const Gallery = memo(
         {...handlers}
       >
         <div className={classes.background} >
-          <img src={`${process.env.STATIC_URL}specification/${gallery[currentImage]}.jpg`} />
+          <img src={`${process.env.STATIC_URL}specification/${gallery[currentImage].specificationId}.jpg`} />
         </div>
 
         <div className={classes.overlay}>
@@ -72,7 +92,7 @@ export const Gallery = memo(
 
 {/* TODO: Add name */}
             <p>
-              LiXiang L9
+              {name}
             </p>
           </div>
 
@@ -96,8 +116,8 @@ export const Gallery = memo(
 
 {/* TODO: Add redirect */}
             {
-              isPromo &&
-              <button>
+              handlePromo &&
+              <button onClick={handlePromoClick}>
                 Рассчитать спеццену
               </button>
             }

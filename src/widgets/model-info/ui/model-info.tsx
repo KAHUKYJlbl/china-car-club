@@ -25,10 +25,10 @@ export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { modelId } = useParams();
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
-  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
   const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
+  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
 
@@ -46,14 +46,19 @@ export const ModelInfo = (): JSX.Element => {
     }
   }, [specificationsLoadingStatus]);
 
-  if (specificationsLoadingStatus.isLoading) {
+  if (specificationsLoadingStatus.isLoading || !modelId) {
     return <LoadingSpinner spinnerType='page' />
   }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery specificationId={currentSpecification} />
+        <Gallery
+          galleryId={{
+            specificationId: currentSpecification,
+            modelId: +modelId
+          }}
+        />
       </div>
 
       {

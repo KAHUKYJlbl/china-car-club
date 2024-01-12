@@ -26,17 +26,27 @@ export const Calculator = (): JSX.Element => {
     dispatch(fetchManufacturers());
   }, []);
 
-const handleFiltersChange = useCallback(
-  setActiveFilters,
-  []
-);
+  const handleFiltersChange = useCallback(
+    setActiveFilters,
+    []
+  );
+
+  const handlePromo = (promoManufacturer: number, promoModel: number, promoSpecification: number) => {
+    setActiveFilters({});
+    setCurrentManufacturer(promoManufacturer);
+    setTimeout(() => setCurrentModel(promoModel), 50);
+    setTimeout(() => setCurrentSpecification(promoSpecification), 150);
+  }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
         <Gallery
-          isPromo={!currentModel}
-          specificationId={currentSpecification}
+          handlePromo={!currentModel ? handlePromo : null}
+          galleryId={{
+            specificationId: currentSpecification,
+            modelId: currentModel,
+          }}
         />
       </div>
 
