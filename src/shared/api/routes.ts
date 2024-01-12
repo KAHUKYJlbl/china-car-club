@@ -1,6 +1,4 @@
 export enum APIRoute {
-  Catalog = '/',
-  Filters = '?',
-  Models = 'manufacturerId=',
-  Specifications = 'seriesId=',
+  Catalog = '/calc/manufacturers',
+  Currency = '/exchange-rates',
 }
