@@ -85,7 +85,7 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       <div className={classes.delivery}>
-        <ChooseDelivery model={currentModel} />
+        <ChooseDelivery modelId={currentModel} specificationId={currentSpecification} />
       </div>
     </div>
   )

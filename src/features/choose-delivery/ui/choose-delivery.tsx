@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import queryString from 'query-string';
 import { generatePath, useNavigate } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
@@ -7,16 +8,23 @@ import { Dropdown } from '../../../shared/ui/dropdown';
 import classes from './choose-delivery.module.sass';
 
 type ChooseDeliveryProps = {
-  model: number | null;
+  modelId: number | null;
+  specificationId: number | null;
 }
 
 export const ChooseDelivery = memo(
-  ({ model }: ChooseDeliveryProps): JSX.Element => {
+  ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const navigate = useNavigate();
 
     const buttonClickHandler = () => {
-      if (model) {
-        navigate( generatePath(AppRoute.Model, {modelId: model.toString()}) )
+      if (modelId && specificationId ) {
+        navigate([
+          generatePath(AppRoute.Model, {modelId: modelId.toString()}),
+          queryString.stringifyUrl({
+            url: '',
+            query: {specificationId}
+          }),
+      ].join(''))
       }
     }
 

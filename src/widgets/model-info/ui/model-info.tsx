@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
+import queryString from 'query-string';
 
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
 import {
   fetchSpecificationsInfo,
-  getSpecifications,
+  // getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Gallery } from '../../../shared/ui/gallery';
@@ -24,14 +25,21 @@ import classes from './model-info.module.sass';
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { modelId } = useParams();
+  const [ searchParams, setSearchParams ] = useSearchParams();
+
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
-  const specifications = useAppSelector(getSpecifications);
+  // const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
+    const id = searchParams.get('specificationId');
 
+    setCurrentSpecification(id ? +id : null);
+  }, []);
+
+  useEffect(() => {
     if (modelId) {
       dispatch(fetchSpecificationsInfo({
         modelId: +modelId,
@@ -41,10 +49,18 @@ export const ModelInfo = (): JSX.Element => {
   }, [modelId]);
 
   useEffect(() => {
-    if (specificationsLoadingStatus.isSuccess) {
-      setCurrentSpecification(specifications[0].id);
+    if (currentSpecification) {
+      setSearchParams ( {specificationId: currentSpecification.toString()} );
     }
-  }, [specificationsLoadingStatus]);
+  }, [currentSpecification]);
+
+  // useEffect(() => {
+  //   if (specificationsLoadingStatus.isSuccess) {
+  //     setCurrentSpecification(specifications[0].id);
+  //   }
+  // }, [specificationsLoadingStatus]);
+
+
 
   if (specificationsLoadingStatus.isLoading || !modelId) {
     return <LoadingSpinner spinnerType='page' />
