@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useParams, useSearchParams } from 'react-router-dom';
-import queryString from 'query-string';
 
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import { Currency } from '../../../entities/currency';
 import {
   fetchSpecificationsInfo,
-  // getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Gallery } from '../../../shared/ui/gallery';
@@ -28,13 +26,12 @@ export const ModelInfo = (): JSX.Element => {
   const [ searchParams, setSearchParams ] = useSearchParams();
 
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
-  // const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
-    const id = searchParams.get('specificationId');
+    const id = searchParams.get('spec');
 
     setCurrentSpecification(id ? +id : null);
   }, []);
@@ -50,17 +47,9 @@ export const ModelInfo = (): JSX.Element => {
 
   useEffect(() => {
     if (currentSpecification) {
-      setSearchParams ( {specificationId: currentSpecification.toString()} );
+      setSearchParams ( {spec: currentSpecification.toString()} );
     }
   }, [currentSpecification]);
-
-  // useEffect(() => {
-  //   if (specificationsLoadingStatus.isSuccess) {
-  //     setCurrentSpecification(specifications[0].id);
-  //   }
-  // }, [specificationsLoadingStatus]);
-
-
 
   if (specificationsLoadingStatus.isLoading || !modelId) {
     return <LoadingSpinner spinnerType='page' />

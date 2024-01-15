@@ -22,7 +22,7 @@ export const ChooseDelivery = memo(
           generatePath(AppRoute.Model, {modelId: modelId.toString()}),
           queryString.stringifyUrl({
             url: '',
-            query: {specificationId}
+            query: {spec: specificationId}
           }),
       ].join(''))
       }
