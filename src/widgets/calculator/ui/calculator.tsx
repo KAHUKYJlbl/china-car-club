@@ -18,6 +18,7 @@ export const Calculator = (): JSX.Element => {
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
+  const [ promoMode, setPromoMode ] = useState(false);
 
   useFilters(activeFilters);
 
@@ -32,17 +33,19 @@ export const Calculator = (): JSX.Element => {
   );
 
   const handlePromo = (promoManufacturer: number, promoModel: number, promoSpecification: number) => {
+    setPromoMode(true);
     setActiveFilters({});
     setCurrentManufacturer(promoManufacturer);
-    setTimeout(() => setCurrentModel(promoModel), 50);
-    setTimeout(() => setCurrentSpecification(promoSpecification), 150);
+    setCurrentModel(promoModel);
+    setCurrentSpecification(promoSpecification);
+    setTimeout(() => setPromoMode(false), 500);
   }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
         <Gallery
-          handlePromo={!currentModel ? handlePromo : null}
+          handlePromo={currentModel ? null : handlePromo}
           galleryId={{
             specificationId: currentSpecification,
             modelId: currentModel,
@@ -52,6 +55,7 @@ export const Calculator = (): JSX.Element => {
 
       <div className={classes.model}>
         <ChooseModel
+          isPromo={promoMode}
           currentManufacturer={currentManufacturer}
           setCurrentManufacturer={setCurrentManufacturer}
           currentModel={currentModel}
@@ -67,6 +71,7 @@ export const Calculator = (): JSX.Element => {
 
       <div className={classes.price}>
         <ChooseSpecification
+          isPromo={promoMode}
           currentManufacturer={currentManufacturer}
           currentModel={currentModel}
           currentSpecification={currentSpecification}

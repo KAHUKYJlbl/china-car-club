@@ -19,6 +19,7 @@ import classes from './choose-specification.module.sass';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
 type ChooseSpecificationProps = {
+  isPromo: boolean;
   currentManufacturer: number | null;
   currentModel: number | null;
   currentSpecification: number | null;
@@ -27,7 +28,14 @@ type ChooseSpecificationProps = {
 };
 
 export const ChooseSpecification = memo(
-  ({ currentManufacturer, currentModel, currentSpecification, setCurrentSpecification, activeFilters }: ChooseSpecificationProps): JSX.Element => {
+  ({
+    isPromo,
+    currentManufacturer,
+    currentModel,
+    currentSpecification,
+    setCurrentSpecification,
+    activeFilters
+  }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
     const cheapest = useAppSelector(getCheapestSpecification);
@@ -48,7 +56,7 @@ export const ChooseSpecification = memo(
     }, [currentModel]);
 
     useEffect(() => {
-      if (specifications && specifications.length !== 0) {
+      if (specifications && specifications.length !== 0 && !isPromo) {
         setCurrentSpecification(cheapest?.id);
       }
     }, [cheapest?.id]);

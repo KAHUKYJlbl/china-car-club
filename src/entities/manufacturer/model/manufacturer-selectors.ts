@@ -5,6 +5,8 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 export const getManufacturers = (state: State) => state[NameSpace.Manufacturer].manufacturers;
 
+export const getFullList = (state: State) => state[NameSpace.Manufacturer].fullListManufacturers;
+
 export const getCarsCount = createSelector(
   getManufacturers,
   (manufacturers) => ({
@@ -64,7 +66,7 @@ export const getModelsList = createSelector(
 
 export const getName = createSelector(
   [
-    getManufacturers,
+    getFullList,
     (_state: State, id: number | null) => id
   ],
   (manufacturers, id) => {
@@ -94,7 +96,7 @@ export const getName = createSelector(
 
 export const getManufacturerByModel = createSelector(
   [
-    getManufacturers,
+    getFullList,
     (_state: State, id: number | null) => id
   ],
   (manufacturers, id) => {

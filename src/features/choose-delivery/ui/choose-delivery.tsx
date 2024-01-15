@@ -16,7 +16,7 @@ export const ChooseDelivery = memo(
 
     const buttonClickHandler = () => {
       if (model) {
-        navigate( generatePath( AppRoute.Model, {modelId: model.toString()} ) )
+        navigate( generatePath(AppRoute.Model, {modelId: model.toString()}) )
       }
     }
 

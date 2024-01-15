@@ -63,9 +63,6 @@ export const Gallery = memo(
     const handlePromoClick = () => {
       if (handlePromo && manufacturerId) {
         handlePromo(manufacturerId, gallery[currentImage].modelId, gallery[currentImage].specificationId);
-        // isPromo.manufacturerCallback(manufacturerId);
-
-        // setTimeout(() => isPromo.modelCallback(gallery[currentImage].modelId), 50)
       }
     }
 
