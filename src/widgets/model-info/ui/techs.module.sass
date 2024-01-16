@@ -3,9 +3,41 @@
 .wrapper
   display: flex
   flex-direction: column
-  justify-content: space-evenly
+  justify-content: space-between
 
+  height: 100%
   padding: 16px
+
+.divider:first-child
+  margin-top: 0
+
+.divider
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+  margin-top: 12px
+
+  .row
+    margin-top: 0
+
+.colors-wrapper
+  padding-top: 12px
+
+  border-top: 1px solid #B7BBBF
+
+.colors
+  font-size: 13px
+  line-height: 21px
+
+  @media screen and (max-width: 1280px)
+    font-size: 12px
+    line-height: 15px
+
+.colors-list
+  display: flex
+
+  list-style: none
 
 .row
   display: flex

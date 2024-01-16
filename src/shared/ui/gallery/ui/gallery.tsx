@@ -56,7 +56,7 @@ export const Gallery = memo(
         {...handlers}
       >
         <div className={classes.background} >
-          <img src={`${process.env.STATIC_URL}${gallery[currentImage]}.jpg`} />
+          <img src={`${process.env.STATIC_URL}specification/${gallery[currentImage]}.jpg`} />
         </div>
 
         <div className={classes.overlay}>
