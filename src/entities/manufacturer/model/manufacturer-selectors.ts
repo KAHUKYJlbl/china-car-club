@@ -5,6 +5,8 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 export const getManufacturers = (state: State) => state[NameSpace.Manufacturer].manufacturers;
 
+export const getFullList = (state: State) => state[NameSpace.Manufacturer].fullListManufacturers;
+
 export const getCarsCount = createSelector(
   getManufacturers,
   (manufacturers) => ({
@@ -60,4 +62,52 @@ export const getModelsList = createSelector(
       }))
     : null
   )
+);
+
+export const getName = createSelector(
+  [
+    getFullList,
+    (_state: State, id: number | null) => id
+  ],
+  (manufacturers, id) => {
+    if (id) {
+      const manufacturer = manufacturers?.manufacturers?.find((manufacturer) =>
+        manufacturer.seriesList.some((series) =>
+          series.id === id
+        )
+      );
+
+      if (manufacturer) {
+        const manufacturerName = manufacturer.name.ru || manufacturer.name.ch;
+
+        const model = manufacturer.seriesList.find((series) => series.id === id);
+
+        if (model) {
+          const modelName = model.name.ru || model.name.ch;
+
+          return `${manufacturerName} ${modelName}`
+        }
+      }
+    }
+
+    return null;
+  }
+);
+
+export const getManufacturerByModel = createSelector(
+  [
+    getFullList,
+    (_state: State, id: number | null) => id
+  ],
+  (manufacturers, id) => {
+    if (id) {
+      return manufacturers?.manufacturers?.find((manufacturer) =>
+        manufacturer.seriesList.some((series) =>
+          series.id === id
+        )
+      )?.id
+    }
+
+    return null;
+  }
 );

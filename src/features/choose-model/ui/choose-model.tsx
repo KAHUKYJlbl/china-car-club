@@ -17,6 +17,7 @@ import { FilterId } from '../../filter/lib/types';
 import classes from './choose-model.module.sass';
 
 type ChooseModelProps = {
+  isPromo: boolean;
   currentManufacturer: number | null;
   setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
@@ -27,6 +28,7 @@ type ChooseModelProps = {
 
 export const ChooseModel = memo(
   ({
+    isPromo,
     currentManufacturer,
     setCurrentManufacturer,
     currentModel,
@@ -43,8 +45,10 @@ export const ChooseModel = memo(
     const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
 
     useEffect(() => {
-      setCurrentModel(null);
-      setCurrentSpecification(null);
+      if ( !isPromo ) {
+        setCurrentModel(null);
+        setCurrentSpecification(null);
+      }
 
       if (currentManufacturer) {
         dispatch(fetchManufacturersWithSpectsCount({
