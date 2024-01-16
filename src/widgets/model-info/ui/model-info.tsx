@@ -4,15 +4,16 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
-import { Currency } from '../../../entities/currency';
 import {
   fetchSpecificationsInfo,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { Gallery } from '../../../shared/ui/gallery';
+import { Currency } from '../../../entities/currency';
+import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { Gallery } from '../../../shared/ui/gallery';
 
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
@@ -27,6 +28,7 @@ export const ModelInfo = (): JSX.Element => {
 
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
@@ -34,6 +36,12 @@ export const ModelInfo = (): JSX.Element => {
     const id = searchParams.get('spec');
 
     setCurrentSpecification(id ? +id : null);
+  }, []);
+
+  useEffect(() => {
+    if (manufacturersLoadingStatus.isLoading) {
+      dispatch(fetchManufacturers());
+    }
   }, []);
 
   useEffect(() => {

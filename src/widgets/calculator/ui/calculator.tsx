@@ -27,10 +27,7 @@ export const Calculator = (): JSX.Element => {
     dispatch(fetchManufacturers());
   }, []);
 
-  const handleFiltersChange = useCallback(
-    setActiveFilters,
-    []
-  );
+  const handleFiltersChange = useCallback(setActiveFilters, []);
 
   const handlePromo = (promoManufacturer: number, promoModel: number, promoSpecification: number) => {
     setPromoMode(true);
@@ -53,6 +50,10 @@ export const Calculator = (): JSX.Element => {
         />
       </div>
 
+      <div className={classes.filter}>
+        <Filter activeFilters={activeFilters} setActiveFilters={handleFiltersChange} />
+      </div>
+
       <div className={classes.model}>
         <ChooseModel
           isPromo={promoMode}
@@ -63,10 +64,6 @@ export const Calculator = (): JSX.Element => {
           setCurrentSpecification={setCurrentSpecification}
           activeFilters={activeFilters}
         />
-      </div>
-
-      <div className={classes.filter}>
-        <Filter activeFilters={activeFilters} setActiveFilters={handleFiltersChange} />
       </div>
 
       <div className={classes.price}>

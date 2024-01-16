@@ -95,7 +95,7 @@ export const ChooseSpecification = memo(
                 </p>
 
                 <p className={cn(classes.discountPrice, classes.price)}>
-                  <b>0 000 000 ₽</b>
+                  <b>00 000 ¥</b>
                 </p>
 
                 <p className={cn(classes.price, classes.grey)}>
