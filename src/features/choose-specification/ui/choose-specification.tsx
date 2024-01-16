@@ -19,6 +19,7 @@ import classes from './choose-specification.module.sass';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
 type ChooseSpecificationProps = {
+  isPromo: boolean;
   currentManufacturer: number | null;
   currentModel: number | null;
   currentSpecification: number | null;
@@ -27,7 +28,14 @@ type ChooseSpecificationProps = {
 };
 
 export const ChooseSpecification = memo(
-  ({ currentManufacturer, currentModel, currentSpecification, setCurrentSpecification, activeFilters }: ChooseSpecificationProps): JSX.Element => {
+  ({
+    isPromo,
+    currentManufacturer,
+    currentModel,
+    currentSpecification,
+    setCurrentSpecification,
+    activeFilters
+  }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
     const cheapest = useAppSelector(getCheapestSpecification);
@@ -48,7 +56,7 @@ export const ChooseSpecification = memo(
     }, [currentModel]);
 
     useEffect(() => {
-      if (specifications && specifications.length !== 0) {
+      if (specifications && specifications.length !== 0 && !isPromo) {
         setCurrentSpecification(cheapest?.id);
       }
     }, [cheapest?.id]);
@@ -81,20 +89,20 @@ export const ChooseSpecification = memo(
                     {
                       price
                         ? `${priceFormat( price.toString() )} ¥`
-                        : 'Цена уточняется'
+                        : 'Уточним цену'
                     }
                   </b>
                 </p>
 
                 <p className={cn(classes.discountPrice, classes.price)}>
-                  <b>0 000 000 ₽</b>
+                  <b>00 000 ¥</b>
                 </p>
 
                 <p className={cn(classes.price, classes.grey)}>
                   {
                     price
                       ? `${priceFormat( (price! * currency.cny).toFixed() )} ₽`
-                      : 'Цена уточняется'
+                      : 'Уточним цену'
                   }
                 </p>
 
@@ -102,7 +110,7 @@ export const ChooseSpecification = memo(
                   {
                     price
                       ? `${priceFormat( (price! * currency.cny / currency.usd).toFixed() )} $`
-                      : 'Цена уточняется'
+                      : 'Уточним цену'
                   }
                 </p>
 

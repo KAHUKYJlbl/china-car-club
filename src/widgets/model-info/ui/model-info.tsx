@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
+import {
+  fetchSpecificationsInfo,
+  getSpecificationsLoadingStatus
+} from '../../../entities/specification';
 import { Currency } from '../../../entities/currency';
-import { fetchSpecificationsInfo, getSpecifications, getSpecificationsLoadingStatus } from '../../../entities/specification';
-import { Gallery } from '../../../shared/ui/gallery';
+import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { Gallery } from '../../../shared/ui/gallery';
 
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
@@ -20,14 +24,27 @@ import classes from './model-info.module.sass';
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { modelId } = useParams();
+  const [ searchParams, setSearchParams ] = useSearchParams();
+
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
-  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
-  const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
+  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
 
   useEffect(() => {
+    const id = searchParams.get('spec');
 
+    setCurrentSpecification(id ? +id : null);
+  }, []);
+
+  useEffect(() => {
+    if (manufacturersLoadingStatus.isLoading) {
+      dispatch(fetchManufacturers());
+    }
+  }, []);
+
+  useEffect(() => {
     if (modelId) {
       dispatch(fetchSpecificationsInfo({
         modelId: +modelId,
@@ -37,19 +54,24 @@ export const ModelInfo = (): JSX.Element => {
   }, [modelId]);
 
   useEffect(() => {
-    if (specificationsLoadingStatus.isSuccess) {
-      setCurrentSpecification(specifications[0].id);
+    if (currentSpecification) {
+      setSearchParams ( {spec: currentSpecification.toString()} );
     }
-  }, [specificationsLoadingStatus]);
+  }, [currentSpecification]);
 
-  if (specificationsLoadingStatus.isLoading) {
+  if (specificationsLoadingStatus.isLoading || !modelId) {
     return <LoadingSpinner spinnerType='page' />
   }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery specificationId={currentSpecification} />
+        <Gallery
+          galleryId={{
+            specificationId: currentSpecification,
+            modelId: +modelId
+          }}
+        />
       </div>
 
       {

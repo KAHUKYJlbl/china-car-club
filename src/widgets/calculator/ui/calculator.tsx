@@ -18,6 +18,7 @@ export const Calculator = (): JSX.Element => {
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
+  const [ promoMode, setPromoMode ] = useState(false);
 
   useFilters(activeFilters);
 
@@ -26,22 +27,36 @@ export const Calculator = (): JSX.Element => {
     dispatch(fetchManufacturers());
   }, []);
 
-const handleFiltersChange = useCallback(
-  setActiveFilters,
-  []
-);
+  const handleFiltersChange = useCallback(setActiveFilters, []);
+
+  const handlePromo = (promoManufacturer: number, promoModel: number, promoSpecification: number) => {
+    setPromoMode(true);
+    setActiveFilters({});
+    setCurrentManufacturer(promoManufacturer);
+    setCurrentModel(promoModel);
+    setCurrentSpecification(promoSpecification);
+    setTimeout(() => setPromoMode(false), 500);
+  }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
         <Gallery
-          isPromo={!currentModel}
-          specificationId={currentSpecification}
+          handlePromo={currentModel ? null : handlePromo}
+          galleryId={{
+            specificationId: currentSpecification,
+            modelId: currentModel,
+          }}
         />
+      </div>
+
+      <div className={classes.filter}>
+        <Filter activeFilters={activeFilters} setActiveFilters={handleFiltersChange} />
       </div>
 
       <div className={classes.model}>
         <ChooseModel
+          isPromo={promoMode}
           currentManufacturer={currentManufacturer}
           setCurrentManufacturer={setCurrentManufacturer}
           currentModel={currentModel}
@@ -51,12 +66,9 @@ const handleFiltersChange = useCallback(
         />
       </div>
 
-      <div className={classes.filter}>
-        <Filter activeFilters={activeFilters} setActiveFilters={handleFiltersChange} />
-      </div>
-
       <div className={classes.price}>
         <ChooseSpecification
+          isPromo={promoMode}
           currentManufacturer={currentManufacturer}
           currentModel={currentModel}
           currentSpecification={currentSpecification}
@@ -70,7 +82,7 @@ const handleFiltersChange = useCallback(
       </div>
 
       <div className={classes.delivery}>
-        <ChooseDelivery model={currentModel} />
+        <ChooseDelivery modelId={currentModel} specificationId={currentSpecification} />
       </div>
     </div>
   )
