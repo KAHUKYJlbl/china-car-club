@@ -59,8 +59,10 @@ export const ChooseModel = memo(
     }, [currentManufacturer]);
 
     useEffect(() => {
-      setCurrentManufacturer(null);
-      setCurrentModel(null);
+      if ( !isPromo ) {
+        setCurrentManufacturer(null);
+        // setCurrentModel(null);
+      }
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
 
     if (manufacturersLoadingStatus.isLoading || !manufacturersList) {

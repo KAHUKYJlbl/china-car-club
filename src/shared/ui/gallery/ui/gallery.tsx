@@ -87,7 +87,6 @@ export const Gallery = memo(
               />
             }
 
-{/* TODO: Add name */}
             <p>
               {name}
             </p>
@@ -111,7 +110,6 @@ export const Gallery = memo(
               </div>
             }
 
-{/* TODO: Add redirect */}
             {
               handlePromo &&
               <button onClick={handlePromoClick}>
