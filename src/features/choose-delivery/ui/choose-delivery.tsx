@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import queryString from 'query-string';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import { Dropdown } from '../../../shared/ui/dropdown';
@@ -18,13 +18,13 @@ export const ChooseDelivery = memo(
 
     const buttonClickHandler = () => {
       if (modelId && specificationId ) {
-        navigate([
-          generatePath(AppRoute.Model, {modelId: modelId.toString()}),
-          queryString.stringifyUrl({
-            url: '',
-            query: {spec: specificationId}
-          }),
-      ].join(''))
+        navigate(queryString.stringifyUrl({
+          url: AppRoute.Model,
+          query: {
+            model: modelId.toString(),
+            spec: specificationId.toString(),
+          }
+        }))
       }
     }
 

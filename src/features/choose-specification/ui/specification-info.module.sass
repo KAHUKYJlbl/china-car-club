@@ -3,31 +3,35 @@
 .wrapper
   display: flex
   flex-direction: column
-  gap: 20px
+  gap: 8px
 
   padding: 12px
 
 .top
   display: flex
   justify-content: space-between
+  align-items: center
 
   button
-    flex-grow: 1
+    align-self: flex-start
 
     min-width: 90px
     width: 90px
-    height: 31px
-    padding: 8px 16px
+    height: 24px
+    padding: 4px 16px
     border-radius: 10px
 
     font-size: 12px
     line-height: 15px
 
 .header
-  flex-grow: 1
+  height: 38px
+  overflow: hidden
+  padding: 0 6px
 
-  font-size: 18px
-  line-height: 25px
+  font-size: 14px
+  line-height: 18px
+  text-overflow: clip
 
 .bottom
   display: flex
@@ -35,6 +39,8 @@
   gap: 4px
 
 .label
+  padding: 0 6px
+
   font-size: 10px
   line-height: 13px
   color: $text-secondary

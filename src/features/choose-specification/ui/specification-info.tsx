@@ -1,15 +1,16 @@
 import { memo } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
+import { AppRoute } from '../../../app/provider/router';
 import {
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
+import { getName } from '../../../entities/manufacturer';
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './specification-info.module.sass';
-import { getName } from '../../../entities/manufacturer';
 
 type SpecificationInfoProps = {
   isPrices: boolean;
@@ -20,16 +21,20 @@ type SpecificationInfoProps = {
 
 export const SpecificationInfo = memo(
   ({ currentSpecification, setCurrentSpecification, setIsPrices, isPrices }: SpecificationInfoProps): JSX.Element => {
-    const { modelId } = useParams();
+    const [ searchParams, _setSearchParams ] = useSearchParams();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-    const name = useAppSelector((state) => getName(state, Number(modelId)));
+    const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
+
+    if (!name) {
+      return <Navigate to={AppRoute.NotFound} />
+    }
 
     return (
       <div className={classes.wrapper}>
         <div className={classes.top}>
           <h2 className={classes.header}>
-            {name ? name : 'Не найдено'}
+            {name.manufacturer}<br/>{name.model}
           </h2>
 
           <button onClick={() => setIsPrices((current) => !current)}>

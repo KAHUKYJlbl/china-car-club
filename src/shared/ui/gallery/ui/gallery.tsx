@@ -88,7 +88,7 @@ export const Gallery = memo(
             }
 
             <p>
-              {name}
+              {`${name?.manufacturer} ${name?.model}`}
             </p>
           </div>
 
