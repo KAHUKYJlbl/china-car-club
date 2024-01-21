@@ -61,7 +61,6 @@ export const ChooseModel = memo(
     useEffect(() => {
       if ( !isPromo ) {
         setCurrentManufacturer(null);
-        // setCurrentModel(null);
       }
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
 

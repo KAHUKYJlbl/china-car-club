@@ -6,9 +6,10 @@ import {
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { getName } from '../../../entities/manufacturer';
+import { getManufacturersLoadingStatus, getName } from '../../../entities/manufacturer';
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 import classes from './specification-info.module.sass';
 
@@ -24,9 +25,14 @@ export const SpecificationInfo = memo(
     const [ searchParams, _setSearchParams ] = useSearchParams();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+    const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus)
     const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
 
-    if (!name) {
+    if (manufacturersLoadingStatus.isLoading || manufacturersLoadingStatus.isIdle) {
+      return <LoadingSpinner spinnerType='widget' />
+    }
+
+    if (!name || !specifications.find((spec) => spec.id === currentSpecification)) {
       return <Navigate to={AppRoute.NotFound} />
     }
 

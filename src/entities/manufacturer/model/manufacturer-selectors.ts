@@ -89,9 +89,9 @@ export const getName = createSelector(
           return {manufacturer: manufacturerName, model: modelName}
         }
       }
-    }
 
-    return null;
+      return null;
+    }
   }
 );
 

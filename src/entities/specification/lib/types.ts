@@ -12,6 +12,11 @@ export type SpecificationType = {
     specificationId: number;
     price: number;
   };
+  priceByCurrentDay: {
+    specificationId: number;
+    dealerPrice: number;
+    factoryPrice: number;
+  }
 };
 
 export type ManufacturersWithSpecificationsType = ManufacturersType & {
