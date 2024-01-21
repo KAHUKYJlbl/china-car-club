@@ -3,8 +3,8 @@ import classes from './loading-spinner.module.sass';
 
 const spinnerTypes = {
   page: {
-    height: '240',
-    width: '240',
+    height: '160',
+    width: '160',
     color: '#7E7E7E',
     wrapperStyle: {
       height: '100vh',

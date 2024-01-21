@@ -19,7 +19,8 @@ export const getCarsCount = createSelector(
 export const getManufacturersLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Manufacturer].manufacturersLoadingStatus,
   (status) => ({
-    isLoading: [FetchStatus.Idle, FetchStatus.Pending].includes(status),
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
   })
@@ -85,12 +86,12 @@ export const getName = createSelector(
         if (model) {
           const modelName = model.name.ru || model.name.ch;
 
-          return `${manufacturerName} ${modelName}`
+          return {manufacturer: manufacturerName, model: modelName}
         }
       }
-    }
 
-    return null;
+      return null;
+    }
   }
 );
 

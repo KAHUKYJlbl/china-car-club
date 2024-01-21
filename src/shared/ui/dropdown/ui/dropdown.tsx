@@ -119,7 +119,7 @@ export const Dropdown = ({
           isOpen && displayedList &&
           <div className={classes.listWrapper} ref={listRef}>
             {
-              extraListHeader && extraList && extraList.length !== 0 && !currentValue &&
+              extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
               <>
                 <p className={classes.listHeader}>{extraListHeader.extraListHeader}</p>
 
@@ -141,7 +141,7 @@ export const Dropdown = ({
             }
 
             {
-              extraListHeader && extraList && extraList.length !== 0 && !currentValue &&
+              extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
               <p className={classes.listHeader}>{extraListHeader.basicListHeader}</p>
             }
 
