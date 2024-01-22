@@ -13,3 +13,15 @@ export const getModelLoadingStatus = createSelector(
     isFailed: status === FetchStatus.Failed,
   })
 );
+
+export const getSpecificationParams = createSelector(
+  [
+    getModel,
+    (_state: State, id: number | null) => id
+  ],
+  (model, id) => (
+    id
+      ? model?.specifications.find((spec) => spec.id === id)
+      : null
+  )
+);

@@ -6,6 +6,7 @@ import {
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Dropdown } from '../../../shared/ui/dropdown';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './specification-info.module.sass';

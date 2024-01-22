@@ -18,11 +18,22 @@ export const getPrice = createSelector(
     getRawSpecifications,
     (_state: State, id: number | null) => id
   ],
-  (specifications, id) => (
-    id
-      ? specifications.find((specification) => specification.id === id)?.priceWithLogisticsByCurrentDay.price
-      : null
-  )
+  (specifications, id) => {
+    if (id) {
+      const specification = specifications.find((spec) => spec.id === id);
+
+      if (specification) {
+        return {
+          price: specification.priceByCurrentDay.factoryPrice,
+          discount: specification.priceByCurrentDay.dealerPrice
+            ? specification.priceByCurrentDay.factoryPrice - specification.priceByCurrentDay.dealerPrice
+            : 0
+        }
+      }
+    }
+
+    return null;
+  }
 )
 
 export const getCheapestSpecification = createSelector(

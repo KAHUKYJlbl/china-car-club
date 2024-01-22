@@ -3,6 +3,13 @@ export type ColorType = {
   hexList: number[];
 }
 
+export type PriceType = {
+  inChina: number,
+  withLogistics: number,
+  tax: number,
+  eptsSbktsUtil: number,
+}
+
 export type SpecsApiType = {
   id: number;
   name: {
@@ -26,6 +33,7 @@ export type SpecsApiType = {
     lengthWidthHeight: string,
     groundClearance: number | null,
     curbWeight: number,
+    engineCapacity: number | null,
     wheelSize: {
       front: string,
       rear: string,
@@ -35,6 +43,28 @@ export type SpecsApiType = {
       interior: ColorType[],
     },
   };
+  price: PriceType;
+}
+
+export type ModelApiType = {
+  data: {
+    id: number;
+    name: {
+      ch: string;
+      ru: string;
+    };
+    officially_in_russia: boolean;
+    manufacturer: {
+      id: number;
+      name: {
+        ch: string;
+        ru: string;
+      };
+      top: boolean;
+      region_id: number | null;
+    };
+    specifications: SpecsApiType[];
+  }
 }
 
 export type SpecsType = {
@@ -54,6 +84,8 @@ export type SpecsType = {
   seats: string[],
   lengthWidthHeight: string,
   groundClearance: number | null,
+  curbWeight: number | null,
+  engineCapacity: number | null,
   wheelSize: {
     front: string,
     rear: string,
@@ -62,25 +94,7 @@ export type SpecsType = {
     external: ColorType[],
     interior: ColorType[],
   };
-}
-
-export type ModelApiType = {
-  id: number;
-  name: {
-    ch: string;
-    ru: string;
-  };
-  officially_in_russia: boolean;
-  manufacturer: {
-    id: number;
-    name: {
-      ch: string;
-      ru: string;
-    };
-    top: boolean;
-    region_id: number | null;
-  };
-  specifications: SpecsApiType[]
+  price: PriceType;
 }
 
 export type ModelType = {
