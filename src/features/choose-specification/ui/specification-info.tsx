@@ -8,8 +8,8 @@ import {
 } from '../../../entities/specification';
 import { getManufacturersLoadingStatus, getName } from '../../../entities/manufacturer';
 import { Dropdown } from '../../../shared/ui/dropdown';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './specification-info.module.sass';
 
