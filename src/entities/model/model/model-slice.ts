@@ -23,12 +23,14 @@ export const modelSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchModel.fulfilled, (state, action) => {
+        const data = action.payload.data;
+
         state.model = {
-          manufacturerId: action.payload.manufacturer.id,
-          modelId: action.payload.id,
-          manufacturerName: action.payload.manufacturer.name.ru || action.payload.manufacturer.name.ch,
-          modelName: action.payload.name.ru || action.payload.name.ch,
-          specifications: action.payload.specifications.map((specification) => ({
+          manufacturerId: data.manufacturer.id,
+          modelId: data.id,
+          manufacturerName: data.manufacturer.name.ru || data.manufacturer.name.ch,
+          modelName: data.name.ru || data.name.ch,
+          specifications: data.specifications.map((specification) => ({
             id: specification.id,
             name: specification.name.ru || specification.name.ch,
             year: specification.year,
@@ -47,6 +49,11 @@ export const modelSlice = createSlice({
             groundClearance: specification.parameters.groundClearance,
             wheelSize: specification.parameters.wheelSize,
             colors: specification.parameters.colors,
+            price: specification.price,
+            curbWeight: specification.parameters.curbWeight,
+            engineCapacity: specification.parameters.engineCapacity
+              ? specification.parameters.engineCapacity * 1000
+              : null
           }))
         };
         state.modelLoadingStatus = FetchStatus.Success;

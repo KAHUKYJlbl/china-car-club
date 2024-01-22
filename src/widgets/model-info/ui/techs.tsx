@@ -1,66 +1,105 @@
 import { memo } from 'react';
 
+import { SpecsType } from '../../../entities/model';
+
 import classes from './techs.module.sass';
 
+type TechsProps = {
+  techs: SpecsType,
+}
+
 export const Techs = memo(
-  (): JSX.Element => {
+  ({ techs }: TechsProps): JSX.Element => {
     return (
       <div className={classes.wrapper}>
         <ul className={classes.divider}>
-          <li className={classes.row}>
-            <p>Мощность</p>
-            <p>0 000 000 ₽</p>
-          </li>
+          {
+            !!techs.power &&
+            <li className={classes.row}>
+              <p>Мощность</p>
+              <p className={classes.row}>{techs.power} кВт</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Крутящий момент</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.torque &&
+            <li className={classes.row}>
+              <p>Крутящий момент</p>
+              <p>{techs.torque} Н ⋅ м</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Коробка</p>
-            <p>000 000 000 ₽</p>
-          </li>
+          {
+            !!techs.transmissionType &&
+            <li className={classes.row}>
+              <p>Коробка</p>
+              <p>{techs.transmissionType}</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Длина * Ширина * Высота</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.lengthWidthHeight &&
+            <li className={classes.row}>
+              <p>Длина * Ширина * Высота</p>
+              <p>{techs.lengthWidthHeight} мм</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Тип кузова</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.bodyType &&
+            <li className={classes.row}>
+              <p>Тип кузова</p>
+              <p>{techs.bodyType}</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Количество мест</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.seats &&
+            <li className={classes.row}>
+              <p>Количество мест</p>
+              <p>{techs.seats}</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Бак</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.powerReserve &&
+            <li className={classes.row}>
+              <p>Бак</p>
+              <p>{techs.powerReserve} Л</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Снаряженная масса</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.curbWeight &&
+            <li className={classes.row}>
+              <p>Снаряженная масса</p>
+              <p>{techs.curbWeight} кг</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Объем двигателя</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.engineCapacity &&
+            <li className={classes.row}>
+              <p>Объем двигателя</p>
+              <p>{techs.engineCapacity} см.куб</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Привод</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.driveType &&
+            <li className={classes.row}>
+              <p>Привод</p>
+              <p>{techs.driveType}</p>
+            </li>
+          }
 
-          <li className={classes.row}>
-            <p>Размер колес</p>
-            <p>0 ₽</p>
-          </li>
+          {
+            !!techs.wheelSize &&
+            <li className={classes.row}>
+              <p>Размер колес</p>
+              <p>{`${techs.wheelSize.front} • ${techs.wheelSize.rear}`}</p>
+            </li>
+          }
         </ul>
 
         <div className={classes.colorsWrapper}>
