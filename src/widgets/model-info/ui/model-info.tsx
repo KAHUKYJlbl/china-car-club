@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions } from '../../../features/choose-options';
@@ -77,7 +77,7 @@ export const ModelInfo = (): JSX.Element => {
         <Gallery
           galleryId={{
             specificationId: currentSpecification,
-            modelId: +modelId
+            modelId: Number(modelId)
           }}
         />
       </div>
