@@ -41,7 +41,7 @@ export const ChooseSpecification = memo(
     const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
-    const price = useAppSelector((state) => getPrice(state, currentSpecification));
+    const priceData = useAppSelector((state) => getPrice(state, currentSpecification));
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
@@ -62,7 +62,11 @@ export const ChooseSpecification = memo(
     }, [cheapest?.id]);
 
     if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
-      return <LoadingSpinner spinnerType='widget' />
+      return (
+        <div className={classes.wrapper}>
+          <LoadingSpinner spinnerType='widget' />
+        </div>
+      )
     }
 
     return (
@@ -87,30 +91,36 @@ export const ChooseSpecification = memo(
                 <p className={classes.price}>
                   <b>
                     {
-                      price
-                        ? `${priceFormat( price.toString() )} ¥`
-                        : 'Уточним цену'
+                      priceData
+                        ? `${priceFormat( priceData.price.toFixed() )} ¥`
+                        : '0'
                     }
                   </b>
                 </p>
 
                 <p className={cn(classes.discountPrice, classes.price)}>
-                  <b>00 000 ¥</b>
+                  <b>
+                    {
+                      priceData
+                        ? `${priceFormat( priceData.discount.toFixed() )} ¥`
+                        : '0'
+                    }
+                  </b>
                 </p>
 
                 <p className={cn(classes.price, classes.grey)}>
                   {
-                    price
-                      ? `${priceFormat( (price! * currency.cny).toFixed() )} ₽`
-                      : 'Уточним цену'
+                    priceData
+                      ? `${priceFormat( (priceData.price * currency.cny).toFixed() )} ₽`
+                      : '0'
                   }
                 </p>
 
                 <p className={cn(classes.price, classes.grey)}>
                   {
-                    price
-                      ? `${priceFormat( (price! * currency.cny / currency.usd).toFixed() )} $`
-                      : 'Уточним цену'
+                    priceData
+                      ? `${priceFormat( (priceData.price * currency.cny / currency.usd).toFixed() )} $`
+                      : '0'
                   }
                 </p>
 

@@ -14,7 +14,7 @@ export const Header = (): JSX.Element => {
       <div className={classes.logo}>
         <Link to={AppRoute.Main} >
           <svg
-            width={ isDesktop ? "214" : ( isMobile ? "106" : "151" ) }
+            width={ isDesktop ? "216" : ( isMobile ? "106" : "151" ) }
             height={ isDesktop ? "26" : ( isMobile ? "12" : "17" ) }
             aria-hidden="true"
           >
@@ -34,9 +34,9 @@ export const Header = (): JSX.Element => {
           {
             isDesktop
             ? <>
-              {/* <div className={classes.navItem}>Журнал</div> */}
-              <div className={classes.navItem}>Контакты</div>
+              <div className={classes.navItem}>Журнал</div>
               <div className={classes.navItem}>О компании</div>
+              <div className={classes.navItem}>Контакты</div>
             </>
             : <div className={cn(classes.navItem, classes.navPhone)}>
               <button>

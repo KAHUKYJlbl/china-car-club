@@ -35,7 +35,7 @@ export const Calculator = (): JSX.Element => {
     setCurrentManufacturer(promoManufacturer);
     setCurrentModel(promoModel);
     setCurrentSpecification(promoSpecification);
-    setTimeout(() => setPromoMode(false), 500);
+    setTimeout(() => setPromoMode(false), 1000);
   }
 
   return (

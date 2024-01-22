@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions } from '../../../features/choose-options';
@@ -22,10 +22,10 @@ import { Prices } from './prices';
 import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
+import { AppRoute } from '../../../app/provider/router';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { modelId } = useParams();
   const [ searchParams, setSearchParams ] = useSearchParams();
 
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
@@ -34,36 +34,36 @@ export const ModelInfo = (): JSX.Element => {
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
-  const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
 
   useEffect(() => {
-    if (searchParams.get('model')) {
-      dispatch( fetchModel(searchParams.get('model')!) );
-    }
-  }, []);
-
-  useEffect(() => {
-    if (manufacturersLoadingStatus.isLoading) {
+    if (manufacturersLoadingStatus.isIdle) {
       dispatch(fetchManufacturers());
     }
   }, []);
 
   useEffect(() => {
-    if (modelId) {
+    if (searchParams.get('model')) {
       dispatch(fetchSpecificationsInfo({
-        modelId: +modelId,
+        modelId: Number(searchParams.get('model')),
         filters: {},
       }));
     }
-  }, [modelId]);
+  }, []);
 
   useEffect(() => {
     if (currentSpecification) {
-      setSearchParams ( {spec: currentSpecification.toString()} );
+      setSearchParams({
+        model: searchParams.get('model')!,
+        spec: currentSpecification.toString(),
+      });
     }
   }, [currentSpecification]);
 
-  if (specificationsLoadingStatus.isLoading || manufacturersLoadingStatus.isLoading || modelLoadingStatus.isLoading) {
+  if (!searchParams.get('model') || !searchParams.get('spec')) {
+    return <Navigate to={AppRoute.NotFound} />
+  }
+
+  if (specificationsLoadingStatus.isLoading || manufacturersLoadingStatus.isLoading) {
     return <LoadingSpinner spinnerType='page' />
   }
 
@@ -77,7 +77,7 @@ export const ModelInfo = (): JSX.Element => {
         <Gallery
           galleryId={{
             specificationId: currentSpecification,
-            modelId: Number(modelId)
+            modelId: Number(searchParams.get('model')),
           }}
         />
       </div>

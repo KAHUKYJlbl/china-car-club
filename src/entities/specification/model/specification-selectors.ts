@@ -34,6 +34,14 @@ export const getPrice = createSelector(
 
     return null;
   }
+  //   id
+  //     ?
+  //       {
+  //           price: specifications.find((specification) => specification.id === id)?.priceByCurrentDay.factoryPrice,
+  //           discount: specifications.find((specification) => specification.id === id)?.priceByCurrentDay.factoryPrice,
+  //       }
+  //     : null
+  // )
 )
 
 export const getCheapestSpecification = createSelector(

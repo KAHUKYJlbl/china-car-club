@@ -87,9 +87,8 @@ export const Gallery = memo(
               />
             }
 
-{/* TODO: Add name */}
             <p>
-              {name}
+              {`${name?.manufacturer} ${name?.model}`}
             </p>
           </div>
 
@@ -111,7 +110,6 @@ export const Gallery = memo(
               </div>
             }
 
-{/* TODO: Add redirect */}
             {
               handlePromo &&
               <button onClick={handlePromoClick}>
