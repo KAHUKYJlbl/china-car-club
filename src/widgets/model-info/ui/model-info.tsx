@@ -22,7 +22,6 @@ import { Prices } from './prices';
 import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
-import { AppRoute } from '../../../app/provider/router';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -34,6 +33,13 @@ export const ModelInfo = (): JSX.Element => {
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
+  const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
+
+  useEffect(() => {
+    if (searchParams.get('model')) {
+      dispatch(fetchModel(searchParams.get('model')!));
+    }
+  }, []);
 
   useEffect(() => {
     if (manufacturersLoadingStatus.isIdle) {
@@ -63,7 +69,7 @@ export const ModelInfo = (): JSX.Element => {
     return <Navigate to={AppRoute.NotFound} />
   }
 
-  if (specificationsLoadingStatus.isLoading || manufacturersLoadingStatus.isLoading) {
+  if (specificationsLoadingStatus.isLoading || manufacturersLoadingStatus.isLoading || modelLoadingStatus.isLoading) {
     return <LoadingSpinner spinnerType='page' />
   }
 
@@ -109,7 +115,7 @@ export const ModelInfo = (): JSX.Element => {
         isPrices &&
         <>
           <div className={classes.prices}>
-            <Prices />
+            <Prices prices={specificationParams.price} />
           </div>
 
           <div className={classes.addOptions}>

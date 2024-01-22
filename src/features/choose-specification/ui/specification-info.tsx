@@ -10,7 +10,6 @@ import { getManufacturersLoadingStatus, getName } from '../../../entities/manufa
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 import classes from './specification-info.module.sass';
 
