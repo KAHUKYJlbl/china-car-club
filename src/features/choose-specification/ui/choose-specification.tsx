@@ -135,7 +135,7 @@ export const ChooseSpecification = memo(
           </p>
         }
 
-        <p className={classes.small}>
+        <p className={classes.contract}>
           По прямому контракту и курсу продажи валюты
         </p>
       </div>
