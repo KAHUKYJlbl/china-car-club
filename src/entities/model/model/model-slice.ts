@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
@@ -19,7 +19,15 @@ const initialState: InitialState = {
 export const modelSlice = createSlice({
   name: NameSpace.Model,
   initialState,
-  reducers: {},
+  reducers: {
+    setIdle: (state) => {
+      state.model = null;
+      state.modelLoadingStatus = FetchStatus.Idle;
+    },
+    setPending: (state) => {
+      state.modelLoadingStatus = FetchStatus.Pending;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchModel.fulfilled, (state, action) => {
@@ -66,3 +74,5 @@ export const modelSlice = createSlice({
       })
   }
 });
+
+export const { setIdle, setPending } = modelSlice.actions;

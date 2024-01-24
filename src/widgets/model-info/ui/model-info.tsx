@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions } from '../../../features/choose-options';
@@ -11,7 +11,7 @@ import {
 } from '../../../entities/specification';
 import { Currency } from '../../../entities/currency';
 import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
-import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
+import { fetchModel, getModelLoadingStatus, getSpecificationParams, setIdle } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
@@ -25,12 +25,14 @@ import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const [ searchParams, setSearchParams ] = useSearchParams();
 
-  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
+
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
@@ -39,13 +41,15 @@ export const ModelInfo = (): JSX.Element => {
     if (searchParams.get('model')) {
       dispatch(fetchModel(searchParams.get('model')!));
     }
+
+    return () => { dispatch(setIdle()) };
   }, []);
 
   useEffect(() => {
     if (manufacturersLoadingStatus.isIdle) {
       dispatch(fetchManufacturers());
     }
-  }, []);
+  }, [manufacturersLoadingStatus.isIdle]);
 
   useEffect(() => {
     if (searchParams.get('model')) {
@@ -65,15 +69,24 @@ export const ModelInfo = (): JSX.Element => {
     }
   }, [currentSpecification]);
 
-  if (!searchParams.get('model') || !searchParams.get('spec')) {
-    return <Navigate to={AppRoute.NotFound} />
-  }
+  useEffect(() => {
+    if ( modelLoadingStatus.isFailed ) {
+      dispatch(setIdle());
+      navigate(AppRoute.NotFound);
+    }
+  }, [modelLoadingStatus.isFailed]);
 
-  if (specificationsLoadingStatus.isLoading || manufacturersLoadingStatus.isLoading || modelLoadingStatus.isLoading) {
+  if (
+    specificationsLoadingStatus.isLoading
+    || manufacturersLoadingStatus.isLoading
+    || modelLoadingStatus.isLoading
+    || !specificationParams
+  ) {
     return <LoadingSpinner spinnerType='page' />
   }
 
-  if (!searchParams.get('model') || !searchParams.get('spec') || !specificationParams) {
+  if (!searchParams.get('model') || !searchParams.get('spec') ) {
+    // dispatch(setIdle());
     return <Navigate to={AppRoute.NotFound} />
   }
 
