@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
@@ -52,16 +52,18 @@ export const modelSlice = createSlice({
             powerReserve: specification.parameters.powerReserve,
             electricPowerReserve: specification.parameters.electricPowerReserve,
             engineCount: specification.parameters.engineCount,
-            seats: specification.parameters.seats,
+            seats: specification.parameters.seats.join(', '),
             lengthWidthHeight: specification.parameters.lengthWidthHeight,
             groundClearance: specification.parameters.groundClearance,
-            wheelSize: specification.parameters.wheelSize,
+            wheelSize: `${specification.parameters.wheelSize.front} • ${specification.parameters.wheelSize.rear}`,
             colors: specification.parameters.colors,
-            price: specification.price,
             curbWeight: specification.parameters.curbWeight,
             engineCapacity: specification.parameters.engineCapacity
-              ? specification.parameters.engineCapacity * 1000
-              : null
+            ? specification.parameters.engineCapacity * 1000
+            : null,
+            price: specification.price,
+            acceleration: specification.parameters.acceleration,
+            totalFuelConsumption: specification.parameters.totalFuelConsumption,
           }))
         };
         state.modelLoadingStatus = FetchStatus.Success;

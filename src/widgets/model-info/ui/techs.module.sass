@@ -19,10 +19,16 @@
   margin-top: 8px
 
   .row
+    display: flex
+    justify-content: space-between
+
     margin-top: 0
 
     font-size: 12px
     line-height: 18px
+
+    @media screen and (max-width: 1280px)
+      line-height: 15px
 
     p
       width: 50%
@@ -32,6 +38,7 @@
 
 .colors-wrapper
   padding-top: 12px
+  margin-top: 12px
 
   border-top: 1px solid #B7BBBF
 
@@ -39,24 +46,33 @@
   font-size: 12px
   line-height: 18px
 
+  p
+    padding-left: 4px
+
   @media screen and (max-width: 1280px)
     font-size: 12px
     line-height: 15px
 
 .colors-list
   display: flex
+  gap: 2px
+  flex-wrap: wrap
+
+  margin: 4px 2px
 
   list-style: none
 
-.row
-  display: flex
-  justify-content: space-between
+  li:hover
+    opacity: 0.8
 
-  margin-top: 8px
+.color-ball
+  height: 12px
+  width: 24px
 
-  font-size: 13px
-  line-height: 21px
+  cursor: pointer
 
-  @media screen and (max-width: 1280px)
-    font-size: 12px
-    line-height: 15px
+.color-ball:first-child
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0
+
+.color-ball:last-child
+  border-radius: 0 0 50% 50% / 0 0 100% 100%

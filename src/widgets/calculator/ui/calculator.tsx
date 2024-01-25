@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Gallery } from '../../../shared/ui/gallery';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { setIdle } from '../../../entities/model';
-import { Currency } from '../../../entities/currency';
+import { Currency, fetchCurrency } from '../../../entities/currency';
 import { fetchManufacturers } from '../../../entities/manufacturer';
 import { ChooseModel } from '../../../features/choose-model';
 import { ChooseDelivery } from '../../../features/choose-delivery';
@@ -26,7 +26,8 @@ export const Calculator = (): JSX.Element => {
   useEffect(() => {
     setCurrentSpecification(null);
     dispatch(fetchManufacturers());
-    dispatch(setIdle())
+    dispatch(setIdle());
+    dispatch(fetchCurrency());
   }, []);
 
   const handleFiltersChange = useCallback(setActiveFilters, []);

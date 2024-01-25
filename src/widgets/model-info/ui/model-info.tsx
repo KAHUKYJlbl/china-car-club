@@ -9,9 +9,9 @@ import {
   fetchSpecificationsInfo,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { Currency } from '../../../entities/currency';
+import { Currency, fetchCurrency } from '../../../entities/currency';
 import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
-import { fetchModel, getModelLoadingStatus, getSpecificationParams, setIdle } from '../../../entities/model';
+import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
@@ -40,6 +40,11 @@ export const ModelInfo = (): JSX.Element => {
   useEffect(() => {
     if (searchParams.get('model')) {
       dispatch(fetchModel(searchParams.get('model')!));
+      dispatch(fetchSpecificationsInfo({
+        modelId: Number(searchParams.get('model')),
+        filters: {},
+      }));
+      dispatch(fetchCurrency());
     }
   }, []);
 
@@ -48,15 +53,6 @@ export const ModelInfo = (): JSX.Element => {
       dispatch(fetchManufacturers());
     }
   }, [manufacturersLoadingStatus.isIdle]);
-
-  useEffect(() => {
-    if (searchParams.get('model')) {
-      dispatch(fetchSpecificationsInfo({
-        modelId: Number(searchParams.get('model')),
-        filters: {},
-      }));
-    }
-  }, []);
 
   useEffect(() => {
     if (currentSpecification) {
