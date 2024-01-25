@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 
@@ -12,21 +12,14 @@ dayjs.updateLocale('ru', {
 })
 
 import { getCurrency, getCurrencyLoadingStatus } from '../model/currency-selectors';
-import { fetchCurrency } from '../model/api-actions/fetch-currency';
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './currency.module.sass';
 
 export const Currency = memo(
   (): JSX.Element => {
-    const dispatch = useAppDispatch();
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
-
-    useEffect(() => {
-      dispatch(fetchCurrency());
-    }, []);
 
     if (currencyLoadingStatus.isLoading || !currency) {
       return <div className={classes.wrapper}><p>Загрузка ...</p></div>

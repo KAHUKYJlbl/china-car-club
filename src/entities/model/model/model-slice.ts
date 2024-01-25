@@ -19,7 +19,15 @@ const initialState: InitialState = {
 export const modelSlice = createSlice({
   name: NameSpace.Model,
   initialState,
-  reducers: {},
+  reducers: {
+    setIdle: (state) => {
+      state.model = null;
+      state.modelLoadingStatus = FetchStatus.Idle;
+    },
+    setPending: (state) => {
+      state.modelLoadingStatus = FetchStatus.Pending;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchModel.fulfilled, (state, action) => {
@@ -44,16 +52,18 @@ export const modelSlice = createSlice({
             powerReserve: specification.parameters.powerReserve,
             electricPowerReserve: specification.parameters.electricPowerReserve,
             engineCount: specification.parameters.engineCount,
-            seats: specification.parameters.seats,
+            seats: specification.parameters.seats.join(', '),
             lengthWidthHeight: specification.parameters.lengthWidthHeight,
             groundClearance: specification.parameters.groundClearance,
-            wheelSize: specification.parameters.wheelSize,
+            wheelSize: `${specification.parameters.wheelSize.front} • ${specification.parameters.wheelSize.rear}`,
             colors: specification.parameters.colors,
-            price: specification.price,
             curbWeight: specification.parameters.curbWeight,
             engineCapacity: specification.parameters.engineCapacity
-              ? specification.parameters.engineCapacity * 1000
-              : null
+            ? specification.parameters.engineCapacity * 1000
+            : null,
+            price: specification.price,
+            acceleration: specification.parameters.acceleration,
+            totalFuelConsumption: specification.parameters.totalFuelConsumption,
           }))
         };
         state.modelLoadingStatus = FetchStatus.Success;
@@ -66,3 +76,5 @@ export const modelSlice = createSlice({
       })
   }
 });
+
+export const { setIdle, setPending } = modelSlice.actions;

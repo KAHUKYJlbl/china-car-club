@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions } from '../../../features/choose-options';
@@ -9,7 +9,7 @@ import {
   fetchSpecificationsInfo,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { Currency } from '../../../entities/currency';
+import { Currency, fetchCurrency } from '../../../entities/currency';
 import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -25,12 +25,14 @@ import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const [ searchParams, setSearchParams ] = useSearchParams();
 
-  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
+
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
@@ -38,6 +40,11 @@ export const ModelInfo = (): JSX.Element => {
   useEffect(() => {
     if (searchParams.get('model')) {
       dispatch(fetchModel(searchParams.get('model')!));
+      dispatch(fetchSpecificationsInfo({
+        modelId: Number(searchParams.get('model')),
+        filters: {},
+      }));
+      dispatch(fetchCurrency());
     }
   }, []);
 
@@ -45,16 +52,7 @@ export const ModelInfo = (): JSX.Element => {
     if (manufacturersLoadingStatus.isIdle) {
       dispatch(fetchManufacturers());
     }
-  }, []);
-
-  useEffect(() => {
-    if (searchParams.get('model')) {
-      dispatch(fetchSpecificationsInfo({
-        modelId: Number(searchParams.get('model')),
-        filters: {},
-      }));
-    }
-  }, []);
+  }, [manufacturersLoadingStatus.isIdle]);
 
   useEffect(() => {
     if (currentSpecification) {
@@ -65,15 +63,22 @@ export const ModelInfo = (): JSX.Element => {
     }
   }, [currentSpecification]);
 
-  if (!searchParams.get('model') || !searchParams.get('spec')) {
-    return <Navigate to={AppRoute.NotFound} />
-  }
+  useEffect(() => {
+    if ( modelLoadingStatus.isFailed ) {
+      navigate(AppRoute.NotFound);
+    }
+  }, [modelLoadingStatus.isFailed]);
 
-  if (specificationsLoadingStatus.isLoading || manufacturersLoadingStatus.isLoading || modelLoadingStatus.isLoading) {
+  if (
+    specificationsLoadingStatus.isLoading
+    || manufacturersLoadingStatus.isLoading
+    || modelLoadingStatus.isLoading
+    || !specificationParams
+  ) {
     return <LoadingSpinner spinnerType='page' />
   }
 
-  if (!searchParams.get('model') || !searchParams.get('spec') || !specificationParams) {
+  if (!searchParams.get('model') || !searchParams.get('spec') ) {
     return <Navigate to={AppRoute.NotFound} />
   }
 

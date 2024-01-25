@@ -1,8 +1,11 @@
 import { memo } from 'react';
+import { Navigate } from 'react-router-dom';
 
+import { AppRoute } from '../../../app/provider/router';
 import { SpecsType } from '../../../entities/model';
 
 import classes from './techs.module.sass';
+import getTechList from '../lib/utils/get-tech-list';
 
 type TechsProps = {
   techs: SpecsType,
@@ -10,95 +13,22 @@ type TechsProps = {
 
 export const Techs = memo(
   ({ techs }: TechsProps): JSX.Element => {
+    const techsList = getTechList(techs);
+
+    if (!techsList) {
+      return <Navigate to={AppRoute.Main} />
+    }
+
     return (
       <div className={classes.wrapper}>
         <ul className={classes.divider}>
           {
-            !!techs.power &&
-            <li className={classes.row}>
-              <p>Мощность</p>
-              <p className={classes.row}>{techs.power} кВт</p>
-            </li>
-          }
-
-          {
-            !!techs.torque &&
-            <li className={classes.row}>
-              <p>Крутящий момент</p>
-              <p>{techs.torque} Н ⋅ м</p>
-            </li>
-          }
-
-          {
-            !!techs.transmissionType &&
-            <li className={classes.row}>
-              <p>Коробка</p>
-              <p>{techs.transmissionType}</p>
-            </li>
-          }
-
-          {
-            !!techs.lengthWidthHeight &&
-            <li className={classes.row}>
-              <p>Длина * Ширина * Высота</p>
-              <p>{techs.lengthWidthHeight} мм</p>
-            </li>
-          }
-
-          {
-            !!techs.bodyType &&
-            <li className={classes.row}>
-              <p>Тип кузова</p>
-              <p>{techs.bodyType}</p>
-            </li>
-          }
-
-          {
-            !!techs.seats &&
-            <li className={classes.row}>
-              <p>Количество мест</p>
-              <p>{techs.seats}</p>
-            </li>
-          }
-
-          {
-            !!techs.powerReserve &&
-            <li className={classes.row}>
-              <p>Бак</p>
-              <p>{techs.powerReserve} Л</p>
-            </li>
-          }
-
-          {
-            !!techs.curbWeight &&
-            <li className={classes.row}>
-              <p>Снаряженная масса</p>
-              <p>{techs.curbWeight} кг</p>
-            </li>
-          }
-
-          {
-            !!techs.engineCapacity &&
-            <li className={classes.row}>
-              <p>Объем двигателя</p>
-              <p>{techs.engineCapacity} см.куб</p>
-            </li>
-          }
-
-          {
-            !!techs.driveType &&
-            <li className={classes.row}>
-              <p>Привод</p>
-              <p>{techs.driveType}</p>
-            </li>
-          }
-
-          {
-            !!techs.wheelSize &&
-            <li className={classes.row}>
-              <p>Размер колес</p>
-              <p>{`${techs.wheelSize.front} • ${techs.wheelSize.rear}`}</p>
-            </li>
+            techsList.map((tech) => (
+              <li className={classes.row}>
+                <p>{tech.name}</p>
+                <p className={classes.row}>{`${tech.value} ${tech.measure}`}</p>
+              </li>
+            ))
           }
         </ul>
 
@@ -107,11 +37,21 @@ export const Techs = memo(
             <p>Цвета кузова</p>
 
             <ul className={classes.colorsList}>
-              <li className={classes.colorBall}>К</li>
+              {
+                techs.colors.external.map((color) => (
+                  <li>
+                    <div
+                      className={classes.colorBall}
+                      style={{backgroundColor: `#${color.hexList[0]}`}}
+                    />
 
-              <li className={classes.colorBall}>С</li>
-
-              <li className={classes.colorBall}>Ч</li>
+                    <div
+                      className={classes.colorBall}
+                      style={{backgroundColor: `#${color.hexList[1] || color.hexList[0]}`}}
+                    />
+                  </li>
+                ))
+              }
             </ul>
           </div>
 
@@ -119,11 +59,21 @@ export const Techs = memo(
             <p>Цвета интерьера</p>
 
             <ul className={classes.colorsList}>
-              <li className={classes.colorBall}>К</li>
+              {
+                techs.colors.interior.map((color) => (
+                  <li>
+                    <div
+                      className={classes.colorBall}
+                      style={{backgroundColor: `#${color.hexList[0]}`}}
+                    />
 
-              <li className={classes.colorBall}>С</li>
-
-              <li className={classes.colorBall}>Ч</li>
+                    <div
+                      className={classes.colorBall}
+                      style={{backgroundColor: `#${color.hexList[1] || color.hexList[0]}`}}
+                    />
+                  </li>
+                ))
+              }
             </ul>
           </div>
         </div>

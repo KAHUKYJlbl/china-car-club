@@ -11,12 +11,11 @@ const spinnerTypes = {
     },
   },
   widget: {
-    height: '50',
-    width: '50',
+    height: '80',
+    width: '80',
     wrapperHeight: '100%',
     color: '#7E7E7E',
     wrapperStyle: {
-      padding: '40px',
       height: '100%'
     },
   },

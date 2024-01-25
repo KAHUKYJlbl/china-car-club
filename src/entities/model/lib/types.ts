@@ -33,7 +33,9 @@ export type SpecsApiType = {
     lengthWidthHeight: string,
     groundClearance: number | null,
     curbWeight: number,
+    acceleration: number | null,
     engineCapacity: number | null,
+    totalFuelConsumption: number | null,
     wheelSize: {
       front: string,
       rear: string,
@@ -81,15 +83,14 @@ export type SpecsType = {
   powerReserve: number | null,
   electricPowerReserve: number | null,
   engineCount: number | null,
-  seats: string[],
+  seats: string,
   lengthWidthHeight: string,
   groundClearance: number | null,
   curbWeight: number | null,
+  acceleration: number | null,
   engineCapacity: number | null,
-  wheelSize: {
-    front: string,
-    rear: string,
-  };
+  totalFuelConsumption: number | null,
+  wheelSize: string;
   colors: {
     external: ColorType[],
     interior: ColorType[],
