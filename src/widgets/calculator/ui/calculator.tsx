@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { Gallery } from '../../../shared/ui/gallery';
-import { fetchManufacturers } from '../../../entities/manufacturer';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { setIdle } from '../../../entities/model';
 import { Currency } from '../../../entities/currency';
+import { fetchManufacturers } from '../../../entities/manufacturer';
 import { ChooseModel } from '../../../features/choose-model';
-import { ChooseSpecification } from '../../../features/choose-specification';
 import { ChooseDelivery } from '../../../features/choose-delivery';
 import { Filter, FilterId } from '../../../features/filter';
+import { ChooseSpecification } from '../../../features/choose-specification';
 
 import classes from './calculator.module.sass';
 import useFilters from '../lib/hooks/use-filters';
@@ -25,6 +26,7 @@ export const Calculator = (): JSX.Element => {
   useEffect(() => {
     setCurrentSpecification(null);
     dispatch(fetchManufacturers());
+    dispatch(setIdle())
   }, []);
 
   const handleFiltersChange = useCallback(setActiveFilters, []);

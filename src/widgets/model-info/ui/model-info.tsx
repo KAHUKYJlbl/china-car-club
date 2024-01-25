@@ -41,8 +41,6 @@ export const ModelInfo = (): JSX.Element => {
     if (searchParams.get('model')) {
       dispatch(fetchModel(searchParams.get('model')!));
     }
-
-    return () => { dispatch(setIdle()) };
   }, []);
 
   useEffect(() => {
@@ -71,7 +69,6 @@ export const ModelInfo = (): JSX.Element => {
 
   useEffect(() => {
     if ( modelLoadingStatus.isFailed ) {
-      dispatch(setIdle());
       navigate(AppRoute.NotFound);
     }
   }, [modelLoadingStatus.isFailed]);
@@ -86,7 +83,6 @@ export const ModelInfo = (): JSX.Element => {
   }
 
   if (!searchParams.get('model') || !searchParams.get('spec') ) {
-    // dispatch(setIdle());
     return <Navigate to={AppRoute.NotFound} />
   }
 
