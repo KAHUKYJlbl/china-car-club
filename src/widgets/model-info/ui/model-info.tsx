@@ -22,6 +22,7 @@ import { Prices } from './prices';
 import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
+import { AddsType } from '../lib/types';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ export const ModelInfo = (): JSX.Element => {
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
 
   const [ isPrices, setIsPrices ] = useState(true);
+  const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
 
@@ -68,6 +70,13 @@ export const ModelInfo = (): JSX.Element => {
       navigate(AppRoute.NotFound);
     }
   }, [modelLoadingStatus.isFailed]);
+
+  const toggleAdds = (add: AddsType) => {
+    setAdds((current) => ({
+      ...current,
+      [add]: !current[add]
+    }));
+  };
 
   if (
     specificationsLoadingStatus.isLoading
@@ -120,11 +129,15 @@ export const ModelInfo = (): JSX.Element => {
         isPrices &&
         <>
           <div className={classes.prices}>
-            <Prices prices={specificationParams.price} />
+            <Prices prices={specificationParams.price} adds={adds} />
           </div>
 
           <div className={classes.addOptions}>
-            <ChooseOptions />
+            <ChooseOptions
+              prices={specificationParams.price}
+              options={adds}
+              optionsHandler={toggleAdds}
+            />
           </div>
 
           <div className={classes.currency}>

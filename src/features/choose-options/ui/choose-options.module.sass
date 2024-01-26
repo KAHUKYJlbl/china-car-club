@@ -31,7 +31,13 @@
 .price
   font-size: 16px
   font-weight: 700
-  line-height: 30px
+  line-height: 20px
+
+  margin-top: 8px
+  margin-bottom: 2px
+
+.price-label
+  padding-left: 1px
 
 .buttons
   display: flex
@@ -64,14 +70,26 @@
   flex-direction: column
   gap: 4px
 
-.optionsItem
-  display: flex
-  justify-content: center
-  align-items: center
-  flex-grow: 1
+  .options-item
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-grow: 1
 
-  background-color: $primary
-  border-radius: 12px
+    border-radius: 12px
+    background-color: $primary
+    border: 1px solid $primary
+    cursor: pointer
 
-  font-size: 12px
-  line-height: 15px
+    font-size: 12px
+    line-height: 15px
+
+  .options-item:hover
+    border: 1px solid #00000099
+
+  .current
+    background-color: white
+
+  .current:hover
+    border: 1px solid $primary
+    opacity: 1

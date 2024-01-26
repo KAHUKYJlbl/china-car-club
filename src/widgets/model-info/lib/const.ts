@@ -1,5 +1,8 @@
 import { TechNameType, TechsByTypes } from './types';
 
+export const CLUB_FEE = 1000;
+export const GUARANTEE_FEE = 1000;
+
 export const ELECTRO = [3];
 
 export const HYBRID = [5, 6, 7, 8, 9, 10];
