@@ -2,7 +2,7 @@ export type TechsByTypes = {
   electro: boolean,
   hybrid: boolean,
   ice: boolean,
-}
+};
 
 export type ElectroSpecsType = {
   bodyType: string;
@@ -20,7 +20,7 @@ export type ElectroSpecsType = {
   acceleration?: number,
   totalFuelConsumption?: number,
   wheelSize: string;
-}
+};
 
 export type HybridSpecsType = {
   bodyType: string;
@@ -40,7 +40,7 @@ export type HybridSpecsType = {
   totalFuelConsumption?: number,
   engineCapacity?: number,
   wheelSize: string;
-}
+};
 
 export type IceSpecsType = {
   bodyType: string;
@@ -57,15 +57,17 @@ export type IceSpecsType = {
   totalFuelConsumption?: number,
   engineCapacity?: number,
   wheelSize: string;
-}
+};
 
 export type Entrytype = [string, string | number];
 
 export type TechNameType = {
   name: string,
   measure: string,
-}
+};
 
 export type TechType = TechNameType & {
   value: string | number,
-}
+};
+
+export type AddsType = 'epts' | 'guarantee' | 'options';

@@ -1,18 +1,24 @@
 import { memo } from 'react';
+import cn from 'classnames';
 
-import classes from './prices.module.sass';
+
 import { PriceType } from '../../../entities/model/lib/types';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
-import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import priceFormat from '../../../shared/lib/utils/price-format';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+
+import { CLUB_FEE, GUARANTEE_FEE } from '../lib/const';
+import { AddsType } from '../lib/types';
+import classes from './prices.module.sass';
 
 type PricesProps = {
   prices: PriceType;
+  adds: Record<AddsType, boolean>
 }
 
 export const Prices = memo(
-  ({ prices }: PricesProps): JSX.Element => {
+  ({ prices, adds }: PricesProps): JSX.Element => {
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
@@ -41,7 +47,7 @@ export const Prices = memo(
 
           <div className={classes.row}>
             <p>Fix-комиссия Chinacar.club</p>
-            <p>{priceFormat((1000 * currency.usd).toFixed())} ₽</p>
+            <p>{priceFormat((CLUB_FEE * currency.usd).toFixed())} ₽</p>
           </div>
         </div>
 
@@ -53,16 +59,30 @@ export const Prices = memo(
 
           <div className={classes.row}>
             <p>ЭПТС, СБКТС и утильсбор</p>
-            <p>{priceFormat((prices.eptsSbktsUtil * currency.cny).toFixed())} ₽</p>
+
+            <p>
+              {
+                adds.epts
+                ? priceFormat((prices.eptsSbktsUtil * currency.cny).toFixed())
+                : 0
+              } ₽
+            </p>
           </div>
 
           <div className={classes.row}>
             <p>Гарантия на автомобиль</p>
-            <p>0 ₽</p>
+
+            <p>
+              {
+                adds.guarantee
+                ? priceFormat((GUARANTEE_FEE * currency.usd).toFixed())
+                : 0
+              } ₽
+            </p>
           </div>
         </div>
 
-        <div className={classes.row}>
+        <div className={cn(classes.row, classes.rowSingle)}>
           <p>Потенциальная скидка на поставку</p>
           <p>0 ₽</p>
         </div>
