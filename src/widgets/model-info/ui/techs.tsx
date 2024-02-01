@@ -24,7 +24,7 @@ export const Techs = memo(
         <ul className={classes.divider}>
           {
             techsList.map((tech) => (
-              <li className={classes.row}>
+              <li className={classes.row} key={tech.name}>
                 <p>{tech.name}</p>
                 <p className={classes.row}>{`${tech.value} ${tech.measure}`}</p>
               </li>
@@ -39,7 +39,7 @@ export const Techs = memo(
             <ul className={classes.colorsList}>
               {
                 techs.colors.external.map((color) => (
-                  <li>
+                  <li key={color.title}>
                     <div
                       className={classes.colorBall}
                       style={{backgroundColor: `#${color.hexList[0]}`}}
@@ -61,7 +61,7 @@ export const Techs = memo(
             <ul className={classes.colorsList}>
               {
                 techs.colors.interior.map((color) => (
-                  <li>
+                  <li key={color.title}>
                     <div
                       className={classes.colorBall}
                       style={{backgroundColor: `#${color.hexList[0]}`}}

@@ -10,7 +10,9 @@ const useFilters = (filters: Partial<Record<FilterId, number[]>>) => {
   const [ filtersToFetch ] = useDebounce(filters, 650);
 
   useEffect(() => {
-    dispatch(fetchFiltered(filtersToFetch));
+    if (Object.entries(filtersToFetch).length !== 0) {
+      dispatch(fetchFiltered(filtersToFetch));
+    }
   }, [filtersToFetch]);
 };
 

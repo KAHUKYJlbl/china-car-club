@@ -5,6 +5,8 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 export const getRawSpecifications = (state: State) => state[NameSpace.Specification].specifications;
 
+export const getSpecificationImg = (state: State) => state[NameSpace.Specification].specificationImg;
+
 export const getSpecifications = createSelector(
   getRawSpecifications,
   (specifications) => specifications.map((specification) => ({
@@ -34,14 +36,6 @@ export const getPrice = createSelector(
 
     return null;
   }
-  //   id
-  //     ?
-  //       {
-  //           price: specifications.find((specification) => specification.id === id)?.priceByCurrentDay.factoryPrice,
-  //           discount: specifications.find((specification) => specification.id === id)?.priceByCurrentDay.factoryPrice,
-  //       }
-  //     : null
-  // )
 )
 
 export const getCheapestSpecification = createSelector(

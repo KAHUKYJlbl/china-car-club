@@ -10,7 +10,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './choose-options.module.sass';
 import getTotal from '../lib/utils/getTotal';
-import { Currency } from '../lib/const';
+import { Currency, DELIVERY } from '../lib/const';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 type ChooseOptionsProps = {
@@ -36,7 +36,7 @@ export const ChooseOptions = memo(
         <Dropdown
           currentElement={currentDelivery}
           setCurrent={setCurrentDelivery}
-          list={[{name: 'Москва и города ЦФО', id: 0}]}
+          list={DELIVERY}
           placeholder='Выберите регион доставки'
         />
 

@@ -52,10 +52,10 @@ export const modelSlice = createSlice({
             powerReserve: specification.parameters.powerReserve,
             electricPowerReserve: specification.parameters.electricPowerReserve,
             engineCount: specification.parameters.engineCount,
-            seats: specification.parameters.seats.join(', '),
+            seats: specification.parameters.seats.filter((seat) => seat !== '0').join(', '),
             lengthWidthHeight: specification.parameters.lengthWidthHeight,
             groundClearance: specification.parameters.groundClearance,
-            wheelSize: `${specification.parameters.wheelSize.front} • ${specification.parameters.wheelSize.rear}`,
+            wheelSize: `${specification.parameters.wheelSize.front.substring(1)} • ${specification.parameters.wheelSize.rear.substring(1)}`,
             colors: specification.parameters.colors,
             curbWeight: specification.parameters.curbWeight,
             engineCapacity: specification.parameters.engineCapacity
