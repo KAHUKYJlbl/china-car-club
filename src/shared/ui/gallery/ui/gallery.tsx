@@ -10,14 +10,15 @@ import classes from './gallery.module.sass';
 
 type GalleryProps = {
   handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void) | null;
-  galleryId: {
+  galleryList: {
     specificationId: number | null,
     modelId: number | null,
+    list?: string[],
   };
 }
 
 export const Gallery = memo(
-  ({ galleryId, handlePromo }: GalleryProps): JSX.Element => {
+  ({ galleryList, handlePromo }: GalleryProps): JSX.Element => {
     const [ currentImage, setCurrentImage ] = useState(0);
     const [ gallery, setGallery ] = useState(PROMO_GALLERY);
     const name = useAppSelector((state) => getName(state, gallery[currentImage].modelId));
@@ -29,18 +30,19 @@ export const Gallery = memo(
 
     useEffect(() => {
       setCurrentImage(0);
-    }, [galleryId.specificationId]);
+    }, [galleryList.specificationId]);
 
     useEffect(() => {
-      if (galleryId.specificationId && galleryId.modelId) {
-        setGallery([{
-          specificationId: galleryId.specificationId,
-          modelId: galleryId.modelId,
-        }]);
+      if (galleryList.specificationId && galleryList.modelId && galleryList.list) {
+        setGallery(galleryList.list.map((url) => ({
+            specificationId: galleryList.specificationId as number,
+            modelId: galleryList.modelId as number,
+            url,
+        })));
       } else {
         setGallery(PROMO_GALLERY);
       }
-    }, [galleryId.specificationId]);
+    }, [galleryList.specificationId]);
 
     function handleNext () {
       setCurrentImage((current) =>
@@ -73,7 +75,7 @@ export const Gallery = memo(
         {...handlers}
       >
         <div className={classes.background} >
-          <img src={`${process.env.STATIC_URL}specification/${gallery[currentImage].specificationId}.jpg`} />
+          <img src={`${process.env.STATIC_URL}${gallery[currentImage].url}`} />
         </div>
 
         <div className={classes.overlay}>

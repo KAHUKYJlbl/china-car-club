@@ -12,6 +12,7 @@ type InitialState = {
   specifications: SpecificationType[];
   specificationImg: SpecificationImageType;
   specificationsLoadingStatus: FetchStatus;
+  specificationImgLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -22,6 +23,7 @@ const initialState: InitialState = {
     official: [],
   },
   specificationsLoadingStatus: FetchStatus.Idle,
+  specificationImgLoadingStatus: FetchStatus.Idle,
 };
 
 export const specificationSlice = createSlice({
@@ -52,13 +54,13 @@ export const specificationSlice = createSlice({
       })
       .addCase(fetchSpecificationsImage.fulfilled, (state, action) => {
         state.specificationImg = action.payload;
-        state.specificationsLoadingStatus = FetchStatus.Success;
+        state.specificationImgLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchSpecificationsImage.pending, (state) => {
-        state.specificationsLoadingStatus = FetchStatus.Pending;
+        state.specificationImgLoadingStatus = FetchStatus.Pending;
       })
       .addCase(fetchSpecificationsImage.rejected, (state) => {
-        state.specificationsLoadingStatus = FetchStatus.Failed;
+        state.specificationImgLoadingStatus = FetchStatus.Failed;
       });
   },
 });

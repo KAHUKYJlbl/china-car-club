@@ -10,7 +10,7 @@ import { generatePath } from 'react-router-dom';
 
 export const fetchSpecificationsImage = createAsyncThunk<
   SpecificationImageType,
-  string,
+  number,
   {
     dispatch: AppDispatch;
     state: State;
@@ -21,7 +21,7 @@ export const fetchSpecificationsImage = createAsyncThunk<
   async ( specificationId, {extra: axios}) => {
     try {
       const { data } = await axios.get<SpecificationImageType>(
-        generatePath(APIRoute.SpecImages, {id: specificationId})
+        generatePath(APIRoute.SpecImages, {id: specificationId.toString()})
       );
 
       return data;

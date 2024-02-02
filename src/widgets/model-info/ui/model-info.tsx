@@ -6,7 +6,10 @@ import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import {
+  fetchSpecificationsImage,
   fetchSpecificationsInfo,
+  getImagesByColor,
+  getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Currency, fetchCurrency } from '../../../entities/currency';
@@ -32,11 +35,15 @@ export const ModelInfo = (): JSX.Element => {
 
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
 
   const [ isPrices, setIsPrices ] = useState(true);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
+  const [ currentColor, setCurrentColor ] = useState<{int: number | null, ext: number | null}>({int: null, ext: null});
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
+
+  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
 
   useEffect(() => {
@@ -49,6 +56,12 @@ export const ModelInfo = (): JSX.Element => {
       dispatch(fetchCurrency());
     }
   }, []);
+
+  useEffect(() => {
+    if (currentSpecification) {
+      dispatch( fetchSpecificationsImage(currentSpecification) );
+    }
+  }, [currentSpecification]);
 
   useEffect(() => {
     if (manufacturersLoadingStatus.isIdle) {
@@ -79,7 +92,8 @@ export const ModelInfo = (): JSX.Element => {
   };
 
   if (
-    specificationsLoadingStatus.isLoading
+    specificationImgLoadingStatus.isLoading
+    || specificationsLoadingStatus.isLoading
     || manufacturersLoadingStatus.isLoading
     || modelLoadingStatus.isLoading
     || !specificationParams
@@ -95,9 +109,10 @@ export const ModelInfo = (): JSX.Element => {
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
         <Gallery
-          galleryId={{
+          galleryList={{
             specificationId: currentSpecification,
             modelId: Number(searchParams.get('model')),
+            list: imgList,
           }}
         />
       </div>
@@ -121,7 +136,7 @@ export const ModelInfo = (): JSX.Element => {
       {
         !isPrices &&
         <div className={classes.techs}>
-          <Techs techs={specificationParams} />
+          <Techs techs={specificationParams} setColor={setCurrentColor} />
         </div>
       }
 
