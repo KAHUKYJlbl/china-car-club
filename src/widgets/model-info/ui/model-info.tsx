@@ -8,7 +8,9 @@ import { SpecificationInfo } from '../../../features/choose-specification';
 import {
   fetchSpecificationsImage,
   fetchSpecificationsInfo,
+  getExtColors,
   getImagesByColor,
+  getIntColors,
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
@@ -37,10 +39,15 @@ export const ModelInfo = (): JSX.Element => {
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
+  const extColors = useAppSelector(getExtColors);
+  const intColors = useAppSelector(getIntColors);
 
   const [ isPrices, setIsPrices ] = useState(true);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
-  const [ currentColor, setCurrentColor ] = useState<{int: number | null, ext: number | null}>({int: null, ext: null});
+  const [ currentColor, setCurrentColor ] = useState<{int: number | null, ext: number | null}>({
+    int: intColors ? intColors[0].color.id : null,
+    ext: extColors ? extColors[0].color?.id : null,
+  });
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
 
   const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
@@ -92,8 +99,7 @@ export const ModelInfo = (): JSX.Element => {
   };
 
   if (
-    specificationImgLoadingStatus.isLoading
-    || specificationsLoadingStatus.isLoading
+    specificationsLoadingStatus.isLoading
     || manufacturersLoadingStatus.isLoading
     || modelLoadingStatus.isLoading
     || !specificationParams
@@ -108,13 +114,17 @@ export const ModelInfo = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery
-          galleryList={{
-            specificationId: currentSpecification,
-            modelId: Number(searchParams.get('model')),
-            list: imgList,
-          }}
-        />
+        {
+          specificationImgLoadingStatus.isLoading
+          ? <LoadingSpinner spinnerType='widget' />
+          : <Gallery
+            galleryList={{
+              specificationId: currentSpecification,
+              modelId: Number(searchParams.get('model')),
+              list: imgList,
+            }}
+          />
+        }
       </div>
 
       {

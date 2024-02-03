@@ -21,22 +21,52 @@ export const getIntColors = createSelector(
   )
 );
 
+export const getDefaultImages = createSelector(
+  getSpecificationImg,
+  (images) => {
+    if (images.external.length > 0) {
+      return images.external[0].urls.map((url) => ({
+        big: url.big ? url.big : url.original,
+        original: url.original,
+      }))
+    }
+
+    return images.official[0]?.urls.map((url) => ({
+      big: url.big ? url.big : url.original,
+      original: url.original,
+    }))
+  }
+);
+
 export const getImagesByColor = createSelector(
   [
     getSpecificationImg,
     (_state: State, colorId: {int: number | null, ext: number | null}) => colorId,
   ],
-  (images, colorId) => (
-    images.external.find((image) => image.color.id === colorId.ext)
-      ?.urls
-        .map((url) => url.big ? url.big : url.original)
-      .concat(
-        images.external.find((image) => image.color.id === colorId.ext)
-        ? images.interior.find((image) => image.color.id === colorId.int)!
-          .urls.map((url) => url.big ? url.big : url.original)
-        : []
-      )
-  )
+  (images, colorId) => {
+    if (images.external.length > 0) {
+      return images.external.find((image) => image.color?.id === colorId.ext)
+        ?.urls
+          .map((url) => ({
+            big: url.big ? url.big : url.original,
+            original: url.original,
+          }))
+          .concat(
+            images.interior.find((image) => image.color?.id === colorId.ext)
+            ? images.interior.find((image) => image.color?.id === colorId.int)!
+              .urls.map((url) => ({
+                big: url.big ? url.big : url.original,
+                original: url.original,
+              }))
+            : []
+          )
+    }
+
+    return images.official[0]?.urls.map((url) => ({
+      big: url.big ? url.big : url.original,
+      original: url.original,
+    }))
+  }
 );
 
 export const getRawSpecifications = (state: State) => state[NameSpace.Specification].specifications;
@@ -76,7 +106,7 @@ export const getCheapestSpecification = createSelector(
   getRawSpecifications,
   (specifications) => (
     specifications.toSorted(
-      (a, b) => a.priceWithLogisticsByCurrentDay.price - b.priceWithLogisticsByCurrentDay.price
+      (a, b) => a.priceWithLogisticsByCurrentDay?.price - b.priceWithLogisticsByCurrentDay?.price
     )[0]
   )
 )

@@ -48,7 +48,7 @@ export const Techs = memo(
         </ul>
 
         {
-          extColors &&
+          (extColors && extColors[0].color) &&
           <div className={classes.colorsWrapper}>
             <div className={classes.colors} >
               <p>Цвета кузова</p>
@@ -76,7 +76,7 @@ export const Techs = memo(
             </div>
 
             {
-              intColors &&
+              (intColors && intColors[0].color) &&
               <div className={classes.colors} >
                 <p>Цвета интерьера</p>
 

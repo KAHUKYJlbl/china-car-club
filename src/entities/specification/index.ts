@@ -13,4 +13,5 @@ export {
   getSpecificationsLoadingStatus,
   getSpecificationImgLoadingStatus,
   getImagesByColor,
+  getDefaultImages,
 } from './model/specification-selectors';

@@ -4,25 +4,30 @@ import { useSwipeable } from 'react-swipeable';
 import PROMO_GALLERY from '../../../../app/settings/gallery';
 import { useAppSelector } from '../../../lib/hooks/use-app-selector';
 import { getManufacturerByModel, getName } from '../../../../entities/manufacturer';
+import { getSpecificationImgLoadingStatus } from '../../../../entities/specification';
+import { LoadingSpinner } from '../../loading-spinner';
 
 import { GalleryPagination } from './gallery-pagination';
+import { GalleryType } from '../lib/types';
 import classes from './gallery.module.sass';
 
 type GalleryProps = {
-  handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void) | null;
+  handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void);
   galleryList: {
     specificationId: number | null,
     modelId: number | null,
-    list?: string[],
+    list?: {big: string, original: string}[],
   };
 }
 
 export const Gallery = memo(
   ({ galleryList, handlePromo }: GalleryProps): JSX.Element => {
     const [ currentImage, setCurrentImage ] = useState(0);
-    const [ gallery, setGallery ] = useState(PROMO_GALLERY);
-    const name = useAppSelector((state) => getName(state, gallery[currentImage].modelId));
-    const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, gallery[currentImage].modelId));
+    const [ gallery, setGallery ] = useState<GalleryType[] | null>(null);
+    const name = useAppSelector((state) => getName(state, gallery && gallery[currentImage].modelId));
+    const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, gallery && gallery[currentImage].modelId));
+    const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
+
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
       onSwipedRight: handlePrev,
@@ -46,7 +51,7 @@ export const Gallery = memo(
 
     function handleNext () {
       setCurrentImage((current) =>
-        current + 1 === gallery.length
+        current + 1 === gallery!.length
         ? 0
         : current + 1
       )
@@ -55,7 +60,7 @@ export const Gallery = memo(
     function handlePrev () {
       setCurrentImage((current) =>
         current === 0
-        ? gallery.length - 1
+        ? gallery!.length - 1
         : current - 1
       )
     };
@@ -63,9 +68,13 @@ export const Gallery = memo(
     const handlePagination = useCallback( setCurrentImage, [] );
 
     const handlePromoClick = () => {
-      if (handlePromo && manufacturerId) {
+      if (handlePromo && manufacturerId && gallery) {
         handlePromo(manufacturerId, gallery[currentImage].modelId, gallery[currentImage].specificationId);
       }
+    }
+
+    if (!gallery) {
+      return <LoadingSpinner spinnerType='widget' />
     }
 
     return (
@@ -74,8 +83,17 @@ export const Gallery = memo(
         className={classes.wrapper}
         {...handlers}
       >
-        <div className={classes.background} >
-          <img src={`${process.env.STATIC_URL}${gallery[currentImage].url}`} />
+        <div
+          className={classes.background}
+          style={{
+            backgroundImage: `url(${process.env.STATIC_URL}${gallery[currentImage].url.original})`,
+            backgroundSize: "cover"
+          }}
+        >
+          {
+            !specificationImgLoadingStatus.isLoading &&
+            <img src={`${process.env.STATIC_URL}${gallery[currentImage].url.big}`} />
+          }
         </div>
 
         <div className={classes.overlay}>
@@ -113,7 +131,7 @@ export const Gallery = memo(
             }
 
             {
-              handlePromo &&
+              !galleryList.specificationId &&
               <button onClick={handlePromoClick}>
                 Рассчитать спеццену
               </button>

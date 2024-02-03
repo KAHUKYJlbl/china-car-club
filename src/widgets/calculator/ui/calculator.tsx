@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { Gallery } from '../../../shared/ui/gallery';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { setIdle } from '../../../entities/model';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { fetchSpecificationsImage, getDefaultImages, getSpecificationImgLoadingStatus } from '../../../entities/specification';
 import { Currency, fetchCurrency } from '../../../entities/currency';
 import { fetchManufacturers } from '../../../entities/manufacturer';
+import { setIdle } from '../../../entities/model';
 import { ChooseModel } from '../../../features/choose-model';
 import { ChooseDelivery } from '../../../features/choose-delivery';
 import { Filter, FilterId } from '../../../features/filter';
@@ -15,13 +18,17 @@ import useFilters from '../lib/hooks/use-filters';
 
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
+
   const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
   const [ promoMode, setPromoMode ] = useState(false);
 
-  useFilters(activeFilters);
+  const imgList = useAppSelector(getDefaultImages);
+
+  useFilters(activeFilters, promoMode);
 
   useEffect(() => {
     setCurrentSpecification(null);
@@ -29,6 +36,12 @@ export const Calculator = (): JSX.Element => {
     dispatch(setIdle());
     dispatch(fetchCurrency());
   }, []);
+
+  useEffect(() => {
+    if (currentSpecification) {
+      dispatch( fetchSpecificationsImage(currentSpecification) );
+    }
+  }, [currentSpecification]);
 
   const handleFiltersChange = useCallback(setActiveFilters, []);
 
@@ -44,13 +57,18 @@ export const Calculator = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery
-          handlePromo={currentModel ? null : handlePromo}
-          galleryId={{
-            specificationId: currentSpecification,
-            modelId: currentModel,
-          }}
-        />
+        {
+          specificationImgLoadingStatus.isLoading
+          ? <LoadingSpinner spinnerType='widget' />
+          : <Gallery
+            handlePromo={handlePromo}
+            galleryList={{
+              specificationId: currentSpecification,
+              modelId: currentModel,
+              list: imgList,
+            }}
+          />
+        }
       </div>
 
       <div className={classes.filter}>
