@@ -1,14 +1,27 @@
 import { memo } from 'react';
 
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { getShorts } from '../../../entities/model';
+
 import classes from './info-bar.module.sass';
 
+type InfoBarProps = {
+  currentSpecification: number | null;
+}
+
 export const InfoBar = memo(
-  (): JSX.Element => {
+  ({currentSpecification} : InfoBarProps): JSX.Element => {
+    const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
+
+    if (!shorts) {
+      return <div>Loading ...</div>
+    }
+
     return (
       <div className={classes.wrapper}>
-        <div className={classes.specs}>
-          Внедорожник • Элктрический двигатель • Автоматическая коробка • Полный привод • Запас хода 600+ км
-        </div>
+        <p className={classes.specs}>
+          {Object.values(shorts).join(' • ')}
+        </p>
 
         <div className={classes.row}>
           <button className={classes.button}>

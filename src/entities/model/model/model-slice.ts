@@ -3,16 +3,19 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-import { ModelType } from '../lib/types';
+import { ModelType, ParamsType } from '../lib/types';
 import { fetchModel } from './api-actions/fetch-model';
+import { FILTERS } from '../../../app/settings/filters';
 
 type InitialState = {
   model: ModelType | null;
+  shorts: ParamsType[];
   modelLoadingStatus: FetchStatus;
 }
 
 const initialState: InitialState = {
   model: null,
+  shorts: [],
   modelLoadingStatus: FetchStatus.Idle,
 }
 
@@ -33,6 +36,24 @@ export const modelSlice = createSlice({
       .addCase(fetchModel.fulfilled, (state, action) => {
         const data = action.payload.data;
 
+        state.shorts = data.specifications.map((specification) => ({
+          id: specification.id,
+          params: {
+            engineType: FILTERS.engine!.elements.find((element) =>
+              element.elementId === specification.parameters.engineType.id
+            )?.name || '',
+            bodyType: FILTERS.body!.elements.find((element) =>
+              element.elementId === specification.parameters.bodyType.id
+            )?.name || '',
+            driveType: FILTERS.drive!.elements.find((element) =>
+              element.elementId === specification.parameters.driveType.id
+            )?.name || '',
+            transmissionType: FILTERS.transmission!.elements.find((element) =>
+              element.elementId === specification.parameters.transmissionType.id
+            )?.name || '',
+          }
+        }))
+
         state.model = {
           manufacturerId: data.manufacturer.id,
           modelId: data.id,
@@ -42,10 +63,10 @@ export const modelSlice = createSlice({
             id: specification.id,
             name: specification.name.ru || specification.name.ch,
             year: specification.year,
-            engineType: specification.parameters.engineType,
-            bodyType: specification.parameters.bodyType,
-            driveType: specification.parameters.driveType,
-            transmissionType: specification.parameters.transmissionType,
+            engineType: specification.parameters.engineType.id,
+            bodyType: specification.parameters.bodyType.name.ru || specification.parameters.bodyType.name.ch,
+            driveType: specification.parameters.driveType.name.ru || specification.parameters.driveType.name.ch,
+            transmissionType: specification.parameters.transmissionType.name.ru || specification.parameters.transmissionType.name.ch,
             power: specification.parameters.power,
             torque: specification.parameters.torque,
             batteryCapacity: specification.parameters.batteryCapacity,
