@@ -10,19 +10,36 @@ export type PriceType = {
   eptsSbktsUtil: number,
 }
 
-export type SpecsApiType = {
+type NameType = {
+  ch: string,
+  ru: string,
+}
+
+export type ParametrApiType = {
   id: number;
-  name: {
-    ch: string,
-    ru: string,
-  };
-  state_id: number;
-  year: number;
-  parameters: {
-    engineType: number,
+  name: NameType;
+}
+
+export type ParamsType = {
+  id: number;
+  params: {
+    engineType: string,
     bodyType: string,
     driveType: string,
     transmissionType: string,
+  }
+}
+
+export type SpecsApiType = {
+  id: number;
+  name: NameType;
+  state_id: number;
+  year: number;
+  parameters: {
+    engineType: ParametrApiType,
+    bodyType: ParametrApiType,
+    driveType: ParametrApiType,
+    transmissionType: ParametrApiType,
     power: number,
     torque: number | null,
     batteryCapacity: number | null,

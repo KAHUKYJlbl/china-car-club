@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import cn from 'classnames';
 
 import useActiveFilters from '../lib/hooks/use-active-filters';
-import { FILTERS } from '../lib/filters';
+import { FILTERS } from '../../../app/settings/filters';
 import { FilterId } from '../lib/types';
 import classes from './filter.module.sass';
 

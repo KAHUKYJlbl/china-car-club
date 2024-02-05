@@ -17,12 +17,12 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { Gallery } from '../../../shared/ui/gallery';
 
+import { AddsType } from '../lib/types';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
 import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
-import { AddsType } from '../lib/types';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -105,7 +105,7 @@ export const ModelInfo = (): JSX.Element => {
       {
         isDesktop &&
         <div className={classes.info}>
-          <InfoBar />
+          <InfoBar currentSpecification={currentSpecification} />
         </div>
       }
 

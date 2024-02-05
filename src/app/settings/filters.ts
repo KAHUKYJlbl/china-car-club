@@ -1,4 +1,4 @@
-import { FilterId, FilterType } from './types';
+import { FilterId, FilterType } from '../../features/filter/lib/types';
 
 export const FILTERS: Partial<Record<FilterId, FilterType>> = {
   price: {

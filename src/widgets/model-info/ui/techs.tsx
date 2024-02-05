@@ -32,7 +32,7 @@ export const Techs = memo(
           }
         </ul>
 
-        <div className={classes.colorsWrapper}>
+        {/* <div className={classes.colorsWrapper}>
           <div className={classes.colors} >
             <p>Цвета кузова</p>
 
@@ -76,7 +76,7 @@ export const Techs = memo(
               }
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
     )
   }
