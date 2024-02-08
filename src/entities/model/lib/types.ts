@@ -17,7 +17,7 @@ type NameType = {
 
 export type ParametrApiType = {
   id: number;
-  name: NameType;
+  name: string;
 }
 
 export type ParamsType = {

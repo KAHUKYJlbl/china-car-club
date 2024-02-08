@@ -117,7 +117,7 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
       },
       {
         elementId: 2,
-        name: 'Робот',
+        name: 'Роботизированная',
       },
       {
         elementId: 3,
