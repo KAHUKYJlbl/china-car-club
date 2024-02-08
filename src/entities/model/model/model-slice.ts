@@ -45,12 +45,12 @@ export const modelSlice = createSlice({
             bodyType: FILTERS.body!.elements.find((element) =>
               element.elementId === specification.parameters.bodyType.id
             )?.name || '',
-            driveType: FILTERS.drive!.elements.find((element) =>
+            driveType: `${FILTERS.drive!.elements.find((element) =>
               element.elementId === specification.parameters.driveType.id
-            )?.name || '',
-            transmissionType: FILTERS.transmission!.elements.find((element) =>
+            )?.name} привод` || '',
+            transmissionType: `${FILTERS.transmission!.elements.find((element) =>
               element.elementId === specification.parameters.transmissionType.id
-            )?.name || '',
+            )?.name} коробка передач` || '',
           }
         }))
 
@@ -64,9 +64,9 @@ export const modelSlice = createSlice({
             name: specification.name.ru || specification.name.ch,
             year: specification.year,
             engineType: specification.parameters.engineType.id,
-            bodyType: specification.parameters.bodyType.name.ru || specification.parameters.bodyType.name.ch,
-            driveType: specification.parameters.driveType.name.ru || specification.parameters.driveType.name.ch,
-            transmissionType: specification.parameters.transmissionType.name.ru || specification.parameters.transmissionType.name.ch,
+            bodyType: specification.parameters.bodyType.name,
+            driveType: specification.parameters.driveType.name,
+            transmissionType: specification.parameters.transmissionType.name,
             power: specification.parameters.power,
             torque: specification.parameters.torque,
             batteryCapacity: specification.parameters.batteryCapacity,
