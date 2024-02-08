@@ -15,7 +15,7 @@ type TechsProps = {
   setColor: React.Dispatch<React.SetStateAction<{
     int: number | null;
     ext: number | null;
-}>>,
+  }>>,
 }
 
 export const Techs = memo(

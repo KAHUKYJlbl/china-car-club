@@ -14,6 +14,18 @@ export const getModelLoadingStatus = createSelector(
   })
 );
 
+export const getShorts = createSelector(
+  [
+    (state: State) => state[NameSpace.Model].shorts,
+    (_state: State, id: number | null) => id
+  ],
+  (shorts, id) => (
+    id
+      ? shorts?.find((short) => short.id === id)?.params
+      : null
+  )
+);
+
 export const getSpecificationParams = createSelector(
   [
     getModel,
