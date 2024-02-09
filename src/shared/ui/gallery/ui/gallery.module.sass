@@ -2,11 +2,9 @@
 
 .wrapper
   position: relative
-  min-height: 564px
   height: 100%
 
   @media screen and (max-width: 1280px)
-    min-height: auto
     height: 432px
 
   @media screen and (max-width: 640px)
@@ -16,8 +14,7 @@
     margin-top: 8px
 
     color: $text-secondary
-    text-shadow: -1px 0 1px #ffffff80, 1px 0 1px #00000099
-    font-size: 15px
+    font-size: 14px
     line-height: 18px
 
     @media screen and (max-width: 640px)
@@ -40,13 +37,6 @@
   animation-duration: 650ms
   animation-name: pages
 
-  img
-    height: 100%
-    width: 100%
-    object-fit: cover
-
-    border-radius: 16px
-
 
 .overlay
   position: relative
@@ -55,7 +45,7 @@
   flex-direction: column
   justify-content: space-between
 
-  padding: 12px
+  padding: 16px
   height: 100%
   border-radius: 16px
 

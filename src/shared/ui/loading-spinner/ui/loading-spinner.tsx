@@ -3,19 +3,20 @@ import classes from './loading-spinner.module.sass';
 
 const spinnerTypes = {
   page: {
-    height: '160',
-    width: '160',
+    height: '240',
+    width: '240',
     color: '#7E7E7E',
     wrapperStyle: {
       height: '100vh',
     },
   },
   widget: {
-    height: '80',
-    width: '80',
+    height: '50',
+    width: '50',
     wrapperHeight: '100%',
     color: '#7E7E7E',
     wrapperStyle: {
+      padding: '40px',
       height: '100%'
     },
   },

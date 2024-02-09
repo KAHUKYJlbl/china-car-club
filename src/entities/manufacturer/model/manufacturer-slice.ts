@@ -9,14 +9,12 @@ import { ManufacturersWithSpecsCountType } from '../lib/types';
 import { fetchManufacturersWithSpectsCount } from './api-actions/fetch-specs';
 
 type InitialState = {
-  fullListManufacturers: ManufacturersWithSpecsCountType | null;
   manufacturers: ManufacturersWithSpecsCountType | null;
   manufacturersLoadingStatus: FetchStatus;
   specsLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
-  fullListManufacturers: null,
   manufacturers: null,
   manufacturersLoadingStatus: FetchStatus.Idle,
   specsLoadingStatus: FetchStatus.Idle,
@@ -30,7 +28,6 @@ export const manufacturerSlice = createSlice({
     builder
     .addCase(fetchManufacturers.fulfilled, (state, action) => {
       state.manufacturers = action.payload;
-      state.fullListManufacturers = action.payload;
       state.manufacturersLoadingStatus = FetchStatus.Success;
     })
     .addCase(fetchManufacturers.pending, (state) => {
