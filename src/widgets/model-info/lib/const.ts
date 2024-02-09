@@ -1,6 +1,5 @@
 import { TechNameType, TechsByTypes } from './types';
 
-export const CLUB_FEE = 1000;
 export const GUARANTEE_FEE = 1000;
 
 export const ELECTRO = [3];

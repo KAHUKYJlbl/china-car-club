@@ -194,6 +194,12 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         elementId: 5,
         name: 'Свежее поколение',
       },
+      {
+        filterId: 'clearance',
+        elementId: 6,
+        name: 'Клиренс 220+ мм',
+      },
+
     ],
   },
 };

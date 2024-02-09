@@ -10,9 +10,7 @@ const useFilters = (filters: Partial<Record<FilterId, number[]>>, isPromo: boole
   const [ filtersToFetch ] = useDebounce(filters, 650);
 
   useEffect(() => {
-    if (Object.entries(filtersToFetch).length !== 0 || isPromo) {
-      dispatch(fetchFiltered(filtersToFetch));
-    }
+    dispatch(fetchFiltered(filtersToFetch));
   }, [filtersToFetch]);
 };
 
