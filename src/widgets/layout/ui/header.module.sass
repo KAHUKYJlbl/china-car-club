@@ -1,3 +1,5 @@
+@use '../../../assets/styles/_variables' as *
+
 .wrapper
   display: flex
   gap: 4px
@@ -21,6 +23,13 @@
     height: 45px
 
     border-radius: 12px
+
+  a
+    display: flex
+    align-items: center
+    justify-content: center
+
+    background: none
 
 .nav-wrapper
   display: flex
@@ -49,23 +58,34 @@
 
 .nav
   display: flex
-  gap: 16px
-  align-items: center
+  gap: 8px
+  align-items: stretch
 
   @media screen and (max-width: 1280px)
-    gap: 8px
+    gap: 4px
 
 .nav-item
+  display: flex
+  align-items: center
+
+  border-radius: 12px
+  padding: 0 8px
+
   font-size: 14px
   line-height: 18px
 
   cursor: pointer
+
+.nav-item:hover
+  background-color: #F8F7F5
 
 .nav-phone,
 .nav-menu
   display: flex
   justify-content: center
   align-items: center
+
+  padding: 0
 
   a,
   button

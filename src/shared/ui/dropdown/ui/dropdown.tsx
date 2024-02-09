@@ -7,16 +7,34 @@ type DropdownProps = {
   currentElement: number | null;
   setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
-  list?: {name: string, id: number, sublistLength?: number | null}[] | null;
+  list?: {
+    name: string,
+    id: number,
+    isHighlight?: boolean,
+    sublistLength?: number | null,
+  }[] | null;
+  extraListHeader?: {
+    extraListHeader: string,
+    basicListHeader: string,
+  }
   disabled?: boolean;
 };
 
-export const Dropdown = ({currentElement, setCurrent, placeholder, list, disabled = false}: DropdownProps): JSX.Element => {
-  const [ isOpen, setIsOpen ] = useState(false);
+export const Dropdown = ({
+  currentElement,
+  setCurrent,
+  list,
+  extraListHeader,
+  placeholder,
+  disabled = false,
+}: DropdownProps): JSX.Element => {
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
+  const [ isOpen, setIsOpen ] = useState(false);
   const [ currentValue, setCurrentValue ] = useState('');
   const [ currentFilter, setCurrentFilter ] = useState('');
+
+  useClickOutside([listRef, fieldRef], () => setIsOpen(false));
 
   useEffect(() => {
     setCurrentFilter('');
@@ -39,7 +57,7 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
     })
     .filter((element) => element.name.toLowerCase().includes(currentFilter.toLowerCase()));
 
-  useClickOutside([listRef, fieldRef], () => setIsOpen(false));
+  const extraList = displayedList?.filter((element) => element.isHighlight);
 
   const toggleOpen = () => {
     if ( list && Boolean(list.length) ) {
@@ -55,6 +73,7 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
   }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsOpen(true);
     setCurrentValue(e.target.value);
     setCurrentFilter(e.target.value);
   }
@@ -70,13 +89,12 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
       <div
         className={classes.wrapper}
         ref={fieldRef}
-        style={disabled ? {color: "lightgrey"} : {}}
         onClick={disabled ? () => null : toggleOpen}
       >
         <input
           className={classes.currentElement}
           placeholder={disabled ? 'Загрузка...' : placeholder}
-          disabled={disabled}
+          disabled={disabled || !list}
           value={currentValue}
           onChange={(e) => handleInput(e)}
           onBlur={handleInputBlur}
@@ -87,24 +105,60 @@ export const Dropdown = ({currentElement, setCurrent, placeholder, list, disable
           width="8"
           height="7"
           aria-hidden="true"
-          style={isOpen ? {transform: 'rotate(180deg)', transitionDuration: '100ms'} : {transitionDuration: '100ms'}}
+          style={isOpen
+            ? {transform: 'rotate(180deg)', transitionDuration: '100ms'}
+            : !list || disabled
+              ? {transitionDuration: '100ms', cursor: 'default'}
+              : {transitionDuration: '100ms'}
+          }
         >
           <use xlinkHref="#dropdown" />
         </svg>
 
-        {isOpen && displayedList &&
+        {
+          isOpen && displayedList &&
           <div className={classes.listWrapper} ref={listRef}>
+            {
+              extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
+              <>
+                <p className={classes.listHeader}>{extraListHeader.extraListHeader}</p>
+
+                <ul className={classes.list}>
+                  {
+                    extraList.map((item) => (
+                      <li
+                        key={item.id}
+                        className={classes.listItem}
+                        onClick={(e) => handleItemClick(item.id, e)}
+                      >
+                        <span>{item.name}</span>
+                        <span className={classes.listItemCount}>{ item.sublistLength }</span>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </>
+            }
+
+            {
+              extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
+              <p className={classes.listHeader}>{extraListHeader.basicListHeader}</p>
+            }
+
             <ul className={classes.list}>
               {
-                displayedList.map((item) => (
-                  <li
-                    key={item.id}
-                    className={classes.listItem}
-                    onClick={(e) => handleItemClick(item.id, e)}
-                  >
-                    {item.name + ( item.sublistLength ? ` (${item.sublistLength})` : '' )}
-                  </li>
-                ))
+                displayedList.length === 0
+                  ? <li className={classes.listItem}>Ничего не найдено</li>
+                  : displayedList.map((item) => (
+                    <li
+                      key={item.id}
+                      className={classes.listItem}
+                      onClick={(e) => handleItemClick(item.id, e)}
+                    >
+                      <span>{item.name}</span>
+                      <span className={classes.listItemCount}>{ item.sublistLength }</span>
+                    </li>
+                  ))
               }
             </ul>
           </div>

@@ -1,13 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 import { camelizeKeys } from 'humps';
-
-const BACKEND_URL = 'https://admin.new.chinacar.club/api/calc/manufacturers'
-const REQUEST_TIMEOUT = 5000;
 
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
-    baseURL: BACKEND_URL,
-    timeout: REQUEST_TIMEOUT,
+    baseURL: process.env.API_URL,
+    timeout: 6000,
   });
 
   api.interceptors.response.use((response: AxiosResponse) => {
@@ -19,6 +17,11 @@ export const createAPI = (): AxiosInstance => {
     }
 
     return response;
+  });
+
+  axiosRetry(api, {
+    retries: 3,
+    retryDelay: axiosRetry.exponentialDelay,
   });
 
   return api;

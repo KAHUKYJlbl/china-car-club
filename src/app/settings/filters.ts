@@ -1,4 +1,4 @@
-import { FilterId, FilterType } from './types';
+import { FilterId, FilterType } from '../../features/filter/lib/types';
 
 export const FILTERS: Partial<Record<FilterId, FilterType>> = {
   price: {
@@ -117,7 +117,7 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
       },
       {
         elementId: 2,
-        name: 'Робот',
+        name: 'Роботизированная',
       },
       {
         elementId: 3,
@@ -194,6 +194,12 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         elementId: 5,
         name: 'Свежее поколение',
       },
+      {
+        filterId: 'clearance',
+        elementId: 6,
+        name: 'Клиренс 220+ мм',
+      },
+
     ],
   },
 };

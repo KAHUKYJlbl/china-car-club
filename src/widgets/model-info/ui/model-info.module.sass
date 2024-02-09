@@ -2,11 +2,12 @@
 
 .wrapper
   display: grid
-  grid-template-rows: min-content 8fr 6fr 1fr 3fr
+  // grid-template-rows: min-content 8fr 6fr 1fr 3fr
+  grid-template-rows: min-content min-content min-content min-content min-content
   grid-template-columns: 27% 73%
   gap: 4px
 
-  margin-top: 32px
+  margin-top: 20px
 
   @media screen and (max-width: 1280px)
     display: flex
@@ -32,6 +33,12 @@
 
 .prices
   grid-area: 2 / 1 / 3 / 2
+
+  border-radius: 16px
+  background-color: $primary
+
+.techs
+  grid-area: 2 / 1 / 6 / 2
 
   border-radius: 16px
   background-color: $primary

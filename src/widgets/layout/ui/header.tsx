@@ -2,6 +2,8 @@ import cn from 'classnames';
 import { useMediaQuery } from 'react-responsive';
 
 import classes from './header.module.sass';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../../app/provider/router';
 
 export const Header = (): JSX.Element => {
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
@@ -10,13 +12,15 @@ export const Header = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.logo}>
-        <svg
-          width={ isDesktop ? "214" : ( isMobile ? "106" : "151" ) }
-          height={ isDesktop ? "26" : ( isMobile ? "12" : "17" ) }
-          aria-hidden="true"
-        >
-          <use xlinkHref="#logo" />
-        </svg>
+        <Link to={AppRoute.Main} >
+          <svg
+            width={ isDesktop ? "216" : ( isMobile ? "106" : "151" ) }
+            height={ isDesktop ? "26" : ( isMobile ? "12" : "17" ) }
+            aria-hidden="true"
+          >
+            <use xlinkHref="#logo" />
+          </svg>
+        </Link>
       </div>
 
       <div className={classes.navWrapper}>
@@ -31,8 +35,8 @@ export const Header = (): JSX.Element => {
             isDesktop
             ? <>
               <div className={classes.navItem}>Журнал</div>
-              <div className={classes.navItem}>Контакты</div>
               <div className={classes.navItem}>О компании</div>
+              <div className={classes.navItem}>Контакты</div>
             </>
             : <div className={cn(classes.navItem, classes.navPhone)}>
               <button>
