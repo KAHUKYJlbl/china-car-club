@@ -8,7 +8,7 @@ import priceFormat from '../../../shared/lib/utils/price-format';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
-import { CLUB_FEE, GUARANTEE_FEE } from '../lib/const';
+import { GUARANTEE_FEE } from '../lib/const';
 import { AddsType } from '../lib/types';
 import classes from './prices.module.sass';
 
@@ -42,12 +42,12 @@ export const Prices = memo(
 
           <div className={classes.row}>
             <p>Цена под ключ на границе Китая</p>
-            <p>{priceFormat((prices.withLogistics * currency.cny).toFixed())} ₽</p>
+            <p>{priceFormat((prices.borderPrice * currency.cny).toFixed())} ₽</p>
           </div>
 
           <div className={classes.row}>
             <p>Fix-комиссия Chinacar.club</p>
-            <p>{priceFormat((CLUB_FEE * currency.usd).toFixed())} ₽</p>
+            <p>{priceFormat((prices.commission * currency.cny).toFixed())} ₽</p>
           </div>
         </div>
 

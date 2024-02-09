@@ -6,7 +6,12 @@ import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import {
+  fetchSpecificationsImage,
   fetchSpecificationsInfo,
+  getExtColors,
+  getImagesByColor,
+  getIntColors,
+  getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Currency, fetchCurrency } from '../../../entities/currency';
@@ -32,11 +37,20 @@ export const ModelInfo = (): JSX.Element => {
 
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
+  const extColors = useAppSelector(getExtColors);
+  const intColors = useAppSelector(getIntColors);
 
   const [ isPrices, setIsPrices ] = useState(true);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
+  const [ currentColor, setCurrentColor ] = useState<{int: number | null, ext: number | null}>({
+    int: intColors ? intColors[0].color.id : null,
+    ext: extColors ? extColors[0].color?.id : null,
+  });
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
+
+  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
 
   useEffect(() => {
@@ -49,6 +63,12 @@ export const ModelInfo = (): JSX.Element => {
       dispatch(fetchCurrency());
     }
   }, []);
+
+  useEffect(() => {
+    if (currentSpecification) {
+      dispatch( fetchSpecificationsImage(currentSpecification) );
+    }
+  }, [currentSpecification]);
 
   useEffect(() => {
     if (manufacturersLoadingStatus.isIdle) {
@@ -94,12 +114,17 @@ export const ModelInfo = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery
-          galleryId={{
-            specificationId: currentSpecification,
-            modelId: Number(searchParams.get('model')),
-          }}
-        />
+        {
+          specificationImgLoadingStatus.isLoading
+          ? <LoadingSpinner spinnerType='widget' />
+          : <Gallery
+            galleryList={{
+              specificationId: currentSpecification,
+              modelId: Number(searchParams.get('model')),
+              list: imgList,
+            }}
+          />
+        }
       </div>
 
       {
@@ -121,7 +146,7 @@ export const ModelInfo = (): JSX.Element => {
       {
         !isPrices &&
         <div className={classes.techs}>
-          <Techs techs={specificationParams} />
+          <Techs techs={specificationParams} setColor={setCurrentColor} />
         </div>
       }
 
