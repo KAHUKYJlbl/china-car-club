@@ -33,11 +33,24 @@ export const Filter = memo(
       }));
     };
 
-    const handleClearFilterClick = () => {
-      const newFilters = {
-        ...activeFilters,
-        [currentFilter]: [],
-      };
+    const handleClearFilterClick = (currentFilter: FilterId) => {
+      let newFilters: Partial<Record<FilterId, number[]>>;
+
+      if (currentFilter === 'other') {
+        newFilters = {
+          ...activeFilters,
+          seats: [],
+          powerReserve: [],
+          acceleration: [],
+          date: [],
+          clearance: [],
+        };
+      } else {
+        newFilters = {
+          ...activeFilters,
+          [currentFilter]: [],
+        };
+      }
 
       setActiveFilters((current) => ({
         ...current,
@@ -83,13 +96,11 @@ export const Filter = memo(
                     activeFilters[filter as FilterId] !== undefined
                     && activeFilters[filter as FilterId]?.length !== 0
                   )
-                  || (filter === 'other' && FILTERS.other?.elements.some((element) =>
-                    (
-                      element.filterId
-                      && (activeFilters[element.filterId] !== undefined)
-                      && (activeFilters[element.filterId]?.length !== 0)
-                    )
-                  )))
+                  || (filter === 'other' && FILTERS.other?.elements.some((element) => (
+                    element.filterId
+                    && activeFilters[element.filterId]
+                    && ( activeFilters[element.filterId]?.length !== 0 )
+                  ))))
                   && <div className={classes.activeFilter} />
                 }
               </div>
@@ -121,8 +132,13 @@ export const Filter = memo(
           }
 
           {
-            activeFilters[currentFilter] && activeFilters[currentFilter]?.length !== 0 &&
-            <button className={classes.xButton} onClick={handleClearFilterClick}>
+            ((activeFilters[currentFilter] && activeFilters[currentFilter]?.length !== 0) ||
+            (currentFilter === 'other' && FILTERS.other?.elements.some((element) => (
+              element.filterId
+              && activeFilters[element.filterId]
+              && ( activeFilters[element.filterId]?.length !== 0 )
+            )))) &&
+            <button className={classes.xButton} onClick={() => handleClearFilterClick(currentFilter)}>
               <svg width="16" height="16" aria-hidden="true">
                 <use xlinkHref="#x" />
               </svg>

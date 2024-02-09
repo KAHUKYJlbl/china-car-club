@@ -28,7 +28,7 @@ export const Calculator = (): JSX.Element => {
 
   const imgList = useAppSelector(getDefaultImages);
 
-  useFilters(activeFilters, promoMode);
+  useFilters(activeFilters);
 
   useEffect(() => {
     setCurrentSpecification(null);

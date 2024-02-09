@@ -8,6 +8,8 @@ export type PriceType = {
   withLogistics: number,
   tax: number,
   eptsSbktsUtil: number,
+  borderPrice: number,
+  commission: number,
 }
 
 type NameType = {

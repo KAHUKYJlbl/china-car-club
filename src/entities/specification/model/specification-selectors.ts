@@ -90,7 +90,9 @@ export const getPrice = createSelector(
 
       if (specification) {
         return {
-          price: specification.priceByCurrentDay.factoryPrice,
+          price: specification.priceByCurrentDay.dealerPrice
+            ? specification.priceByCurrentDay.dealerPrice
+            : specification.priceByCurrentDay.factoryPrice,
           discount: specification.priceByCurrentDay.dealerPrice
             ? specification.priceByCurrentDay.factoryPrice - specification.priceByCurrentDay.dealerPrice
             : 0
