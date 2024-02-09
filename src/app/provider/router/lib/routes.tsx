@@ -1,6 +1,6 @@
 export enum AppRoute {
   Main = '/',
   Calc = '/calculator',
-  Model = '/calculator/modelinfo',
+  Model = '/model/:modelId',
   NotFound = '/not-found',
 }

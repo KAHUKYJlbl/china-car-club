@@ -2,12 +2,12 @@
 
 .wrapper
   height: 100%
-  padding: 12px 0
+  padding: 12px
   overflow: hidden
 
   p
-    font-size: 12px
-    line-height: 15px
+    font-size: 10px
+    line-height: 13px
     color: $text-secondary
 
 .header-row
@@ -17,10 +17,9 @@
   justify-content: space-between
 
   height: 24px
-  margin: 0 12px
 
   p
-    padding-left: 4px
+    margin-bottom: 10px
 
 .row
   display: flex
@@ -29,12 +28,12 @@
   gap: 2px
 
   overflow-x: scroll
-  margin-top: 2px
-  padding: 0 12px
+  margin-top: 4px
 
+  -ms-overflow-style: none
   scrollbar-width: none
 
-.row::-webkit-scrollbar
+.row::webkit-scrollbar
   display: none
 
 .filter-button
@@ -43,9 +42,8 @@
   justify-content: center
   align-items: center
 
-  padding: 12px
+  padding: 14px 12px
   min-width: max-content
-  height: 40px
 
   border-radius: 12px
   background-color: $secondary
@@ -72,7 +70,6 @@
 
   padding: 12px
   min-width: max-content
-  height: 40px
 
   border-radius: 12px
   border: 2px solid $secondary

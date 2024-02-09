@@ -1,7 +1,4 @@
 import { memo } from 'react';
-import { Link } from 'react-router-dom';
-
-import { AppRoute } from '../../../app/provider/router';
 
 import classes from './order-buttons.module.sass';
 
@@ -19,9 +16,9 @@ export const OrderButtons = memo(
           </button>
         </div>
 
-        <Link to={AppRoute.Main} >
+        <button>
           Выбрать другой автомобиль или страну
-        </Link>
+        </button>
       </div>
     )
   }
