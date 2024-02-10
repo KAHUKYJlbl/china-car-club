@@ -47,25 +47,14 @@ export const getImagesByColor = createSelector(
     if (images.external.length > 0) {
       return images.external.find((image) => image.color?.id === colorId.ext)
         ?.urls
-          .map((url) => ({
-            big: url.big ? url.big : url.original,
-            original: url.original,
-          }))
-          .concat(
-            images.interior.find((image) => image.color?.id === colorId.ext)
-            ? images.interior.find((image) => image.color?.id === colorId.int)!
-              .urls.map((url) => ({
-                big: url.big ? url.big : url.original,
-                original: url.original,
-              }))
-            : []
-          )
+        .concat(
+          images.interior.find((image) => image.color?.id === colorId.int)
+          ? images.interior.find((image) => image.color?.id === colorId.int)!.urls
+          : []
+        )
     }
 
-    return images.official[0]?.urls.map((url) => ({
-      big: url.big ? url.big : url.original,
-      original: url.original,
-    }))
+    return images.official[0]?.urls;
   }
 );
 

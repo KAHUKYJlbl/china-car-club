@@ -50,8 +50,18 @@ export const ModelInfo = (): JSX.Element => {
   });
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
 
-  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
+  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
+  console.log(imgList);
+
+  useEffect(() => {
+    if (specificationImgLoadingStatus.isSuccess) {
+      setCurrentColor({
+        int: intColors ? intColors[0].color.id : null,
+        ext: extColors ? extColors[0].color?.id : null,
+      });
+    }
+  }, [specificationImgLoadingStatus.isSuccess]);
 
   useEffect(() => {
     if (searchParams.get('model')) {
@@ -99,7 +109,8 @@ export const ModelInfo = (): JSX.Element => {
   };
 
   if (
-    specificationsLoadingStatus.isLoading
+    specificationImgLoadingStatus.isLoading
+    || specificationsLoadingStatus.isLoading
     || manufacturersLoadingStatus.isLoading
     || modelLoadingStatus.isLoading
     || !specificationParams
@@ -114,17 +125,11 @@ export const ModelInfo = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        {
-          specificationImgLoadingStatus.isLoading
-          ? <LoadingSpinner spinnerType='widget' />
-          : <Gallery
-            galleryList={{
-              specificationId: currentSpecification,
-              modelId: Number(searchParams.get('model')),
-              list: imgList,
-            }}
-          />
-        }
+        <Gallery
+          galleryList={imgList}
+          specificationId={currentSpecification}
+          modelId={Number(searchParams.get('model'))}
+        />
       </div>
 
       {
