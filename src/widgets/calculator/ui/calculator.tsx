@@ -61,12 +61,10 @@ export const Calculator = (): JSX.Element => {
           specificationImgLoadingStatus.isLoading
           ? <LoadingSpinner spinnerType='widget' />
           : <Gallery
-            handlePromo={handlePromo}
-            galleryList={{
-              specificationId: currentSpecification,
-              modelId: currentModel,
-              list: imgList,
-            }}
+            handlePromo={currentSpecification ? null : handlePromo}
+            galleryList={imgList}
+            specificationId={currentSpecification}
+            modelId={currentModel}
           />
         }
       </div>
