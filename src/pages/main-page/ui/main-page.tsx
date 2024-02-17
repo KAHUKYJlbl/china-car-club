@@ -5,7 +5,7 @@ import { AppRoute } from '../../../app/provider/router';
 
 const MainPage = (): JSX.Element => {
   useEffect(() => {
-    window.location.replace('https://chinacar.club');
+    window.location.replace('https://youtube.com');
   }, []);
 
   return <Navigate to={AppRoute.Calc} />;
