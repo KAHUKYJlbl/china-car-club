@@ -142,7 +142,9 @@ export const Dropdown = ({
 
             {
               extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
-              <p className={classes.listHeader}>{extraListHeader.basicListHeader}</p>
+              <p className={classes.listHeader}>
+                {extraListHeader.basicListHeader}
+              </p>
             }
 
             <ul className={classes.list}>

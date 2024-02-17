@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
@@ -32,7 +31,6 @@ import classes from './model-info.module.sass';
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const [ searchParams, setSearchParams ] = useSearchParams();
 
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
@@ -132,12 +130,9 @@ export const ModelInfo = (): JSX.Element => {
         />
       </div>
 
-      {
-        isDesktop &&
-        <div className={classes.info}>
-          <InfoBar currentSpecification={currentSpecification} />
-        </div>
-      }
+      <div className={classes.info}>
+        <InfoBar currentSpecification={currentSpecification} />
+      </div>
 
       <div className={classes.specification}>
         <SpecificationInfo
