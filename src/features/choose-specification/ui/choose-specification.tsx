@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { Dropdown } from '../../../shared/ui/dropdown';
+import { DropdownBlocks } from '../../../shared/ui/dropdown';
 import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
 import {
   fetchSpecifications,
@@ -74,7 +74,7 @@ export const ChooseSpecification = memo(
         {
           currentModel
           ? <>
-            <Dropdown
+            <DropdownBlocks
               currentElement={currentSpecification}
               setCurrent={setCurrentSpecification}
               placeholder='Комплектация'
