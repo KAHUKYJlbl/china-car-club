@@ -4,7 +4,6 @@ import useClickOutside from '../../../lib/hooks/use-click-outside';
 
 import { DropdownExtraListType, DropdownListType } from '../lib/types';
 import classes from './dropdown.module.sass';
-import priceFormat from '../../../lib/utils/price-format';
 
 type DropdownProps = {
   currentElement: number | null;
