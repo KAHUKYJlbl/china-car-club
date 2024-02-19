@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';

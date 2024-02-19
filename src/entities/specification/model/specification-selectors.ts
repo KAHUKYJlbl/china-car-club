@@ -64,7 +64,9 @@ export const getSpecifications = createSelector(
   getRawSpecifications,
   (specifications) => specifications.map((specification) => ({
     name: specification.name.ru || specification.name.ch,
-    id: specification.id
+    id: specification.id,
+    price: specification.priceWithLogisticsByCurrentDay.price,
+    year: specification.year,
   }))
 );
 

@@ -2,23 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 
 import useClickOutside from '../../../lib/hooks/use-click-outside';
 
-import { DropdownExtraListType, DropdownListType } from '../lib/types';
-import classes from './dropdown.module.sass';
+import { DropdownListType } from '../lib/types';
+import classes from './dropdown-blocks.module.sass';
+import priceFormat from '../../../lib/utils/price-format';
 
 type DropdownProps = {
   currentElement: number | null;
   setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
   list?: DropdownListType[] | null;
-  extraListHeader?: DropdownExtraListType
   disabled?: boolean;
 };
 
-export const Dropdown = ({
+export const DropdownBlocks = ({
   currentElement,
   setCurrent,
   list,
-  extraListHeader,
   placeholder,
   disabled = false,
 }: DropdownProps): JSX.Element => {
@@ -50,8 +49,6 @@ export const Dropdown = ({
       }
     })
     .filter((element) => element.name.toLowerCase().includes(currentFilter.toLowerCase()));
-
-  const extraList = displayedList?.filter((element) => element.isHighlight);
 
   const toggleOpen = () => {
     if ( list && Boolean(list.length) ) {
@@ -112,35 +109,6 @@ export const Dropdown = ({
         {
           isOpen && displayedList &&
           <div className={classes.listWrapper} ref={listRef}>
-            {
-              extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
-              <>
-                <p className={classes.listHeader}>{extraListHeader.extraListHeader}</p>
-
-                <ul className={classes.list}>
-                  {
-                    extraList.map((item) => (
-                      <li
-                        key={item.id}
-                        className={classes.listItem}
-                        onClick={(e) => handleItemClick(item.id, e)}
-                      >
-                        <span>{item.name}</span>
-                        <span className={classes.listItemCount}>{ item.sublistLength }</span>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </>
-            }
-
-            {
-              extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
-              <p className={classes.listHeader}>
-                {extraListHeader.basicListHeader}
-              </p>
-            }
-
             <ul className={classes.list}>
               {
                 displayedList.length === 0
@@ -151,7 +119,15 @@ export const Dropdown = ({
                       className={classes.listItem}
                       onClick={(e) => handleItemClick(item.id, e)}
                     >
-                      <span>{item.name}</span>
+                      <p>
+                        <span>{item.name}</span>
+                        {
+                          item.price &&
+                          <span className={classes.price}>
+                            {`↳ Под ключ: ${priceFormat( item.price.toString() )} ₽`}
+                          </span>
+                        }
+                      </p>
 
                       <span className={classes.listItemCount}>{ item.sublistLength }</span>
                     </li>
