@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { getCurrency } from '../../../../entities/currency';
+
 import useClickOutside from '../../../lib/hooks/use-click-outside';
+import priceFormat from '../../../lib/utils/price-format';
+import { useAppSelector } from '../../../lib/hooks/use-app-selector';
 
 import { DropdownListType } from '../lib/types';
 import classes from './dropdown-blocks.module.sass';
-import priceFormat from '../../../lib/utils/price-format';
 
 type DropdownProps = {
   currentElement: number | null;
@@ -23,9 +26,15 @@ export const DropdownBlocks = ({
 }: DropdownProps): JSX.Element => {
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
+  const currency = useAppSelector(getCurrency);
   const [ isOpen, setIsOpen ] = useState(false);
   const [ currentValue, setCurrentValue ] = useState('');
   const [ currentFilter, setCurrentFilter ] = useState('');
+
+  console.log(list);
+  console.log(
+    new Set(list?.map((element) => element.year))
+  );
 
   useClickOutside([listRef, fieldRef], () => setIsOpen(false));
 
@@ -40,13 +49,18 @@ export const DropdownBlocks = ({
 
   const displayedList = list
     ?.toSorted((a, b) => {
-      if (a.name > b.name) {
-        return 1;
-      } else if (a.name < b.name) {
-        return -1;
-      } else {
-        return 0;
-      }
+      if (a.price && b.price) {
+        return a.price - b.price;
+      };
+
+      return 0;
+      // if (a.name > b.name) {
+      //   return 1;
+      // } else if (a.name < b.name) {
+      //   return -1;
+      // } else {
+      //   return 0;
+      // }
     })
     .filter((element) => element.name.toLowerCase().includes(currentFilter.toLowerCase()));
 
@@ -109,31 +123,46 @@ export const DropdownBlocks = ({
         {
           isOpen && displayedList &&
           <div className={classes.listWrapper} ref={listRef}>
-            <ul className={classes.list}>
-              {
-                displayedList.length === 0
-                  ? <li className={classes.listItem}>Ничего не найдено</li>
-                  : displayedList.map((item) => (
-                    <li
-                      key={item.id}
-                      className={classes.listItem}
-                      onClick={(e) => handleItemClick(item.id, e)}
-                    >
-                      <p>
-                        <span>{item.name}</span>
-                        {
-                          item.price &&
-                          <span className={classes.price}>
-                            {`↳ Под ключ: ${priceFormat( item.price.toString() )} ₽`}
-                          </span>
-                        }
-                      </p>
+            {
+              Array.from(new Set(list?.map((element) => element.year)))
+                .toSorted((a, b) => (a && b) ? a - b : 0)
+                .map((year) =>
+                  <>
+                    <p className={classes.listHeader}>
+                      {`${year} поколение • 2024 выпуск`}
+                    </p>
 
-                      <span className={classes.listItemCount}>{ item.sublistLength }</span>
-                    </li>
-                  ))
-              }
-            </ul>
+                    <ul className={classes.list}>
+                      {
+                        displayedList.length === 0
+                          ? <li className={classes.listItem}>Ничего не найдено</li>
+                          : displayedList
+                            .filter((item) => item.year === year)
+                            .map((item) => (
+                              <li
+                                key={item.id}
+                                className={classes.listItem}
+                                onClick={(e) => handleItemClick(item.id, e)}
+                              >
+                                <p>
+                                  <span>{item.name}</span>
+                                  {
+                                    item.price &&
+                                    <span className={classes.price}>
+                                      {`↳ Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`}
+                                    </span>
+                                  }
+                                </p>
+
+                                <span className={classes.listItemCount}>{ item.sublistLength }</span>
+                              </li>
+                            ))
+                      }
+                    </ul>
+                  </>
+              )
+            }
+
           </div>
         }
       </div>

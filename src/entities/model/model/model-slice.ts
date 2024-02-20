@@ -76,7 +76,7 @@ export const modelSlice = createSlice({
             seats: specification.parameters.seats.filter((seat) => seat !== '0').join(', '),
             lengthWidthHeight: specification.parameters.lengthWidthHeight,
             groundClearance: specification.parameters.groundClearance,
-            wheelSize: `${specification.parameters.wheelSize.front.substring(1)} • ${specification.parameters.wheelSize.rear.substring(1)}`,
+            wheelSize: `${specification.parameters.wheelSize.front} • ${specification.parameters.wheelSize.rear}`,
             colors: specification.parameters.colors,
             curbWeight: specification.parameters.curbWeight,
             engineCapacity: specification.parameters.engineCapacity
