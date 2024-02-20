@@ -41,7 +41,7 @@ export const fetchSpecifications = createAsyncThunk<
 
       return specificationsBySeriesId;
     } catch (err) {
-      throw Error('Unable to fetch Manufacturers');
+      throw Error('Unable to fetch Specification');
     }
   },
 );
