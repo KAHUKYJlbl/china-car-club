@@ -7,7 +7,7 @@ import {
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { getManufacturersLoadingStatus, getName } from '../../../entities/manufacturer';
-import { Dropdown } from '../../../shared/ui/dropdown';
+import { DropdownBlocks } from '../../../shared/ui/dropdown';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
@@ -53,7 +53,7 @@ export const SpecificationInfo = memo(
             Комплектация нового автомобиля
           </p>
 
-          <Dropdown
+          <DropdownBlocks
             currentElement={currentSpecification}
             setCurrent={setCurrentSpecification}
             placeholder='Комплектация'
