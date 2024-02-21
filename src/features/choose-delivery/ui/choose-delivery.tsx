@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import queryString from 'query-string';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +6,8 @@ import { AppRoute } from '../../../app/provider/router';
 import { Dropdown } from '../../../shared/ui/dropdown';
 
 import classes from './choose-delivery.module.sass';
+import { Login } from '../../login';
+import { toast } from 'react-toastify';
 
 type ChooseDeliveryProps = {
   modelId: number | null;
@@ -15,9 +17,10 @@ type ChooseDeliveryProps = {
 export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const navigate = useNavigate();
+    const [ isLogin, setIsLogin ] = useState(false);
 
-    const buttonClickHandler = () => {
-      if (modelId && specificationId ) {
+    const loginHandler = () => {
+      if ( modelId && specificationId ) {
         navigate(queryString.stringifyUrl({
           url: AppRoute.Model,
           query: {
@@ -25,6 +28,14 @@ export const ChooseDelivery = memo(
             spec: specificationId.toString(),
           }
         }))
+      }
+    }
+
+    const calculateHandler = () => {
+      if (modelId && specificationId) {
+        setIsLogin(true)
+      } else {
+        toast('Выберите комплектацию', {type: 'warning'});
       }
     }
 
@@ -55,7 +66,7 @@ export const ChooseDelivery = memo(
 
         <button
           className={classes.button}
-          onClick={ buttonClickHandler }
+          onClick={calculateHandler}
         >
           Быстрый онлайн-расчет под ключ
         </button>
@@ -63,6 +74,14 @@ export const ChooseDelivery = memo(
         <p className={classes.small}>
           Нажимая кнопку, даю согласие на обработку моих персональных данных в соответствии с политикой конфиденциальности
         </p>
+
+        {
+          isLogin &&
+          <Login
+            onClose={() => setIsLogin(false)}
+            onLoginSuccess={loginHandler}
+          />
+        }
       </div>
     )
   }
