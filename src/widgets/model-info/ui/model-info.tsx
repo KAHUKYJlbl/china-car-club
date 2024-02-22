@@ -50,7 +50,6 @@ export const ModelInfo = (): JSX.Element => {
 
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
   const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
-  console.log(imgList);
 
   useEffect(() => {
     if (specificationImgLoadingStatus.isSuccess) {
