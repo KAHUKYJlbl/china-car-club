@@ -9,6 +9,8 @@ type LoginProps = {
 }
 
 export const Login = ({onClose, onLoginSuccess}: LoginProps): JSX.Element => {
+  console.log(onLoginSuccess);
+
   return (
     <Modal onClose={onClose}>
       <div className={classes.wrapper}>
