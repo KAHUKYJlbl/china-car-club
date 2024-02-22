@@ -1,5 +1,5 @@
 import { Modal } from '../../../shared/ui/modal';
-import TelegramLoginButton, { TelegramUser } from 'telegram-login-button';
+import TelegramLoginButton from 'telegram-login-button';
 
 import classes from './login.module.sass';
 import { toast } from 'react-toastify';
@@ -10,8 +10,6 @@ type LoginProps = {
 }
 
 export const Login = ({onClose, onLoginSuccess}: LoginProps): JSX.Element => {
-  console.log(onLoginSuccess);
-
   const smsHandler = () => {
     toast('Сервис SMS недоступен.', {type: 'warning'});
     toast('Попробуйте авторизацию через Telegram.', {type: 'warning'});
@@ -44,7 +42,7 @@ export const Login = ({onClose, onLoginSuccess}: LoginProps): JSX.Element => {
           <TelegramLoginButton
             botName="test111_login_bot"
             cornerRadius={12}
-            dataOnauth={(user: TelegramUser) => console.log(user)}
+            dataOnauth={onLoginSuccess}
           />
         </div>
       </div>
