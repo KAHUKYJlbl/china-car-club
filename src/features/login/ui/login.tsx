@@ -21,7 +21,7 @@ export const Login = ({onClose, onLoginSuccess}: LoginProps): JSX.Element => {
           </label>
         </form>
 
-        <TelegramLoginButton botName="TelegramBot" dataOnauth={(user: TelegramUser) => console.log(user)} />
+        <TelegramLoginButton botName="test111_login_bot" dataOnauth={(user: TelegramUser) => console.log(user)} />
       </div>
     </Modal>
   )
