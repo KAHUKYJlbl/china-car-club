@@ -31,11 +31,6 @@ export const DropdownBlocks = ({
   const [ currentValue, setCurrentValue ] = useState('');
   const [ currentFilter, setCurrentFilter ] = useState('');
 
-  console.log(list);
-  console.log(
-    new Set(list?.map((element) => element.year))
-  );
-
   useClickOutside([listRef, fieldRef], () => setIsOpen(false));
 
   useEffect(() => {
@@ -54,13 +49,6 @@ export const DropdownBlocks = ({
       };
 
       return 0;
-      // if (a.name > b.name) {
-      //   return 1;
-      // } else if (a.name < b.name) {
-      //   return -1;
-      // } else {
-      //   return 0;
-      // }
     })
     .filter((element) => element.name.toLowerCase().includes(currentFilter.toLowerCase()));
 
