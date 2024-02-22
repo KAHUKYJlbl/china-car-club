@@ -1,5 +1,5 @@
 import { Modal } from '../../../shared/ui/modal';
-import TelegramLoginButton, { TelegramUser } from 'telegram-login-button';
+import TelegramLoginButton from 'telegram-login-button';
 
 import classes from './login.module.sass';
 import { toast } from 'react-toastify';
