@@ -77,11 +77,13 @@
     "react-helmet-async": "^1.3.0",
     "react-hook-form": "^7.46.1",
     "react-loader-spinner": "^5.4.5",
+    "react-modal": "^3.16.1",
     "react-redux": "^8.1.2",
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.16.0",
     "react-swipeable": "^7.0.1",
     "react-toastify": "^9.1.3",
+    "telegram-login-button": "^0.1.0",
     "use-debounce": "^10.0.0"
   },
   "devDependencies": {
@@ -91,6 +93,7 @@
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-helmet-async": "^1.0.3",
+    "@types/react-modal": "^3.16.3",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "@vitejs/plugin-react": "^4.0.3",
