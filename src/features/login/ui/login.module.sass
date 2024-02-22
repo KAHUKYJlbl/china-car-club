@@ -1,0 +1,49 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 32px
+  // align-items: center
+
+  font-family: "CoFoSans", 'Arial', sans-serif
+  font-weight: 400
+  font-size: 16px
+  line-height: 20px
+  color: $text-primary
+
+  .sms
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    span
+      padding-left: 8px
+
+    input
+      padding: 16px
+
+      border-radius: 12px
+      outline: none
+
+    .button
+      padding: 16px 0
+
+      background-color: $accent
+      border-radius: 12px
+      cursor: pointer
+
+      color: white
+
+    .button:active
+      opacity: 0.8
+
+  p
+    color: $text-secondary
+    text-align: center
+    font-size: 16px
+    line-height: 20px
+
+
+  .telegram
+    overflow: hidden
