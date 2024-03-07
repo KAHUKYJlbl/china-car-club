@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
+import { userSlice } from '../../../../entities/user';
 import { modelSlice } from '../../../../entities/model';
 import { currencySlice } from '../../../../entities/currency';
 import { manufacturerSlice } from '../../../../entities/manufacturer';
@@ -12,4 +13,5 @@ export const rootReducer = combineReducers({
   [NameSpace.Specification]: specificationSlice.reducer,
   [NameSpace.Currency]: currencySlice.reducer,
   [NameSpace.Model]: modelSlice.reducer,
+  [NameSpace.User]: userSlice.reducer,
 });
