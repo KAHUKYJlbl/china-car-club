@@ -4,4 +4,7 @@ export enum APIRoute {
   Spec = '',
   SpecImages = '/calc/specification/:id/images',
   Currency = '/exchange-rates',
+  AuthHash = '/auth/generate-hash',
+  AuthSms = '/auth/init',
+  AuthConfirm = '/auth/confirm',
 }

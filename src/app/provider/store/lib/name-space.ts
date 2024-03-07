@@ -3,4 +3,5 @@ export enum NameSpace {
   Model = 'Model',
   Specification = 'Specification',
   Currency = 'Currency',
+  User = 'User',
 }

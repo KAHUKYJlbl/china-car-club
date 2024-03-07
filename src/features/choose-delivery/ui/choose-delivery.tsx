@@ -1,13 +1,17 @@
 import { memo, useState } from 'react';
 import queryString from 'query-string';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useCookies } from 'react-cookie';
 
 import { AppRoute } from '../../../app/provider/router';
+import { fetchHash } from '../../../entities/user';
 import { Dropdown } from '../../../shared/ui/dropdown';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
+import { Login } from '../../login';
 
 import classes from './choose-delivery.module.sass';
-import { Login } from '../../login';
-import { toast } from 'react-toastify';
 
 type ChooseDeliveryProps = {
   modelId: number | null;
@@ -16,6 +20,8 @@ type ChooseDeliveryProps = {
 
 export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+    const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
     const navigate = useNavigate();
     const [ isLogin, setIsLogin ] = useState(false);
 
@@ -33,7 +39,12 @@ export const ChooseDelivery = memo(
 
     const calculateHandler = () => {
       if (modelId && specificationId) {
-        setIsLogin(true)
+        if ( cookies[AUTH_TOKEN_KEY_NAME] ) {
+          loginHandler();
+        } else {
+          dispatch(fetchHash());
+          setIsLogin(true);
+        }
       } else {
         toast('Выберите комплектацию', {type: 'warning'});
       }
@@ -79,7 +90,7 @@ export const ChooseDelivery = memo(
           isLogin &&
           <Login
             onClose={() => setIsLogin(false)}
-            onLoginSuccess={loginHandler}
+            onLogin={loginHandler}
           />
         }
       </div>
