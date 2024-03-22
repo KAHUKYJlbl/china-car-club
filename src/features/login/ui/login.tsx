@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm, SubmitHandler } from "react-hook-form";
+import InputMask from 'react-input-mask';
 
 import { Modal } from '../../../shared/ui/modal';
+import { unmask } from '../../../shared/lib/utils/unmask';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -26,14 +28,23 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
   const user = useAppSelector(getUser);
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
 
-  const { register: registerInit, handleSubmit: handleSubmitInit } = useForm<SmsFormType>();
+  const { register: registerInit, handleSubmit: handleSubmitInit, watch: watchInit } = useForm<SmsFormType>();
   const { register: registerConfirm, handleSubmit: handleSubmitConfirm } = useForm<ConfirmFormType>()
 
+  const getMask = () => {
+    const phone = unmask(watchInit('msisdn'));
+    if (phone.startsWith('7')) return '+9 (999) 999-99-99';
+    if (phone.startsWith('374') || phone.startsWith('993')) return '+999 (99) 99-99-99';
+    if (phone.startsWith('992') || phone.startsWith('996')) return '+999 (999) 99-99-99';
+    if (phone.startsWith('375') || phone.startsWith('380') || phone.startsWith('994') || phone.startsWith('995') || phone.startsWith('998')) return '+999 (99) 999-99-99';
+    toast.error('We could not provide message to your country');
+    return '+999999999999999'
+  }
 
   const onInitSubmit: SubmitHandler<SmsFormType> = (data) => {
     if (user) {
       dispatch(fetchSms({
-        ...data,
+        msisdn: unmask(data.msisdn),
         provider: 'sms',
         hash: user.hash,
       }))
@@ -54,7 +65,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
   const onConfirmSubmit: SubmitHandler<ConfirmFormType> = (data) => {
     if (user) {
       dispatch(fetchConfirm({
-        ...data,
+        pin: unmask(data.pin),
         hash: user.hash,
       }))
         .then((data) => {
@@ -89,9 +100,10 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
             <label className={classes.sms}>
               <span>Введите номер телефона:</span>
 
-              <input
-                type='text'
+              <InputMask
                 className={classes.input}
+                mask={getMask()}
+                maskChar=" "
                 {...registerInit("msisdn", { required: true })}
               />
 
@@ -129,11 +141,13 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
             <label className={classes.sms}>
               <span>Введите код из сообщения:</span>
 
-              <input
-                type='text'
+              <InputMask
                 className={classes.input}
+                mask="99999"
+                maskChar=" "
                 {...registerConfirm("pin", { required: true })}
               />
+
 
               <button
                 type='submit'
