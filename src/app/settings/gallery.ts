@@ -1,18 +1,18 @@
 const PROMO_GALLERY = [
   {
-    specificationId: 76863,
+    specificationId: 76883,
     modelId: 86,
     url: {
-      big: 'specification/76863/b_c1_col2745_o3.jpg',
-      original: 'specification/76863/p_c1_col2745_o3.jpg',
+      big: 'specification/76883/b_c1_col2749_o1.jpg',
+      original: 'specification/76883/p_c1_col2749_o1.jpg',
     }
   },
   {
-    specificationId: 68497,
+    specificationId: 68490,
     modelId: 844,
     url: {
-      big: '/specification/68497/b_c1_col1141_o1.jpg',
-      original: '/specification/68497/p_c1_col1141_o1.jpg',
+      big: '/specification/68490/b_c1_col1199_o1.jpg',
+      original: '/specification/68490/p_c1_col1199_o1.jpg',
     }
   },
   {

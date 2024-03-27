@@ -11,6 +11,9 @@ import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
 import { Login } from '../../login';
 
+import { useUtm } from '../lib/hooks/use-utm';
+import { useGeolocation } from '../lib/hooks/use-geolocation';
+import { postStatistics } from '../model/api-actions/post-statistics';
 import classes from './choose-delivery.module.sass';
 
 type ChooseDeliveryProps = {
@@ -22,11 +25,23 @@ export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
-    const navigate = useNavigate();
     const [ isLogin, setIsLogin ] = useState(false);
+    const utm = useUtm();
+    const location = useGeolocation();
+    const navigate = useNavigate();
 
     const loginHandler = () => {
       if ( modelId && specificationId ) {
+        dispatch(postStatistics({
+          specificationId: specificationId,
+          customerLocation: location,
+          customerDelivery: {
+            countryId: null,
+            cityId: null,
+          },
+          utm,
+        }));
+
         navigate(queryString.stringifyUrl({
           url: AppRoute.Model,
           query: {
