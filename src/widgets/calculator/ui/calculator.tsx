@@ -50,8 +50,9 @@ export const Calculator = (): JSX.Element => {
     setActiveFilters({});
     setCurrentManufacturer(promoManufacturer);
     setCurrentModel(promoModel);
+    console.log(promoSpecification);
     setCurrentSpecification(promoSpecification);
-    setTimeout(() => setPromoMode(false), 1000);
+    setTimeout(() => setPromoMode(false), 2000);
   }
 
   return (
