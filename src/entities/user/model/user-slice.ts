@@ -31,7 +31,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state = initialState;
+      state.user = initialState.user;
+      state.isAuth = initialState.isAuth;
+      state.geolocation = initialState.geolocation;
+      state.userLoadingStatus = initialState.userLoadingStatus;
     },
     setGeolocation: (state, action: PayloadAction<LocationType>) => {
       state.geolocation = action.payload;
