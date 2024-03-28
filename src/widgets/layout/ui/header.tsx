@@ -4,10 +4,13 @@ import { useMediaQuery } from 'react-responsive';
 import classes from './header.module.sass';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../app/provider/router';
+import { getAuthStatus, User } from '../../../entities/user';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 export const Header = (): JSX.Element => {
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+  const isAuth = useAppSelector(getAuthStatus);
 
   return (
     <div className={classes.wrapper}>
@@ -31,6 +34,11 @@ export const Header = (): JSX.Element => {
         }
 
         <nav className={classes.nav}>
+          {
+            isAuth &&
+            <User classes={[classes.navItem]} />
+          }
+
           {
             isDesktop
             ? <>
