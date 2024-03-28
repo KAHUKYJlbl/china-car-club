@@ -3,9 +3,7 @@ import { AxiosInstance } from 'axios';
 
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
-import { StatisticsType } from '../../lib/types';
-
-
+import { StatisticsType } from '../../../../features/choose-delivery/lib/types';
 
 export const postStatistics = createAsyncThunk<
   void,

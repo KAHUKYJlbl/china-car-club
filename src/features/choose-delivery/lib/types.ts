@@ -1,3 +1,5 @@
+import { LocationType } from "../../../entities/user";
+
 export type StatisticsType = {
   specificationId: number,
   customerLocation: LocationType,
@@ -26,9 +28,4 @@ export type StatisticsType = {
     yclid: string | null,
     fbclid: string | null,
   },
-};
-
-export type LocationType = {
-  latitude: number | null,
-  longitude: number | null,
 };

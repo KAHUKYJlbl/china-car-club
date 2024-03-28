@@ -9,10 +9,10 @@ import { unmask } from '../../../shared/lib/utils/unmask';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { fetchSms } from '../../../entities/user/model/api-actons/fetch-sms';
-import { fetchConfirm } from '../../../entities/user/model/api-actons/fetch-confirm';
-import { ConfirmFormType } from '../../../entities/user/lib/types';
-import { SmsFormType, getUser, getUserLoadingStatus } from '../../../entities/user';
+import { fetchSms } from '../model/api-actons/fetch-sms';
+import { fetchConfirm } from '../model/api-actons/fetch-confirm';
+import { ConfirmFormType } from '../lib/types';
+import { SmsFormType, getUser, getUserLoadingStatus } from '..';
 
 import classes from './login.module.sass';
 
@@ -37,8 +37,8 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
     if (phone.startsWith('374') || phone.startsWith('993')) return '+999 (99) 99-99-99';
     if (phone.startsWith('992') || phone.startsWith('996')) return '+999 (999) 99-99-99';
     if (phone.startsWith('375') || phone.startsWith('380') || phone.startsWith('994') || phone.startsWith('995') || phone.startsWith('998')) return '+999 (99) 999-99-99';
-    toast.error('We could not provide message to your country');
-    return '+999999999999999'
+    if (phone !== '') toast.error('Мы не можем отправить сообзение в вашу страну');
+    return '+999999999999999';
   }
 
   const onInitSubmit: SubmitHandler<SmsFormType> = (data) => {
@@ -67,14 +67,13 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
       dispatch(fetchConfirm({
         pin: unmask(data.pin),
         hash: user.hash,
-      }))
-        .then((data) => {
-          if (data.meta.requestStatus === 'fulfilled') {
-            onClose();
-            onLogin();
-          } else {
-            toast.warning('Ошибка сервиса.');
-          }
+      })).then((data) => {
+        if (data.meta.requestStatus === 'fulfilled') {
+          onClose();
+          onLogin();
+        } else {
+          toast.warning('Ошибка сервиса.');
+        }
       });
     }
   }
