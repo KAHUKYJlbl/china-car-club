@@ -5,15 +5,13 @@ import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
 
 import { AppRoute } from '../../../app/provider/router';
-import { fetchHash } from '../../../entities/user';
+import { fetchHash, postStatistics, getGeolocation, Login } from '../../../entities/user';
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
-import { Login } from '../../login';
 
 import { useUtm } from '../lib/hooks/use-utm';
-import { useGeolocation } from '../lib/hooks/use-geolocation';
-import { postStatistics } from '../model/api-actions/post-statistics';
 import classes from './choose-delivery.module.sass';
 
 type ChooseDeliveryProps = {
@@ -24,17 +22,17 @@ type ChooseDeliveryProps = {
 export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
     const [ isLogin, setIsLogin ] = useState(false);
+    const geolocation = useAppSelector(getGeolocation);
     const utm = useUtm();
-    const location = useGeolocation();
-    const navigate = useNavigate();
 
     const loginHandler = () => {
       if ( modelId && specificationId ) {
         dispatch(postStatistics({
           specificationId: specificationId,
-          customerLocation: location,
+          customerLocation: geolocation,
           customerDelivery: {
             countryId: null,
             cityId: null,

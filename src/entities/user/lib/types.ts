@@ -22,3 +22,8 @@ export type ConfirmType = ConfirmFormType & {
 export type TokenType = {
   token: string;
 }
+
+export type LocationType = {
+  latitude: number | null,
+  longitude: number | null,
+};
