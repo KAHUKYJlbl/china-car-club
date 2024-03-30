@@ -21,7 +21,7 @@ export const Header = (): JSX.Element => {
             height={ isDesktop ? "26" : ( isMobile ? "12" : "17" ) }
             aria-hidden="true"
           >
-            <use xlinkHref="#logo-new" />
+            <use xlinkHref="#logo" />
           </svg>
         </Link>
       </div>
