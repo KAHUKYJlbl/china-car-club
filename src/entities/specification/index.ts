@@ -14,4 +14,5 @@ export {
   getSpecificationImgLoadingStatus,
   getImagesByColor,
   getDefaultImages,
+  getInitSlide,
 } from './model/specification-selectors';

@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { NameSpace, State } from '../../../app/provider/store';
+import { CurrentColorType } from '../../../widgets/model-info';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
 export const getSpecificationImg = (state: State) => state[NameSpace.Specification].specificationImg;
@@ -41,7 +42,7 @@ export const getDefaultImages = createSelector(
 export const getImagesByColor = createSelector(
   [
     getSpecificationImg,
-    (_state: State, colorId: {int: number | null, ext: number | null}) => colorId,
+    (_state: State, colorId: CurrentColorType) => colorId,
   ],
   (images, colorId) => {
     if (images.external.length > 0) {
@@ -55,6 +56,19 @@ export const getImagesByColor = createSelector(
     }
 
     return images.official[0]?.urls;
+  }
+);
+
+export const getInitSlide = createSelector(
+  [
+    getSpecificationImg,
+    (_state: State, colorId: CurrentColorType) => colorId,
+  ],
+  (images, colorId) => {
+    if (images.external.length > 0 && colorId.isInteriorFirst) {
+      return images.external.find((image) => image.color?.id === colorId.ext)?.urls.length
+    }
+    return 0;
   }
 );
 
