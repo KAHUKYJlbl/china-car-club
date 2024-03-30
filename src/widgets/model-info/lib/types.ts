@@ -71,3 +71,9 @@ export type TechType = TechNameType & {
 };
 
 export type AddsType = 'epts' | 'guarantee' | 'options';
+
+export type CurrentColorType = {
+  int: number | null,
+  ext: number | null,
+  isInteriorFirst: boolean;
+};

@@ -9,6 +9,7 @@ import {
   fetchSpecificationsInfo,
   getExtColors,
   getImagesByColor,
+  getInitSlide,
   getIntColors,
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
@@ -21,7 +22,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { Gallery } from '../../../shared/ui/gallery';
 
-import { AddsType } from '../lib/types';
+import { AddsType, CurrentColorType } from '../lib/types';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
 import { Techs } from './techs';
@@ -42,20 +43,23 @@ export const ModelInfo = (): JSX.Element => {
 
   const [ isPrices, setIsPrices ] = useState(true);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
-  const [ currentColor, setCurrentColor ] = useState<{int: number | null, ext: number | null}>({
+  const [ currentColor, setCurrentColor ] = useState<CurrentColorType>({
     int: intColors ? intColors[0].color.id : null,
     ext: extColors ? extColors[0].color?.id : null,
+    isInteriorFirst: false,
   });
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
 
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
   const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
+  const initSlide = useAppSelector((state) => getInitSlide(state, currentColor));
 
   useEffect(() => {
     if (specificationImgLoadingStatus.isSuccess) {
       setCurrentColor({
         int: intColors ? intColors[0].color.id : null,
         ext: extColors ? extColors[0].color?.id : null,
+        isInteriorFirst: false,
       });
     }
   }, [specificationImgLoadingStatus.isSuccess]);
@@ -126,6 +130,7 @@ export const ModelInfo = (): JSX.Element => {
           galleryList={imgList}
           specificationId={currentSpecification}
           modelId={Number(searchParams.get('model'))}
+          initSlide={initSlide}
         />
       </div>
 
