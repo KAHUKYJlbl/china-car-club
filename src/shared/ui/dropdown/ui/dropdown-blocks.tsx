@@ -85,6 +85,7 @@ export const DropdownBlocks = ({
         onClick={disabled ? () => null : toggleOpen}
       >
         <input
+          type='text'
           className={classes.currentElement}
           placeholder={disabled ? 'Загрузка...' : placeholder}
           disabled={disabled || !list}
