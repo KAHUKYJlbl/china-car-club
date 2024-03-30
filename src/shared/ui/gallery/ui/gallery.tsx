@@ -16,11 +16,12 @@ type GalleryProps = {
   specificationId: number | null;
   modelId: number | null;
   galleryList?: ImgUrlType[];
+  initSlide?: number;
 }
 
 export const Gallery = memo(
-  ({ specificationId, modelId, galleryList, handlePromo }: GalleryProps): JSX.Element => {
-    const [ currentImage, setCurrentImage ] = useState(0);
+  ({ specificationId, modelId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
+    const [ currentImage, setCurrentImage ] = useState(initSlide);
     const [ gallery, setGallery ] = useState<GalleryType[] | null>(null);
     const name = useAppSelector((state) => getName(state, gallery && gallery[currentImage].modelId));
     const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, gallery && gallery[currentImage].modelId));
@@ -33,6 +34,10 @@ export const Gallery = memo(
     useEffect(() => {
       setCurrentImage(0);
     }, [specificationId]);
+
+    useEffect(() => {
+      setCurrentImage(initSlide);
+    }, [initSlide]);
 
     useEffect(() => {
       if (specificationId && modelId && galleryList) {

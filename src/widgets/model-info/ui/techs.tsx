@@ -9,13 +9,11 @@ import { SpecsType } from '../../../entities/model';
 import classes from './techs.module.sass';
 import getTechList from '../lib/utils/get-tech-list';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { CurrentColorType } from '../lib/types';
 
 type TechsProps = {
   techs: SpecsType,
-  setColor: React.Dispatch<React.SetStateAction<{
-    int: number | null;
-    ext: number | null;
-  }>>,
+  setColor: React.Dispatch<React.SetStateAction<CurrentColorType>>,
 }
 
 export const Techs = memo(
@@ -58,7 +56,11 @@ export const Techs = memo(
                   extColors.map((color) => (
                     <li
                       key={color.color.id}
-                      onClick={() => setColor((current) => ({...current, ext: color.color.id}))}
+                      onClick={() => setColor((current) => ({
+                        ...current,
+                        ext: color.color.id,
+                        isInteriorFirst: false
+                      }))}
                     >
                       <div
                         className={classes.colorBall}
@@ -85,7 +87,11 @@ export const Techs = memo(
                     intColors.map((color) => (
                       <li
                         key={color.color.id}
-                        onClick={() => setColor((current) => ({...current, int: color.color.id}))}
+                        onClick={() => setColor((current) => ({
+                          ...current,
+                          int: color.color.id,
+                          isInteriorFirst: true
+                        }))}
                       >
                         <div
                           className={classes.colorBall}
