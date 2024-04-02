@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 
 import { AppRoute } from '../../../app/provider/router';
 import { fetchHash, postStatistics, getGeolocation, Login, getCurrentCity, getAuthStatus } from '../../../entities/user';
-import { Dropdown } from '../../../shared/ui/dropdown';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 // import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
