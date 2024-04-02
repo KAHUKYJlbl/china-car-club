@@ -41,30 +41,47 @@ export const NewHeader = ({}: NewHeaderProps) => {
 
   return (
     <div className={classes.wrapper}>
-      <div className={classes.menuWrapper}>
-        <Link to={AppRoute.Main} >
-          <svg
-            width={ isDesktop ? 220 : 148 }
-            height={ isDesktop ? 36 : 24 }
-            aria-hidden="true"
-          >
-            <use xlinkHref="#logo-new" />
-          </svg>
-        </Link>
+      <div className={classes.links}>
+        <p>
+          <span className={classes.link}>Стать продавцом</span>
+          <span> • </span>
+          <span className={classes.link}>Покупать как компания</span>
+        </p>
 
-        <HeaderButton icon='menu' onClick={() => null} />
-
-        <DropdownHeader
-          currentElement={city}
-          setCurrent={setCityHandler}
-          list={DROPDOWN_CITIES}
-          placeholder='Город доставки авто'
-        />
-
-        <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
+        <p>
+          <span>Бесплатно по России: </span>
+          <Link to='tel:+78007001895' className={classes.link}>8 800 700 18 95</Link>
+        </p>
       </div>
 
-      <HeaderUser />
+      <div className={classes.mainWrapper}>
+        <div className={classes.menuWrapper}>
+          <Link to={AppRoute.Main} >
+            <svg
+              width={ isDesktop ? 220 : 148 }
+              height={ isDesktop ? 36 : 24 }
+              aria-hidden="true"
+            >
+              <use xlinkHref="#logo-new" />
+            </svg>
+          </Link>
+
+          <HeaderButton icon='menu' onClick={() => null} />
+
+          <DropdownHeader
+            currentElement={city}
+            setCurrent={setCityHandler}
+            list={DROPDOWN_CITIES}
+            placeholder='Город доставки авто'
+          />
+
+          <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
+        </div>
+
+        <HeaderUser />
+      </div>
+
+      {/* <div className={classes.breadcrumbs}></div> */}
     </div>
   );
 };
