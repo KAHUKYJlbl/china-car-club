@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
 
 import { AppRoute } from '../../../app/provider/router';
-import { fetchHash, postStatistics, getGeolocation, Login } from '../../../entities/user';
+import { fetchHash, postStatistics, getGeolocation, Login, getCurrentCity } from '../../../entities/user';
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
@@ -26,6 +26,7 @@ export const ChooseDelivery = memo(
     const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
     const [ isLogin, setIsLogin ] = useState(false);
     const geolocation = useAppSelector(getGeolocation);
+    const city = useAppSelector(getCurrentCity);
     const utm = useUtm();
 
     const loginHandler = () => {
@@ -35,7 +36,7 @@ export const ChooseDelivery = memo(
           customerLocation: geolocation,
           customerDelivery: {
             countryId: null,
-            cityId: null,
+            cityId: city,
           },
           utm,
         }));

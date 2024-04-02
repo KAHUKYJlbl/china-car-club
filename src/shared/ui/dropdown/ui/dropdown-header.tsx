@@ -1,20 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useEffect, useRef, useState } from 'react';
 
 import useClickOutside from '../../../lib/hooks/use-click-outside';
+import { useAppDispatch } from '../../../lib/hooks/use-app-dispatch';
 
 import { DropdownExtraListType, DropdownListType } from '../lib/types';
-import classes from './dropdown.module.sass';
+import classes from './dropdown-header.module.sass';
+import { setAutoLocation } from '../../../../entities/user';
 
 type DropdownProps = {
   currentElement: number | null;
-  setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
+  setCurrent: (id: number) => void;
   placeholder: string;
   list?: DropdownListType[] | null;
   extraListHeader?: DropdownExtraListType
   disabled?: boolean;
 };
 
-export const Dropdown = ({
+export const DropdownHeader = ({
   currentElement,
   setCurrent,
   list,
@@ -22,6 +24,7 @@ export const Dropdown = ({
   placeholder,
   disabled = false,
 }: DropdownProps): JSX.Element => {
+  const dispatch = useAppDispatch();
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const [ isOpen, setIsOpen ] = useState(false);
@@ -78,6 +81,11 @@ export const Dropdown = ({
     }
   }
 
+  const handleAutoLocation = (e: MouseEvent<SVGSVGElement>) => {
+    e.stopPropagation();
+    dispatch(setAutoLocation());
+  }
+
   return (
     <>
       <div
@@ -85,29 +93,30 @@ export const Dropdown = ({
         ref={fieldRef}
         onClick={disabled ? () => null : toggleOpen}
       >
-        <input
-          type='text'
-          className={classes.currentElement}
-          placeholder={disabled ? 'Загрузка...' : placeholder}
-          disabled={disabled || !list}
-          value={currentValue}
-          onChange={(e) => handleInput(e)}
-          onBlur={handleInputBlur}
-        />
+        <div className={classes.currentWrapper}>
+          <p className={classes.placeholder}>
+            {placeholder}
+          </p>
+
+          <input
+            type='text'
+            className={classes.currentElement}
+            placeholder={disabled ? 'Загрузка...' : placeholder}
+            disabled={disabled || !list}
+            value={currentValue}
+            onChange={(e) => handleInput(e)}
+            onBlur={handleInputBlur}
+          />
+        </div>
 
         <svg
           className={classes.arrow}
-          width="8"
-          height="7"
+          width="24"
+          height="24"
           aria-hidden="true"
-          style={isOpen
-            ? {transform: 'rotate(180deg)', transitionDuration: '100ms'}
-            : !list || disabled
-              ? {transitionDuration: '100ms', cursor: 'default'}
-              : {transitionDuration: '100ms'}
-          }
+          onClick={handleAutoLocation}
         >
-          <use xlinkHref="#dropdown" />
+          <use xlinkHref="#pin" />
         </svg>
 
         {

@@ -1,17 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NameSpace } from '../../../app/provider/store';
+import { DEFAULT_CITY } from '../../../app/settings/cities';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
 import { fetchHash } from './api-actons/fetch-hash';
 import { fetchSms } from './api-actons/fetch-sms';
-import { LocationType, UserType } from '../lib/types';
 import { fetchConfirm } from './api-actons/fetch-confirm';
+import { fetchCity } from './api-actons/fetch-city';
+import { LocationType, UserType } from '../lib/types';
 
 
 type InitialState = {
   user: UserType | null;
   isAuth: boolean;
+  city: {
+    id: number;
+    manualMode: boolean;
+  };
   geolocation: LocationType;
   userLoadingStatus: FetchStatus;
 };
@@ -19,6 +25,10 @@ type InitialState = {
 const initialState: InitialState = {
   user: null,
   isAuth: false,
+  city: {
+    id: DEFAULT_CITY,
+    manualMode: false,
+  },
   geolocation: {
     latitude: null,
     longitude: null,
@@ -38,7 +48,20 @@ export const userSlice = createSlice({
     },
     setGeolocation: (state, action: PayloadAction<LocationType>) => {
       state.geolocation = action.payload;
-    }
+    },
+    setCity: (state, action: PayloadAction<number>) => {
+      state.city = {
+        id: action.payload,
+        manualMode: true,
+      };
+    },
+    setAutoLocation: (state) => {
+      console.log('auto');
+      state.city = {
+        id: state.city.id,
+        manualMode: false,
+      };
+    },
   },
   extraReducers(builder) {
     builder
@@ -70,8 +93,24 @@ export const userSlice = createSlice({
       })
       .addCase(fetchConfirm.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchCity.fulfilled, (state, action) => {
+        if (!state.city.manualMode) {
+          state.city = {
+            ...state.city,
+            id: action.payload,
+          };
+        }
+        state.userLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchCity.pending, (state) => {
+        state.userLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchCity.rejected, (state) => {
+        state.userLoadingStatus = FetchStatus.Failed;
       });
+
   },
 });
 
-export const { logout, setGeolocation } = userSlice.actions;
+export const { logout, setGeolocation, setCity, setAutoLocation } = userSlice.actions;
