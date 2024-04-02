@@ -26,9 +26,9 @@ export const HeaderUser = ({}: headerUserProps) => {
 
   return (
     <div className={classes.wrapper}>
-      <HeaderButton icon='favorite' text='Избранное' type='light' />
+      <HeaderButton icon='favorite' text='Избранное' type='light' onClick={() => null} />
 
-      <HeaderButton icon='profile' text='Войти' type='light' />
+      <HeaderButton icon='profile' text='Войти' type='light' onClick={() => null} />
     </div>
   );
 };

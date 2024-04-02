@@ -1,9 +1,3 @@
-export enum Currency {
-  RUB = '₽',
-  USD = '$',
-  CNY = '¥',
-};
-
 export const DELIVERY = [
   {
     name: 'Москва и города ЦФО',
