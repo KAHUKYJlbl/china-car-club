@@ -1,4 +1,4 @@
-import { MouseEvent, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import useClickOutside from '../../../lib/hooks/use-click-outside';
 import { useAppDispatch } from '../../../lib/hooks/use-app-dispatch';

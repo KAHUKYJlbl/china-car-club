@@ -1,7 +1,9 @@
+@use '../../../assets/styles/_variables' as *
+
 .wrapper
   max-width: 1200px
   margin: auto
-  padding: 18px 0
+  padding: 12px 0
 
   @media screen and (max-width: 1280px)
       max-width: 1024px
@@ -12,7 +14,11 @@
       padding: 12px 12px
 
 .heading-wrapper
-  margin-top: 64px
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+  margin-top: 40px
   padding-left: 16px
 
   @media screen and (max-width: 1280px)
@@ -21,9 +27,9 @@
 .heading
   margin: 0
 
-  font-size: 34px
+  font-size: 24px
   font-weight: 700
-  line-height: 35px
+  line-height: 28px
 
   @media screen and (max-width: 1280px)
     font-size: 24px
@@ -35,10 +41,10 @@
     line-height: 20px
 
 .subheading
-  margin-top: 8px
-
-  font-size: 18px
+  font-size: 16px
   line-height: 20px
+
+  color: $text-light
 
   @media screen and (max-width: 640px)
     text-align: center

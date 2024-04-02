@@ -131,7 +131,7 @@ export const ChooseSpecification = memo(
             </div>
           </>
           : <p className={classes.big}>
-            Выберите марку и модель автомобиля — <span className={classes.grey}>покажем цену в Китае на текущий день</span>
+            ❶ Выберите марку и модель автомобиля — <span className={classes.grey}>покажем цену в Китае на текущий день</span>
           </p>
         }
 

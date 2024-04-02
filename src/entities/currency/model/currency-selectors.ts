@@ -2,6 +2,9 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { NameSpace, State } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
+import { Currencies } from '../lib/const';
+
+export const getCurrentCurrency = (state: State): Currencies => state[NameSpace.Currency].currentCurrency;
 
 export const getCurrency = createSelector(
   (state: State) => state[NameSpace.Currency].currency,
