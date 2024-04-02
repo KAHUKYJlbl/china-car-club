@@ -2,16 +2,18 @@ import { memo, useState } from 'react';
 import cn from 'classnames';
 
 import { AddsType } from '../../../widgets/model-info';
-import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
 import { PriceType } from '../../../entities/model';
+import { setCurrentCurrency } from '../../../entities/currency/model/currency-slice';
+import { Currencies, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { Dropdown } from '../../../shared/ui/dropdown';
-import priceFormat from '../../../shared/lib/utils/price-format';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-
-import classes from './choose-options.module.sass';
-import getTotal from '../lib/utils/getTotal';
-import { Currency, DELIVERY } from '../lib/const';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import priceFormat from '../../../shared/lib/utils/price-format';
+
+import getTotal from '../lib/utils/getTotal';
+import { DELIVERY } from '../lib/const';
+import classes from './choose-options.module.sass';
 
 type ChooseOptionsProps = {
   prices: PriceType;
@@ -21,10 +23,16 @@ type ChooseOptionsProps = {
 
 export const ChooseOptions = memo(
   ({ prices, options, optionsHandler }: ChooseOptionsProps): JSX.Element => {
+    const dispatch = useAppDispatch();
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
-    const [ currentCurrency, setCurrentCurrency ] = useState(Currency.RUB);
+    const currentCurrency = useAppSelector(getCurrentCurrency);
+    // const [ currentCurrency, setCurrentCurrency ] = useState(Currencies.RUB);
     const [ currentDelivery, setCurrentDelivery ] = useState<number | null>(null);
+
+    const handleSetCurrency = (currency: Currencies) => {
+      dispatch(setCurrentCurrency(currency))
+    };
 
     if (currencyLoadingStatus.isLoading || !currency) {
       return <LoadingSpinner spinnerType='widget' />
@@ -89,24 +97,24 @@ export const ChooseOptions = memo(
 
             <div className={classes.buttons}>
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.RUB})}
-                onClick={() => setCurrentCurrency(Currency.RUB)}
+                className={cn({[classes.current]: currentCurrency === Currencies.RUB})}
+                onClick={() => handleSetCurrency(Currencies.RUB)}
               >
-                {Currency.RUB}
+                {Currencies.RUB}
               </button>
 
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.USD})}
-                onClick={() => setCurrentCurrency(Currency.USD)}
+                className={cn({[classes.current]: currentCurrency === Currencies.USD})}
+                onClick={() => handleSetCurrency(Currencies.USD)}
               >
-                {Currency.USD}
+                {Currencies.USD}
               </button>
 
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.CNY})}
-                onClick={() => setCurrentCurrency(Currency.CNY)}
+                className={cn({[classes.current]: currentCurrency === Currencies.CNY})}
+                onClick={() => handleSetCurrency(Currencies.CNY)}
               >
-                {Currency.CNY}
+                {Currencies.CNY}
               </button>
             </div>
           </div>

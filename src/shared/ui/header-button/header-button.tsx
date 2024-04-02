@@ -6,15 +6,17 @@ type HeaderButtonProps = {
   text?: string;
   icon?: string;
   type?: 'dark' | 'light';
+  onClick: () => void;
 };
 
-export const HeaderButton = ({text, icon, type = 'dark'}: HeaderButtonProps) => {
+export const HeaderButton = ({text, icon, type = 'dark', onClick}: HeaderButtonProps) => {
   return (
     <div
       className={cn(
         {[classes.light]: type === 'light'},
         classes.wrapper
       )}
+      onClick={onClick}
     >
       {
         icon &&

@@ -1,5 +1,7 @@
-export { currencySlice } from './model/currency-slice';
-export { Currency } from './ui/currency';
 export type { CurrencyType } from './lib/types';
-export { getCurrency, getCurrencyLoadingStatus } from './model/currency-selectors';
+export { Currencies } from './lib/const';
+export { Currency } from './ui/currency';
+export { currencySlice } from './model/currency-slice';
 export { fetchCurrency } from './model/api-actions/fetch-currency';
+export { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from './model/currency-selectors';
+export { getCurrencyName } from './lib/utils/get-currency-name';
