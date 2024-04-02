@@ -2,26 +2,44 @@
 
 .wrapper
   display: flex
-  justify-content: space-between
+  flex-direction: column
+  gap: 12px
 
-  padding: 4px
-
-  border-radius: 12px
-  background-color: $white
-
-  .menu-wrapper
+  .links
     display: flex
-    gap: 4px
+    justify-content: space-between
 
-    a
+    padding: 0 16px
+
+    color: $text-light
+    font-size: 14px
+    line-height: 18px
+
+    .link
+      cursor: pointer
+
+  .main-wrapper
+    display: flex
+    justify-content: space-between
+
+    padding: 4px
+
+    border-radius: 12px
+    background-color: $white
+
+    .menu-wrapper
       display: flex
-      align-items: center
-      justify-content: center
+      gap: 4px
 
-      background: none
-      width: 238px
-      height: 52px
+      a
+        display: flex
+        align-items: center
+        justify-content: center
 
-      @media screen and (max-width:960px)
-        width: 164px
-        height: 42px
+        background: none
+        width: 238px
+        height: 52px
+
+        @media screen and (max-width:960px)
+          width: 164px
+          height: 42px

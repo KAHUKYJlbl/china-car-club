@@ -2,14 +2,14 @@ import { memo, useState } from 'react';
 import queryString from 'query-string';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useCookies } from 'react-cookie';
+// import { useCookies } from 'react-cookie';
 
 import { AppRoute } from '../../../app/provider/router';
-import { fetchHash, postStatistics, getGeolocation, Login, getCurrentCity } from '../../../entities/user';
+import { fetchHash, postStatistics, getGeolocation, Login, getCurrentCity, getAuthStatus } from '../../../entities/user';
 import { Dropdown } from '../../../shared/ui/dropdown';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
+// import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
 
 import { useUtm } from '../lib/hooks/use-utm';
 import classes from './choose-delivery.module.sass';
@@ -23,8 +23,9 @@ export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
+    // const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
     const [ isLogin, setIsLogin ] = useState(false);
+    const isAuth = useAppSelector(getAuthStatus);
     const geolocation = useAppSelector(getGeolocation);
     const city = useAppSelector(getCurrentCity);
     const utm = useUtm();
@@ -53,7 +54,7 @@ export const ChooseDelivery = memo(
 
     const calculateHandler = () => {
       if (modelId && specificationId) {
-        if ( cookies[AUTH_TOKEN_KEY_NAME] ) {
+        if (isAuth) {
           loginHandler();
         } else {
           dispatch(fetchHash());
@@ -67,14 +68,12 @@ export const ChooseDelivery = memo(
     return (
       <div className={classes.wrapper}>
         <p>
-          <span className={classes.bold}>
-            Рассчитайте цену под заказ из Китая
-          </span>
+          <span className={classes.big}>❷ Рассчитайте под ключ доставку из Китая</span>
 
-          <br/>и сравните условия «под ключ» по каждой комплектации автомобиля
+          <br/>Сравните варианты растаможивания по каждой комплектации автомобиля. Запросите цены наших партнёров, чтобы выбрать лучшее предложение на рынке
         </p>
 
-        <div className={classes.controls}>
+        {/* <div className={classes.controls}>
           <Dropdown
             currentElement={null}
             setCurrent={() => null}
@@ -87,7 +86,7 @@ export const ChooseDelivery = memo(
             placeholder='Город получения авто'
             list={[{ name:'Москва', id: 1 }]}
           />
-        </div>
+        </div> */}
 
         <button
           className={classes.button}
