@@ -1,0 +1,27 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  justify-content: space-between
+
+  padding: 4px
+
+  border-radius: 12px
+  background-color: $white
+
+  .menu-wrapper
+    display: flex
+    gap: 4px
+
+    a
+      display: flex
+      align-items: center
+      justify-content: center
+
+      background: none
+      width: 238px
+      height: 52px
+
+      @media screen and (max-width:960px)
+        width: 164px
+        height: 42px

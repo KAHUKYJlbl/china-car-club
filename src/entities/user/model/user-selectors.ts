@@ -6,6 +6,10 @@ import { LocationType, UserType } from "../lib/types";
 
 export const getUser = (state: State): UserType | null => state[NameSpace.User].user;
 
+export const getCurrentCity = (state: State): number => state[NameSpace.User].city.id;
+
+export const getGeolocationMode = (state: State): boolean => state[NameSpace.User].city.manualMode;
+
 export const getGeolocation = (state: State): LocationType => state[NameSpace.User].geolocation;
 
 export const getAuthStatus = (state: State): boolean => state[NameSpace.User].isAuth;

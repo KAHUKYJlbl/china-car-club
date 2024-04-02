@@ -1,11 +1,12 @@
 import cn from 'classnames';
+import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
-import classes from './header.module.sass';
-import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../app/provider/router';
 import { getAuthStatus, User } from '../../../entities/user';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+
+import classes from './header.module.sass';
 
 export const Header = (): JSX.Element => {
   const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });

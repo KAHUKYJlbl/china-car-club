@@ -1,0 +1,106 @@
+@use '../../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  justify-content: space-between
+  align-items: center
+  gap: 4px
+  position: relative
+
+  height: 52px
+  padding: 0 14px 0 12px
+
+  border-radius: 12px
+  background-color: $primary
+
+  font-size: 14px
+  line-height: 15px
+
+.current-wrapper
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.placeholder
+  font-size: 12px
+  color: $text-light
+
+.current-element
+  max-height: 15px
+  flex-grow: 1
+
+  outline: none
+  background-color: $primary
+
+  overflow: hidden
+  text-overflow: ellipsis
+
+.current-element:disabled::placeholder
+  opacity: 1
+
+.arrow
+  cursor: pointer
+
+.listWrapper
+  position: absolute
+  left: 2%
+  top: 106%
+  z-index: 1
+  overflow: scroll
+  scrollbar-width: none
+
+  max-height: 50vh
+  width: 96%
+
+  background-color: white
+  border-radius: 8px
+  border: 2px solid $secondary
+
+.listWrapper::-webkit-scrollbar
+  display: none
+
+.list-header
+  padding: 16px 16px
+
+  border-bottom: 1px solid $secondary
+
+  color: $text-secondary
+  text-transform: uppercase
+
+.list
+  list-style: none
+
+.list-item
+  display: flex
+  justify-content: space-between
+  padding: 8px 16px
+
+  font-size: 14px
+  line-height: 16px
+
+  border-bottom: 1px solid $secondary
+  cursor: pointer
+
+  p
+    display: flex
+    flex-direction: column
+    gap: 2px
+
+  span
+    overflow: hidden
+    text-overflow: ellipsis
+
+  .price
+    padding-left: 4px
+
+    font-size: 12px
+    line-height: 15px
+    color: $text-secondary
+
+
+.list-item:hover
+  background-color: $primary
+
+.list-item-count
+  font-size: 12px
+  color: $text-secondary
