@@ -16,10 +16,15 @@
   font-size: 14px
   line-height: 15px
 
+  @media screen and (max-width:960px)
+    height: 42px
+    flex-grow: 1
+
 .current-wrapper
   display: flex
   flex-direction: column
   gap: 4px
+  flex-grow: 1
 
 .placeholder
   font-size: 12px
@@ -45,11 +50,11 @@
   position: absolute
   left: 2%
   top: 106%
-  z-index: 1
+  z-index: 3
   overflow: scroll
   scrollbar-width: none
 
-  max-height: 33vh
+  max-height: 50vh
   width: 96%
 
   background-color: white

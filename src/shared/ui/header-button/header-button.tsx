@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useMediaQuery } from 'react-responsive';
 
 import classes from './header-button.module.sass';
 
@@ -10,6 +11,8 @@ type HeaderButtonProps = {
 };
 
 export const HeaderButton = ({text, icon, type = 'dark', onClick}: HeaderButtonProps) => {
+  const isMobile = useMediaQuery({ maxWidth: 960 });
+
   return (
     <div
       className={cn(
@@ -30,7 +33,7 @@ export const HeaderButton = ({text, icon, type = 'dark', onClick}: HeaderButtonP
       }
 
       {
-        text &&
+        text && (!isMobile || !icon) &&
         <div className={classes.textWrapper} >
           {text}
         </div>
