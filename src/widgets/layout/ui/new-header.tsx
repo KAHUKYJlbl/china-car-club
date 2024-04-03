@@ -68,6 +68,27 @@ export const NewHeader = ({}: NewHeaderProps) => {
 
           <HeaderButton icon='menu' onClick={() => null} />
 
+          {
+            isDesktop &&
+            <>
+              <DropdownHeader
+                currentElement={city}
+                setCurrent={setCityHandler}
+                list={DROPDOWN_CITIES}
+                placeholder='Город доставки авто'
+              />
+
+              <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
+            </>
+          }
+        </div>
+
+        <HeaderUser />
+      </div>
+
+      {
+        !isDesktop &&
+        <div className={classes.mobileWrapper}>
           <DropdownHeader
             currentElement={city}
             setCurrent={setCityHandler}
@@ -77,9 +98,7 @@ export const NewHeader = ({}: NewHeaderProps) => {
 
           <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
         </div>
-
-        <HeaderUser />
-      </div>
+      }
 
       {/* <div className={classes.breadcrumbs}></div> */}
     </div>

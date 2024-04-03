@@ -3,17 +3,21 @@
 .wrapper
   display: flex
   flex-direction: column
-  gap: 12px
+  gap: 4px
 
   .links
     display: flex
     justify-content: space-between
 
-    padding: 0 16px
+    padding: 0 16px 8px
 
     color: $text-light
     font-size: 14px
     line-height: 18px
+
+    @media screen and (max-width:640px)
+      flex-direction: column
+      align-items: center
 
     .link
       cursor: pointer
@@ -43,3 +47,7 @@
         @media screen and (max-width:960px)
           width: 164px
           height: 42px
+
+  .mobile-wrapper
+    display: flex
+    gap: 4px
