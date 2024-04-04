@@ -32,16 +32,6 @@ const getTotal = ({
 
   const cnyTotal = totalPrice + optionsTotal - discount;
 
-  // switch (currentCurrency) {
-  //   case Currencies.CNY:
-  //     return cnyTotal.toFixed();
-  //   case Currencies.RUB:
-  //     return (cnyTotal * currency.cny).toFixed();
-  //   case Currencies.USD:
-  //     return (cnyTotal * currency.cny / currency.usd).toFixed();
-  //   default:
-  //     return null;
-  // }
   return getCurrencyExchange(cnyTotal, currentCurrency, currency);
 };
 
