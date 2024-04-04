@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import {
@@ -23,6 +23,7 @@ type SpecificationInfoProps = {
 export const SpecificationInfo = memo(
   ({ currentSpecification, setCurrentSpecification, setIsPrices, isPrices }: SpecificationInfoProps): JSX.Element => {
     const [ searchParams, _setSearchParams ] = useSearchParams();
+    const navigate = useNavigate();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
     const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus)
@@ -50,16 +51,20 @@ export const SpecificationInfo = memo(
 
         <div className={classes.bottom}>
           <p className={classes.label}>
-            Комплектация нового автомобиля
+            Комплектация автомобиля:
           </p>
 
-          <DropdownBlocks
-            currentElement={currentSpecification}
-            setCurrent={setCurrentSpecification}
-            placeholder='Комплектация'
-            list={specifications}
-            disabled={specificationsLoadingStatus.isLoading}
-          />
+          <div className={classes.dropdownWrapper}>
+            <DropdownBlocks
+              currentElement={currentSpecification}
+              setCurrent={setCurrentSpecification}
+              placeholder='Комплектация'
+              list={specifications}
+              disabled={specificationsLoadingStatus.isLoading}
+            />
+
+            <button onClick={() => navigate(AppRoute.Main)}>Вернуться</button>
+          </div>
         </div>
       </div>
     )

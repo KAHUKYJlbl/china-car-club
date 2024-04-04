@@ -50,7 +50,7 @@ export const NewHeader = ({}: NewHeaderProps) => {
 
         <p>
           <span>Бесплатно по России: </span>
-          <Link to='tel:+78007001895' className={classes.link}>8 800 700 18 95</Link>
+          <Link to='tel:+78007001895' className={classes.phone}>8 800 700 18 95</Link>
         </p>
       </div>
 

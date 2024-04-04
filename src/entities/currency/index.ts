@@ -5,3 +5,4 @@ export { currencySlice } from './model/currency-slice';
 export { fetchCurrency } from './model/api-actions/fetch-currency';
 export { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from './model/currency-selectors';
 export { getCurrencyName } from './lib/utils/get-currency-name';
+export { getCurrencyExchange } from './lib/utils/get-currency-exchange';

@@ -1,6 +1,11 @@
 import { TechNameType, TechsByTypes } from './types';
 
-export const GUARANTEE_FEE = 1000;
+export enum Taxes {
+  PERS = 'Физлицо',
+  SELL = 'На перепродажу',
+  CORP = 'Юрлицо',
+  COMMERC = 'Коммерческие автомобили',
+};
 
 export const ELECTRO = [3];
 
