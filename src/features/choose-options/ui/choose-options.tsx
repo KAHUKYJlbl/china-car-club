@@ -43,7 +43,7 @@ export const ChooseOptions = memo(
               {
                 `${priceFormat(
                   getTotal({
-                    totalPrice: prices.withLogistics,
+                    totalPrice: prices.withLogisticsPers,
                     options,
                     optionsPrices: {
                       epts: prices.eptsSbktsUtil,
