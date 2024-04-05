@@ -28,6 +28,7 @@ import { Prices } from './prices';
 import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
+import { Taxes } from '../lib/const';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ export const ModelInfo = (): JSX.Element => {
   const intColors = useAppSelector(getIntColors);
 
   const [ isPrices, setIsPrices ] = useState(true);
+  const [ currentTax, setCurrentTax ] = useState(Taxes.PERS);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
   const [ currentColor, setCurrentColor ] = useState<CurrentColorType>({
     int: intColors ? intColors[0].color.id : null,
@@ -157,16 +159,24 @@ export const ModelInfo = (): JSX.Element => {
       {
         isPrices &&
         <>
-          <div className={classes.prices}>
-            <Prices prices={specificationParams.price} adds={adds} />
-          </div>
+          <div className={classes.pricesWrapper}>
+            <div className={classes.prices}>
+              <Prices
+                prices={specificationParams.price}
+                adds={adds}
+                currentTax={currentTax}
+                setCurrentTax={setCurrentTax}
+              />
+            </div>
 
-          <div className={classes.addOptions}>
-            <ChooseOptions
-              prices={specificationParams.price}
-              options={adds}
-              optionsHandler={toggleAdds}
-            />
+            <div className={classes.addOptions}>
+              <ChooseOptions
+                prices={specificationParams.price}
+                options={adds}
+                optionsHandler={toggleAdds}
+                currentTax={currentTax}
+              />
+            </div>
           </div>
 
           <div className={classes.currency}>
