@@ -25,6 +25,7 @@ export type ParamsType = {
 
 export type PriceApiType = {
   inChina: number,
+  priceInCityOfReceipt: number,
   withLogistics: number,
   tax: number,
   eptsSbktsUtil: number,
@@ -91,7 +92,9 @@ export type ModelApiType = {
 
 export type PriceType = {
   inChina: number,
-  withLogistics: number,
+  priceInCityOfReceipt: number,
+  withLogisticsPers: number,
+  withLogisticsCorp: number,
   tax: number,
   eptsSbktsUtil: number,
   borderPrice: number,

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import cn from 'classnames';
 
-import { AddsType } from '../../../widgets/model-info';
+import { AddsType, Taxes } from '../../../widgets/model-info';
 import { PriceType } from '../../../entities/model';
 import { setCurrentCurrency } from '../../../entities/currency/model/currency-slice';
 import { Currencies, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
@@ -17,10 +17,11 @@ type ChooseOptionsProps = {
   prices: PriceType;
   options: Record<AddsType, boolean>;
   optionsHandler: (arg: AddsType) => void;
+  currentTax: Taxes;
 }
 
 export const ChooseOptions = memo(
-  ({ prices, options, optionsHandler }: ChooseOptionsProps): JSX.Element => {
+  ({ prices, options, optionsHandler, currentTax }: ChooseOptionsProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -43,7 +44,7 @@ export const ChooseOptions = memo(
               {
                 `${priceFormat(
                   getTotal({
-                    totalPrice: prices.withLogistics,
+                    totalPrice: currentTax === Taxes.PERS ? prices.withLogisticsPers : prices.withLogisticsCorp,
                     options,
                     optionsPrices: {
                       epts: prices.eptsSbktsUtil,
