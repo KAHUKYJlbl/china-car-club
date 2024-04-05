@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import cn from 'classnames';
 
 import { PriceType } from '../../../entities/model/lib/types';
