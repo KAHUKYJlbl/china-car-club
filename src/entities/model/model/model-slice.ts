@@ -85,7 +85,9 @@ export const modelSlice = createSlice({
             : null,
             price: {
               inChina: specification.price.inChina,
-              withLogistics: specification.price.withLogistics,
+              priceInCityOfReceipt: specification.price.priceInCityOfReceipt,
+              withLogisticsPers: specification.price.withLogistics,
+              withLogisticsCorp: corp.specifications[id].price.withLogistics,
               tax: specification.price.tax,
               eptsSbktsUtil: specification.price.eptsSbktsUtil,
               borderPrice: specification.price.borderPrice,

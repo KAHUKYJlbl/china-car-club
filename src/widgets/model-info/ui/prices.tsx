@@ -13,15 +13,16 @@ import { Taxes } from '../lib/const';
 
 type PricesProps = {
   prices: PriceType;
-  adds: Record<AddsType, boolean>
+  adds: Record<AddsType, boolean>;
+  currentTax: Taxes;
+  setCurrentTax: React.Dispatch<React.SetStateAction<Taxes>>;
 }
 
 export const Prices = memo(
-  ({ prices, adds }: PricesProps): JSX.Element => {
+  ({ prices, adds, currentTax, setCurrentTax }: PricesProps): JSX.Element => {
     const currency = useAppSelector(getCurrency);
     const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
-    const [ currentTax, setCurrentTax ] = useState(Taxes.PERS);
 
     if (currencyLoadingStatus.isLoading || !currency) {
       return <LoadingSpinner spinnerType='widget' />
@@ -56,7 +57,7 @@ export const Prices = memo(
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  prices.withLogistics,
+                  prices.priceInCityOfReceipt,
                   currentCurrency,
                   currency
                 ))
