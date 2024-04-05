@@ -91,8 +91,7 @@ export type ModelApiType = {
 
 export type PriceType = {
   inChina: number,
-  withLogisticsPers: number,
-  withLogisticsCorp: number,
+  withLogistics: number,
   tax: number,
   eptsSbktsUtil: number,
   borderPrice: number,
