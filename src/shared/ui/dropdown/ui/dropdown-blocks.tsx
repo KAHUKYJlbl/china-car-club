@@ -116,7 +116,7 @@ export const DropdownBlocks = ({
               Array.from(new Set(list?.map((element) => element.year)))
                 .toSorted((a, b) => (a && b) ? a - b : 0)
                 .map((year) =>
-                  <>
+                  <div key={year}>
                     <p className={classes.listHeader}>
                       {`${year} поколение • 2024 выпуск`}
                     </p>
@@ -148,7 +148,7 @@ export const DropdownBlocks = ({
                             ))
                       }
                     </ul>
-                  </>
+                  </div>
               )
             }
 

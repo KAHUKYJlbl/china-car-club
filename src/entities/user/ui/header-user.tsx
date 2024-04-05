@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
@@ -9,6 +9,7 @@ import { fetchCity } from "../model/api-actons/fetch-city";
 import { fetchHash } from "../model/api-actons/fetch-hash";
 import {
   getAuthStatus,
+  getGeolocation,
   getGeolocationMode
 } from "../model/user-selectors";
 import { logout, setGeolocation } from "../model/user-slice";
@@ -17,16 +18,17 @@ import classes from './header-user.module.sass';
 
 type headerUserProps = {};
 
-export const HeaderUser = ({}: headerUserProps) => {
+export const HeaderUser = memo(({}: headerUserProps) => {
   const dispatch = useAppDispatch();
-  const location = useGeolocation();
+  const storedLocation = useAppSelector(getGeolocation);
   const locationMode = useAppSelector(getGeolocationMode);
   const isAuth = useAppSelector(getAuthStatus);
   const [ isLogin, setIsLogin ] = useState(false);
+  const location = useGeolocation(storedLocation);
 
   useEffect(() => {
-    dispatch(setGeolocation(location));
     if (location.latitude && location.longitude) {
+      dispatch(setGeolocation(location));
       dispatch(fetchCity(location));
     }
   }, [location.latitude, location.longitude, locationMode]);
@@ -57,4 +59,4 @@ export const HeaderUser = ({}: headerUserProps) => {
       }
     </>
   );
-};
+});

@@ -4,7 +4,7 @@ import { Gallery } from '../../../shared/ui/gallery';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-import { fetchSpecificationsImage, getDefaultImages, getSpecificationImgLoadingStatus } from '../../../entities/specification';
+import { fetchSpecificationsImage, getDefaultImages, getSpecificationImgLoadingStatus, setSpecsIdle } from '../../../entities/specification';
 import { Currency, fetchCurrency } from '../../../entities/currency';
 import { fetchManufacturers } from '../../../entities/manufacturer';
 import { setIdle } from '../../../entities/model';
@@ -34,6 +34,7 @@ export const Calculator = (): JSX.Element => {
     setCurrentSpecification(null);
     dispatch(fetchManufacturers());
     dispatch(setIdle());
+    dispatch(setSpecsIdle());
     dispatch(fetchCurrency());
   }, []);
 

@@ -56,7 +56,7 @@ export const Prices = memo(
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  currentTax === Taxes.PERS ? prices.withLogisticsPers : prices.withLogisticsCorp,
+                  prices.withLogistics,
                   currentCurrency,
                   currency
                 ))
@@ -116,12 +116,12 @@ export const Prices = memo(
 
           <div className={classes.row}>
             <p>Доп. товары на автомобиль</p>
-            <p><span>(скоро)</span> {priceFormat(getCurrencyExchange(0, currentCurrency, currency))} {currentCurrency}</p>
+            <p><span>скоро</span></p>
           </div>
 
           <div className={classes.row}>
             <p>Гарантия на автомобиль</p>
-            <p><span>(скоро)</span> {priceFormat(getCurrencyExchange(0, Currencies.RUB, currency))} {Currencies.RUB}</p>
+            <p><span>скоро</span></p>
           </div>
         </div>
       </div>

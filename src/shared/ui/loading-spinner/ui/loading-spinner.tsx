@@ -13,7 +13,6 @@ const spinnerTypes = {
   widget: {
     height: '80',
     width: '80',
-    wrapperHeight: '100%',
     color: '#7E7E7E',
     wrapperStyle: {
       height: '100%'

@@ -41,16 +41,16 @@ export const modelSlice = createSlice({
           id: specification.id,
           params: {
             engineType: FILTERS.engine!.elements.find((element) =>
-              element.elementId === specification.parameters.engineType.id
+              element.elementId === specification.parameters?.engineType.id
             )?.name || '',
             bodyType: FILTERS.body!.elements.find((element) =>
-              element.elementId === specification.parameters.bodyType.id
+              element.elementId === specification.parameters?.bodyType.id
             )?.name || '',
             driveType: `${FILTERS.drive!.elements.find((element) =>
-              element.elementId === specification.parameters.driveType.id
+              element.elementId === specification.parameters?.driveType.id
             )?.name} привод` || '',
             transmissionType: `${FILTERS.transmission!.elements.find((element) =>
-              element.elementId === specification.parameters.transmissionType.id
+              element.elementId === specification.parameters?.transmissionType.id
             )?.name} коробка передач` || '',
           }
         }))
@@ -64,29 +64,28 @@ export const modelSlice = createSlice({
             id: specification.id,
             name: specification.name.ru || specification.name.ch,
             year: specification.year,
-            engineType: specification.parameters.engineType.id,
-            bodyType: specification.parameters.bodyType.name,
-            driveType: specification.parameters.driveType.name,
-            transmissionType: specification.parameters.transmissionType.name,
-            power: specification.parameters.power,
-            torque: specification.parameters.torque,
-            batteryCapacity: specification.parameters.batteryCapacity,
-            powerReserve: specification.parameters.powerReserve,
-            electricPowerReserve: specification.parameters.electricPowerReserve,
-            engineCount: specification.parameters.engineCount,
-            seats: specification.parameters.seats.filter((seat) => seat !== '0').join(', '),
-            lengthWidthHeight: specification.parameters.lengthWidthHeight,
-            groundClearance: specification.parameters.groundClearance,
-            wheelSize: `${specification.parameters.wheelSize.front} • ${specification.parameters.wheelSize.rear}`,
-            colors: specification.parameters.colors,
-            curbWeight: specification.parameters.curbWeight,
-            engineCapacity: specification.parameters.engineCapacity
-            ? specification.parameters.engineCapacity * 1000
+            engineType: specification.parameters?.engineType.id,
+            bodyType: specification.parameters?.bodyType.name,
+            driveType: specification.parameters?.driveType.name,
+            transmissionType: specification.parameters?.transmissionType.name,
+            power: specification.parameters?.power,
+            torque: specification.parameters?.torque,
+            batteryCapacity: specification.parameters?.batteryCapacity,
+            powerReserve: specification.parameters?.powerReserve,
+            electricPowerReserve: specification.parameters?.electricPowerReserve,
+            engineCount: specification.parameters?.engineCount,
+            seats: specification.parameters?.seats.filter((seat) => seat !== '0').join(', '),
+            lengthWidthHeight: specification.parameters?.lengthWidthHeight,
+            groundClearance: specification.parameters?.groundClearance,
+            wheelSize: `${specification.parameters?.wheelSize.front} • ${specification.parameters?.wheelSize.rear}`,
+            colors: specification.parameters?.colors,
+            curbWeight: specification.parameters?.curbWeight,
+            engineCapacity: specification.parameters?.engineCapacity
+            ? specification.parameters?.engineCapacity * 1000
             : null,
             price: {
               inChina: specification.price.inChina,
-              withLogisticsPers: specification.price.withLogistics,
-              withLogisticsCorp: corp.specifications[id].price.withLogistics,
+              withLogistics: specification.price.withLogistics,
               tax: specification.price.tax,
               eptsSbktsUtil: specification.price.eptsSbktsUtil,
               borderPrice: specification.price.borderPrice,
@@ -94,8 +93,8 @@ export const modelSlice = createSlice({
               customsClearancePers: specification.price.customsClearance,
               customsClearanceCorp: corp.specifications[id].price.customsClearance,
             },
-            acceleration: specification.parameters.acceleration,
-            totalFuelConsumption: specification.parameters.totalFuelConsumption,
+            acceleration: specification.parameters?.acceleration,
+            totalFuelConsumption: specification.parameters?.totalFuelConsumption,
           }))
         };
         state.modelLoadingStatus = FetchStatus.Success;
