@@ -29,7 +29,18 @@ const initialState: InitialState = {
 export const specificationSlice = createSlice({
   name: NameSpace.Specification,
   initialState,
-  reducers: {},
+  reducers: {
+    setSpecsIdle: (state) => {
+      state.specifications = [];
+      state.specificationImg = {
+        external: [],
+        interior: [],
+        official: [],
+      };
+      state.specificationsLoadingStatus = FetchStatus.Idle;
+      state.specificationImgLoadingStatus = FetchStatus.Idle;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchSpecifications.fulfilled, (state, action) => {
@@ -64,3 +75,6 @@ export const specificationSlice = createSlice({
       });
   },
 });
+
+export const { setSpecsIdle } = specificationSlice.actions;
+

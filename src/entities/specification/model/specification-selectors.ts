@@ -79,7 +79,7 @@ export const getSpecifications = createSelector(
   (specifications) => specifications.map((specification) => ({
     name: specification.name.ru || specification.name.ch,
     id: specification.id,
-    price: specification.priceWithLogisticsByCurrentDay.price,
+    price: specification.priceWithLogisticsByCurrentDay?.price,
     year: specification.year,
   }))
 );

@@ -33,7 +33,7 @@ export const Prices = memo(
         <div className={classes.divider}>
           <div className={cn(classes.row, classes.bold)}>
             <p>Мин цена на автомобиль в Китае</p>
-            <p>{priceFormat((prices.inChina * currency.cny).toFixed())} {currentCurrency}</p>
+            <p>{priceFormat(getCurrencyExchange(prices.inChina, currentCurrency, currency))} {currentCurrency}</p>
           </div>
 
           <div className={classes.row}>
@@ -53,14 +53,30 @@ export const Prices = memo(
 
           <div className={cn(classes.row, classes.bold)}>
             <p>Цена в РФ, в городе доставки</p>
-            <p>{priceFormat(getCurrencyExchange(prices.withLogistics, currentCurrency, currency))} {currentCurrency}</p>
+            <p>
+              {
+                priceFormat(getCurrencyExchange(
+                  prices.withLogistics,
+                  currentCurrency,
+                  currency
+                ))
+              } {currentCurrency}
+            </p>
           </div>
         </div>
 
         <div className={classes.divider}>
           <div className={cn(classes.row, classes.bold)}>
             <p>Растаможивание в России</p>
-            <p>{priceFormat(getCurrencyExchange(0, Currencies.RUB, currency))} {Currencies.RUB}</p>
+            <p>
+              {
+                priceFormat(getCurrencyExchange(
+                  currentTax === Taxes.PERS ? prices.customsClearancePers : prices.customsClearanceCorp,
+                  Currencies.RUB,
+                  currency
+                ))
+              } {Currencies.RUB}
+            </p>
           </div>
 
           <div className={classes.row}>
@@ -100,12 +116,12 @@ export const Prices = memo(
 
           <div className={classes.row}>
             <p>Доп. товары на автомобиль</p>
-            <p><span>(скоро)</span> {priceFormat(getCurrencyExchange(0, currentCurrency, currency))} {currentCurrency}</p>
+            <p><span>скоро</span></p>
           </div>
 
           <div className={classes.row}>
             <p>Гарантия на автомобиль</p>
-            <p><span>(скоро)</span> {priceFormat(getCurrencyExchange(0, Currencies.RUB, currency))} {Currencies.RUB}</p>
+            <p><span>скоро</span></p>
           </div>
         </div>
       </div>
