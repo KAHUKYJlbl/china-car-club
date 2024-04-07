@@ -24,12 +24,12 @@ export const fetchModel = createAsyncThunk<
     try {
       const pers = await axios.get<ModelApiType>([
         generatePath( APIRoute.Model, {id: modelId} ),
-        '?priceTypeId=4'
+        '?priceTypeId=2'
       ].join(''));
 
       const corp = await axios.get<ModelApiType>([
         generatePath( APIRoute.Model, {id: modelId} ),
-        '?priceTypeId=5'
+        '?priceTypeId=3'
       ].join(''));
 
       return {pers: pers.data, corp: corp.data};
