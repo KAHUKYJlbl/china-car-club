@@ -23,6 +23,15 @@ export type ParamsType = {
   }
 }
 
+export type CustomsType = {
+  final: number,
+  fee: number,
+  duty: number,
+  recyclingFee: number,
+  exciseTax: number,
+  nds: number,
+};
+
 export type PriceApiType = {
   inChina: number,
   priceInCityOfReceipt: number,
@@ -31,7 +40,7 @@ export type PriceApiType = {
   eptsSbktsUtil: number,
   borderPrice: number,
   commission: number,
-  customsClearance: number,
+  customsClearance: CustomsType,
 }
 
 export type SpecsApiType = {
@@ -99,8 +108,8 @@ export type PriceType = {
   eptsSbktsUtil: number,
   borderPrice: number,
   commission: number,
-  customsClearancePers: number,
-  customsClearanceCorp: number,
+  customsClearancePers: CustomsType,
+  customsClearanceCorp: CustomsType,
 }
 
 export type SpecsType = {
