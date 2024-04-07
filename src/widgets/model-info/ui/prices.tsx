@@ -72,7 +72,7 @@ export const Prices = memo(
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  currentTax === Taxes.PERS ? prices.customsClearancePers : prices.customsClearanceCorp,
+                  currentTax === Taxes.PERS ? prices.customsClearancePers.final : prices.customsClearanceCorp.final,
                   Currencies.RUB,
                   currency
                 ))
