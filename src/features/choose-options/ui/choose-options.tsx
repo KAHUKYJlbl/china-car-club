@@ -10,7 +10,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
-import getTotal from '../lib/utils/getTotal';
+import { getTotal } from '../lib/utils/getTotal';
 import classes from './choose-options.module.sass';
 
 type ChooseOptionsProps = {

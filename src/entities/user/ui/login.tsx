@@ -9,8 +9,8 @@ import { unmask } from '../../../shared/lib/utils/unmask';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { fetchSms } from '../model/api-actons/fetch-sms';
-import { fetchConfirm } from '../model/api-actons/fetch-confirm';
+import { postSms } from '../model/api-actons/post-sms';
+import { postConfirm } from '../model/api-actons/post-confirm';
 import { ConfirmFormType } from '../lib/types';
 import { SmsFormType, getUser, getUserLoadingStatus } from '..';
 
@@ -43,7 +43,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
 
   const onInitSubmit: SubmitHandler<SmsFormType> = (data) => {
     if (user) {
-      dispatch(fetchSms({
+      dispatch(postSms({
         msisdn: unmask(data.msisdn),
         provider: 'sms',
         hash: user.hash,
@@ -64,7 +64,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
 
   const onConfirmSubmit: SubmitHandler<ConfirmFormType> = (data) => {
     if (user) {
-      dispatch(fetchConfirm({
+      dispatch(postConfirm({
         pin: unmask(data.pin),
         hash: user.hash,
       })).then((data) => {

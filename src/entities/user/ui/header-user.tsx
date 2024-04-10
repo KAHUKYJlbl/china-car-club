@@ -1,5 +1,7 @@
 import { memo, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
+import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { HeaderButton } from "../../../shared/ui/header-button/header-button";
@@ -12,7 +14,7 @@ import {
   getGeolocation,
   getGeolocationMode
 } from "../model/user-selectors";
-import { logout, setGeolocation } from "../model/user-slice";
+import { login, logout, setGeolocation } from "../model/user-slice";
 import { Login } from "./login";
 import classes from './header-user.module.sass';
 
@@ -23,8 +25,15 @@ export const HeaderUser = memo(({}: headerUserProps) => {
   const storedLocation = useAppSelector(getGeolocation);
   const locationMode = useAppSelector(getGeolocationMode);
   const isAuth = useAppSelector(getAuthStatus);
+  const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
   const [ isLogin, setIsLogin ] = useState(false);
   const location = useGeolocation(storedLocation);
+
+  useEffect(() => {
+    if (cookies[AUTH_TOKEN_KEY_NAME]) {
+      dispatch(login());
+    }
+  }, [cookies[AUTH_TOKEN_KEY_NAME]]);
 
   useEffect(() => {
     if (location.latitude && location.longitude) {
@@ -35,6 +44,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
 
   const handleLoginClick = () => {
     if (isAuth) {
+      clearToken();
       dispatch(logout());
     } else {
       dispatch(fetchHash());

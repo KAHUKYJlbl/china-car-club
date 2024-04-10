@@ -2,13 +2,19 @@ import { memo, useState } from 'react';
 import queryString from 'query-string';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-// import { useCookies } from 'react-cookie';
 
 import { AppRoute } from '../../../app/provider/router';
-import { fetchHash, postStatistics, getGeolocation, Login, getCurrentCity, getAuthStatus } from '../../../entities/user';
+import {
+  fetchHash,
+  postStatistics,
+  getGeolocation,
+  Login,
+  getCurrentCity,
+  getAuthStatus,
+  postRefresh
+} from '../../../entities/user';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-// import { AUTH_TOKEN_KEY_NAME } from '../../../shared/api/token';
 
 import { useUtm } from '../lib/hooks/use-utm';
 import classes from './choose-delivery.module.sass';
@@ -22,7 +28,6 @@ export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    // const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
     const [ isLogin, setIsLogin ] = useState(false);
     const isAuth = useAppSelector(getAuthStatus);
     const geolocation = useAppSelector(getGeolocation);
@@ -40,6 +45,8 @@ export const ChooseDelivery = memo(
           },
           utm,
         }));
+
+        dispatch(postRefresh());
 
         navigate(queryString.stringifyUrl({
           url: AppRoute.Model,
@@ -71,21 +78,6 @@ export const ChooseDelivery = memo(
 
           <br/>Сравните варианты растаможивания по каждой комплектации автомобиля. Запросите цены наших партнёров, чтобы выбрать лучшее предложение на рынке
         </p>
-
-        {/* <div className={classes.controls}>
-          <Dropdown
-            currentElement={null}
-            setCurrent={() => null}
-            placeholder='Страна получения авто'
-            list={[{ name:'Россия', id: 1 }]}
-          />
-          <Dropdown
-            currentElement={null}
-            setCurrent={() => null}
-            placeholder='Город получения авто'
-            list={[{ name:'Москва', id: 1 }]}
-          />
-        </div> */}
 
         <button
           className={classes.button}
