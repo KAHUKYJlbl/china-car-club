@@ -5,8 +5,8 @@ import { DEFAULT_CITY } from '../../../app/settings/cities';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
 import { fetchHash } from './api-actons/fetch-hash';
-import { fetchSms } from './api-actons/fetch-sms';
-import { fetchConfirm } from './api-actons/fetch-confirm';
+import { postSms } from './api-actons/post-sms';
+import { postConfirm } from './api-actons/post-confirm';
 import { fetchCity } from './api-actons/fetch-city';
 import { LocationType, UserType } from '../lib/types';
 
@@ -40,10 +40,12 @@ export const userSlice = createSlice({
   name: NameSpace.Specification,
   initialState,
   reducers: {
+    login: (state) => {
+      state.isAuth = true;
+    },
     logout: (state) => {
       state.user = initialState.user;
       state.isAuth = initialState.isAuth;
-      state.geolocation = initialState.geolocation;
       state.userLoadingStatus = initialState.userLoadingStatus;
       state.city = initialState.city;
     },
@@ -76,23 +78,23 @@ export const userSlice = createSlice({
       .addCase(fetchHash.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
       })
-      .addCase(fetchSms.fulfilled, (state) => {
+      .addCase(postSms.fulfilled, (state) => {
         state.userLoadingStatus = FetchStatus.Success;
       })
-      .addCase(fetchSms.pending, (state) => {
+      .addCase(postSms.pending, (state) => {
         state.userLoadingStatus = FetchStatus.Pending;
       })
-      .addCase(fetchSms.rejected, (state) => {
+      .addCase(postSms.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
       })
-      .addCase(fetchConfirm.fulfilled, (state) => {
+      .addCase(postConfirm.fulfilled, (state) => {
         state.isAuth = true;
         state.userLoadingStatus = FetchStatus.Success;
       })
-      .addCase(fetchConfirm.pending, (state) => {
+      .addCase(postConfirm.pending, (state) => {
         state.userLoadingStatus = FetchStatus.Pending;
       })
-      .addCase(fetchConfirm.rejected, (state) => {
+      .addCase(postConfirm.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchCity.fulfilled, (state, action) => {
@@ -114,4 +116,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, setGeolocation, setCity, setAutoLocation } = userSlice.actions;
+export const { logout, setGeolocation, setCity, setAutoLocation, login } = userSlice.actions;

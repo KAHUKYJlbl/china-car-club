@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
-import { ChooseOptions } from '../../../features/choose-options';
+import { ChooseOptions, getTotal } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import {
   fetchSpecificationsImage,
@@ -14,7 +14,7 @@ import {
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { Currency, fetchCurrency } from '../../../entities/currency';
+import { Currency, fetchCurrency, getCurrency, getCurrentCurrency } from '../../../entities/currency';
 import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -41,6 +41,8 @@ export const ModelInfo = (): JSX.Element => {
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
+  const currency = useAppSelector(getCurrency);
+  const currentCurrency = useAppSelector(getCurrentCurrency);
 
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentTax, setCurrentTax ] = useState(Taxes.PERS);
@@ -117,6 +119,7 @@ export const ModelInfo = (): JSX.Element => {
     || manufacturersLoadingStatus.isLoading
     || modelLoadingStatus.isLoading
     || !specificationParams
+    || !currency
   ) {
     return <LoadingSpinner spinnerType='page' />
   }
@@ -184,7 +187,23 @@ export const ModelInfo = (): JSX.Element => {
           </div>
 
           <div className={classes.buttons}>
-            <OrderButtons />
+            <OrderButtons
+              specificationId={currentSpecification}
+              epts={adds.epts}
+              totalPrice={Number(
+                getTotal({
+                  totalPrice: currentTax === Taxes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
+                  options: adds,
+                  optionsPrices: {
+                    epts: specificationParams.price.eptsSbktsUtil,
+                    guarantee: 0,
+                    options: 0
+                  },
+                  currency,
+                  currentCurrency,
+                })
+              )}
+            />
           </div>
         </>
       }

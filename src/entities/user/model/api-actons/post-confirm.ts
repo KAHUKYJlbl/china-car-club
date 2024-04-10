@@ -8,7 +8,7 @@ import { ConfirmType, TokenType } from '../../lib/types';
 import { setToken } from '../../../../shared/api/token';
 
 
-export const fetchConfirm = createAsyncThunk<
+export const postConfirm = createAsyncThunk<
   void,
   ConfirmType,
   {
@@ -17,13 +17,13 @@ export const fetchConfirm = createAsyncThunk<
     extra: AxiosInstance;
   }
 > (
-  'User/fetchConfirm',
+  'User/postConfirm',
   async ( pin, {extra: axios}) => {
     try {
       const { data } = await axios.post<TokenType>(APIRoute.AuthConfirm, pin);
-      setToken(data.token);
+      setToken(data.accessToken);
     } catch (err) {
-      throw Error('Unable to fetch Auth Confirm');
+      throw Error('Unable to post Auth Confirm');
     }
   },
 );
