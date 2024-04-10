@@ -4,24 +4,23 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { SmsType } from '../../lib/types';
+import { OrderType } from '../../lib/types';
 
-
-export const fetchSms = createAsyncThunk<
+export const postOrder = createAsyncThunk<
   void,
-  SmsType,
+  OrderType,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
 > (
-  'User/fetchSms',
-  async ( smsData, {extra: axios}) => {
+  'Statistics/postOrder',
+  async ( order, {extra: axios}) => {
     try {
-      await axios.post(APIRoute.AuthSms, smsData);
+      await axios.post(APIRoute.PostOrder, order)
     } catch (err) {
-      throw Error('Unable to fetch Sms');
+      throw Error('Unable to post statistics');
     }
   },
 );

@@ -11,7 +11,7 @@ type getTotalProps = {
   discount?: number,
 }
 
-const getTotal = ({
+export const getTotal = ({
   totalPrice,
   options,
   optionsPrices,
@@ -34,5 +34,3 @@ const getTotal = ({
 
   return getCurrencyExchange(cnyTotal, currentCurrency, currency);
 };
-
-export default getTotal;

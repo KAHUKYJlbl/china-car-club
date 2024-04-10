@@ -3,23 +3,25 @@ import { AxiosInstance } from 'axios';
 
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
-import { StatisticsType } from '../../lib/types';
 
-export const postStatistics = createAsyncThunk<
+import { SmsType } from '../../lib/types';
+
+
+export const postSms = createAsyncThunk<
   void,
-  StatisticsType,
+  SmsType,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
 > (
-  'Statistics/postStatistics',
-  async ( statistics, {extra: axios}) => {
+  'User/postSms',
+  async ( smsData, {extra: axios}) => {
     try {
-      await axios.post(APIRoute.PostStatistics, statistics)
+      await axios.post(APIRoute.AuthSms, smsData);
     } catch (err) {
-      throw Error('Unable to post statistics');
+      throw Error('Unable to post Sms');
     }
   },
 );

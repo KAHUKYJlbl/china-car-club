@@ -7,5 +7,7 @@ export enum APIRoute {
   AuthHash = '/auth/generate-hash',
   AuthSms = '/auth/init',
   AuthConfirm = '/auth/confirm',
+  AuthRefresh = '/auth/refresh',
   PostStatistics = '/statistics/car-calculation',
+  PostOrder = '/statistics/car-order',
 }

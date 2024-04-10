@@ -13,7 +13,7 @@ export const getToken = (): Token => {
 export const setToken = (token: Token): void => {
   Cookies.set(AUTH_TOKEN_KEY_NAME, token, {
     path: '/',
-    expires: 7
+    expires: 1
   });
 };
 
