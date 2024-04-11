@@ -120,7 +120,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
           </p>
 
           <Link
-            to={`tg://resolve?domain=ID_ChinaCarClub_bo&start=auth_hash_${user.hash}`}
+            to={`tg://resolve?domain=ID_ChinaCarClub_bot&start=auth_hash_${user.hash}`}
             className={classes.telegram}
             onClick={() => setMode('confirm')}
           >
