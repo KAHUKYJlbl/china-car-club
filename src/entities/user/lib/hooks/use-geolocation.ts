@@ -14,5 +14,5 @@ export const useGeolocation = (storedLocation: LocationType) => {
       ));
     }
   }, [storedLocation.latitude, storedLocation.longitude]);
-  return location;
+  return location.latitude ? location : storedLocation;
 }

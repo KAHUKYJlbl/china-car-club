@@ -61,6 +61,7 @@ export const SpecificationInfo = memo(
               placeholder='Комплектация'
               list={specifications}
               disabled={specificationsLoadingStatus.isLoading}
+              isPrices
             />
 
             <button onClick={() => navigate(AppRoute.Main)}>Вернуться</button>

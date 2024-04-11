@@ -8,11 +8,11 @@ const PROMO_GALLERY = [
     }
   },
   {
-    specificationId: 68490,
-    modelId: 844,
+    specificationId: 70206,
+    modelId: 1249,
     url: {
-      big: '/specification/68490/b_c1_col1199_o1.jpg',
-      original: '/specification/68490/p_c1_col1199_o1.jpg',
+      big: '/specification/70206/b_c1_col1227_o1.jpg',
+      original: '/specification/70206/p_c1_col1227_o1.jpg',
     }
   },
   {
