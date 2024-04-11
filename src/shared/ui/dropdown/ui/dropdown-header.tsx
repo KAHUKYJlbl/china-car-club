@@ -2,10 +2,10 @@ import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import useClickOutside from '../../../lib/hooks/use-click-outside';
 import { useAppDispatch } from '../../../lib/hooks/use-app-dispatch';
+import { setAutoLocation } from '../../../../entities/user';
 
 import { DropdownExtraListType, DropdownListType } from '../lib/types';
 import classes from './dropdown-header.module.sass';
-import { setAutoLocation } from '../../../../entities/user';
 
 type DropdownProps = {
   currentElement: number | null;
@@ -37,7 +37,7 @@ export const DropdownHeader = ({
     setCurrentFilter('');
     setCurrentValue('');
 
-    if (list && currentElement) {
+    if (list && currentElement !== null) {
       setCurrentValue(list.find((item) => item.id === currentElement)?.name || '');
     }
   }, [currentElement, isOpen, disabled]);

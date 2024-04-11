@@ -3,12 +3,12 @@
 .wrapper
   display: grid
   grid-template-rows: min-content min-content min-content min-content min-content
-  grid-template-columns: 32% 68%
+  grid-template-columns: 310px 1fr
   gap: 4px
 
   margin-top: 20px
 
-  @media screen and (max-width: 1280px)
+  @media screen and (max-width: 960px)
     display: flex
     flex-direction: column
 
@@ -21,6 +21,9 @@
 
   border-radius: 16px
   background-color: $secondary
+
+  @media screen and (max-width: 960px)
+    height: 75vw
 
 .info
   grid-area: 1 / 2 / 2 / 3

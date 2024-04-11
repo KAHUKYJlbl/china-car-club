@@ -15,6 +15,7 @@ type DropdownProps = {
   placeholder: string;
   list?: DropdownListType[] | null;
   disabled?: boolean;
+  isPrices?: boolean;
 };
 
 export const DropdownBlocks = ({
@@ -23,6 +24,7 @@ export const DropdownBlocks = ({
   list,
   placeholder,
   disabled = false,
+  isPrices = false,
 }: DropdownProps): JSX.Element => {
   const listRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -136,7 +138,7 @@ export const DropdownBlocks = ({
                                 <p>
                                   <span>{item.name}</span>
                                   {
-                                    item.price &&
+                                    item.price && isPrices &&
                                     <span className={classes.price}>
                                       {`↳ Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`}
                                     </span>
