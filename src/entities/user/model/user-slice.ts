@@ -59,7 +59,6 @@ export const userSlice = createSlice({
       };
     },
     setAutoLocation: (state) => {
-      console.log('auto');
       state.city = {
         id: state.city.id,
         manualMode: false,
