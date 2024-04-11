@@ -28,7 +28,7 @@ export const ChooseOptions = memo(
     const currentCurrency = useAppSelector(getCurrentCurrency);
 
     const handleSetCurrency = (currency: Currencies) => {
-      dispatch(setCurrentCurrency(currency))
+      dispatch(setCurrentCurrency(currency));
     };
 
     if (currencyLoadingStatus.isLoading || !currency) {

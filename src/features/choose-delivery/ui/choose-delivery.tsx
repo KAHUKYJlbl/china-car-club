@@ -44,9 +44,11 @@ export const ChooseDelivery = memo(
             cityId: city,
           },
           utm,
-        }));
+        }))
+          .then(() => {
+            dispatch(postRefresh());
+          });
 
-        dispatch(postRefresh());
 
         navigate(queryString.stringifyUrl({
           url: AppRoute.Model,
