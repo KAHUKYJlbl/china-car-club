@@ -1,78 +1,114 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import cn from 'classnames';
 
-import { Dropdown } from '../../../shared/ui/dropdown';
+import { AddsType, Taxes } from '../../../widgets/model-info';
+import { PriceType } from '../../../entities/model';
+import { setCurrentCurrency } from '../../../entities/currency/model/currency-slice';
+import { Currencies, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import priceFormat from '../../../shared/lib/utils/price-format';
 
+import { getTotal } from '../lib/utils/getTotal';
 import classes from './choose-options.module.sass';
 
-enum Currency {
-  RUB = '₽',
-  USD = '$',
-  CNY = '¥',
-};
+type ChooseOptionsProps = {
+  prices: PriceType;
+  options: Record<AddsType, boolean>;
+  optionsHandler: (arg: AddsType) => void;
+  currentTax: Taxes;
+}
 
 export const ChooseOptions = memo(
-  (): JSX.Element => {
-    const [ currentCurrency, setCurrentCurrency ] = useState(Currency.RUB);
-    const [ currentDelivery, setCurrentDelivery ] = useState<number | null>(null);
+  ({ prices, options, optionsHandler, currentTax }: ChooseOptionsProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+    const currency = useAppSelector(getCurrency);
+    const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+    const currentCurrency = useAppSelector(getCurrentCurrency);
+
+    const handleSetCurrency = (currency: Currencies) => {
+      dispatch(setCurrentCurrency(currency));
+    };
+
+    if (currencyLoadingStatus.isLoading || !currency) {
+      return <LoadingSpinner spinnerType='widget' />
+    }
+
 
     return (
       <div className={classes.wrapper}>
-        <Dropdown
-          currentElement={currentDelivery}
-          setCurrent={setCurrentDelivery}
-          list={[{name: 'Москва и города ЦФО', id: 0}]}
-          placeholder='Выберите регион доставки'
-        />
-
         <div className={classes.block}>
           <div className={classes.prices}>
             <span className={classes.price}>
-              0 000 000 {currentCurrency}
+              {
+                `${priceFormat(
+                  getTotal({
+                    totalPrice: currentTax === Taxes.PERS ? prices.withLogisticsPers : prices.withLogisticsCorp,
+                    options,
+                    optionsPrices: {
+                      epts: prices.eptsSbktsUtil,
+                      guarantee: 0,
+                      options: 0
+                    },
+                    currency,
+                    currentCurrency,
+                  })
+                )} ${currentCurrency}`
+              }
             </span>
 
-            Цена на авто под ключ
-
-            <span className={classes.price}>
-              0 000 000 {currentCurrency}
+            <span className={classes.priceLabel}>
+              Итого, поставка<br/>автомобиля из Китая<br/>с растаможкой.
             </span>
-
-            Цена со снижением
 
             <div className={classes.buttons}>
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.RUB})}
-                onClick={() => setCurrentCurrency(Currency.RUB)}
+                className={cn({[classes.current]: currentCurrency === Currencies.RUB})}
+                onClick={() => handleSetCurrency(Currencies.RUB)}
               >
-                {Currency.RUB}
+                {Currencies.RUB}
               </button>
 
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.USD})}
-                onClick={() => setCurrentCurrency(Currency.USD)}
+                className={cn({[classes.current]: currentCurrency === Currencies.USD})}
+                onClick={() => handleSetCurrency(Currencies.USD)}
               >
-                {Currency.USD}
+                {Currencies.USD}
               </button>
 
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.CNY})}
-                onClick={() => setCurrentCurrency(Currency.CNY)}
+                className={cn({[classes.current]: currentCurrency === Currencies.CNY})}
+                onClick={() => handleSetCurrency(Currencies.CNY)}
               >
-                {Currency.CNY}
+                {Currencies.CNY}
               </button>
             </div>
           </div>
 
           <div className={classes.options}>
-            <div className={classes.optionsItem}>
-              Выбрать доп.опции
+            <div
+              onClick={() => optionsHandler('epts')}
+              className={cn(
+                classes.optionsItem,
+                {[classes.current]: options.epts}
+              )}
+            >
+              ЭПТС и СБКТС
             </div>
 
-            <div className={classes.optionsItem}>
-              ЭПТС и утильсбор
+            <div className={cn(classes.optionsItem, classes.disabled)}>
+              Доп. товары на авто
             </div>
 
-            <div className={classes.optionsItem}>
+            <div
+              onClick={() => optionsHandler('guarantee')}
+              className={cn(
+                classes.disabled,
+                classes.optionsItem,
+                {[classes.current]: options.guarantee}
+              )}
+            >
               Гарантия на авто
             </div>
           </div>

@@ -12,19 +12,11 @@ export const InfoBar = memo(
 
         <div className={classes.row}>
           <button className={classes.button}>
-            Сравнить все комплектации ↗
+            История цены
           </button>
 
           <button className={classes.button}>
-            360° обзор ↗
-          </button>
-
-          <button className={classes.button}>
-            История цены в Китае
-          </button>
-
-          <button className={classes.button}>
-            Следить за снижением цены
+            Следить за скидками
           </button>
         </div>
       </div>

@@ -3,31 +3,58 @@
 .wrapper
   display: flex
   flex-direction: column
-  gap: 20px
+  gap: 8px
 
   padding: 12px
 
-.top
-  display: flex
-  justify-content: space-between
-
   button
-    padding: 8px 16px
-    border-radius: 24px
+    align-self: flex-start
+
+    min-width: 90px
+    width: 90px
+    height: 24px
+    padding: 4px 16px
+    border-radius: 10px
+    cursor: pointer
+
+    background-color: $secondary
+
     font-size: 12px
     line-height: 15px
 
+  button:hover
+    opacity: 0.8
 
-.header
-  font-size: 18px
-  line-height: 25px
+  .top
+    display: flex
+    justify-content: space-between
+    align-items: center
 
-.bottom
-  display: flex
-  flex-direction: column
-  gap: 4px
 
-.label
-  font-size: 10px
-  line-height: 13px
-  color: $text-secondary
+    .header
+      height: 38px
+      overflow: hidden
+      padding: 0 6px
+
+      font-size: 14px
+      line-height: 18px
+      text-overflow: clip
+
+  .bottom
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    .label
+      padding: 0 6px
+
+      font-size: 12px
+      line-height: 15px
+      color: $text-secondary
+
+    .dropdown-wrapper
+      display: flex
+      gap: 4px
+
+      button
+        height: 40px

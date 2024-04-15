@@ -1,60 +1,71 @@
-import { memo, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { memo } from 'react';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
+import { AppRoute } from '../../../app/provider/router';
 import {
-  fetchSpecificationsInfo,
   getSpecifications,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { Dropdown } from '../../../shared/ui/dropdown';
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { getManufacturersLoadingStatus, getName } from '../../../entities/manufacturer';
+import { DropdownBlocks } from '../../../shared/ui/dropdown';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './specification-info.module.sass';
 
+type SpecificationInfoProps = {
+  isPrices: boolean;
+  setIsPrices: React.Dispatch<React.SetStateAction<boolean>>;
+  currentSpecification: number | null;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
+};
+
 export const SpecificationInfo = memo(
-  (): JSX.Element => {
-    const dispatch = useAppDispatch();
-    const { modelId } = useParams();
+  ({ currentSpecification, setCurrentSpecification, setIsPrices, isPrices }: SpecificationInfoProps): JSX.Element => {
+    const [ searchParams, _setSearchParams ] = useSearchParams();
+    const navigate = useNavigate();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-    const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
+    const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus)
+    const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
 
-    useEffect(() => {
-      setCurrentSpecification(null);
+    if (manufacturersLoadingStatus.isLoading || manufacturersLoadingStatus.isIdle) {
+      return <LoadingSpinner spinnerType='widget' />
+    }
 
-      if (modelId) {
-        dispatch(fetchSpecificationsInfo({
-          modelId: +modelId,
-          filters: {},
-        }));
-      }
-    }, [modelId]);
+    if (!name || !specifications.find((spec) => spec.id === currentSpecification)) {
+      return <Navigate to={AppRoute.NotFound} />
+    }
 
     return (
       <div className={classes.wrapper}>
         <div className={classes.top}>
           <h2 className={classes.header}>
-            LiXang L9
+            {name.manufacturer}<br/>{name.model}
           </h2>
 
-          <button>
-            О машине
+          <button onClick={() => setIsPrices((current) => !current)}>
+            {isPrices ? 'О машине' : 'К ценам'}
           </button>
         </div>
 
         <div className={classes.bottom}>
           <p className={classes.label}>
-            Комплектация нового автомобиля
+            Комплектация автомобиля:
           </p>
 
-          <Dropdown
-            currentElement={currentSpecification}
-            setCurrent={setCurrentSpecification}
-            placeholder='Комплектация'
-            list={specifications}
-            disabled={specificationsLoadingStatus.isLoading}
-          />
+          <div className={classes.dropdownWrapper}>
+            <DropdownBlocks
+              currentElement={currentSpecification}
+              setCurrent={setCurrentSpecification}
+              placeholder='Комплектация'
+              list={specifications}
+              disabled={specificationsLoadingStatus.isLoading}
+              isPrices
+            />
+
+            <button onClick={() => navigate(AppRoute.Main)}>Вернуться</button>
+          </div>
         </div>
       </div>
     )

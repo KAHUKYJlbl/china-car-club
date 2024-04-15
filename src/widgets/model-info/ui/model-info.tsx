@@ -1,50 +1,212 @@
-import { useMediaQuery } from 'react-responsive';
+import { useEffect, useState } from 'react';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { ChooseOptions } from '../../../features/choose-options';
+import { AppRoute } from '../../../app/provider/router';
+import { ChooseOptions, getTotal } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
-import { Currency } from '../../../entities/currency';
+import {
+  fetchSpecificationsImage,
+  fetchSpecificationsInfo,
+  getExtColors,
+  getImagesByColor,
+  getInitSlide,
+  getIntColors,
+  getSpecificationImgLoadingStatus,
+  getSpecificationsLoadingStatus
+} from '../../../entities/specification';
+import { Currency, fetchCurrency, getCurrency, getCurrentCurrency } from '../../../entities/currency';
+import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
+import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { Gallery } from '../../../shared/ui/gallery';
 
+import { AddsType, CurrentColorType } from '../lib/types';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
+import { Techs } from './techs';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
+import { Taxes } from '../lib/const';
 
 export const ModelInfo = (): JSX.Element => {
-  const isDesktop = useMediaQuery({ query: '(min-width: 1281px)' });
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [ searchParams, setSearchParams ] = useSearchParams();
+
+  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+  const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
+  const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
+  const extColors = useAppSelector(getExtColors);
+  const intColors = useAppSelector(getIntColors);
+  const currency = useAppSelector(getCurrency);
+  const currentCurrency = useAppSelector(getCurrentCurrency);
+
+  const [ isPrices, setIsPrices ] = useState(true);
+  const [ currentTax, setCurrentTax ] = useState(Taxes.PERS);
+  const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
+  const [ currentColor, setCurrentColor ] = useState<CurrentColorType>({
+    int: intColors ? intColors[0].color.id : null,
+    ext: extColors ? extColors[0].color?.id : null,
+    isInteriorFirst: false,
+  });
+  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
+
+  const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
+  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
+  const initSlide = useAppSelector((state) => getInitSlide(state, currentColor));
+
+  useEffect(() => {
+    if (specificationImgLoadingStatus.isSuccess) {
+      setCurrentColor({
+        int: intColors ? intColors[0].color.id : null,
+        ext: extColors ? extColors[0].color?.id : null,
+        isInteriorFirst: false,
+      });
+    }
+  }, [specificationImgLoadingStatus.isSuccess]);
+
+  useEffect(() => {
+    if (searchParams.get('model')) {
+      dispatch(fetchModel(searchParams.get('model')!));
+      dispatch(fetchSpecificationsInfo({
+        modelId: Number(searchParams.get('model')),
+        filters: {},
+      }));
+      dispatch(fetchCurrency());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentSpecification) {
+      dispatch( fetchSpecificationsImage(currentSpecification) );
+    }
+  }, [currentSpecification]);
+
+  useEffect(() => {
+    if (manufacturersLoadingStatus.isIdle) {
+      dispatch(fetchManufacturers());
+    }
+  }, [manufacturersLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (currentSpecification) {
+      setSearchParams({
+        model: searchParams.get('model')!,
+        spec: currentSpecification.toString(),
+      });
+    }
+  }, [currentSpecification]);
+
+  useEffect(() => {
+    if ( modelLoadingStatus.isFailed ) {
+      navigate(AppRoute.NotFound);
+    }
+  }, [modelLoadingStatus.isFailed]);
+
+  const toggleAdds = (add: AddsType) => {
+    setAdds((current) => ({
+      ...current,
+      [add]: !current[add]
+    }));
+  };
+
+  if (
+    specificationImgLoadingStatus.isLoading
+    || specificationsLoadingStatus.isLoading
+    || manufacturersLoadingStatus.isLoading
+    || modelLoadingStatus.isLoading
+    || !specificationParams
+    || !currency
+  ) {
+    return <LoadingSpinner spinnerType='page' />
+  }
+
+  if (!searchParams.get('model') || !searchParams.get('spec') ) {
+    return <Navigate to={AppRoute.NotFound} />
+  }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery />
+        <Gallery
+          galleryList={imgList}
+          specificationId={currentSpecification}
+          modelId={Number(searchParams.get('model'))}
+          initSlide={initSlide}
+        />
+      </div>
+
+      <div className={classes.info}>
+        <InfoBar currentSpecification={currentSpecification} />
+      </div>
+
+      <div className={classes.specification}>
+        <SpecificationInfo
+          isPrices={isPrices}
+          setIsPrices={setIsPrices}
+          currentSpecification={currentSpecification}
+          setCurrentSpecification={setCurrentSpecification}
+        />
       </div>
 
       {
-        isDesktop &&
-        <div className={classes.info}>
-          <InfoBar />
+        !isPrices &&
+        <div className={classes.techs}>
+          <Techs techs={specificationParams} setColor={setCurrentColor} />
         </div>
       }
 
-      <div className={classes.specification}>
-        <SpecificationInfo />
-      </div>
+      {
+        isPrices &&
+        <>
+          <div className={classes.pricesWrapper}>
+            <div className={classes.prices}>
+              <Prices
+                prices={specificationParams.price}
+                adds={adds}
+                currentTax={currentTax}
+                setCurrentTax={setCurrentTax}
+              />
+            </div>
 
-      <div className={classes.prices}>
-        <Prices />
-      </div>
+            <div className={classes.addOptions}>
+              <ChooseOptions
+                prices={specificationParams.price}
+                options={adds}
+                optionsHandler={toggleAdds}
+                currentTax={currentTax}
+              />
+            </div>
+          </div>
 
-      <div className={classes.addOptions}>
-        <ChooseOptions />
-      </div>
+          <div className={classes.currency}>
+            <Currency />
+          </div>
 
-      <div className={classes.currency}>
-        <Currency />
-      </div>
-
-      <div className={classes.buttons}>
-        <OrderButtons />
-      </div>
+          <div className={classes.buttons}>
+            <OrderButtons
+              specificationId={currentSpecification}
+              epts={adds.epts}
+              totalPrice={Number(
+                getTotal({
+                  totalPrice: currentTax === Taxes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
+                  options: adds,
+                  optionsPrices: {
+                    epts: specificationParams.price.eptsSbktsUtil,
+                    guarantee: 0,
+                    options: 0
+                  },
+                  currency,
+                  currentCurrency,
+                })
+              )}
+            />
+          </div>
+        </>
+      }
     </div>
   )
 }

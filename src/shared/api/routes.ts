@@ -1,6 +1,13 @@
 export enum APIRoute {
-  Catalog = '/',
-  Filters = '?',
-  Models = 'manufacturerId=',
-  Specifications = 'seriesId=',
+  Catalog = '/calc/manufacturers',
+  Model = '/calc/series/:id',
+  Spec = '',
+  SpecImages = '/calc/specification/:id/images',
+  Currency = '/exchange-rates',
+  AuthHash = '/auth/generate-hash',
+  AuthSms = '/auth/init',
+  AuthConfirm = '/auth/confirm',
+  AuthRefresh = '/auth/refresh',
+  PostStatistics = '/statistics/car-calculation',
+  PostOrder = '/statistics/car-order',
 }
