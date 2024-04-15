@@ -17,20 +17,24 @@ import { FilterId } from '../../filter/lib/types';
 import classes from './choose-model.module.sass';
 
 type ChooseModelProps = {
+  isPromo: boolean;
   currentManufacturer: number | null;
   setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial< Record< FilterId, number[] > >;
 }
 
 export const ChooseModel = memo(
   ({
+    isPromo,
     currentManufacturer,
     setCurrentManufacturer,
     currentModel,
     setCurrentModel,
-    activeFilters
+    setCurrentSpecification,
+    activeFilters,
   }: ChooseModelProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
@@ -41,7 +45,10 @@ export const ChooseModel = memo(
     const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
 
     useEffect(() => {
-      setCurrentModel(null);
+      if ( !isPromo ) {
+        setCurrentModel(null);
+        setCurrentSpecification(null);
+      }
 
       if (currentManufacturer) {
         dispatch(fetchManufacturersWithSpectsCount({
@@ -52,8 +59,9 @@ export const ChooseModel = memo(
     }, [currentManufacturer]);
 
     useEffect(() => {
-      setCurrentManufacturer(null);
-      setCurrentModel(null);
+      if ( !isPromo ) {
+        setCurrentManufacturer(null);
+      }
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.manufacturersCount]);
 
     if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
@@ -64,7 +72,11 @@ export const ChooseModel = memo(
       <div className={classes.wrapper}>
         <div className={classes.count}>
           <p>
-            {carsCount.manufacturersCount} марок • {carsCount.seriesCount} моделей • {carsCount.specificationsCount} комплектаций
+            {carsCount.manufacturersCount} марок
+            <span>•</span>
+            {carsCount.seriesCount} моделей
+            <span>•</span>
+            {carsCount.specificationsCount} комплектаций
           </p>
         </div>
 
@@ -74,6 +86,10 @@ export const ChooseModel = memo(
             setCurrent={setCurrentManufacturer}
             placeholder={'Марка'}
             list={manufacturersList}
+            extraListHeader={{
+              basicListHeader: 'Все марки',
+              extraListHeader: 'Популярные',
+            }}
           />
 
           <Dropdown

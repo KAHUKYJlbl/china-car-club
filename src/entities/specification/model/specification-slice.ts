@@ -3,18 +3,27 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-import { SpecificationType } from '../lib/types';
+import { SpecificationImageType, SpecificationType } from '../lib/types';
 import { fetchSpecifications } from './api-actions/fetch-specifications';
 import { fetchSpecificationsInfo } from './api-actions/fetch-specification-info';
+import { fetchSpecificationsImage } from './api-actions/fetch-specification-image';
 
 type InitialState = {
   specifications: SpecificationType[];
+  specificationImg: SpecificationImageType;
   specificationsLoadingStatus: FetchStatus;
+  specificationImgLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
   specifications: [],
+  specificationImg: {
+    external: [],
+    interior: [],
+    official: [],
+  },
   specificationsLoadingStatus: FetchStatus.Idle,
+  specificationImgLoadingStatus: FetchStatus.Idle,
 };
 
 export const specificationSlice = createSlice({
@@ -53,6 +62,16 @@ export const specificationSlice = createSlice({
       })
       .addCase(fetchSpecificationsInfo.rejected, (state) => {
         state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationsImage.fulfilled, (state, action) => {
+        state.specificationImg = action.payload;
+        state.specificationImgLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationsImage.pending, (state) => {
+        state.specificationImgLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationsImage.rejected, (state) => {
+        state.specificationImgLoadingStatus = FetchStatus.Failed;
       });
   },
 });

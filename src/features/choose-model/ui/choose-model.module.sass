@@ -12,12 +12,22 @@
 
   height: 24px
 
-  font-size: 10px
-  line-height: 13px
+  font-size: 12px
+  line-height: 15px
   font-weight: 700
 
+  @media screen and (max-width: 1280px)
+    align-items: flex-start
+
+  @media screen and (max-width: 640px)
+    font-size: 10px
+    line-height: 13px
+
   p
-    margin-bottom: 10px
+    padding-left: 4px
+
+    span
+      margin: 0 2px
 
 
 .controls

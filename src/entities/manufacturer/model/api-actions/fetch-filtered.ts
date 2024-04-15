@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 
-import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
+import { AppDispatch, State } from '../../../../app/provider/store';
 import { FilterId } from '../../../../features/filter';
 
 import { ManufacturersWithSpecsCountType } from '../../lib/types';
@@ -20,9 +20,11 @@ export const fetchFiltered = createAsyncThunk<
   'Manufacturer/fetchFiltered',
   async (filters, {extra: axios}) => {
     try {
-      const { data } = await axios.get<ManufacturersWithSpecsCountType>(
-        `${APIRoute.Filters}${getFiltersQuery(filters)}`
-      );
+      const { data } = await axios.get<ManufacturersWithSpecsCountType>([
+        APIRoute.Catalog,
+        '?',
+        getFiltersQuery(filters),
+      ].join(''));
 
       return data;
     } catch (err) {

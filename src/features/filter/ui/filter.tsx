@@ -1,10 +1,8 @@
 import { memo, useState } from 'react';
 import cn from 'classnames';
 
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { fetchFiltered } from '../../../entities/manufacturer';
-
-import { FILTERS } from '../lib/filters';
+import useActiveFilters from '../lib/hooks/use-active-filters';
+import { FILTERS } from '../../../app/settings/filters';
 import { FilterId } from '../lib/types';
 import classes from './filter.module.sass';
 
@@ -15,47 +13,55 @@ type FolterProps = {
 
 export const Filter = memo(
   ({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
-    const dispatch = useAppDispatch();
     const [ currentFilter, setCurrentFilter ] = useState(Object.keys(FILTERS)[0] as FilterId);
+    const isActiveFilters = useActiveFilters(activeFilters);
 
     const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
       const newFilters = {
         ...activeFilters,
-        [filter]: activeFilters[filter]
-          ? activeFilters[filter]?.includes(elementId)
-            ? activeFilters[filter]?.filter((element) => element !== elementId)
-            : activeFilters[filter]?.concat(elementId)
-          : [elementId]
+        [filter]:
+          activeFilters[filter]
+            ? activeFilters[filter]?.includes(elementId)
+              ? activeFilters[filter]?.filter((element) => element !== elementId)
+              : activeFilters[filter]?.concat(elementId)
+            : [elementId]
       };
 
       setActiveFilters((current) => ({
         ...current,
         ...newFilters
       }));
-
-      dispatch(fetchFiltered(newFilters));
     };
 
-    const handleClearFilterClick = () => {
-      const newFilters = {
-        ...activeFilters,
-        [currentFilter]: [],
-      };
+    const handleClearFilterClick = (currentFilter: FilterId) => {
+      let newFilters: Partial<Record<FilterId, number[]>>;
+
+      if (currentFilter === 'other') {
+        newFilters = {
+          ...activeFilters,
+          seats: [],
+          powerReserve: [],
+          acceleration: [],
+          date: [],
+          clearance: [],
+        };
+      } else {
+        newFilters = {
+          ...activeFilters,
+          [currentFilter]: [],
+        };
+      }
 
       setActiveFilters((current) => ({
         ...current,
         ...newFilters
       }));
-
-      dispatch(fetchFiltered(newFilters));
     }
 
     const handleClearAllFiltersClick = () => {
       const newFilters = {};
 
       setActiveFilters(newFilters);
-
-      dispatch(fetchFiltered(newFilters));
     }
 
     return (
@@ -63,13 +69,16 @@ export const Filter = memo(
         <div className={classes.headerRow}>
           <p>Фильтр автомобилей</p>
 
-          <div className={classes.buttonWrapper}>
-            <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
-              <svg width="16" height="16" aria-hidden="true">
-                <use xlinkHref="#x" />
-              </svg>
-            </button>
-          </div>
+          {
+            isActiveFilters &&
+            <div className={classes.buttonWrapper}>
+              <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+                <svg width="16" height="16" aria-hidden="true">
+                  <use xlinkHref="#x" />
+                </svg>
+              </button>
+            </div>
+          }
         </div>
 
         <div className={classes.row}>
@@ -87,13 +96,11 @@ export const Filter = memo(
                     activeFilters[filter as FilterId] !== undefined
                     && activeFilters[filter as FilterId]?.length !== 0
                   )
-                  || (filter === 'other' && FILTERS.other?.elements.some((element) =>
-                    (
-                      element.filterId
-                      && (activeFilters[element.filterId] !== undefined)
-                      && (activeFilters[element.filterId]?.length !== 0)
-                    )
-                  )))
+                  || (filter === 'other' && FILTERS.other?.elements.some((element) => (
+                    element.filterId
+                    && activeFilters[element.filterId]
+                    && ( activeFilters[element.filterId]?.length !== 0 )
+                  ))))
                   && <div className={classes.activeFilter} />
                 }
               </div>
@@ -124,11 +131,19 @@ export const Filter = memo(
             ))
           }
 
-          <button className={classes.xButton} onClick={handleClearFilterClick}>
-            <svg width="16" height="16" aria-hidden="true">
-              <use xlinkHref="#x" />
-            </svg>
-          </button>
+          {
+            ((activeFilters[currentFilter] && activeFilters[currentFilter]?.length !== 0) ||
+            (currentFilter === 'other' && FILTERS.other?.elements.some((element) => (
+              element.filterId
+              && activeFilters[element.filterId]
+              && ( activeFilters[element.filterId]?.length !== 0 )
+            )))) &&
+            <button className={classes.xButton} onClick={() => handleClearFilterClick(currentFilter)}>
+              <svg width="16" height="16" aria-hidden="true">
+                <use xlinkHref="#x" />
+              </svg>
+            </button>
+          }
         </div>
       </div>
     )

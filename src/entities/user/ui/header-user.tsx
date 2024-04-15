@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
-import { HeaderButton } from "../../../shared/ui/header-button/header-button";
+import { HeaderButton } from "../../../shared/ui/header-button/ui/header-button";
 
 import { useGeolocation } from "../lib/hooks/use-geolocation";
 import { fetchCity } from "../model/api-actons/fetch-city";
