@@ -100,6 +100,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
               <span>Введите номер телефона:</span>
 
               <InputMask
+                autoComplete="off"
                 className={classes.input}
                 mask={getMask()}
                 maskChar=" "
@@ -141,6 +142,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
               <span>Введите код из сообщения:</span>
 
               <InputMask
+                autoComplete="off"
                 className={classes.input}
                 mask="99999"
                 maskChar=" "

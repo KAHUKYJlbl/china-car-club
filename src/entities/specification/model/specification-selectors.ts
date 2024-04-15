@@ -81,6 +81,7 @@ export const getSpecifications = createSelector(
     id: specification.id,
     price: specification.priceWithLogisticsByCurrentDay?.price,
     year: specification.year,
+    chinaPrice: specification.priceByCurrentDay.dealerPrice || specification.priceByCurrentDay.factoryPrice,
   }))
 );
 
