@@ -143,8 +143,8 @@ export const DropdownBlocks = ({
                                     <span className={classes.price}>
                                       {
                                         isPrices
-                                          ? `↳ Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`
-                                          : `↳ В Китае: ${priceFormat( (item.chinaPrice * currency!.cny).toFixed() )} ₽`
+                                          ? `Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`
+                                          : `В Китае: ${priceFormat( (item.chinaPrice * currency!.cny).toFixed() )} ₽`
                                       }
                                     </span>
                                   }
