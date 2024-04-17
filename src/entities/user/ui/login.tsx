@@ -33,11 +33,25 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
 
   const getMask = () => {
     const phone = unmask(watchInit('msisdn'));
-    if (phone.startsWith('7')) return '+9 (999) 999-99-99';
-    if (phone.startsWith('374') || phone.startsWith('993')) return '+999 (99) 99-99-99';
-    if (phone.startsWith('992') || phone.startsWith('996')) return '+999 (999) 99-99-99';
-    if (phone.startsWith('375') || phone.startsWith('380') || phone.startsWith('994') || phone.startsWith('995') || phone.startsWith('998')) return '+999 (99) 999-99-99';
-    if (phone !== '') toast.error('Мы не можем отправить сообзение в вашу страну');
+    if (phone.startsWith('7')) {
+      toast.dismiss();
+      return '+9 (999) 999-99-99';
+    }
+    if (phone.startsWith('374') || phone.startsWith('993')) {
+      toast.dismiss();
+      return '+999 (99) 99-99-99';
+    }
+    if (phone.startsWith('992') || phone.startsWith('996')) {
+      toast.dismiss();
+      return '+999 (999) 99-99-99';
+    }
+    if (phone.startsWith('375') || phone.startsWith('380') || phone.startsWith('994') || phone.startsWith('995') || phone.startsWith('998')) {
+      toast.dismiss();
+      return '+999 (99) 999-99-99';
+    }
+    if (phone !== '') {
+      toast.error('Мы не можем отправить сообщение в вашу страну', {toastId: 'phoneError'});
+    }
     return '+999999999999999';
   }
 
