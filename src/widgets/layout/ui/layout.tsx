@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Outlet } from 'react-router-dom';
 
 import { SvgSprite } from '../../../shared/ui/svg-sprite';
 
@@ -10,7 +11,7 @@ type LayoutProps = {
  title?: string;
 };
 
-export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>): JSX.Element => {
+export const Layout = ({ title }: PropsWithChildren<LayoutProps>): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <Helmet>
@@ -31,7 +32,9 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>): JSX
         </p>
       </div>
 
-      {children}
+      <Outlet />
+
+      {/* {children} */}
     </div>
   )
 }
