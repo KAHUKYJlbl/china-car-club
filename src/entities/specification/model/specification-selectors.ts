@@ -113,9 +113,13 @@ export const getPrice = createSelector(
 export const getCheapestSpecification = createSelector(
   getRawSpecifications,
   (specifications) => (
-    specifications.toSorted(
-      (a, b) => a.priceWithLogisticsByCurrentDay?.price - b.priceWithLogisticsByCurrentDay?.price
+    specifications
+    .toSorted((a, b) =>
+    b.year - a.year || a.priceWithLogisticsByCurrentDay?.price - b.priceWithLogisticsByCurrentDay?.price
     )[0]
+    // .toSorted((a, b) =>
+    //   b.year - a.year
+    // )[0]
   )
 )
 
