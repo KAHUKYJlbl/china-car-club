@@ -14,13 +14,13 @@ import {
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
-import { Currency, fetchCurrency, getCurrency, getCurrentCurrency } from '../../../entities/currency';
-import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
+import { Currency, fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
+import { fetchManufacturers, getManufacturerByModel, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { Gallery } from '../../../shared/ui/gallery';
+import { Gallery } from '../../../entities/gallery';
 
 import { AddsType, CurrentColorType } from '../lib/types';
 import { InfoBar } from './info-bar';
@@ -36,6 +36,7 @@ export const ModelInfo = (): JSX.Element => {
   const [ searchParams, setSearchParams ] = useSearchParams();
 
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+  const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
@@ -43,6 +44,7 @@ export const ModelInfo = (): JSX.Element => {
   const intColors = useAppSelector(getIntColors);
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
+  const manufacturerId = useAppSelector((state) => getManufacturerByModel( state, Number( searchParams.get('model') ) ));
 
   const [ isPrices, setIsPrices ] = useState(true);
   const [ currentTax, setCurrentTax ] = useState(Taxes.PERS);
@@ -75,7 +77,6 @@ export const ModelInfo = (): JSX.Element => {
         modelId: Number(searchParams.get('model')),
         filters: {},
       }));
-      dispatch(fetchCurrency());
     }
   }, []);
 
@@ -90,6 +91,12 @@ export const ModelInfo = (): JSX.Element => {
       dispatch(fetchManufacturers());
     }
   }, [manufacturersLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (currencyLoadingStatus.isIdle) {
+      dispatch(fetchCurrency());
+    }
+  }, [currencyLoadingStatus.isIdle]);
 
   useEffect(() => {
     if (currentSpecification) {
@@ -135,6 +142,7 @@ export const ModelInfo = (): JSX.Element => {
           galleryList={imgList}
           specificationId={currentSpecification}
           modelId={Number(searchParams.get('model'))}
+          manufacturerId={manufacturerId}
           initSlide={initSlide}
         />
       </div>
