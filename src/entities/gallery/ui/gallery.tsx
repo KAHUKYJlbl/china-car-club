@@ -81,8 +81,8 @@ export const Gallery = memo(
     const handlePagination = useCallback( setCurrentImage, [] );
 
     const handlePromoClick = () => {
-      if (handlePromo && manufacturerId && gallery) {
-        handlePromo(manufacturerId, gallery[currentImage].model.id, gallery[currentImage].specificationId);
+      if (handlePromo && gallery) {
+        handlePromo(gallery[currentImage].manufacturer.id, gallery[currentImage].model.id, gallery[currentImage].specificationId);
       }
     }
 
