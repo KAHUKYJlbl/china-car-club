@@ -23,7 +23,8 @@ export const getCurrency = createSelector(
 export const getCurrencyLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Currency].currencyLoadingStatus,
   (status) => ({
-    isLoading: [FetchStatus.Idle, FetchStatus.Pending].includes(status),
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
   })

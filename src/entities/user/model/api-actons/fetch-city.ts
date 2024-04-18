@@ -6,7 +6,6 @@ import { DEFAULT_CITY, DROPDOWN_CITIES } from '../../../../app/settings/cities';
 
 import { LocationType } from '../../lib/types';
 
-
 export const fetchCity = createAsyncThunk<
   number,
   LocationType,

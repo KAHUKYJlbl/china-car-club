@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { Gallery } from '../../../shared/ui/gallery';
+import { Gallery, getPromoGalleryLoadingStatus, fetchPromo } from '../../../entities/gallery';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { fetchSpecificationsImage, getDefaultImages, getSpecificationImgLoadingStatus, setSpecsIdle } from '../../../entities/specification';
-import { Currency, fetchCurrency } from '../../../entities/currency';
-import { fetchManufacturers } from '../../../entities/manufacturer';
+import { Currency, fetchCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
+import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { setIdle } from '../../../entities/model';
 import { ChooseModel } from '../../../features/choose-model';
 import { ChooseDelivery } from '../../../features/choose-delivery';
@@ -19,6 +19,9 @@ import useFilters from '../lib/hooks/use-filters';
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
+  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+  const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+  const galleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
 
   const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
@@ -32,11 +35,27 @@ export const Calculator = (): JSX.Element => {
 
   useEffect(() => {
     setCurrentSpecification(null);
-    dispatch(fetchManufacturers());
     dispatch(setIdle());
     dispatch(setSpecsIdle());
-    dispatch(fetchCurrency());
   }, []);
+
+  useEffect(() => {
+    if (manufacturersLoadingStatus.isIdle) {
+      dispatch(fetchManufacturers());
+    }
+  }, [manufacturersLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (currencyLoadingStatus.isIdle) {
+      dispatch(fetchCurrency());
+    }
+  }, [currencyLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (galleryLoadingStatus.isIdle) {
+      dispatch(fetchPromo());
+    }
+  }, [galleryLoadingStatus.isIdle]);
 
   useEffect(() => {
     if (currentSpecification) {
@@ -66,6 +85,7 @@ export const Calculator = (): JSX.Element => {
             galleryList={imgList}
             specificationId={currentSpecification}
             modelId={currentModel}
+            manufacturerId={currentManufacturer}
           />
         }
       </div>
