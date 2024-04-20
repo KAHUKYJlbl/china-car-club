@@ -112,7 +112,6 @@ export const userSlice = createSlice({
       .addCase(fetchCity.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
       });
-
   },
 });
 

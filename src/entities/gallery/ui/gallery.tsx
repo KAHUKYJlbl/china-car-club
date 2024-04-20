@@ -1,18 +1,19 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
-import PROMO_GALLERY from '../../../../app/settings/gallery';
-import { useAppSelector } from '../../../lib/hooks/use-app-selector';
-import { getManufacturerByModel, getName } from '../../../../entities/manufacturer';
-import { ImgUrlType } from '../../../../entities/specification';
-import { LoadingSpinner } from '../../loading-spinner';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { getName } from '../../../entities/manufacturer';
+import { ImgUrlType } from '../../../entities/specification';
 
 import { GalleryPagination } from './gallery-pagination';
+import { getPromoGallery, getPromoGalleryLoadingStatus } from '../model/gallery-selectors';
 import { GalleryType } from '../lib/types';
 import classes from './gallery.module.sass';
 
 type GalleryProps = {
   handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void) | null;
+  manufacturerId: number | null | undefined;
   specificationId: number | null;
   modelId: number | null;
   galleryList?: ImgUrlType[];
@@ -20,11 +21,12 @@ type GalleryProps = {
 }
 
 export const Gallery = memo(
-  ({ specificationId, modelId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
+  ({ specificationId, modelId, manufacturerId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
     const [ currentImage, setCurrentImage ] = useState(initSlide);
     const [ gallery, setGallery ] = useState<GalleryType[] | null>(null);
-    const name = useAppSelector((state) => getName(state, gallery && gallery[currentImage].modelId));
-    const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, gallery && gallery[currentImage].modelId));
+    const name = useAppSelector((state) => getName(state, modelId));
+    const promoGallery = useAppSelector(getPromoGallery);
+    const promoGalleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
 
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
@@ -40,18 +42,25 @@ export const Gallery = memo(
     }, [initSlide]);
 
     useEffect(() => {
-      if (specificationId && modelId && galleryList) {
+      if (specificationId && modelId && manufacturerId && galleryList) {
         setGallery(galleryList.map((url) => ({
             specificationId: specificationId as number,
-            modelId: modelId as number,
+            model: {
+              id: modelId as number,
+              name: name?.model as string,
+            },
+            manufacturer: {
+              id: manufacturerId as number,
+              name: name?.manufacturer as string,
+            },
             url,
         })));
       }
 
       if (handlePromo) {
-        setGallery(PROMO_GALLERY);
+        setGallery(promoGallery);
       }
-    }, [specificationId, galleryList]);
+    }, [specificationId, galleryList, promoGallery.length]);
 
     function handleNext () {
       setCurrentImage((current) =>
@@ -72,12 +81,17 @@ export const Gallery = memo(
     const handlePagination = useCallback( setCurrentImage, [] );
 
     const handlePromoClick = () => {
-      if (handlePromo && manufacturerId && gallery) {
-        handlePromo(manufacturerId, gallery[currentImage].modelId, gallery[currentImage].specificationId);
+      if (handlePromo && gallery) {
+        handlePromo(gallery[currentImage].manufacturer.id, gallery[currentImage].model.id, gallery[currentImage].specificationId);
       }
     }
 
-    if (!gallery) {
+    if (
+      !gallery
+      || gallery.length === 0
+      || promoGalleryLoadingStatus.isIdle
+      || promoGalleryLoadingStatus.isLoading
+    ) {
       return <LoadingSpinner spinnerType='widget' />
     }
 
@@ -109,7 +123,11 @@ export const Gallery = memo(
             }
 
             <p>
-              {`${name?.manufacturer} ${name?.model}`}
+              {
+                name
+                ? `${name?.manufacturer} ${name?.model}`
+                : `${gallery[currentImage].manufacturer.name} ${gallery[currentImage].model.name}`
+              }
             </p>
           </div>
 
