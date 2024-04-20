@@ -1,6 +1,5 @@
 import { PropsWithChildren } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Outlet } from 'react-router-dom';
 
 import { SvgSprite } from '../../../shared/ui/svg-sprite';
 
@@ -11,11 +10,15 @@ type LayoutProps = {
  title?: string;
 };
 
-export const Layout = ({ title }: PropsWithChildren<LayoutProps>): JSX.Element => {
+export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>): JSX.Element => {
   return (
     <div className={classes.wrapper}>
       <Helmet>
-        <title>{title}</title>
+        <title>{title || 'Купить новый автомобиль из Китая под ключ по цене завода'}</title>
+        <meta
+          name='description'
+          content='Заказать новый авто из Китая по выгодной цене. Быстрый онлайн расчёт под ключ. По цене завода и с пожизненной поддержкой запчастями.'
+        />
       </Helmet>
 
       <SvgSprite />
@@ -32,9 +35,7 @@ export const Layout = ({ title }: PropsWithChildren<LayoutProps>): JSX.Element =
         </p>
       </div>
 
-      <Outlet />
-
-      {/* {children} */}
+      {children}
     </div>
   )
 }

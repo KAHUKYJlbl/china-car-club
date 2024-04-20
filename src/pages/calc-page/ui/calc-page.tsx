@@ -1,9 +1,11 @@
 import { Calculator } from '../../../widgets/calculator';
-// import { Layout } from '../../../widgets/layout'
+import { Layout } from '../../../widgets/layout'
 
 const CalcPage = (): JSX.Element => {
   return (
-    <Calculator />
+    <Layout>
+      <Calculator />
+    </Layout>
   )
 }
 
