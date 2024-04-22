@@ -35,7 +35,7 @@
   background-position: center center
   background-repeat: no-repeat
 
-  animation-duration: 650ms
+  animation-duration: 1250ms
   animation-name: pages
 
   img
@@ -45,6 +45,13 @@
 
     border-radius: 16px
 
+.next
+  animation-duration: 350ms
+  animation-name: next
+
+.prev
+  animation-duration: 350ms
+  animation-name: prev
 
 .overlay
   position: relative
@@ -73,23 +80,19 @@
   display: flex
   gap: 4px
 
+@keyframes next
+  0%
+    transform: rotate(7deg) skewY(5deg) scale(0.9)
+    filter: blur(6px)
+    opacity: 0.6
+
+@keyframes prev
+  0%
+    transform: rotate(-7deg) skewY(-5deg) scale(0.9)
+    filter: blur(6px)
+    opacity: 0.6
+
 @keyframes pages
   0%
-    opacity: 0.4
-    filter: grayscale(0.7)
-
-  25%
-    opacity: 0.5
-    filter: grayscale(0.45)
-
-  50%
-    opacity: 0.65
-    filter: grayscale(0.25)
-
-  75%
-    opacity: 0.85
-    filter: grayscale(0.1)
-
-  100%
-    opacity: 1
-    filter: grayscale(0)
+    filter: blur(6px) brightness(0.6)
+    opacity: 0.7

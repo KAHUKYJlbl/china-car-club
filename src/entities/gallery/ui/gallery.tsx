@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
+import cn from 'classnames';
 
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
@@ -22,6 +23,7 @@ type GalleryProps = {
 
 export const Gallery = memo(
   ({ specificationId, modelId, manufacturerId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
+    const [ isNext, setIsNext ] = useState<boolean | null>(null);
     const [ currentImage, setCurrentImage ] = useState(initSlide);
     const [ gallery, setGallery ] = useState<GalleryType[] | null>(null);
     const name = useAppSelector((state) => getName(state, modelId));
@@ -63,6 +65,7 @@ export const Gallery = memo(
     }, [specificationId, galleryList, promoGallery.length]);
 
     function handleNext () {
+      setIsNext(true);
       setCurrentImage((current) =>
         current + 1 === gallery!.length
         ? 0
@@ -71,6 +74,7 @@ export const Gallery = memo(
     };
 
     function handlePrev () {
+      setIsNext(false);
       setCurrentImage((current) =>
         current === 0
         ? gallery!.length - 1
@@ -78,7 +82,12 @@ export const Gallery = memo(
       )
     };
 
-    const handlePagination = useCallback( setCurrentImage, [] );
+    function handlePage (page: number) {
+      setIsNext(null);
+      setCurrentImage(page);
+    }
+
+    const handlePagination = useCallback( handlePage, [] );
 
     const handlePromoClick = () => {
       if (handlePromo && gallery) {
@@ -102,7 +111,13 @@ export const Gallery = memo(
         {...handlers}
       >
         <div
-          className={classes.background}
+          className={cn(
+            {
+              [classes.next]: isNext,
+              [classes.prev]: isNext === false,
+            },
+            classes.background
+          )}
           style={{
             backgroundImage: `url(${process.env.STATIC_URL}${gallery[currentImage].url.original})`,
             backgroundSize: "cover"
