@@ -89,8 +89,7 @@ export const Gallery = memo(
     if (
       !gallery
       || gallery.length === 0
-      || promoGalleryLoadingStatus.isIdle
-      || promoGalleryLoadingStatus.isLoading
+      || handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading)
     ) {
       return <LoadingSpinner spinnerType='widget' />
     }
