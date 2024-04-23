@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm, SubmitHandler } from "react-hook-form";
 import InputMask from 'react-input-mask';
@@ -9,11 +8,14 @@ import { unmask } from '../../../shared/lib/utils/unmask';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+
 import { postSms } from '../model/api-actons/post-sms';
 import { postConfirm } from '../model/api-actons/post-confirm';
-import { ConfirmFormType } from '../lib/types';
-import { SmsFormType, getUser, getUserLoadingStatus } from '..';
+import { getUser, getUserLoadingStatus } from '../model/user-selectors';
+import { ConfirmFormType, LoginModeType, SmsFormType } from '../lib/types';
 
+// import { LoginPhone } from './login-phone';
+import { LoginInit } from './login-init';
 import classes from './login.module.sass';
 
 type LoginProps = {
@@ -23,7 +25,7 @@ type LoginProps = {
 
 export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const [mode, setMode] = useState <'init' | 'confirm'> ('init');
+  const [ mode, setMode ] = useState<LoginModeType>('init');
 
   const user = useAppSelector(getUser);
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
@@ -64,7 +66,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
       }))
         .then((data) => {
           if (data.meta.requestStatus === 'fulfilled') {
-            setMode('confirm');
+            setMode('confirm-phone');
           } else {
             toast.warning('Ошибка сервиса.');
           }
@@ -106,7 +108,19 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
 
   return (
     <Modal onClose={onClose}>
-      {
+      <div className={classes.wrapper}>
+        {
+          (mode === 'init') &&
+          <LoginInit setMode={setMode} />
+        }
+
+        {/* {
+          (mode === 'phone') &&
+          <LoginPhone />
+        } */}
+      </div>
+
+      {/* {
         (mode === 'init') &&
         <div className={classes.wrapper}>
           <form onSubmit={handleSubmitInit( onInitSubmit, onInitError )}>
@@ -146,10 +160,10 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
             Log in with Telegram
           </Link>
         </div>
-      }
+      } */}
 
       {
-        (mode === 'confirm') &&
+        (mode === 'confirm-phone') &&
         <div className={classes.wrapper}>
           <form onSubmit={handleSubmitConfirm( onConfirmSubmit, onConfirmError )}>
             <label className={classes.sms}>

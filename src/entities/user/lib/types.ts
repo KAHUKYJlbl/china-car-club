@@ -1,3 +1,5 @@
+export type LoginModeType = 'init' | 'phone' | 'confirm-telegram' | 'confirm-phone';
+
 export type UserType = {
   hash: string;
 }
