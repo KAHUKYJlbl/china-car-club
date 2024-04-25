@@ -8,15 +8,17 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import classes from './order-buttons.module.sass';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { toast } from 'react-toastify';
+import { Taxes } from '../lib/const';
 
 type OrderButtonsProps = {
   specificationId: number | null;
   totalPrice: number;
   epts: boolean;
+  currentTax: Taxes;
 }
 
 export const OrderButtons = memo(
-  ({specificationId, totalPrice, epts}: OrderButtonsProps): JSX.Element => {
+  ({specificationId, totalPrice, epts, currentTax}: OrderButtonsProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const geolocation = useAppSelector(getGeolocation);
     const city = useAppSelector(getCurrentCity);
@@ -40,6 +42,7 @@ export const OrderButtons = memo(
             currencyId: currentCurrency,
           },
           availabilityOfEpts: epts,
+          priceTypeId: currentTax === Taxes.PERS ? 2 : 3,
         },
       }));
 

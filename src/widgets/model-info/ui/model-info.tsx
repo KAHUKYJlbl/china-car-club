@@ -198,6 +198,7 @@ export const ModelInfo = (): JSX.Element => {
             <OrderButtons
               specificationId={currentSpecification}
               epts={adds.epts}
+              currentTax={currentTax}
               totalPrice={Number(
                 getTotal({
                   totalPrice: currentTax === Taxes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,

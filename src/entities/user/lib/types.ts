@@ -73,5 +73,6 @@ export type OrderType = {
       currencyId: number,
     },
     availabilityOfEpts: boolean,
+    priceTypeId: number,
   },
 };
