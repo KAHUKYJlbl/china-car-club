@@ -20,7 +20,6 @@ export const LoginInit = ({setMode}: LoginInitProps) => {
     return <LoadingSpinner spinnerType='widget' />
   }
 
-
   return (
     <>
       <div className={classes.wrapper}>
