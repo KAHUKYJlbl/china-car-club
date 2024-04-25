@@ -3,24 +3,44 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-import { SpecificationType } from '../lib/types';
+import { SpecificationImageType, SpecificationType } from '../lib/types';
 import { fetchSpecifications } from './api-actions/fetch-specifications';
 import { fetchSpecificationsInfo } from './api-actions/fetch-specification-info';
+import { fetchSpecificationsImage } from './api-actions/fetch-specification-image';
 
 type InitialState = {
   specifications: SpecificationType[];
+  specificationImg: SpecificationImageType;
   specificationsLoadingStatus: FetchStatus;
+  specificationImgLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
   specifications: [],
+  specificationImg: {
+    external: [],
+    interior: [],
+    official: [],
+  },
   specificationsLoadingStatus: FetchStatus.Idle,
+  specificationImgLoadingStatus: FetchStatus.Idle,
 };
 
 export const specificationSlice = createSlice({
   name: NameSpace.Specification,
   initialState,
-  reducers: {},
+  reducers: {
+    setSpecsIdle: (state) => {
+      state.specifications = [];
+      state.specificationImg = {
+        external: [],
+        interior: [],
+        official: [],
+      };
+      state.specificationsLoadingStatus = FetchStatus.Idle;
+      state.specificationImgLoadingStatus = FetchStatus.Idle;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchSpecifications.fulfilled, (state, action) => {
@@ -42,6 +62,19 @@ export const specificationSlice = createSlice({
       })
       .addCase(fetchSpecificationsInfo.rejected, (state) => {
         state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationsImage.fulfilled, (state, action) => {
+        state.specificationImg = action.payload;
+        state.specificationImgLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationsImage.pending, (state) => {
+        state.specificationImgLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationsImage.rejected, (state) => {
+        state.specificationImgLoadingStatus = FetchStatus.Failed;
       });
   },
 });
+
+export const { setSpecsIdle } = specificationSlice.actions;
+

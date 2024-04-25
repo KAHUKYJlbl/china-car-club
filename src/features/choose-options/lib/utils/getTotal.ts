@@ -1,17 +1,17 @@
-import { CurrencyType } from '../../../../entities/currency';
+import { CurrencyType, getCurrencyExchange } from '../../../../entities/currency';
 import { AddsType } from '../../../../widgets/model-info';
-import { Currency } from '../const';
+import { Currencies } from '../../../../entities/currency';
 
 type getTotalProps = {
   totalPrice: number,
   options: Record<AddsType, boolean>,
   optionsPrices: Record<AddsType, number>,
   currency: CurrencyType,
-  currentCurrency: Currency,
+  currentCurrency: Currencies,
   discount?: number,
 }
 
-const getTotal = ({
+export const getTotal = ({
   totalPrice,
   options,
   optionsPrices,
@@ -30,18 +30,7 @@ const getTotal = ({
     .map((option) => option[1])
     .reduce((acc, option) => acc + option, 0);
 
-  const cnyTotal = totalPrice + ( optionsTotal - discount ) * currency.usd / currency.cny;
+  const cnyTotal = totalPrice + optionsTotal - discount;
 
-  switch (currentCurrency) {
-    case Currency.CNY:
-      return cnyTotal.toFixed();
-    case Currency.RUB:
-      return (cnyTotal * currency.cny).toFixed();
-    case Currency.USD:
-      return (cnyTotal * currency.cny / currency.usd).toFixed();
-    default:
-      return null;
-  }
+  return getCurrencyExchange(cnyTotal, currentCurrency, currency);
 };
-
-export default getTotal;

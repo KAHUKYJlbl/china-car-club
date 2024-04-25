@@ -3,13 +3,6 @@ export type ColorType = {
   hexList: number[];
 }
 
-export type PriceType = {
-  inChina: number,
-  withLogistics: number,
-  tax: number,
-  eptsSbktsUtil: number,
-}
-
 type NameType = {
   ch: string,
   ru: string,
@@ -28,6 +21,26 @@ export type ParamsType = {
     driveType: string,
     transmissionType: string,
   }
+}
+
+export type CustomsType = {
+  final: number,
+  fee: number,
+  duty: number,
+  recyclingFee: number,
+  exciseTax: number,
+  nds: number,
+};
+
+export type PriceApiType = {
+  inChina: number,
+  priceInCityOfReceipt: number,
+  withLogistics: number,
+  tax: number,
+  eptsSbktsUtil: number,
+  borderPrice: number,
+  commission: number,
+  customsClearance: CustomsType,
 }
 
 export type SpecsApiType = {
@@ -62,7 +75,7 @@ export type SpecsApiType = {
       interior: ColorType[],
     },
   };
-  price: PriceType;
+  price: PriceApiType;
 }
 
 export type ModelApiType = {
@@ -84,6 +97,19 @@ export type ModelApiType = {
     };
     specifications: SpecsApiType[];
   }
+}
+
+export type PriceType = {
+  inChina: number,
+  priceInCityOfReceipt: number,
+  withLogisticsPers: number,
+  withLogisticsCorp: number,
+  tax: number,
+  eptsSbktsUtil: number,
+  borderPrice: number,
+  commission: number,
+  customsClearancePers: CustomsType,
+  customsClearanceCorp: CustomsType,
 }
 
 export type SpecsType = {

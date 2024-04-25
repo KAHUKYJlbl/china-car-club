@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { Gallery } from '../../../shared/ui/gallery';
+import { Gallery, getPromoGalleryLoadingStatus, fetchPromo } from '../../../entities/gallery';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { fetchSpecificationsImage, getDefaultImages, getSpecificationImgLoadingStatus, setSpecsIdle } from '../../../entities/specification';
+import { Currency, fetchCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
+import { fetchManufacturers, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { setIdle } from '../../../entities/model';
-import { Currency, fetchCurrency } from '../../../entities/currency';
-import { fetchManufacturers } from '../../../entities/manufacturer';
 import { ChooseModel } from '../../../features/choose-model';
 import { ChooseDelivery } from '../../../features/choose-delivery';
 import { Filter, FilterId } from '../../../features/filter';
@@ -15,20 +18,50 @@ import useFilters from '../lib/hooks/use-filters';
 
 export const Calculator = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
+  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+  const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+  const galleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
+
   const [ activeFilters, setActiveFilters ] = useState< Partial<Record<FilterId, number[]>> >({});
   const [ currentManufacturer, setCurrentManufacturer ] = useState<number | null>(null);
   const [ currentModel, setCurrentModel ] = useState<number | null>(null);
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>(null);
   const [ promoMode, setPromoMode ] = useState(false);
 
+  const imgList = useAppSelector(getDefaultImages);
+
   useFilters(activeFilters);
 
   useEffect(() => {
     setCurrentSpecification(null);
-    dispatch(fetchManufacturers());
     dispatch(setIdle());
-    dispatch(fetchCurrency());
+    dispatch(setSpecsIdle());
   }, []);
+
+  useEffect(() => {
+    if (manufacturersLoadingStatus.isIdle) {
+      dispatch(fetchManufacturers());
+    }
+  }, [manufacturersLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (currencyLoadingStatus.isIdle) {
+      dispatch(fetchCurrency());
+    }
+  }, [currencyLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (galleryLoadingStatus.isIdle) {
+      dispatch(fetchPromo());
+    }
+  }, [galleryLoadingStatus.isIdle]);
+
+  useEffect(() => {
+    if (currentSpecification) {
+      dispatch( fetchSpecificationsImage(currentSpecification) );
+    }
+  }, [currentSpecification]);
 
   const handleFiltersChange = useCallback(setActiveFilters, []);
 
@@ -38,19 +71,23 @@ export const Calculator = (): JSX.Element => {
     setCurrentManufacturer(promoManufacturer);
     setCurrentModel(promoModel);
     setCurrentSpecification(promoSpecification);
-    setTimeout(() => setPromoMode(false), 1000);
+    setTimeout(() => setPromoMode(false), 2000);
   }
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery
-          handlePromo={currentModel ? null : handlePromo}
-          galleryId={{
-            specificationId: currentSpecification,
-            modelId: currentModel,
-          }}
-        />
+        {
+          specificationImgLoadingStatus.isLoading
+          ? <LoadingSpinner spinnerType='widget' />
+          : <Gallery
+            handlePromo={currentSpecification ? null : handlePromo}
+            galleryList={imgList}
+            specificationId={currentSpecification}
+            modelId={currentModel}
+            manufacturerId={currentManufacturer}
+          />
+        }
       </div>
 
       <div className={classes.filter}>

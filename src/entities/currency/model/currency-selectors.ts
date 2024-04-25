@@ -2,6 +2,9 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { NameSpace, State } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
+import { Currencies } from '../lib/const';
+
+export const getCurrentCurrency = (state: State): Currencies => state[NameSpace.Currency].currentCurrency;
 
 export const getCurrency = createSelector(
   (state: State) => state[NameSpace.Currency].currency,
@@ -20,7 +23,8 @@ export const getCurrency = createSelector(
 export const getCurrencyLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Currency].currencyLoadingStatus,
   (status) => ({
-    isLoading: [FetchStatus.Idle, FetchStatus.Pending].includes(status),
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
   })

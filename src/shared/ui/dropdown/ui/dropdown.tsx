@@ -1,22 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
-import classes from './dropdown.module.sass';
 import useClickOutside from '../../../lib/hooks/use-click-outside';
+
+import { DropdownExtraListType, DropdownListType } from '../lib/types';
+import classes from './dropdown.module.sass';
 
 type DropdownProps = {
   currentElement: number | null;
   setCurrent: React.Dispatch<React.SetStateAction< number | null >>;
   placeholder: string;
-  list?: {
-    name: string,
-    id: number,
-    isHighlight?: boolean,
-    sublistLength?: number | null,
-  }[] | null;
-  extraListHeader?: {
-    extraListHeader: string,
-    basicListHeader: string,
-  }
+  list?: DropdownListType[] | null;
+  extraListHeader?: DropdownExtraListType
   disabled?: boolean;
 };
 
@@ -92,6 +86,9 @@ export const Dropdown = ({
         onClick={disabled ? () => null : toggleOpen}
       >
         <input
+          type="text"
+          name="search"
+          autoComplete="off"
           className={classes.currentElement}
           placeholder={disabled ? 'Загрузка...' : placeholder}
           disabled={disabled || !list}
@@ -142,7 +139,9 @@ export const Dropdown = ({
 
             {
               extraListHeader && extraList && extraList.length !== 0 && !currentFilter &&
-              <p className={classes.listHeader}>{extraListHeader.basicListHeader}</p>
+              <p className={classes.listHeader}>
+                {extraListHeader.basicListHeader}
+              </p>
             }
 
             <ul className={classes.list}>
@@ -156,6 +155,7 @@ export const Dropdown = ({
                       onClick={(e) => handleItemClick(item.id, e)}
                     >
                       <span>{item.name}</span>
+
                       <span className={classes.listItemCount}>{ item.sublistLength }</span>
                     </li>
                   ))

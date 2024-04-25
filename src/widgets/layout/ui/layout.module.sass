@@ -1,12 +1,50 @@
+@use '../../../assets/styles/_variables' as *
+
 .wrapper
   max-width: 1200px
   margin: auto
-  padding: 18px 0
+  padding: 24px 24px
 
   @media screen and (max-width: 1280px)
-      max-width: 576px
-      padding: 24px 0
+      max-width: 1024px
 
   @media screen and (max-width: 640px)
-      max-width: 304px
-      padding: 12px 0
+      max-width: 576px
+      padding: 12px 12px
+
+.heading-wrapper
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+  margin-top: 40px
+  padding-left: 16px
+
+  @media screen and (max-width: 1280px)
+    margin-top: 24px
+
+  @media screen and (max-width: 640px)
+    padding-left: 8px
+
+.heading
+  margin: 0
+
+  font-size: 24px
+  font-weight: 700
+  line-height: 28px
+
+  @media screen and (max-width: 1280px)
+    line-height: 25px
+
+  @media screen and (max-width: 480px)
+    font-size: 22px
+
+.subheading
+  font-size: 16px
+  line-height: 20px
+
+  color: $text-light
+
+  @media screen and (max-width: 640px)
+    font-size: 14px
+    line-height: 15px

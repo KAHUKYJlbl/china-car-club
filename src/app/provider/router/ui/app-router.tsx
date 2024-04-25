@@ -1,11 +1,11 @@
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
-import { MainPage } from '../../../../pages/main-page';
 import { NotFound } from '../../../../pages/not-found';
 import { CalcPage } from '../../../../pages/calc-page';
+import { ModelPage } from '../../../../pages/model-page';
 
 import { AppRoute } from '../lib/routes';
-import { ModelPage } from '../../../../pages/model-page';
+import { PrivateRoute } from './private-route';
 
 export const AppRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -13,19 +13,15 @@ export const AppRouter = createBrowserRouter(
       <Route
         path={AppRoute.Main}
         element={
-          <MainPage />
-        }
-      />
-      <Route
-        path={AppRoute.Calc}
-        element={
           <CalcPage />
         }
       />
       <Route
         path={AppRoute.Model}
         element={
-          <ModelPage />
+          <PrivateRoute>
+            <ModelPage />
+          </PrivateRoute>
         }
       />
       <Route

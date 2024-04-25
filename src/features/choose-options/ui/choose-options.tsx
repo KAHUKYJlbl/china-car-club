@@ -1,30 +1,35 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import cn from 'classnames';
 
-import { AddsType } from '../../../widgets/model-info';
-import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
+import { AddsType, Taxes } from '../../../widgets/model-info';
 import { PriceType } from '../../../entities/model';
-import { Dropdown } from '../../../shared/ui/dropdown';
-import priceFormat from '../../../shared/lib/utils/price-format';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-
-import classes from './choose-options.module.sass';
-import getTotal from '../lib/utils/getTotal';
-import { Currency } from '../lib/const';
+import { setCurrentCurrency } from '../../../entities/currency/model/currency-slice';
+import { Currencies, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import priceFormat from '../../../shared/lib/utils/price-format';
+
+import { getTotal } from '../lib/utils/getTotal';
+import classes from './choose-options.module.sass';
 
 type ChooseOptionsProps = {
   prices: PriceType;
   options: Record<AddsType, boolean>;
   optionsHandler: (arg: AddsType) => void;
+  currentTax: Taxes;
 }
 
 export const ChooseOptions = memo(
-  ({ prices, options, optionsHandler }: ChooseOptionsProps): JSX.Element => {
+  ({ prices, options, optionsHandler, currentTax }: ChooseOptionsProps): JSX.Element => {
+    const dispatch = useAppDispatch();
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
-    const [ currentCurrency, setCurrentCurrency ] = useState(Currency.RUB);
-    const [ currentDelivery, setCurrentDelivery ] = useState<number | null>(null);
+    const currentCurrency = useAppSelector(getCurrentCurrency);
+
+    const handleSetCurrency = (currency: Currencies) => {
+      dispatch(setCurrentCurrency(currency));
+    };
 
     if (currencyLoadingStatus.isLoading || !currency) {
       return <LoadingSpinner spinnerType='widget' />
@@ -33,89 +38,55 @@ export const ChooseOptions = memo(
 
     return (
       <div className={classes.wrapper}>
-        <Dropdown
-          currentElement={currentDelivery}
-          setCurrent={setCurrentDelivery}
-          list={[{name: 'Москва и города ЦФО', id: 0}]}
-          placeholder='Выберите регион доставки'
-        />
-
         <div className={classes.block}>
           <div className={classes.prices}>
             <span className={classes.price}>
               {
-                `${priceFormat(String(
+                `${priceFormat(
                   getTotal({
-                    totalPrice: prices.withLogistics,
+                    totalPrice: currentTax === Taxes.PERS ? prices.withLogisticsPers : prices.withLogisticsCorp,
                     options,
                     optionsPrices: {
-                      epts: 1000,
-                      guarantee: 1000,
+                      epts: prices.eptsSbktsUtil,
+                      guarantee: 0,
                       options: 0
                     },
                     currency,
                     currentCurrency,
                   })
-                ))} ${currentCurrency}`
+                )} ${currentCurrency}`
               }
             </span>
 
             <span className={classes.priceLabel}>
-              Цена на авто под ключ
-            </span>
-
-            <span className={classes.price}>
-            {
-                `${priceFormat(String(
-                  getTotal({
-                    totalPrice: prices.withLogistics,
-                    options,
-                    optionsPrices: {
-                      epts: 1000,
-                      guarantee: 1000,
-                      options: 0
-                    },
-                    currency,
-                    currentCurrency,
-                    discount: 5000
-                  })
-                ))} ${currentCurrency}`
-              }
-            </span>
-
-            <span className={classes.priceLabel}>
-              Цена со снижением
+              Итого, поставка<br/>автомобиля из Китая<br/>с растаможкой.
             </span>
 
             <div className={classes.buttons}>
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.RUB})}
-                onClick={() => setCurrentCurrency(Currency.RUB)}
+                className={cn({[classes.current]: currentCurrency === Currencies.RUB})}
+                onClick={() => handleSetCurrency(Currencies.RUB)}
               >
-                {Currency.RUB}
+                {Currencies.RUB}
               </button>
 
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.USD})}
-                onClick={() => setCurrentCurrency(Currency.USD)}
+                className={cn({[classes.current]: currentCurrency === Currencies.USD})}
+                onClick={() => handleSetCurrency(Currencies.USD)}
               >
-                {Currency.USD}
+                {Currencies.USD}
               </button>
 
               <button
-                className={cn({[classes.current]: currentCurrency === Currency.CNY})}
-                onClick={() => setCurrentCurrency(Currency.CNY)}
+                className={cn({[classes.current]: currentCurrency === Currencies.CNY})}
+                onClick={() => handleSetCurrency(Currencies.CNY)}
               >
-                {Currency.CNY}
+                {Currencies.CNY}
               </button>
             </div>
           </div>
 
           <div className={classes.options}>
-            <div className={classes.optionsItem}>
-              Выбрать доп.опции
-            </div>
-
             <div
               onClick={() => optionsHandler('epts')}
               className={cn(
@@ -123,12 +94,17 @@ export const ChooseOptions = memo(
                 {[classes.current]: options.epts}
               )}
             >
-              ЭПТС и утильсбор
+              ЭПТС и СБКТС
+            </div>
+
+            <div className={cn(classes.optionsItem, classes.disabled)}>
+              Доп. товары на авто
             </div>
 
             <div
               onClick={() => optionsHandler('guarantee')}
               className={cn(
+                classes.disabled,
                 classes.optionsItem,
                 {[classes.current]: options.guarantee}
               )}

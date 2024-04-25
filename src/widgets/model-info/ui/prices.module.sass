@@ -6,30 +6,74 @@
 
   padding: 12px
 
-.divider:first-child
-  margin-top: 0
+  .divider:first-child
+    margin-top: 0
 
-.divider
-  display: flex
-  flex-direction: column
-  gap: 4px
+  .divider:last-child
+    border-bottom: none
+    padding-bottom: 0
 
-  margin-top: 8px
-  padding-bottom: 8px
-  border-bottom: 1px solid #B7BBBF
+  .divider
+    display: flex
+    flex-direction: column
+    gap: 3px
 
-.row
-  display: flex
-  justify-content: space-between
+    margin-top: 8px
+    padding-bottom: 8px
+    border-bottom: 1px solid #B7BBBF
 
-  margin-top: 0
+    .row
+      display: flex
+      justify-content: space-between
 
-  font-size: 12px
-  line-height: 18px
+      margin-top: 0
 
-  @media screen and (max-width: 1280px)
-    font-size: 12px
-    line-height: 15px
+      font-size: 12px
+      line-height: 18px
 
-.row-single
-  margin-top: 8px
+      @media screen and (max-width: 1280px)
+        font-size: 12px
+        line-height: 15px
+
+      span
+        color: $text-secondary
+
+      .buttons
+        display: flex
+        gap: 2px
+
+        height: 24px
+
+        button
+          flex-grow: 1
+          padding: 2px 4px
+
+          border-radius: 8px
+          border: 1px solid $primary
+          background-color: $primary
+          cursor: pointer
+
+
+        button:hover
+          border: 1px solid #00000099
+
+        .current
+          background-color: white
+
+        .current:hover
+          border: 1px solid $primary
+          opacity: 1
+
+    .bold
+      font-weight: 700
+
+    button
+      padding: 2px 8px
+
+      border-radius: 8px
+      background-color: $secondary
+
+      cursor: pointer
+
+    button:hover
+      opacity: 0.8
