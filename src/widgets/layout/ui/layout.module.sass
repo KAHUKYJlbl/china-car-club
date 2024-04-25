@@ -3,11 +3,10 @@
 .wrapper
   max-width: 1200px
   margin: auto
-  padding: 12px 0
+  padding: 24px 24px
 
   @media screen and (max-width: 1280px)
       max-width: 1024px
-      padding: 24px 24px
 
   @media screen and (max-width: 640px)
       max-width: 576px
@@ -24,6 +23,9 @@
   @media screen and (max-width: 1280px)
     margin-top: 24px
 
+  @media screen and (max-width: 640px)
+    padding-left: 8px
+
 .heading
   margin: 0
 
@@ -32,13 +34,10 @@
   line-height: 28px
 
   @media screen and (max-width: 1280px)
-    font-size: 24px
     line-height: 25px
 
-  @media screen and (max-width: 640px)
-    text-align: center
-    font-size: 18px
-    line-height: 20px
+  @media screen and (max-width: 480px)
+    font-size: 22px
 
 .subheading
   font-size: 16px
@@ -47,6 +46,5 @@
   color: $text-light
 
   @media screen and (max-width: 640px)
-    text-align: center
     font-size: 14px
     line-height: 15px

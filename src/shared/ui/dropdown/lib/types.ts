@@ -4,6 +4,7 @@ export type DropdownListType = {
   isHighlight?: boolean,
   sublistLength?: number | null,
   price?: number,
+  chinaPrice?: number,
   year?: number,
 }
 

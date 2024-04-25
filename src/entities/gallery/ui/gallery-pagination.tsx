@@ -6,13 +6,13 @@ import classes from './gallery-pagination.module.sass';
 type GalleryPaginationProps = {
   count: number;
   current: number;
-  onClick: React.Dispatch<React.SetStateAction<number>>;
+  onClick: (arg: number) => void;
 }
 
 export const GalleryPagination = memo(
   ({ count, current, onClick }: GalleryPaginationProps): JSX.Element => {
     useEffect(() => {
-      const timeout = setTimeout(() => onClick(current + 1 === count ? 0 : current + 1), 15000);
+      const timeout = setTimeout(() => onClick(current + 1 === count ? 0 : current + 1), 9500);
 
       return () => clearTimeout(timeout);
     }, [current]);

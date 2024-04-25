@@ -1,42 +1,66 @@
 const PROMO_GALLERY = [
   {
-    specificationId: 76883,
-    modelId: 86,
+    specificationId: 82750,
+    modelId: 1513,
     url: {
-      big: 'specification/76883/b_c1_col2749_o1.jpg',
-      original: 'specification/76883/p_c1_col2749_o1.jpg',
+      big: 'specification/82750/b_c1_col3624_o1.jpg',
+      original: 'specification/82750/p_c1_col3624_o1.jpg',
     }
   },
   {
-    specificationId: 70206,
-    modelId: 1249,
+    specificationId: 85538,
+    modelId: 348,
     url: {
-      big: '/specification/70206/b_c1_col1227_o1.jpg',
-      original: '/specification/70206/p_c1_col1227_o1.jpg',
+      big: '/specification/85538/b_c1_col60_o1.jpg',
+      original: '/specification/85538/p_c1_col60_o1.jpg',
     }
   },
   {
-    specificationId: 69449,
-    modelId: 1454,
+    specificationId: 70927,
+    modelId: 625,
     url: {
-      big: '/specification/69449/b_c1_col381_o1.jpg',
-      original: '/specification/69449/p_c1_col381_o1.jpg',
+      big: '/specification/70927/b_c1_col0_o1.jpg',
+      original: '/specification/70927/p_c1_col0_o1.jpg',
     }
   },
   {
-    specificationId: 76333,
-    modelId: 1300,
+    specificationId: 82183,
+    modelId: 747,
     url: {
-      big: '/specification/76333/b_c1_col1684_o1.jpg',
-      original: '/specification/76333/p_c1_col1684_o1.jpg',
+      big: '/specification/82183/b_c1_col3632_o1.jpg',
+      original: '/specification/82183/p_c1_col3632_o1.jpg',
     }
   },
   {
-    specificationId: 78524,
-    modelId: 57,
+    specificationId: 87469,
+    modelId: 305,
     url: {
-      big: '/specification/78524/b_c1_col0_o1.jpg',
-      original: '/specification/78524/p_c1_col0_o1.jpg',
+      big: '/specification/87469/b_c1_col1033_o1.jpg',
+      original: '/specification/87469/p_c1_col1033_o1.jpg',
+    },
+  },
+  {
+    specificationId: 84124,
+    modelId: 518,
+    url: {
+      big: '/specification/84124/b_c1_col0_o1.jpg',
+      original: '/specification/84124/p_c1_col0_o1.jpg',
+    },
+  },
+  {
+    specificationId: 75479,
+    modelId: 1401,
+    url: {
+      big: '/specification/75479/p_c1_col2654_o1.jpg',
+      original: '/specification/75479/b_c1_col2654_o1.jpg',
+    },
+  },
+  {
+    specificationId: 85208,
+    modelId: 1539,
+    url: {
+      big: '/specification/85208/b_c1_col0_o1.jpg',
+      original: '/specification/85208/p_c1_col0_o1.jpg',
     },
   },
 ];

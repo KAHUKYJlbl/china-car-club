@@ -3,61 +3,33 @@
 .wrapper
   display: flex
   flex-direction: column
-  gap: 32px
+  gap: 4px
+
+  width: 310px
+  min-height: 536px
 
   font-family: "CoFoSans", 'Arial', sans-serif
-  font-weight: 400
-  font-size: 16px
+  font-size: 14px
   line-height: 18px
+  font-weight: 400
   color: $text-primary
+  text-align: center
 
-  .sms
-    display: flex
-    flex-direction: column
-    gap: 12px
+.wrapper-loader
+  display: flex
+  flex-direction: column
+  gap: 4px
+  justify-content: center
 
-    span
-      padding-left: 8px
+  width: 310px
+  min-height: 536px
 
-    .input
-      padding: 12px
+  background-color: $primary
+  border-radius: 16px
 
-      border-radius: 12px
-      outline: none
-      text-align: center
-
-    .button
-      padding: 12px 0
-
-      background-color: $accent
-      border-radius: 12px
-      cursor: pointer
-
-      color: white
-
-    .button:active
-      opacity: 0.8
-
-  p
-    color: $text-secondary
-    text-align: center
-    font-size: 16px
-    line-height: 20px
-
-  .return
-    cursor: pointer
-
-  .telegram
-    display: flex
-    gap: 20px
-    padding: 12px 20px
-    width: max-content
-
-    border-radius: 12px
-    background-color: #039BE5
-    color: white
-    cursor: pointer
-
-  .telegram:active
-    opacity: 0.8
-
+  font-family: "CoFoSans", 'Arial', sans-serif
+  font-size: 14px
+  line-height: 18px
+  font-weight: 400
+  color: $text-primary
+  text-align: center

@@ -87,7 +87,9 @@ export const DropdownBlocks = ({
         onClick={disabled ? () => null : toggleOpen}
       >
         <input
-          type='text'
+          type="text"
+          name="search"
+          autoComplete="off"
           className={classes.currentElement}
           placeholder={disabled ? 'Загрузка...' : placeholder}
           disabled={disabled || !list}
@@ -116,7 +118,7 @@ export const DropdownBlocks = ({
           <div className={classes.listWrapper} ref={listRef}>
             {
               Array.from(new Set(list?.map((element) => element.year)))
-                .toSorted((a, b) => (a && b) ? a - b : 0)
+                .toSorted((a, b) => (a && b) ? b - a : 0)
                 .map((year) =>
                   <div key={year}>
                     <p className={classes.listHeader}>
@@ -138,9 +140,13 @@ export const DropdownBlocks = ({
                                 <p>
                                   <span>{item.name}</span>
                                   {
-                                    item.price && isPrices &&
+                                    item.price && item.chinaPrice &&
                                     <span className={classes.price}>
-                                      {`↳ Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`}
+                                      {
+                                        isPrices
+                                          ? `Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`
+                                          : `В Китае: ${priceFormat( (item.chinaPrice * currency!.cny).toFixed() )} ₽`
+                                      }
                                     </span>
                                   }
                                 </p>

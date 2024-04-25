@@ -1,15 +1,15 @@
 import { memo } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { AppRoute } from '../../../app/provider/router';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { getExtColors, getIntColors, getSpecificationImgLoadingStatus } from '../../../entities/specification';
 import { SpecsType } from '../../../entities/model';
 
-import classes from './techs.module.sass';
 import getTechList from '../lib/utils/get-tech-list';
-import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { CurrentColorType } from '../lib/types';
+import classes from './techs.module.sass';
 
 type TechsProps = {
   techs: SpecsType,

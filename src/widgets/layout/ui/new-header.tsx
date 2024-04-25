@@ -5,7 +5,7 @@ import { AppRoute } from '../../../app/provider/router';
 import { DROPDOWN_CITIES } from '../../../app/settings/cities';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { HeaderButton } from '../../../shared/ui/header-button/header-button';
+import { HeaderButton } from '../../../shared/ui/header-button';
 import { DropdownHeader } from '../../../shared/ui/dropdown';
 import { Currencies, getCurrencyName, getCurrentCurrency } from '../../../entities/currency';
 import { getCurrentCity, HeaderUser, setCity } from '../../../entities/user';

@@ -4,4 +4,5 @@ export enum NameSpace {
   Specification = 'Specification',
   Currency = 'Currency',
   User = 'User',
+  Gallery = 'Gallery',
 }

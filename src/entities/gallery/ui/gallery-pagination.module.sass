@@ -1,4 +1,4 @@
-@use '../../../../assets/styles/_variables' as *
+@use '../../../assets/styles/_variables' as *
 
 .wrapper
   display: flex
@@ -13,7 +13,6 @@
     gap: 4px
 
 .bar
-  position: relative
   flex-grow: 1
   height: 4px
   border-radius: 2px
@@ -28,13 +27,10 @@
   background-color: white
 
 .current
-  position: absolute
-  left: 0
-  top: 0
   height: 100%
   width: 100%
   background-color: white
-  animation-duration: 16500ms
+  animation-duration: 11000ms
   animation-name: timer
 
 @keyframes timer

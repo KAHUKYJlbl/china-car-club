@@ -42,6 +42,7 @@ export const userSlice = createSlice({
   reducers: {
     login: (state) => {
       state.isAuth = true;
+      // state.userLoadingStatus = FetchStatus.Success
     },
     logout: (state) => {
       state.user = initialState.user;
@@ -111,7 +112,6 @@ export const userSlice = createSlice({
       .addCase(fetchCity.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
       });
-
   },
 });
 

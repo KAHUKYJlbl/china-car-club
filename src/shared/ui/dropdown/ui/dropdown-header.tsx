@@ -99,7 +99,9 @@ export const DropdownHeader = ({
           </p>
 
           <input
-            type='text'
+            type="text"
+            name="search"
+            autoComplete="off"
             className={classes.currentElement}
             placeholder={disabled ? 'Загрузка...' : placeholder}
             disabled={disabled || !list}
