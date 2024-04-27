@@ -7,10 +7,11 @@ import classes from './info-bar.module.sass';
 
 type InfoBarProps = {
   currentSpecification: number | null;
+  setIsPrices: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const InfoBar = memo(
-  ({currentSpecification} : InfoBarProps): JSX.Element => {
+  ({currentSpecification, setIsPrices} : InfoBarProps): JSX.Element => {
     const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
 
     if (!shorts) {
@@ -24,6 +25,13 @@ export const InfoBar = memo(
         </p>
 
         <div className={classes.row}>
+          <button
+            className={classes.button}
+            onClick={() => setIsPrices((current) => !current)}
+          >
+            Характеристики
+          </button>
+
           <button className={classes.button}>
             История цены
           </button>

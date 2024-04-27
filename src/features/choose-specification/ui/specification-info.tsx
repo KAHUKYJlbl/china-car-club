@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import {
@@ -14,16 +14,13 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import classes from './specification-info.module.sass';
 
 type SpecificationInfoProps = {
-  isPrices: boolean;
-  setIsPrices: React.Dispatch<React.SetStateAction<boolean>>;
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const SpecificationInfo = memo(
-  ({ currentSpecification, setCurrentSpecification, setIsPrices, isPrices }: SpecificationInfoProps): JSX.Element => {
+  ({ currentSpecification, setCurrentSpecification }: SpecificationInfoProps): JSX.Element => {
     const [ searchParams, _setSearchParams ] = useSearchParams();
-    const navigate = useNavigate();
     const specifications = useAppSelector(getSpecifications);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
     const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus)
@@ -44,9 +41,7 @@ export const SpecificationInfo = memo(
             {name.manufacturer}<br/>{name.model}
           </h2>
 
-          <button onClick={() => setIsPrices((current) => !current)}>
-            {isPrices ? 'О машине' : 'К ценам'}
-          </button>
+          <Link to={AppRoute.Main}>Назад</Link>
         </div>
 
         <div className={classes.bottom}>
@@ -63,8 +58,6 @@ export const SpecificationInfo = memo(
               disabled={specificationsLoadingStatus.isLoading}
               isPrices
             />
-
-            <button onClick={() => navigate(AppRoute.Main)}>Вернуться</button>
           </div>
         </div>
       </div>

@@ -23,39 +23,43 @@ export const LoginInit = ({setMode}: LoginInitProps) => {
   return (
     <>
       <div className={classes.wrapper}>
-        <p className={classes.header}>
-          Вход в Chinacar.club
-        </p>
-
-        <p>
-          Чтобы мгновенно считать стоимость доставки и&nbsp;растаможки автомобилей из&nbsp;Китая,
-          добавлять в&nbsp;Избранное, запрашивать цены поставщиков рынка и&nbsp;выбирать лучшее предложение.
-        </p>
-
-        <button
-          className={classes.button}
-          onClick={() => setMode('phone')}
-        >
-          Войти по номеру телефона
-        </button>
-
-        <p className={classes.grey}>
-          или
-        </p>
-
-        <Link
-          to={`tg://resolve?domain=ID_ChinaCarClub_bot&start=auth_hash_${user.hash}`}
-          className={cn(classes.button, classes.telegram)}
-          onClick={() => setMode('confirm-telegram')}
-        >
-          <svg width="18" height="18" aria-hidden="true">
-            <use xlinkHref="#telegram" />
-          </svg>
+        <div>
+          <p className={classes.header}>
+            Вход в Chinacar.club
+          </p>
 
           <p>
-            Войти через Telegram
+            Чтобы мгновенно считать стоимость доставки и&nbsp;растаможки автомобилей из&nbsp;Китая,
+            добавлять в&nbsp;Избранное, запрашивать цены поставщиков рынка и&nbsp;выбирать лучшее предложение.
           </p>
-        </Link>
+        </div>
+
+        <div className={classes.main}>
+          <button
+            className={classes.button}
+            onClick={() => setMode('phone')}
+          >
+            Войти по номеру телефона
+          </button>
+
+          <p className={classes.grey}>
+            или
+          </p>
+
+          <Link
+            to={`tg://resolve?domain=ID_ChinaCarClub_bot&start=auth_hash_${user.hash}`}
+            className={cn(classes.button, classes.telegram)}
+            onClick={() => setMode('confirm-telegram')}
+          >
+            <svg width="16" height="16" aria-hidden="true">
+              <use xlinkHref="#telegram" />
+            </svg>
+
+            <p>
+              Войти через Telegram
+            </p>
+          </Link>
+        </div>
 
         <p className={cn(classes.grey, classes.small)}>
           Авторизуясь на&nbsp;сайте, я&nbsp;принимаю условия пользовательского соглашения

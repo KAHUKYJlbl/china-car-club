@@ -1,26 +1,39 @@
 import { memo } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { getExtColors, getIntColors, getSpecificationImgLoadingStatus } from '../../../entities/specification';
+import { DropdownBlocks } from '../../../shared/ui/dropdown';
+import {
+  getExtColors,
+  getIntColors,
+  getSpecificationImgLoadingStatus,
+  getSpecifications,
+  getSpecificationsLoadingStatus
+} from '../../../entities/specification';
 import { SpecsType } from '../../../entities/model';
+import { getName } from '../../../entities/manufacturer';
 
+import { Statuses } from '../lib/const';
 import getTechList from '../lib/utils/get-tech-list';
-import { CurrentColorType } from '../lib/types';
 import classes from './techs.module.sass';
 
 type TechsProps = {
   techs: SpecsType,
-  setColor: React.Dispatch<React.SetStateAction<CurrentColorType>>,
+  currentSpecification: number | null;
+  setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export const Techs = memo(
-  ({ techs, setColor }: TechsProps): JSX.Element => {
+  ({ techs, currentSpecification, setCurrentSpecification }: TechsProps): JSX.Element => {
+    const [ searchParams, _setSearchParams ] = useSearchParams();
     const extColors = useAppSelector(getExtColors);
     const intColors = useAppSelector(getIntColors);
+    const specifications = useAppSelector(getSpecifications);
+    const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
     const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
+    const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
 
     const techsList = getTechList(techs);
 
@@ -28,86 +41,120 @@ export const Techs = memo(
       return <Navigate to={AppRoute.Main} />
     }
 
-    if (specificationImgLoadingStatus.isLoading) {
+    if (specificationImgLoadingStatus.isLoading || !name) {
       return <LoadingSpinner spinnerType='widget' />
     }
 
     return (
       <div className={classes.wrapper}>
-        <ul className={classes.divider}>
-          {
-            techsList.map((tech) => (
-              <li className={classes.row} key={tech.name}>
-                <p>{tech.name}</p>
-                <p className={classes.row}>{`${tech.value} ${tech.measure}`}</p>
-              </li>
-            ))
-          }
-        </ul>
+        <div className={classes.block}>
+          <h3 className={classes.header}>
+            Характеристики
+          </h3>
+
+          <p className={classes.model}>
+            <span>Автомобиль:</span><br/>{name.manufacturer}<br/>{name.model}
+          </p>
+
+          <DropdownBlocks
+            currentElement={currentSpecification}
+            setCurrent={setCurrentSpecification}
+            placeholder='Комплектация'
+            list={specifications}
+            disabled={specificationsLoadingStatus.isLoading}
+            isPrices
+          />
+
+          <div className={classes.row}>
+            <p>
+              Статус в Китае:
+            </p>
+
+            <p>
+              {Statuses[techs.stateId]}
+            </p>
+          </div>
+        </div>
+
+
+        <div className={classes.block}>
+          <ul className={classes.techsList}>
+            {
+              techsList.map((tech) => (
+                <li className={classes.row} key={tech.name}>
+                  <p>{tech.name}</p>
+                  <p>{`${tech.value} ${tech.measure}`}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
 
         {
           (extColors && extColors[0].color) &&
-          <div className={classes.colorsWrapper}>
-            <div className={classes.colors} >
-              <p>Цвета кузова</p>
+          <div className={classes.block} >
+            <p>Доступные цвета кузова</p>
 
-              <ul className={classes.colorsList}>
-                {
-                  extColors.map((color) => (
-                    <li
-                      key={color.color.id}
-                      onClick={() => setColor((current) => ({
-                        ...current,
-                        ext: color.color.id,
-                        isInteriorFirst: false
-                      }))}
-                    >
+            <ul className={classes.techsList}>
+              {
+                extColors.map((color) => (
+                  <li
+                    className={classes.row}
+                    key={color.color.id}
+                  >
+                    <div>
+                      {color.color.name.ru || color.color.name.ch}
+                    </div>
+
+                    <div className={classes.colors}>
                       <div
-                        className={classes.colorBall}
+                        className={classes.color}
                         style={{backgroundColor: `#${color.color.hexList[0]}`}}
                       />
 
                       <div
-                        className={classes.colorBall}
+                        className={classes.color}
                         style={{backgroundColor: `#${color.color.hexList[1] || color.color.hexList[0]}`}}
                       />
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        }
 
-            {
-              (intColors && intColors[0].color) &&
-              <div className={classes.colors} >
-                <p>Цвета интерьера</p>
+        {
+          (intColors && intColors[0].color) &&
+          <div className={classes.block} >
+            <p>Доступные цвета салона</p>
 
-                <ul className={classes.colorsList}>
-                  {
-                    intColors.map((color) => (
-                      <li
-                        key={color.color.id}
-                        onClick={() => setColor((current) => ({
-                          ...current,
-                          int: color.color.id,
-                          isInteriorFirst: true
-                        }))}
-                      >
-                        <div
-                          className={classes.colorBall}
-                          style={{backgroundColor: `#${color.color.hexList[0]}`}}
-                        />
+            <ul className={classes.techsList}>
+              {
+                intColors.map((color) => (
+                  <li
+                    className={classes.row}
+                    key={color.color.id}
+                  >
+                    <div>
+                      {color.color.name.ru || color.color.name.ch}
+                    </div>
 
-                        <div
-                          className={classes.colorBall}
-                          style={{backgroundColor: `#${color.color.hexList[1] || color.color.hexList[0]}`}}
-                        />
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
-            }
+                    <div className={classes.colors}>
+                      <div
+                        className={classes.color}
+                        style={{backgroundColor: `#${color.color.hexList[0]}`}}
+                      />
+
+                      <div
+                        className={classes.color}
+                        style={{backgroundColor: `#${color.color.hexList[1] || color.color.hexList[0]}`}}
+                      />
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
           </div>
         }
       </div>
