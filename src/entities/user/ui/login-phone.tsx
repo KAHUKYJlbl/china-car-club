@@ -75,7 +75,7 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
         Вход по номеру телефона
       </p>
 
-      <div>
+      <div className={classes.main}>
         <form onSubmit={handleSubmit( onInitSubmit, onInitError )}>
           <label className={classes.phone}>
             <InputMask

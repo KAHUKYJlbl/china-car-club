@@ -14,13 +14,14 @@ import {
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
+import { Gallery } from '../../../entities/gallery';
 import { Currency, fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { fetchManufacturers, getManufacturerByModel, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { Gallery } from '../../../entities/gallery';
+import { Modal } from '../../../shared/ui/modal';
 
 import { AddsType, CurrentColorType } from '../lib/types';
 import { InfoBar } from './info-bar';
@@ -148,73 +149,73 @@ export const ModelInfo = (): JSX.Element => {
       </div>
 
       <div className={classes.info}>
-        <InfoBar currentSpecification={currentSpecification} />
+        <InfoBar
+          currentSpecification={currentSpecification}
+          setIsPrices={setIsPrices}
+        />
       </div>
 
       <div className={classes.specification}>
         <SpecificationInfo
-          isPrices={isPrices}
-          setIsPrices={setIsPrices}
           currentSpecification={currentSpecification}
           setCurrentSpecification={setCurrentSpecification}
         />
       </div>
 
+      <div className={classes.pricesWrapper}>
+        <div className={classes.prices}>
+          <Prices
+            prices={specificationParams.price}
+            adds={adds}
+            currentTax={currentTax}
+            setCurrentTax={setCurrentTax}
+            />
+        </div>
+
+        <div className={classes.addOptions}>
+          <ChooseOptions
+            prices={specificationParams.price}
+            options={adds}
+            optionsHandler={toggleAdds}
+            currentTax={currentTax}
+            />
+        </div>
+      </div>
+
+      <div className={classes.currency}>
+        <Currency />
+      </div>
+
+      <div className={classes.buttons}>
+        <OrderButtons
+          specificationId={currentSpecification}
+          epts={adds.epts}
+          currentTax={currentTax}
+          totalPrice={Number(
+            getTotal({
+              totalPrice: currentTax === Taxes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
+              options: adds,
+              optionsPrices: {
+                epts: specificationParams.price.eptsSbktsUtil,
+                guarantee: 0,
+                options: 0
+              },
+              currency,
+              currentCurrency,
+            })
+            )}
+            />
+      </div>
+
       {
         !isPrices &&
-        <div className={classes.techs}>
-          <Techs techs={specificationParams} setColor={setCurrentColor} />
-        </div>
-      }
-
-      {
-        isPrices &&
-        <>
-          <div className={classes.pricesWrapper}>
-            <div className={classes.prices}>
-              <Prices
-                prices={specificationParams.price}
-                adds={adds}
-                currentTax={currentTax}
-                setCurrentTax={setCurrentTax}
-              />
-            </div>
-
-            <div className={classes.addOptions}>
-              <ChooseOptions
-                prices={specificationParams.price}
-                options={adds}
-                optionsHandler={toggleAdds}
-                currentTax={currentTax}
-              />
-            </div>
-          </div>
-
-          <div className={classes.currency}>
-            <Currency />
-          </div>
-
-          <div className={classes.buttons}>
-            <OrderButtons
-              specificationId={currentSpecification}
-              epts={adds.epts}
-              currentTax={currentTax}
-              totalPrice={Number(
-                getTotal({
-                  totalPrice: currentTax === Taxes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
-                  options: adds,
-                  optionsPrices: {
-                    epts: specificationParams.price.eptsSbktsUtil,
-                    guarantee: 0,
-                    options: 0
-                  },
-                  currency,
-                  currentCurrency,
-                })
-              )}
-            />
-          </div>
-        </>
+        <Modal onClose={() => setIsPrices(true)}>
+          <Techs
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+            techs={specificationParams}
+          />
+        </Modal>
       }
     </div>
   )

@@ -57,18 +57,18 @@ export const ConfirmTelegram = ({ onClose, onLogin, setMode }: ConfirmPhoneProps
         </p>
 
         <p className={classes.grey}>
-          Откройте в Telegram<br/>
+          Откройте в Telegram бот<br/>
           <Link
             to={`tg://resolve?domain=${process.env.TELEGRAM_BOT}`}
             className={classes.timer}
           >
             @{process.env.TELEGRAM_BOT}
           </Link>
-          <br/>нажмите «Начать/Start» и получите код.
+          , нажмите<br/>«Начать/Start» и получите код.
         </p>
       </div>
 
-      <div>
+      <div className={classes.main}>
         <form onSubmit={handleSubmitConfirm( onConfirmSubmit, onConfirmError )}>
           <label className={classes.sms}>
             <InputMask

@@ -12,6 +12,15 @@
   border-radius: 16px
   background-color: $primary
 
+  .main
+    position: absolute
+    top: 206px
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+    width: 286px
+
   p
     padding: 0 4px
 
@@ -21,6 +30,9 @@
     border-radius: 8px
     background-color: $secondary
     cursor: pointer
+
+    font-size: 14px
+    line-height: 18px
 
   .button:hover
     opacity: 0.8
@@ -47,6 +59,8 @@
     line-height: 16px
 
 .secondary
+  flex-grow: 0
+
   padding-top: 16px
 
   background-color: $secondary
