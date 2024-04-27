@@ -46,7 +46,7 @@ export type PriceApiType = {
 export type SpecsApiType = {
   id: number;
   name: NameType;
-  state_id: number;
+  stateId: number;
   year: number;
   parameters: {
     engineType: ParametrApiType,
@@ -114,6 +114,7 @@ export type PriceType = {
 
 export type SpecsType = {
   id: number;
+  stateId: number;
   name: string;
   year: number;
   engineType: number,

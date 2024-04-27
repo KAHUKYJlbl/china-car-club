@@ -20,7 +20,7 @@
   flex-direction: column
   justify-content: space-between
 
-  padding: 6px 12px
+  padding: 8px
 
   background-color: $primary
   border-radius: 12px
@@ -41,31 +41,20 @@
   font-size: 12px
   line-height: 16px
 
-.buttons
-  display: flex
-  gap: 2px
+.button
+  height: 32px
+  width: 42px
+  padding: 8px
 
-  margin-top: 8px
+  background-color: transparent
+  border-radius: 8px
+  cursor: pointer
 
-  button
-    flex-grow: 1
-    padding: 2px 0
+  font-size: 12px
+  line-height: 16px
 
-    border-radius: 8px
-    border: 1px solid $primary
-    background-color: $primary
-    cursor: pointer
-
-
-  button:hover
-    border: 1px solid #00000099
-
-  .current
-    background-color: white
-
-  .current:hover
-    border: 1px solid $primary
-    opacity: 1
+.button:hover
+  background-color: $primary-light
 
 .options
   display: flex

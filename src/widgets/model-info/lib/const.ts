@@ -7,6 +7,11 @@ export enum Taxes {
   COMMERC = 'Коммерческие автомобили',
 };
 
+export enum Statuses {
+  'В продаже',
+  'Снят с производства и в продаже',
+};
+
 export const ELECTRO = [3];
 
 export const HYBRID = [5, 6, 7, 8, 9, 10];
@@ -93,7 +98,7 @@ export const TECHS_BY_TYPES: Record<string, TechsByTypes> = {
 
 export const TECH_NAMES: Record<string, TechNameType> = {
   bodyType: {
-    name: 'Тип кузова',
+    name: 'Кузов',
     measure: '',
   },
   driveType: {
@@ -105,7 +110,7 @@ export const TECH_NAMES: Record<string, TechNameType> = {
     measure: '',
   },
   power: {
-    name: 'Мощность',
+    name: 'Мощность двигателя',
     measure: 'кВт',
   },
   torque: {

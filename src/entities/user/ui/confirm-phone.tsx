@@ -91,7 +91,7 @@ export const ConfirmPhone = ({ phone, setMode, onClose, onLogin }: ConfirmPhoneP
         </p>
       </div>
 
-      <div>
+      <div className={classes.main}>
         <form onSubmit={handleSubmit( onConfirmSubmit, onConfirmError )}>
           <label className={classes.sms}>
             <InputMask

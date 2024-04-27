@@ -62,6 +62,7 @@ export const modelSlice = createSlice({
           modelName: pers.name.ru || pers.name.ch,
           specifications: pers.specifications.map((specification, id) => ({
             id: specification.id,
+            stateId: specification.stateId,
             name: specification.name.ru || specification.name.ch,
             year: specification.year,
             engineType: specification.parameters?.engineType.id,

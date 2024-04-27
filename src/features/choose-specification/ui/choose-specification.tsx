@@ -83,7 +83,7 @@ export const ChooseSpecification = memo(
             />
 
             <p className={classes.header}>
-              <b>Цена в Китае на сегодня</b> за выбранную комплектацию нового автомобиля
+              <b>Цена в&nbsp;Китае на&nbsp;сегодня</b> за&nbsp;выбранную комплектацию нового автомобиля
             </p>
 
             <div className={classes.priceWrapper}>
@@ -125,18 +125,18 @@ export const ChooseSpecification = memo(
                 </p>
 
                 <p className={cn(classes.small, classes.grey, classes.discount)}>
-                  Действующая скидка на автомобиль у дилера
+                  Действующая скидка на&nbsp;автомобиль у&nbsp;дилера
                 </p>
               </div>
             </div>
           </>
           : <p className={classes.big}>
-            ❶ Выберите марку и модель автомобиля — <span className={classes.grey}>покажем цену в Китае на текущий день</span>
+            ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;— <span className={classes.grey}>покажем цену в&nbsp;Китае на&nbsp;текущий день</span>
           </p>
         }
 
         <p className={classes.contract}>
-          По прямому контракту и курсу продажи валюты
+          По&nbsp;прямому контракту и&nbsp;курсу продажи валюты
         </p>
       </div>
     )
