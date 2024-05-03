@@ -19,7 +19,8 @@ export type ElectroSpecsType = {
   curbWeight?: number,
   acceleration?: number,
   totalFuelConsumption?: number,
-  wheelSize: string;
+  frontWheel: string;
+  rearWheel: string;
 };
 
 export type HybridSpecsType = {
@@ -39,7 +40,8 @@ export type HybridSpecsType = {
   acceleration?: number,
   totalFuelConsumption?: number,
   engineCapacity?: number,
-  wheelSize: string;
+  frontWheel: string;
+  rearWheel: string;
 };
 
 export type IceSpecsType = {
@@ -56,7 +58,8 @@ export type IceSpecsType = {
   acceleration?: number,
   totalFuelConsumption?: number,
   engineCapacity?: number,
-  wheelSize: string;
+  frontWheel: string;
+  rearWheel: string;
 };
 
 export type Entrytype = [string, string | number];
