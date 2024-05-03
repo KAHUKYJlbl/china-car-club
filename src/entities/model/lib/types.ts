@@ -134,7 +134,8 @@ export type SpecsType = {
   acceleration: number | null,
   engineCapacity: number | null,
   totalFuelConsumption: number | null,
-  wheelSize: string;
+  frontWheel: string;
+  rearWheel: string;
   colors: {
     external: ColorType[],
     interior: ColorType[],
