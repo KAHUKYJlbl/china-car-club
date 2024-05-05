@@ -7,19 +7,21 @@ import priceFormat from '../../../shared/lib/utils/price-format';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
+import { getTaxes } from '../lib/utils/get-taxes';
+import { TaxesTypes } from '../lib/const';
 import { AddsType } from '../lib/types';
 import classes from './prices.module.sass';
-import { Taxes } from '../lib/const';
 
 type PricesProps = {
   prices: PriceType;
   adds: Record<AddsType, boolean>;
-  currentTax: Taxes;
-  setCurrentTax: React.Dispatch<React.SetStateAction<Taxes>>;
+  currentTax: TaxesTypes;
+  setCurrentTax: React.Dispatch<React.SetStateAction<TaxesTypes>>;
+  setIsTaxes: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Prices = memo(
-  ({ prices, adds, currentTax, setCurrentTax }: PricesProps): JSX.Element => {
+  ({ prices, adds, currentTax, setCurrentTax, setIsTaxes }: PricesProps): JSX.Element => {
     const currency = useAppSelector(getCurrency);
     const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -72,7 +74,7 @@ export const Prices = memo(
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  currentTax === Taxes.PERS ? prices.customsClearancePers.final : prices.customsClearanceCorp.final,
+                  getTaxes(currentTax, prices).final,
                   Currencies.RUB,
                   currency
                 ))
@@ -83,22 +85,26 @@ export const Prices = memo(
           <div className={classes.row}>
             <div className={classes.buttons}>
               <button
-                className={cn({[classes.current]: currentTax === Taxes.PERS})}
-                onClick={() => setCurrentTax(Taxes.PERS)}
+                className={cn({[classes.current]: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL})}
+                onClick={() => setCurrentTax(TaxesTypes.PERS)}
               >
-                {Taxes.PERS}
+                {TaxesTypes.PERS}
               </button>
 
               <button
-                className={cn({[classes.current]: currentTax === Taxes.CORP})}
-                onClick={() => setCurrentTax(Taxes.CORP)}
+                className={cn({[classes.current]: currentTax === TaxesTypes.CORP || currentTax === TaxesTypes.VAT})}
+                onClick={() => setCurrentTax(TaxesTypes.CORP)}
               >
-                {Taxes.CORP}
+                {TaxesTypes.CORP}
               </button>
 
             </div>
 
-            <button>Подробнее</button>
+            <button
+              onClick={() => setIsTaxes(true)}
+            >
+              Подробнее
+            </button>
 
           </div>
         </div>

@@ -1,10 +1,10 @@
 import { TechNameType, TechsByTypes } from './types';
 
-export enum Taxes {
+export enum TaxesTypes {
   PERS = 'Физлицо',
   SELL = 'На перепродажу',
   CORP = 'Юрлицо',
-  COMMERC = 'Коммерческие автомобили',
+  VAT = 'Без НДС',
 };
 
 export const Statuses = [

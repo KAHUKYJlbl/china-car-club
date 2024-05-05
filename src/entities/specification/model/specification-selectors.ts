@@ -85,6 +85,24 @@ export const getSpecifications = createSelector(
   }))
 );
 
+export const getSpecificationName = createSelector(
+  [
+    getRawSpecifications,
+    (_state: State, id: number | null) => id
+  ],
+  (specifications, id) => {
+    if (id) {
+      const specification = specifications.find((spec) => spec.id === id);
+
+      if (specification) {
+        return specification.name.ru || specification.name.ch;
+      }
+    }
+
+    return '';
+  }
+);
+
 export const getPrice = createSelector(
   [
     getRawSpecifications,
@@ -117,9 +135,6 @@ export const getCheapestSpecification = createSelector(
     .toSorted((a, b) =>
     b.year - a.year || a.priceWithLogisticsByCurrentDay?.price - b.priceWithLogisticsByCurrentDay?.price
     )[0]
-    // .toSorted((a, b) =>
-    //   b.year - a.year
-    // )[0]
   )
 )
 

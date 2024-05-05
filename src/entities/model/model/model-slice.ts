@@ -36,6 +36,7 @@ export const modelSlice = createSlice({
       .addCase(fetchModel.fulfilled, (state, action) => {
         const pers = action.payload.pers.data;
         const corp = action.payload.corp.data;
+        const resale = action.payload.resale.data;
 
         state.shorts = pers.specifications.map((specification) => ({
           id: specification.id,
@@ -93,12 +94,14 @@ export const modelSlice = createSlice({
               inChina: specification.price.inChina,
               priceInCityOfReceipt: specification.price.priceInCityOfReceipt,
               withLogisticsPers: specification.price.withLogistics,
+              withLogisticsResale: resale.specifications[id].price.withLogistics,
               withLogisticsCorp: corp.specifications[id].price.withLogistics,
               tax: specification.price.tax,
               eptsSbktsUtil: specification.price.eptsSbktsUtil,
               borderPrice: specification.price.borderPrice,
               commission: specification.price.commission,
               customsClearancePers: specification.price.customsClearance,
+              customsClearanceResale: resale.specifications[id].price.customsClearance,
               customsClearanceCorp: corp.specifications[id].price.customsClearance,
             },
             acceleration: specification.parameters?.acceleration,
