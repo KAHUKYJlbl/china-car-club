@@ -8,13 +8,13 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import classes from './order-buttons.module.sass';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { toast } from 'react-toastify';
-import { Taxes } from '../lib/const';
+import { TaxesTypes } from '../lib/const';
 
 type OrderButtonsProps = {
   specificationId: number | null;
   totalPrice: number;
   epts: boolean;
-  currentTax: Taxes;
+  currentTax: TaxesTypes;
 }
 
 export const OrderButtons = memo(
@@ -42,7 +42,7 @@ export const OrderButtons = memo(
             currencyId: currentCurrency,
           },
           availabilityOfEpts: epts,
-          priceTypeId: currentTax === Taxes.PERS ? 2 : 3,
+          priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
         },
       }));
 

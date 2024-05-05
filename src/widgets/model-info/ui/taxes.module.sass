@@ -50,21 +50,44 @@
     grid-template-columns: 50% 50%
     padding: 0 4px
 
-  .techs-list
+  .flex-row
     display: flex
-    flex-direction: column
     gap: 4px
+    justify-content: space-between
 
-    margin: 4px 2px
+    padding: 0 4px
 
-    list-style: none
+    p
+      padding: 0
+
+  .grey
     color: $text-light
 
-  .colors
+  .bold
+    font-weight: 700
+
+  .button-wrapper
     display: flex
+    gap: 4px
 
-    border: 1px solid #B3BBC6
+    button
+      flex-grow: 1
 
-  .color
-    flex-grow: 1
-    height: 18px
+      border-radius: 12px
+      background-color: $secondary
+
+    button:hover
+      background-color: $primary-light
+
+    .primary
+      height: 40px
+
+    .secondary
+      height: 24px
+
+    .current
+      background-color: $white
+
+  p
+    padding: 0 8px
+

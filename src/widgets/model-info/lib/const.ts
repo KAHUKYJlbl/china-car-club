@@ -1,16 +1,19 @@
 import { TechNameType, TechsByTypes } from './types';
 
-export enum Taxes {
+export enum TaxesTypes {
   PERS = 'Физлицо',
   SELL = 'На перепродажу',
   CORP = 'Юрлицо',
-  COMMERC = 'Коммерческие автомобили',
+  VAT = 'Без НДС',
 };
 
-export enum Statuses {
+export const Statuses = [
+  '',
   'В продаже',
   'Снят с производства и в продаже',
-};
+  'Продажи прекращены',
+  'Скоро',
+];
 
 export const ELECTRO = [3];
 
@@ -89,7 +92,12 @@ export const TECHS_BY_TYPES: Record<string, TechsByTypes> = {
     hybrid: true,
     ice: true,
   },
-  wheelSize: {
+  frontWheel: {
+    electro: true,
+    hybrid: true,
+    ice: true,
+  },
+  rearWheel: {
     electro: true,
     hybrid: true,
     ice: true,
@@ -161,8 +169,12 @@ export const TECH_NAMES: Record<string, TechNameType> = {
     name: 'Объем двигателя',
     measure: 'см.куб',
   },
-  wheelSize: {
-    name: 'Размер колес',
+  frontWheel: {
+    name: 'Передние колеса',
+    measure: '',
+  },
+  rearWheel: {
+    name: 'Задние колеса',
     measure: '',
   },
 }

@@ -36,6 +36,7 @@ export const modelSlice = createSlice({
       .addCase(fetchModel.fulfilled, (state, action) => {
         const pers = action.payload.pers.data;
         const corp = action.payload.corp.data;
+        const resale = action.payload.resale.data;
 
         state.shorts = pers.specifications.map((specification) => ({
           id: specification.id,
@@ -78,15 +79,12 @@ export const modelSlice = createSlice({
             seats: specification.parameters?.seats.filter((seat) => seat !== '0').join(', '),
             lengthWidthHeight: specification.parameters?.lengthWidthHeight,
             groundClearance: specification.parameters?.groundClearance,
-            wheelSize: `${(
-              specification.parameters?.wheelSize.front.includes('●')
-              ? specification.parameters?.wheelSize.front.slice(1)
-              : specification.parameters?.wheelSize.front
-            )} • ${
-              specification.parameters?.wheelSize.rear.includes('●')
-              ? specification.parameters?.wheelSize.rear.slice(1)
-              : specification.parameters?.wheelSize.rear
-            }`,
+            frontWheel: specification.parameters?.wheelSize.front.includes('●')
+              ? specification.parameters?.wheelSize.front.slice(1, 11)
+              : specification.parameters?.wheelSize.front.slice(0, 10),
+            rearWheel: specification.parameters?.wheelSize.front.includes('●')
+              ? specification.parameters?.wheelSize.front.slice(1, 11)
+              : specification.parameters?.wheelSize.front.slice(0, 10),
             colors: specification.parameters?.colors,
             curbWeight: specification.parameters?.curbWeight,
             engineCapacity: specification.parameters?.engineCapacity
@@ -96,12 +94,14 @@ export const modelSlice = createSlice({
               inChina: specification.price.inChina,
               priceInCityOfReceipt: specification.price.priceInCityOfReceipt,
               withLogisticsPers: specification.price.withLogistics,
+              withLogisticsResale: resale.specifications[id].price.withLogistics,
               withLogisticsCorp: corp.specifications[id].price.withLogistics,
               tax: specification.price.tax,
               eptsSbktsUtil: specification.price.eptsSbktsUtil,
               borderPrice: specification.price.borderPrice,
               commission: specification.price.commission,
               customsClearancePers: specification.price.customsClearance,
+              customsClearanceResale: resale.specifications[id].price.customsClearance,
               customsClearanceCorp: corp.specifications[id].price.customsClearance,
             },
             acceleration: specification.parameters?.acceleration,

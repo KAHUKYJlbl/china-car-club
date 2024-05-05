@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import cn from 'classnames';
 
-import { AddsType, Taxes } from '../../../widgets/model-info';
+import { AddsType, TaxesTypes } from '../../../widgets/model-info';
 import { PriceType } from '../../../entities/model';
 import { setCurrentCurrency } from '../../../entities/currency/model/currency-slice';
 import { Currencies, getCurrency, getCurrencyLoadingStatus, getCurrencyName, getCurrentCurrency } from '../../../entities/currency';
@@ -10,14 +10,15 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
-import { getTotal } from '../lib/utils/getTotal';
+import { getTotal } from '../lib/utils/get-total';
 import classes from './choose-options.module.sass';
+import { getPrices } from '../lib/utils/get-prices';
 
 type ChooseOptionsProps = {
   prices: PriceType;
   options: Record<AddsType, boolean>;
   optionsHandler: (arg: AddsType) => void;
-  currentTax: Taxes;
+  currentTax: TaxesTypes;
 }
 
 export const ChooseOptions = memo(
@@ -55,7 +56,7 @@ export const ChooseOptions = memo(
                 {
                   `${priceFormat(
                     getTotal({
-                      totalPrice: currentTax === Taxes.PERS ? prices.withLogisticsPers : prices.withLogisticsCorp,
+                      totalPrice: getPrices(currentTax, prices),
                       options,
                       optionsPrices: {
                         epts: prices.eptsSbktsUtil,
