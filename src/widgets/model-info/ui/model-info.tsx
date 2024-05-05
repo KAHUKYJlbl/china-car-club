@@ -24,12 +24,13 @@ import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { Modal } from '../../../shared/ui/modal';
 
 import { AddsType, CurrentColorType } from '../lib/types';
+import { TaxesTypes } from '../lib/const';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
 import { Techs } from './techs';
+import { Taxes } from './taxes';
 import { OrderButtons } from './order-buttons';
 import classes from './model-info.module.sass';
-import { Taxes } from '../lib/const';
 
 export const ModelInfo = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -47,8 +48,9 @@ export const ModelInfo = (): JSX.Element => {
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const manufacturerId = useAppSelector((state) => getManufacturerByModel( state, Number( searchParams.get('model') ) ));
 
-  const [ isPrices, setIsPrices ] = useState(true);
-  const [ currentTax, setCurrentTax ] = useState(Taxes.PERS);
+  const [ isTechs, setIsTechs ] = useState(false);
+  const [ isTaxes, setIsTaxes ] = useState(false);
+  const [ currentTax, setCurrentTax ] = useState(TaxesTypes.PERS);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
   const [ currentColor, setCurrentColor ] = useState<CurrentColorType>({
     int: intColors ? intColors[0].color.id : null,
@@ -151,7 +153,7 @@ export const ModelInfo = (): JSX.Element => {
       <div className={classes.info}>
         <InfoBar
           currentSpecification={currentSpecification}
-          setIsPrices={setIsPrices}
+          setIsTechs={setIsTechs}
         />
       </div>
 
@@ -169,7 +171,8 @@ export const ModelInfo = (): JSX.Element => {
             adds={adds}
             currentTax={currentTax}
             setCurrentTax={setCurrentTax}
-            />
+            setIsTaxes={setIsTaxes}
+          />
         </div>
 
         <div className={classes.addOptions}>
@@ -193,7 +196,7 @@ export const ModelInfo = (): JSX.Element => {
           currentTax={currentTax}
           totalPrice={Number(
             getTotal({
-              totalPrice: currentTax === Taxes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
+              totalPrice: currentTax === TaxesTypes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
               options: adds,
               optionsPrices: {
                 epts: specificationParams.price.eptsSbktsUtil,
@@ -208,9 +211,22 @@ export const ModelInfo = (): JSX.Element => {
       </div>
 
       {
-        !isPrices &&
-        <Modal onClose={() => setIsPrices(true)}>
+        isTechs &&
+        <Modal onClose={() => setIsTechs(false)}>
           <Techs
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+            techs={specificationParams}
+          />
+        </Modal>
+      }
+
+      {
+        isTaxes &&
+        <Modal onClose={() => setIsTaxes(false)}>
+          <Taxes
+            currentTax={currentTax}
+            setCurrentTax={setCurrentTax}
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}

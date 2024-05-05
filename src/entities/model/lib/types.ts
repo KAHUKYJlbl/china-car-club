@@ -104,12 +104,14 @@ export type PriceType = {
   priceInCityOfReceipt: number,
   withLogisticsPers: number,
   withLogisticsCorp: number,
+  withLogisticsResale: number,
   tax: number,
   eptsSbktsUtil: number,
   borderPrice: number,
   commission: number,
   customsClearancePers: CustomsType,
   customsClearanceCorp: CustomsType,
+  customsClearanceResale: CustomsType,
 }
 
 export type SpecsType = {

@@ -1,0 +1,93 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+
+  .block
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    padding-bottom: 12px
+    border-bottom: 2px solid $secondary
+
+    font-size: 12px
+    line-height: 16px
+
+  .block:last-child
+    border: none
+
+  .header
+    padding: 0 4px
+
+    font-size: 18px
+    line-height: 22px
+    font-weight: 700
+
+  .model
+    padding: 0 4px
+
+    font-size: 14px
+    font-weight: 700
+
+    span
+      font-size: 12px
+      line-height: 16px
+      font-weight: 400
+      color: $text-light
+
+  .row
+    display: grid
+    grid-template-columns: 50% 50%
+    padding: 0 4px
+
+  .flex-row
+    display: flex
+    gap: 4px
+    justify-content: space-between
+
+    padding: 0 4px
+
+    p
+      padding: 0
+
+  .grey
+    color: $text-light
+
+  .bold
+    font-weight: 700
+
+  .button-wrapper
+    display: flex
+    gap: 4px
+
+    button
+      flex-grow: 1
+
+      border-radius: 12px
+      background-color: $secondary
+
+    button:hover
+      background-color: $primary-light
+
+    .primary
+      height: 40px
+
+    .secondary
+      height: 24px
+
+    .current
+      background-color: $white
+
+  p
+    padding: 0 8px
+

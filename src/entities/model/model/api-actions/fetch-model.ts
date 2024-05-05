@@ -11,6 +11,7 @@ export const fetchModel = createAsyncThunk<
   {
     pers: ModelApiType,
     corp: ModelApiType,
+    resale: ModelApiType,
   },
   string,
   {
@@ -32,7 +33,16 @@ export const fetchModel = createAsyncThunk<
         '?priceTypeId=3'
       ].join(''));
 
-      return {pers: pers.data, corp: corp.data};
+      const resale = await axios.get<ModelApiType>([
+        generatePath( APIRoute.Model, {id: modelId} ),
+        '?priceTypeId=6'
+      ].join(''));
+
+      return {
+        pers: pers.data,
+        corp: corp.data,
+        resale: resale.data,
+      };
     } catch (err) {
       throw Error('Unable to fetch Model');
     }
