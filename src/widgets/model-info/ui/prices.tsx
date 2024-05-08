@@ -15,13 +15,14 @@ import classes from './prices.module.sass';
 type PricesProps = {
   prices: PriceType;
   adds: Record<AddsType, boolean>;
+  addItemsPrice: number;
   currentTax: TaxesTypes;
   setCurrentTax: React.Dispatch<React.SetStateAction<TaxesTypes>>;
   setIsTaxes: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Prices = memo(
-  ({ prices, adds, currentTax, setCurrentTax, setIsTaxes }: PricesProps): JSX.Element => {
+  ({ prices, adds, currentTax, setCurrentTax, setIsTaxes, addItemsPrice }: PricesProps): JSX.Element => {
     const currency = useAppSelector(getCurrency);
     const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -123,7 +124,13 @@ export const Prices = memo(
 
           <div className={classes.row}>
             <p>Доп. товары на автомобиль</p>
-            <p><span>скоро</span></p>
+            <p>
+              {
+                addItemsPrice
+                ? priceFormat(getCurrencyExchange(addItemsPrice, currentCurrency, currency))
+                : '0 '
+              } {currentCurrency}
+            </p>
           </div>
 
           <div className={classes.row}>

@@ -15,14 +15,16 @@ import classes from './choose-options.module.sass';
 import { getPrices } from '../lib/utils/get-prices';
 
 type ChooseOptionsProps = {
+  addItemsPrice: number;
   prices: PriceType;
   options: Record<AddsType, boolean>;
   optionsHandler: (arg: AddsType) => void;
+  setIsAddProducts: React.Dispatch<React.SetStateAction<boolean>>;
   currentTax: TaxesTypes;
 }
 
 export const ChooseOptions = memo(
-  ({ prices, options, optionsHandler, currentTax }: ChooseOptionsProps): JSX.Element => {
+  ({ prices, options, optionsHandler, currentTax, setIsAddProducts, addItemsPrice }: ChooseOptionsProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -61,7 +63,7 @@ export const ChooseOptions = memo(
                       optionsPrices: {
                         epts: prices.eptsSbktsUtil,
                         guarantee: 0,
-                        options: 0
+                        options: addItemsPrice,
                       },
                       currency,
                       currentCurrency,
@@ -94,7 +96,13 @@ export const ChooseOptions = memo(
               ЭПТС и СБКТС
             </div>
 
-            <div className={cn(classes.optionsItem, classes.disabled)}>
+            <div
+              onClick={() => setIsAddProducts(true)}
+              className={cn(
+                classes.optionsItem,
+                {[classes.current]: options.options}
+              )}
+            >
               Доп. товары на авто
             </div>
 

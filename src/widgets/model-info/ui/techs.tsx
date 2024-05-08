@@ -42,7 +42,11 @@ export const Techs = memo(
     }
 
     if (specificationImgLoadingStatus.isLoading || !name) {
-      return <LoadingSpinner spinnerType='widget' />
+      return (
+        <div className={classes.wrapper}>
+          <LoadingSpinner spinnerType='widget' />
+        </div>
+      )
     }
 
     return (

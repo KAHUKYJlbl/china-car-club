@@ -6,6 +6,10 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 export const getSpecificationImg = (state: State) => state[NameSpace.Specification].specificationImg;
 
+export const getRawSpecifications = (state: State) => state[NameSpace.Specification].specifications;
+
+export const getSpecificationAddProducts = (state: State) => state[NameSpace.Specification].specificationAddProducts;
+
 export const getExtColors = createSelector(
   getSpecificationImg,
   (images) => (images.external.length > 0
@@ -71,8 +75,6 @@ export const getInitSlide = createSelector(
     return 0;
   }
 );
-
-export const getRawSpecifications = (state: State) => state[NameSpace.Specification].specifications;
 
 export const getSpecifications = createSelector(
   getRawSpecifications,
@@ -141,6 +143,7 @@ export const getCheapestSpecification = createSelector(
 export const getSpecificationsLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Specification].specificationsLoadingStatus,
   (status) => ({
+    isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
@@ -150,6 +153,17 @@ export const getSpecificationsLoadingStatus = createSelector(
 export const getSpecificationImgLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Specification].specificationImgLoadingStatus,
   (status) => ({
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+
+export const getSpecificationAddProductsLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Specification].specificationAddProductsLoadingStatus,
+  (status) => ({
+    isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,

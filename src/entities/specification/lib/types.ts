@@ -46,3 +46,24 @@ export type SpecificationImageType = {
 export type ManufacturersWithSpecificationsType = ManufacturersType & {
   specificationsBySeriesId: SpecificationType[];
 };
+
+export type AddItemType = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  tags: string[];
+}
+
+export type SpecificationAddProductsApiType = {
+  groups: {
+    id: number;
+    name: string;
+    description: string;
+    items: AddItemType[];
+  }[];
+};
+
+export type SpecificationAddProductsType = SpecificationAddProductsApiType & {
+  specId: number;
+}

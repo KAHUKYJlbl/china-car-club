@@ -3,26 +3,32 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-import { SpecificationImageType, SpecificationType } from '../lib/types';
+import { SpecificationAddProductsType, SpecificationImageType, SpecificationType } from '../lib/types';
 import { fetchSpecifications } from './api-actions/fetch-specifications';
 import { fetchSpecificationsInfo } from './api-actions/fetch-specification-info';
 import { fetchSpecificationsImage } from './api-actions/fetch-specification-image';
+import { fetchSpecificationAddProducts } from './api-actions/fetch-specification-add-products';
+import { ADDS_GROUPS } from '../lib/const';
 
 type InitialState = {
+  specificationAddProducts: SpecificationAddProductsType | null;
   specifications: SpecificationType[];
   specificationImg: SpecificationImageType;
   specificationsLoadingStatus: FetchStatus;
+  specificationAddProductsLoadingStatus: FetchStatus;
   specificationImgLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
   specifications: [],
+  specificationAddProducts: null,
   specificationImg: {
     external: [],
     interior: [],
     official: [],
   },
   specificationsLoadingStatus: FetchStatus.Idle,
+  specificationAddProductsLoadingStatus: FetchStatus.Idle,
   specificationImgLoadingStatus: FetchStatus.Idle,
 };
 
@@ -52,6 +58,26 @@ export const specificationSlice = createSlice({
       })
       .addCase(fetchSpecifications.rejected, (state) => {
         state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationAddProducts.fulfilled, (state, action) => {
+        state.specificationAddProducts = {
+          specId: action.payload.specId,
+          groups: action.payload.groups.map((group) => ({
+            ...group,
+            description: group.description || ADDS_GROUPS[group.id].description,
+            items: group.items.map((item) => ({
+              ...item,
+              description: item.description || ADDS_GROUPS[group.id].items[item.id]
+            })),
+          })),
+        };
+        state.specificationAddProductsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationAddProducts.pending, (state) => {
+        state.specificationAddProductsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationAddProducts.rejected, (state) => {
+        state.specificationAddProductsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchSpecificationsInfo.fulfilled, (state, action) => {
         state.specifications = action.payload;

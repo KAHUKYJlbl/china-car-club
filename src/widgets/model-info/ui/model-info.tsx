@@ -5,6 +5,7 @@ import { AppRoute } from '../../../app/provider/router';
 import { ChooseOptions, getTotal } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import {
+  fetchSpecificationAddProducts,
   fetchSpecificationsImage,
   fetchSpecificationsInfo,
   getExtColors,
@@ -14,8 +15,14 @@ import {
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
+import {
+  Currency,
+  fetchCurrency,
+  getCurrency,
+  getCurrencyLoadingStatus,
+  getCurrentCurrency
+} from '../../../entities/currency';
 import { Gallery } from '../../../entities/gallery';
-import { Currency, fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { fetchManufacturers, getManufacturerByModel, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -25,11 +32,12 @@ import { Modal } from '../../../shared/ui/modal';
 
 import { AddsType, CurrentColorType } from '../lib/types';
 import { TaxesTypes } from '../lib/const';
+import { OrderButtons } from './order-buttons';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
 import { Techs } from './techs';
 import { Taxes } from './taxes';
-import { OrderButtons } from './order-buttons';
+import { Adds } from './adds';
 import classes from './model-info.module.sass';
 
 export const ModelInfo = (): JSX.Element => {
@@ -49,9 +57,12 @@ export const ModelInfo = (): JSX.Element => {
   const manufacturerId = useAppSelector((state) => getManufacturerByModel( state, Number( searchParams.get('model') ) ));
 
   const [ isTechs, setIsTechs ] = useState(false);
+  const [ isAddProducts, setIsAddProducts ] = useState(false);
   const [ isTaxes, setIsTaxes ] = useState(false);
   const [ currentTax, setCurrentTax ] = useState(TaxesTypes.PERS);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
+  const [ addItems, setAddItems ] = useState<number[]>([]);
+  const [ addItemsPrice, setAddItemsPrice ] = useState(0);
   const [ currentColor, setCurrentColor ] = useState<CurrentColorType>({
     int: intColors ? intColors[0].color.id : null,
     ext: extColors ? extColors[0].color?.id : null,
@@ -86,6 +97,7 @@ export const ModelInfo = (): JSX.Element => {
   useEffect(() => {
     if (currentSpecification) {
       dispatch( fetchSpecificationsImage(currentSpecification) );
+      dispatch( fetchSpecificationAddProducts(currentSpecification) );
     }
   }, [currentSpecification]);
 
@@ -169,6 +181,7 @@ export const ModelInfo = (): JSX.Element => {
           <Prices
             prices={specificationParams.price}
             adds={adds}
+            addItemsPrice={addItemsPrice}
             currentTax={currentTax}
             setCurrentTax={setCurrentTax}
             setIsTaxes={setIsTaxes}
@@ -177,10 +190,12 @@ export const ModelInfo = (): JSX.Element => {
 
         <div className={classes.addOptions}>
           <ChooseOptions
+            addItemsPrice={addItemsPrice}
             prices={specificationParams.price}
             options={adds}
             optionsHandler={toggleAdds}
             currentTax={currentTax}
+            setIsAddProducts={setIsAddProducts}
             />
         </div>
       </div>
@@ -194,20 +209,32 @@ export const ModelInfo = (): JSX.Element => {
           specificationId={currentSpecification}
           epts={adds.epts}
           currentTax={currentTax}
-          totalPrice={Number(
-            getTotal({
-              totalPrice: currentTax === TaxesTypes.PERS ? specificationParams.price.withLogisticsPers : specificationParams.price.withLogisticsCorp,
-              options: adds,
-              optionsPrices: {
-                epts: specificationParams.price.eptsSbktsUtil,
-                guarantee: 0,
-                options: 0
-              },
-              currency,
-              currentCurrency,
-            })
-            )}
-            />
+          addItems={addItems}
+          prices={{
+            totalPrice: Number(
+              getTotal({
+                totalPrice: currentTax === TaxesTypes.PERS
+                  ? specificationParams.price.withLogisticsPers
+                  : specificationParams.price.withLogisticsCorp,
+                options: adds,
+                optionsPrices: {
+                  epts: specificationParams.price.eptsSbktsUtil,
+                  guarantee: 0,
+                  options: addItemsPrice,
+                },
+                currency,
+                currentCurrency,
+              })
+            ),
+            minPrice: specificationParams.price.inChina,
+            tax: specificationParams.price.tax,
+            comission: specificationParams.price.commission,
+            borderPrice: specificationParams.price.borderPrice,
+            customsPrice: currentTax === TaxesTypes.PERS
+              ? specificationParams.price.customsClearancePers.final
+              : specificationParams.price.customsClearanceCorp.final,
+          }}
+        />
       </div>
 
       {
@@ -217,6 +244,21 @@ export const ModelInfo = (): JSX.Element => {
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}
+          />
+        </Modal>
+      }
+
+      {
+        isAddProducts &&
+        <Modal onClose={() => setIsAddProducts(false)}>
+          <Adds
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+            techs={specificationParams}
+            setAdds={setAdds}
+            addItems={addItems}
+            setAddItems={setAddItems}
+            setAddItemsPrice={setAddItemsPrice}
           />
         </Modal>
       }
