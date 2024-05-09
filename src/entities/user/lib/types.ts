@@ -67,6 +67,7 @@ export type OrderType = {
     countryId: number | null,
     cityId: number | null,
   },
+  addItems: number[];
   prices: {
     totalPrice: {
       currencyQuantity: number,
@@ -74,5 +75,26 @@ export type OrderType = {
     },
     availabilityOfEpts: boolean,
     priceTypeId: number,
+    minPrice: {
+      currencyQuantity: number,
+      currencyId: number,
+    };
+    tax: {
+      currencyQuantity: number,
+      currencyId: number,
+    };
+    comission: {
+      currencyQuantity: number,
+      currencyId: number,
+    };
+    borderPrice: {
+      currencyQuantity: number,
+      currencyId: number,
+    };
+    customsPrice: {
+      currencyQuantity: number,
+      currencyId: number,
+    };
+
   },
 };

@@ -3,6 +3,7 @@ export enum APIRoute {
   Catalog = '/calc/manufacturers',
   Model = '/calc/series/:id',
   SpecImages = '/calc/specification/:id/images',
+  SpecAddProducts = '/calc/specification/:id/additional-products',
   PromoGallery = '/calc/specification/promotional',
   Currency = '/exchange-rates',
   AuthHash = '/auth/generate-hash',

@@ -12,13 +12,21 @@ import { TaxesTypes } from '../lib/const';
 
 type OrderButtonsProps = {
   specificationId: number | null;
-  totalPrice: number;
+  addItems: number[];
+  prices: {
+    totalPrice: number;
+    minPrice: number;
+    tax: number;
+    comission: number;
+    borderPrice: number;
+    customsPrice: number;
+  }
   epts: boolean;
   currentTax: TaxesTypes;
 }
 
 export const OrderButtons = memo(
-  ({specificationId, totalPrice, epts, currentTax}: OrderButtonsProps): JSX.Element => {
+  ({specificationId, epts, currentTax, prices, addItems}: OrderButtonsProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const geolocation = useAppSelector(getGeolocation);
     const city = useAppSelector(getCurrentCity);
@@ -36,13 +44,34 @@ export const OrderButtons = memo(
           countryId: null,
           cityId: city,
         },
+        addItems: addItems,
         prices: {
           totalPrice: {
-            currencyQuantity: totalPrice,
+            currencyQuantity: prices.totalPrice,
             currencyId: currentCurrency,
           },
           availabilityOfEpts: epts,
           priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
+          minPrice: {
+            currencyQuantity: prices.minPrice,
+            currencyId: currentCurrency,
+          },
+          tax: {
+            currencyQuantity: prices.tax,
+            currencyId: currentCurrency,
+          },
+          comission: {
+            currencyQuantity: prices.comission,
+            currencyId: 2,
+          },
+          borderPrice: {
+            currencyQuantity: prices.borderPrice,
+            currencyId: currentCurrency,
+          },
+          customsPrice: {
+            currencyQuantity: prices.customsPrice,
+            currencyId: 1,
+          },
         },
       }));
 

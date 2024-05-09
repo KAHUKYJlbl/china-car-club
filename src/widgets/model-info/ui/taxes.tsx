@@ -32,7 +32,11 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
   if (!name || !currency || !shorts) {
-    return <LoadingSpinner spinnerType='widget' />
+    return (
+      <div className={classes.wrapper}>
+        <LoadingSpinner spinnerType='widget' />
+      </div>
+    )
   }
 
   return (
@@ -159,7 +163,6 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                 >
                   Перепродажа / Повышенный утиль
                 </button>
-
               </div>
 
               <p className={classes.grey}>

@@ -17,7 +17,7 @@ export const fetchSpecificationsImage = createAsyncThunk<
     extra: AxiosInstance;
   }
 > (
-  'Specifications/fetchSpecificationsImage',
+  'Specifications/fetchSpecificationsImages',
   async ( specificationId, {extra: axios}) => {
     try {
       const { data } = await axios.get<SpecificationImageType>(
@@ -26,7 +26,7 @@ export const fetchSpecificationsImage = createAsyncThunk<
 
       return data;
     } catch (err) {
-      throw Error('Unable to fetch Manufacturers');
+      throw Error('Unable to fetch Images');
     }
   },
 );

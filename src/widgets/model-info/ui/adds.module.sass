@@ -1,0 +1,127 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+  font-size: 12px
+  line-height: 16px
+
+  .header
+    padding: 0 4px
+
+    font-size: 18px
+    line-height: 22px
+    font-weight: 700
+
+  .model
+    padding: 0 4px
+
+    font-size: 14px
+    font-weight: 700
+
+    span
+      font-size: 12px
+      line-height: 16px
+      font-weight: 400
+      color: $text-light
+
+  .row
+    display: grid
+    grid-template-columns: 50% 50%
+    padding: 0 4px
+
+  .flex-row
+    display: flex
+    gap: 4px
+    justify-content: space-between
+
+    padding: 0 4px
+
+    p
+      padding: 0
+
+  .grey
+    color: $text-light
+
+  .bold
+    font-weight: 700
+
+  .button-wrapper
+    display: flex
+    gap: 4px
+
+    button
+      flex-grow: 1
+
+      border-radius: 12px
+      background-color: $secondary
+
+    button:hover
+      background-color: $primary-light
+
+    .primary
+      height: 40px
+
+    .secondary
+      height: 24px
+
+    .current
+      background-color: $white
+
+  .header-wraper
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+  .group-header
+    font-size: 18px
+    line-height: 22px
+
+
+
+  .description-wrapper
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+  .price-wrapper
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 4px
+
+    padding-left: 12px
+
+    background-color: $secondary
+    border-radius: 12px
+
+    font-size: 14px
+    line-height: 18px
+
+    .price-button
+      height: 40px
+      width: 120px
+
+      background-color: $accent
+      border-radius: 12px
+
+      color: $white
+      cursor: pointer
+
+    .price-button:hover
+      background-color: $white
+
+      color: $text-primary
+
+    .added
+      background-color: $additional
+
+      color: $text-primary
