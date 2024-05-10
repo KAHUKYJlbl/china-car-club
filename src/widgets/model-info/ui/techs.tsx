@@ -80,7 +80,6 @@ export const Techs = memo(
           </div>
         </div>
 
-
         <div className={classes.block}>
           <ul className={classes.techsList}>
             {
