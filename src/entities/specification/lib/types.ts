@@ -67,3 +67,17 @@ export type SpecificationAddProductsApiType = {
 export type SpecificationAddProductsType = SpecificationAddProductsApiType & {
   specId: number;
 }
+
+export type PriceHistoryApiType = {
+  data: {
+    dealerPrice: number;
+    factoryPrice: number;
+    date: string;
+}[];
+}
+
+export type PriceHistoryType = {
+  dealerPrice: number;
+  factoryPrice: number;
+  date: string;
+}

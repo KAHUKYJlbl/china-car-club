@@ -10,6 +10,8 @@ export const getRawSpecifications = (state: State) => state[NameSpace.Specificat
 
 export const getSpecificationAddProducts = (state: State) => state[NameSpace.Specification].specificationAddProducts;
 
+export const getSpecificationPriceHistory = (state: State) => state[NameSpace.Specification].specificationPriceHistory;
+
 export const getExtColors = createSelector(
   getSpecificationImg,
   (images) => (images.external.length > 0
@@ -162,6 +164,16 @@ export const getSpecificationImgLoadingStatus = createSelector(
 
 export const getSpecificationAddProductsLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Specification].specificationAddProductsLoadingStatus,
+  (status) => ({
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+
+export const getSpecificationPriceHistoryLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Specification].specificationPriceHistoryLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,

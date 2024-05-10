@@ -32,6 +32,7 @@ import { Modal } from '../../../shared/ui/modal';
 
 import { AddsType, CurrentColorType } from '../lib/types';
 import { TaxesTypes } from '../lib/const';
+import { PriceHistory } from './price-history';
 import { OrderButtons } from './order-buttons';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
@@ -56,9 +57,12 @@ export const ModelInfo = (): JSX.Element => {
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const manufacturerId = useAppSelector((state) => getManufacturerByModel( state, Number( searchParams.get('model') ) ));
 
+  // popups
   const [ isTechs, setIsTechs ] = useState(false);
   const [ isAddProducts, setIsAddProducts ] = useState(false);
   const [ isTaxes, setIsTaxes ] = useState(false);
+  const [ isPriceHistory, setIsPriceHistory ] = useState(false);
+
   const [ currentTax, setCurrentTax ] = useState(TaxesTypes.PERS);
   const [ adds, setAdds ] = useState<Record<AddsType, boolean>>({epts: false, guarantee: false, options: false});
   const [ addItems, setAddItems ] = useState<number[]>([]);
@@ -166,6 +170,7 @@ export const ModelInfo = (): JSX.Element => {
         <InfoBar
           currentSpecification={currentSpecification}
           setIsTechs={setIsTechs}
+          setIsPriceHistory={setIsPriceHistory}
         />
       </div>
 
@@ -272,6 +277,19 @@ export const ModelInfo = (): JSX.Element => {
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}
+          />
+        </Modal>
+      }
+
+      {
+        isPriceHistory &&
+        <Modal onClose={() => setIsPriceHistory(false)}>
+          <PriceHistory
+            // currentTax={currentTax}
+            // setCurrentTax={setCurrentTax}
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+            // techs={specificationParams}
           />
         </Modal>
       }
