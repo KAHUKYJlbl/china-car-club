@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import cn from 'classnames';
+import dayjs from 'dayjs';
 
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
@@ -12,14 +13,16 @@ import { fetchSpecificationPriceHistory, getSpecifications, getSpecificationsLoa
 import { getSpecificationPriceHistory, getSpecificationPriceHistoryLoadingStatus } from '../../../entities/specification';
 import { getCurrency, getCurrencyExchange, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 
-import classes from './price-history.module.sass';
 import { getPriceChanges } from '../lib/utils/get-price-changes';
-import dayjs from 'dayjs';
+import { PriceTypes } from '../lib/const';
+import classes from './price-history.module.sass';
 
-enum Prices {
-  Factory = 'завода',
-  Dealer = 'дилера',
-};
+dayjs.updateLocale('ru', {
+  monthsShort: [
+    "янв", "фев", "мар", "апр", "мая", "июн",
+    "июл", "авг", "сен", "окт", "ноя", "дек"
+  ]
+})
 
 type PriceHistoryProps = {
   currentSpecification: number | null;
@@ -30,7 +33,7 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
   const dispatch = useAppDispatch();
   const [ searchParams, _setSearchParams ] = useSearchParams();
 
-  const [ currentPrice, setCurrentPrice ] = useState(Prices.Factory);
+  const [ currentPrice, setCurrentPrice ] = useState(PriceTypes.Factory);
 
   const priceHistory = useAppSelector(getSpecificationPriceHistory);
   const priceHistoryLoadingStatus = useAppSelector(getSpecificationPriceHistoryLoadingStatus);
@@ -42,10 +45,10 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
   const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
 
   useEffect(() => {
-    if (currentSpecification && priceHistoryLoadingStatus.isIdle) {
+    if (currentSpecification) {
       dispatch(fetchSpecificationPriceHistory(currentSpecification));
     }
-  }, []);
+  }, [currentSpecification]);
 
   if (
     ! name
@@ -87,17 +90,17 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
           priceHistory.filter((price) => price.dealerPrice !== 0).length > 0 &&
           <div className={classes.buttonWrapper}>
             <button
-              className={cn(currentPrice === Prices.Factory && classes.current)}
-              onClick={() => setCurrentPrice(Prices.Factory)}
+              className={cn(currentPrice === PriceTypes.Factory && classes.current)}
+              onClick={() => setCurrentPrice(PriceTypes.Factory)}
             >
-              Цена {Prices.Factory}
+              Цена {PriceTypes.Factory}
             </button>
 
             <button
-              className={cn(currentPrice === Prices.Dealer && classes.current)}
-              onClick={() => setCurrentPrice(Prices.Dealer)}
+              className={cn(currentPrice === PriceTypes.Dealer && classes.current)}
+              onClick={() => setCurrentPrice(PriceTypes.Dealer)}
             >
-              Цена {Prices.Dealer}
+              Цена {PriceTypes.Dealer}
             </button>
           </div>
         }
@@ -106,7 +109,17 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
           <div className={classes.flexRow}>
             <p>Текущая цена {currentPrice}:</p>
 
-            <p><span>{priceFormat(getCurrencyExchange(priceHistory[0].factoryPrice, currentCurrency, currency))} {currentCurrency}</span></p>
+            <p>
+              <span>
+                {priceFormat(
+                  getCurrencyExchange(
+                    priceHistory[0][currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice'],
+                    currentCurrency,
+                    currency
+                  )
+                )} {currentCurrency}
+                </span>
+              </p>
           </div>
 
           <div className={classes.flexRow}>
@@ -115,7 +128,11 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  priceHistory.toSorted((a, b) => a.factoryPrice - b.factoryPrice)[0].factoryPrice,
+                  priceHistory.toSorted((a, b) =>
+                    a[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']
+                    -
+                    b[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']
+                  )[0][currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice'],
                   currentCurrency,
                   currency
                 ))
@@ -129,7 +146,11 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  priceHistory.toSorted((a, b) => b.factoryPrice - a.factoryPrice)[0].factoryPrice,
+                  priceHistory.toSorted((a, b) =>
+                    b[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']
+                    -
+                    a[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']
+                  )[0][currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice'],
                   currentCurrency,
                   currency
                 ))
@@ -147,39 +168,48 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
         </div>
 
         <ul className={classes.priceList}>
-          <li className={classes.flexRow}>
-            <p>{priceHistory[0].date}</p>
-            <p>
-              {
-                priceFormat(getCurrencyExchange(
-                  priceHistory[0].factoryPrice,
-                  currentCurrency,
-                  currency
-                ))
-              } {currentCurrency}
-            </p>
-          </li>
-
           {
-            getPriceChanges(priceHistory).map((price) => (
-              <li className={classes.flexRow}>
-                <p>{price.date}</p>
-                <p>
+            getPriceChanges(priceHistory, currentPrice).map((price, index, array) => (
+              <li
+              key={price.date}
+                className={classes.flexRow}
+              >
+                <div className={classes.priceWrapper}>
+                  <p>
+                    {
+                      priceFormat(getCurrencyExchange(
+                        price[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice'],
+                        currentCurrency,
+                        currency
+                      ))
+                    } {currentCurrency}
+                  </p>
+
                   {
-                    priceFormat(getCurrencyExchange(
-                      price.factoryPrice,
-                      currentCurrency,
-                      currency
-                    ))
-                  } {currentCurrency}
-                </p>
+                    index !== array.length - 1 &&
+                    <svg
+                      width="18"
+                      height="18"
+                      aria-hidden="true"
+                    >
+                      <use xlinkHref={
+                        (price[currentPrice === PriceTypes.Factory? 'factoryPrice' : 'dealerPrice']
+                        >
+                        array[index + 1][currentPrice === PriceTypes.Factory? 'factoryPrice' : 'dealerPrice'])
+                        ? '#price-up'
+                        : '#price-down'
+                      } />
+                  </svg>
+                  }
+                </div>
+                <p>{dayjs(price.date).locale('ru').format('DD MMM YYYY')}</p>
               </li>
             ))
           }
 
           <li className={classes.flexRow}>
             <p>Последняя проверка</p>
-            <p>{dayjs(priceHistory[0].date).locale('ru').format('DD MMMM YYYY')}</p>
+            <p>{dayjs(priceHistory[0].date).locale('ru').format('DD MMM YYYY')}</p>
           </li>
         </ul>
       </div>
