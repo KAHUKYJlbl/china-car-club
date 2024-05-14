@@ -128,7 +128,7 @@ export const PriceHistory = ({ currentSpecification, setCurrentSpecification }: 
             <p>
               {
                 priceFormat(getCurrencyExchange(
-                  priceHistory.toSorted((a, b) =>
+                  getPriceChanges(priceHistory, currentPrice).toSorted((a, b) =>
                     a[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']
                     -
                     b[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']

@@ -6,6 +6,7 @@ export const getPriceChanges = (prices: PriceHistoryType[], currentPrice: PriceT
   if (prices.length) {
     return prices
       .toReversed()
+      .filter((price) => price[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice'] !== 0)
       .reduce<PriceHistoryType[]>((acc, current) => {
         if (
           acc[acc.length - 1][currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice']
@@ -16,7 +17,6 @@ export const getPriceChanges = (prices: PriceHistoryType[], currentPrice: PriceT
         }
         return acc.concat(current);
       }, [prices[prices.length - 1]])
-      .filter((price) => price[currentPrice === PriceTypes.Factory ? 'factoryPrice' : 'dealerPrice'] !== 0)
       .toReversed()
   }
   return [];
