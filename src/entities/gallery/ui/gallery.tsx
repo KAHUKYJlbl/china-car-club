@@ -1,4 +1,4 @@
-import { memo, Suspense, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
@@ -6,7 +6,6 @@ import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { getName } from '../../../entities/manufacturer';
 import { ImgUrlType } from '../../../entities/specification';
 
-import { GalleryImg } from './gallery-img';
 import { GalleryPagination } from './gallery-pagination';
 import { getPromoGallery, getPromoGalleryLoadingStatus } from '../model/gallery-selectors';
 import { GalleryType } from '../lib/types';
