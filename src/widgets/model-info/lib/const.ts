@@ -7,6 +7,11 @@ export enum TaxesTypes {
   VAT = 'Без НДС',
 };
 
+export enum PriceTypes {
+  Factory = 'завода',
+  Dealer = 'дилера',
+};
+
 export const Statuses = [
   '',
   'В продаже',

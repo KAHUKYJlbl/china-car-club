@@ -3,20 +3,23 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-import { SpecificationAddProductsType, SpecificationImageType, SpecificationType } from '../lib/types';
+import { PriceHistoryType, SpecificationAddProductsType, SpecificationImageType, SpecificationType } from '../lib/types';
 import { fetchSpecifications } from './api-actions/fetch-specifications';
 import { fetchSpecificationsInfo } from './api-actions/fetch-specification-info';
 import { fetchSpecificationsImage } from './api-actions/fetch-specification-image';
 import { fetchSpecificationAddProducts } from './api-actions/fetch-specification-add-products';
 import { ADDS_GROUPS } from '../lib/const';
+import { fetchSpecificationPriceHistory } from './api-actions/fetch-specification-price-history';
 
 type InitialState = {
-  specificationAddProducts: SpecificationAddProductsType | null;
   specifications: SpecificationType[];
   specificationImg: SpecificationImageType;
+  specificationAddProducts: SpecificationAddProductsType | null;
+  specificationPriceHistory: PriceHistoryType[];
   specificationsLoadingStatus: FetchStatus;
-  specificationAddProductsLoadingStatus: FetchStatus;
   specificationImgLoadingStatus: FetchStatus;
+  specificationAddProductsLoadingStatus: FetchStatus;
+  specificationPriceHistoryLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -27,9 +30,11 @@ const initialState: InitialState = {
     interior: [],
     official: [],
   },
+  specificationPriceHistory: [],
   specificationsLoadingStatus: FetchStatus.Idle,
   specificationAddProductsLoadingStatus: FetchStatus.Idle,
   specificationImgLoadingStatus: FetchStatus.Idle,
+  specificationPriceHistoryLoadingStatus: FetchStatus.Idle,
 };
 
 export const specificationSlice = createSlice({
@@ -38,6 +43,8 @@ export const specificationSlice = createSlice({
   reducers: {
     setSpecsIdle: (state) => {
       state.specifications = [];
+      state.specificationAddProducts = null;
+      state.specificationPriceHistory = [];
       state.specificationImg = {
         external: [],
         interior: [],
@@ -45,6 +52,8 @@ export const specificationSlice = createSlice({
       };
       state.specificationsLoadingStatus = FetchStatus.Idle;
       state.specificationImgLoadingStatus = FetchStatus.Idle;
+      state.specificationAddProductsLoadingStatus = FetchStatus.Idle;
+      state.specificationPriceHistoryLoadingStatus = FetchStatus.Idle;
     },
   },
   extraReducers(builder) {
@@ -88,6 +97,16 @@ export const specificationSlice = createSlice({
       })
       .addCase(fetchSpecificationsInfo.rejected, (state) => {
         state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationPriceHistory.fulfilled, (state, action) => {
+        state.specificationPriceHistory = action.payload;
+        state.specificationPriceHistoryLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationPriceHistory.pending, (state) => {
+        state.specificationPriceHistoryLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationPriceHistory.rejected, (state) => {
+        state.specificationPriceHistoryLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchSpecificationsImage.fulfilled, (state, action) => {
         state.specificationImg = action.payload;

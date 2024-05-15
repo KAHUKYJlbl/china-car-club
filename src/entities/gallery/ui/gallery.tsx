@@ -122,7 +122,7 @@ export const Gallery = memo(
             backgroundSize: "cover"
           }}
         >
-          <img src={`${process.env.STATIC_URL}${gallery[currentImage].url.big}`} />
+          {/* <img src={`${process.env.STATIC_URL}${gallery[currentImage].url.big}`} /> */}
         </div>
 
         <div className={classes.overlay}>
