@@ -21,12 +21,17 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
 
-  const { register, handleSubmit, watch } = useForm<SmsFormType>();
+  const { register, handleSubmit, watch, setValue } = useForm<SmsFormType>();
 
   const getMask = () => {
     const phone = unmask(watch('msisdn'));
     if (phone.startsWith('7')) {
       toast.dismiss();
+      return '+9 (999) 999-99-99';
+    }
+    if (phone.startsWith('8')) {
+      toast.dismiss();
+      setValue('msisdn', '7');
       return '+9 (999) 999-99-99';
     }
     if (phone.startsWith('374') || phone.startsWith('993')) {
@@ -68,7 +73,6 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
     toast.error('Необходимо ввести номер телефона.')
   }
 
-
   return (
     <div className={classes.wrapper}>
       <p className={classes.header}>
@@ -82,7 +86,7 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
               autoComplete="off"
               className={classes.input}
               mask={getMask()}
-              maskChar=" "
+              maskChar={null}
               {...register("msisdn", { required: true })}
             />
 

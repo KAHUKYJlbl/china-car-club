@@ -26,28 +26,24 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
     name: 'Двигатель',
     elements: [
       {
+        elementId: 3,
+        name: 'Электро',
+      },
+      {
+        elementId: 10,
+        name: 'Гибрид REV',
+      },
+      {
+        elementId: 9,
+        name: 'Гибрид PHEV',
+      },
+      {
         elementId: 1,
         name: 'Бензин',
       },
       {
         elementId: 2,
         name: 'Дизель',
-      },
-      {
-        elementId: 3,
-        name: 'Электро',
-      },
-      {
-        elementId: 4,
-        name: 'Водород',
-      },
-      {
-        elementId: 5,
-        name: 'Гибрид на метаноле',
-      },
-      {
-        elementId: 6,
-        name: 'Гибрид HEV',
       },
       {
         elementId: 7,
@@ -58,12 +54,16 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         name: 'Гибрид MHEV + дизель',
       },
       {
-        elementId: 9,
-        name: 'Гибрид PHEV',
+        elementId: 6,
+        name: 'Гибрид HEV',
       },
       {
-        elementId: 10,
-        name: 'Гибрид REV',
+        elementId: 5,
+        name: 'Гибрид на метаноле',
+      },
+      {
+        elementId: 4,
+        name: 'Водород',
       },
     ],
   },
@@ -75,6 +75,26 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         name: 'Внедорожник',
       },
       {
+        elementId: 6,
+        name: 'Седан',
+      },
+      {
+        elementId: 9,
+        name: 'MPV',
+      },
+      {
+        elementId: 5,
+        name: 'Пикап',
+      },
+      {
+        elementId: 4,
+        name: 'Мини',
+      },
+      {
+        elementId: 7,
+        name: 'Спортивный',
+      },
+      {
         elementId: 2,
         name: 'Микроавтобус',
       },
@@ -83,28 +103,8 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         name: 'Микрогрузовик',
       },
       {
-        elementId: 4,
-        name: 'Мини',
-      },
-      {
-        elementId: 5,
-        name: 'Пикап',
-      },
-      {
-        elementId: 6,
-        name: 'Седан',
-      },
-      {
-        elementId: 7,
-        name: 'Спортивный',
-      },
-      {
         elementId: 8,
         name: 'Фургон',
-      },
-      {
-        elementId: 9,
-        name: 'MPV',
       },
     ],
   },
@@ -133,6 +133,10 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
     name: 'Привод',
     elements: [
       {
+        elementId: 3,
+        name: 'Полный',
+      },
+      {
         elementId: 1,
         name: 'Передний',
       },
@@ -140,34 +144,30 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         elementId: 2,
         name: 'Задний',
       },
-      {
-        elementId: 3,
-        name: 'Полный',
-      },
     ],
   },
   region: {
     name: 'Страна',
     elements: [
       {
+        elementId: 5,
+        name: 'Китай',
+      },
+      {
         elementId: 1,
         name: 'Европа',
-      },
-      {
-        elementId: 2,
-        name: 'Америка',
-      },
-      {
-        elementId: 3,
-        name: 'Япония',
       },
       {
         elementId: 4,
         name: 'Корея',
       },
       {
-        elementId: 5,
-        name: 'Китай',
+        elementId: 3,
+        name: 'Япония',
+      },
+      {
+        elementId: 2,
+        name: 'Америка',
       },
     ],
   },

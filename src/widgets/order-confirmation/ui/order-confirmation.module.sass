@@ -1,0 +1,84 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: grid
+  grid-template-rows: min-content min-content min-content
+  grid-template-columns: 310px minmax(598px, 886px)
+  gap: 4px
+
+  margin-top: 20px
+
+  @media screen and (max-width: 960px)
+    display: flex
+    flex-direction: column
+
+  .subwrapper
+    padding: 12px
+
+    border-radius: 16px
+    background-color: $primary
+
+    font-size: 14px
+    line-height: 18px
+
+    p
+      padding-left: 4px
+
+    .header
+      font-size: 24px
+      line-height: 28px
+
+    .block
+      display: flex
+      flex-direction: column
+      gap: 12px
+
+      padding-bottom: 12px
+      border-bottom: 2px solid $secondary
+
+    .block:last-child
+      border: none
+
+  .bar
+    grid-area: 1 / 1 / 2 / 3
+
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    font-size: 24px
+    font-weight: 700
+    line-height: 28px
+
+    button
+      width: 80px
+      height: 40px
+
+      border-radius: 12px
+      background-color: $secondary
+
+      font-size: 12px
+
+      cursor: pointer
+
+    button:hover
+      background-color: $primary-light
+
+  .data
+    grid-area: 2 / 1 / 4 / 2
+
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+
+    .model
+      span
+        font-weight: 700
+
+
+  .conditions
+    grid-area: 2 / 2 / 3 / 3
+
+  .confirm
+    grid-area: 3 / 2 / 4 / 3
