@@ -2,7 +2,7 @@
 
 .wrapper
   display: grid
-  grid-template-rows: min-content min-content min-content
+  grid-template-rows: min-content 1fr min-content
   grid-template-columns: 310px minmax(598px, 886px)
   gap: 4px
 
@@ -38,6 +38,7 @@
 
     .block:last-child
       border: none
+      padding-bottom: 0
 
   .bar
     grid-area: 1 / 1 / 2 / 3
@@ -49,6 +50,10 @@
     font-size: 24px
     font-weight: 700
     line-height: 28px
+
+    @media screen and (max-width: 960px)
+      font-size: 18px
+      line-height: 22px
 
     button
       width: 80px
@@ -71,14 +76,121 @@
     flex-direction: column
     gap: 12px
 
-
     .model
       span
         font-weight: 700
 
+    .list-wrapper
+      padding-left: 4px
+
+      font-size: 12px
+      line-height: 16px
+
+      ul
+        list-style: none
+
+      span
+        color: $text-light
+
+      .nested-list
+        list-style: disc
+        padding-left: 12px
+
+        li::marker
+          color: $text-light
+
+    .checkbox-label
+      display: flex
+      gap: 8px
+
+      cursor: pointer
+
+      .checkbox
+        height: 24px
+        width: 24px
+        margin-top: 2px
+        padding: 2px
+        flex-shrink: 0
+
+        border: 2px solid $border
+        border-radius: 8px
+
+      .checkbox:hover
+        border-color: $accent
+
+      .checked
+        border-color: $accent
+        background-color: $accent
+        color: $white
+
+      .checked:hover
+        border-color: $primary-light
+        background-color: $primary-light
+        color: $accent
 
   .conditions
     grid-area: 2 / 2 / 3 / 3
 
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    .condition-button
+      display: flex
+      justify-content: space-between
+      align-items: center
+
+      width: 100%
+      height: 40px
+      padding: 0 16px
+
+      border-radius: 12px
+      background-color: $secondary
+      cursor: pointer
+
+      font-size: 16px
+      line-height: 20px
+
+    .condition-button:hover
+      background-color: $primary-light
+
+    .filled
+      background-color: $checked
+      color: $text-checked
+
+    .filled:hover
+      color: $text-checked
+
+    input
+      width: 290px
+      padding: 0 16px
+
+      border-radius: 12px
+      outline: none
+
+      line-height: 40px
+
+    textarea
+      resize: none
+      height: 100%
+      min-height: 110px
+      padding: 12px 16px
+
+      border-radius: 12px
+
   .confirm
     grid-area: 3 / 2 / 4 / 3
+
+    button
+      width: 100%
+      height: 50px
+
+      background-color: $accent
+      border-radius: 12px
+
+      color: $white
+
+    button:hover
+      background-color: $primary-light
+      color: $accent
+      cursor: pointer

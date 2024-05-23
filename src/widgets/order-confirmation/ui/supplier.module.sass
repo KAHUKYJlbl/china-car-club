@@ -1,0 +1,67 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 48px 12px 16px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+
+  .header
+    font-size: 18px
+    font-weight: 700
+    line-height: 22px
+
+    padding: 0 2px
+
+  .subheader
+    margin-top: 4px
+    padding: 0 2px
+
+    font-size: 12px
+    line-height: 16px
+    color: $text-light
+
+  ul
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    list-style: none
+
+    label
+      display: flex
+      gap: 8px
+      align-items: center
+
+      padding: 8px 12px
+
+      background-color: $secondary
+      border-radius: 12px
+
+      font-size: 16px
+      line-height: 20px
+      cursor: pointer
+
+      div
+        height: 20px
+        width: 20px
+        flex-shrink: 0
+
+        border-radius: 50%
+        border: 2px solid $border
+
+      div:hover
+        border-color: $accent
+
+    .checked
+        border: none
+        background-color: $primary-light
+
+    label:hover
+      background-color: $primary-light

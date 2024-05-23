@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRoute } from '../../../app/provider/router';
-import { ChooseOptions, getTotal } from '../../../features/choose-options';
+import { ChooseOptions, getPrices, getTotal } from '../../../features/choose-options';
 import { SpecificationInfo } from '../../../features/choose-specification';
 import {
   fetchSpecificationAddProducts,
@@ -61,7 +61,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const manufacturerId = useAppSelector((state) => getManufacturerByModel( state, Number( searchParams.get('model') ) ));
   const currentTax = useAppSelector(getCurrentTax);
-  const adds = useAppSelector(getAdds);
+  const options = useAppSelector(getAdds);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currentColor = useAppSelector(getCurrentColor);
 
@@ -196,15 +196,13 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       <div className={classes.buttons}>
         <OrderButtons
           specificationId={currentSpecification}
-          epts={adds.epts}
+          epts={options.epts}
           setConfirmation={setConfirmation}
           prices={{
             totalPrice: Number(
               getTotal({
-                totalPrice: currentTax === TaxesTypes.PERS
-                  ? specificationParams.price.withLogisticsPers
-                  : specificationParams.price.withLogisticsCorp,
-                options: adds,
+                totalPrice: getPrices(currentTax, specificationParams.price),
+                options,
                 optionsPrices: {
                   epts: specificationParams.price.eptsSbktsUtil,
                   guarantee: 0,

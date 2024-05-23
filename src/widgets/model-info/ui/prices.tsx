@@ -33,7 +33,6 @@ export const Prices = memo(
       return <LoadingSpinner spinnerType='widget' />
     }
 
-
     return (
       <div className={classes.wrapper}>
         <div className={classes.divider}>

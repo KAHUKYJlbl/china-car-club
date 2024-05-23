@@ -50,6 +50,7 @@ export type ManufacturersWithSpecificationsType = ManufacturersType & {
 export type AddItemType = {
   id: number;
   name: string;
+  fullName: string;
   description: string;
   price: number;
   tags: string[];
