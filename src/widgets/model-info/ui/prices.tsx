@@ -1,28 +1,30 @@
 import { memo } from 'react';
 import cn from 'classnames';
 
+import { getAddItemsPrice, getAdds, getCurrentTax, setCurrentTax } from '../../../entities/order';
 import { PriceType } from '../../../entities/model/lib/types';
 import { Currencies, getCurrency, getCurrencyExchange, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import priceFormat from '../../../shared/lib/utils/price-format';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
 import { getTaxes } from '../lib/utils/get-taxes';
 import { TaxesTypes } from '../lib/const';
-import { AddsType } from '../lib/types';
 import classes from './prices.module.sass';
 
 type PricesProps = {
   prices: PriceType;
-  adds: Record<AddsType, boolean>;
-  addItemsPrice: number;
-  currentTax: TaxesTypes;
-  setCurrentTax: React.Dispatch<React.SetStateAction<TaxesTypes>>;
   setIsTaxes: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Prices = memo(
-  ({ prices, adds, currentTax, setCurrentTax, setIsTaxes, addItemsPrice }: PricesProps): JSX.Element => {
+  ({ prices, setIsTaxes }: PricesProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+
+    const currentTax = useAppSelector(getCurrentTax);
+    const adds = useAppSelector(getAdds);
+    const addItemsPrice = useAppSelector(getAddItemsPrice);
     const currency = useAppSelector(getCurrency);
     const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -30,7 +32,6 @@ export const Prices = memo(
     if (currencyLoadingStatus.isLoading || !currency) {
       return <LoadingSpinner spinnerType='widget' />
     }
-
 
     return (
       <div className={classes.wrapper}>
@@ -87,14 +88,14 @@ export const Prices = memo(
             <div className={classes.buttons}>
               <button
                 className={cn({[classes.current]: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL})}
-                onClick={() => setCurrentTax(TaxesTypes.PERS)}
+                onClick={() => dispatch(setCurrentTax(TaxesTypes.PERS))}
               >
                 {TaxesTypes.PERS}
               </button>
 
               <button
                 className={cn({[classes.current]: currentTax === TaxesTypes.CORP || currentTax === TaxesTypes.VAT})}
-                onClick={() => setCurrentTax(TaxesTypes.CORP)}
+                onClick={() => dispatch(setCurrentTax(TaxesTypes.CORP))}
               >
                 {TaxesTypes.CORP}
               </button>

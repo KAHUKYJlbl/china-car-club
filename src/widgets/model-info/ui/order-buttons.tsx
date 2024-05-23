@@ -1,5 +1,6 @@
 import { memo } from 'react';
 
+import { getAddItems, getCurrentTax } from '../../../entities/order';
 import { Currencies, getCurrentCurrency } from '../../../entities/currency';
 import { getCurrentCity, getGeolocation, postOrder } from '../../../entities/user';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -7,12 +8,11 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
 import classes from './order-buttons.module.sass';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { toast } from 'react-toastify';
 import { TaxesTypes } from '../lib/const';
 
 type OrderButtonsProps = {
+  setConfirmation: () => void;
   specificationId: number | null;
-  addItems: number[];
   prices: {
     totalPrice: number;
     minPrice: number;
@@ -22,14 +22,15 @@ type OrderButtonsProps = {
     customsPrice: number;
   }
   epts: boolean;
-  currentTax: TaxesTypes;
 }
 
 export const OrderButtons = memo(
-  ({specificationId, epts, currentTax, prices, addItems}: OrderButtonsProps): JSX.Element => {
+  ({ specificationId, epts, prices, setConfirmation }: OrderButtonsProps): JSX.Element => {
     const dispatch = useAppDispatch();
+    const currentTax = useAppSelector(getCurrentTax);
     const geolocation = useAppSelector(getGeolocation);
     const city = useAppSelector(getCurrentCity);
+    const addItems = useAppSelector(getAddItems);
     const currentCurrency = Object.values(Currencies).indexOf(useAppSelector(getCurrentCurrency)) + 1;
 
     if (!specificationId) {
@@ -75,7 +76,7 @@ export const OrderButtons = memo(
         },
       }));
 
-      toast('Заказ принят.', {type: 'success'});
+      setConfirmation();
     };
 
     return (

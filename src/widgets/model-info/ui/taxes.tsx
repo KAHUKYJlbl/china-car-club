@@ -3,6 +3,7 @@ import cn from 'classnames';
 
 import { getSpecifications, getSpecificationsLoadingStatus } from '../../../entities/specification';
 import { Currencies, getCurrency, getCurrencyExchange } from '../../../entities/currency';
+import { getCurrentTax, setCurrentTax } from '../../../entities/order';
 import { getShorts, SpecsType } from '../../../entities/model';
 import { getName } from '../../../entities/manufacturer';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
@@ -13,21 +14,22 @@ import priceFormat from '../../../shared/lib/utils/price-format';
 import { TaxesTypes } from '../lib/const';
 import { getTaxes } from '../lib/utils/get-taxes';
 import classes from './taxes.module.sass';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
 type TaxesProps = {
-  currentTax: TaxesTypes;
-  setCurrentTax: React.Dispatch<React.SetStateAction<TaxesTypes>>;
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   techs: SpecsType;
 };
 
-export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, currentTax, setCurrentTax }: TaxesProps) => {
+export const Taxes = ({ currentSpecification, setCurrentSpecification, techs }: TaxesProps) => {
+  const dispatch = useAppDispatch();
   const [ searchParams, _setSearchParams ] = useSearchParams();
 
   const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
   const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
   const currency = useAppSelector(getCurrency);
+  const currentTax = useAppSelector(getCurrentTax);
   const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
@@ -92,7 +94,7 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                 classes.primary,
                 {[classes.current]: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL},
               )}
-              onClick={() => setCurrentTax(TaxesTypes.PERS)}
+              onClick={() => dispatch(setCurrentTax(TaxesTypes.PERS))}
             >
               Физлицом
             </button>
@@ -102,7 +104,7 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                 classes.primary,
                 {[classes.current]: currentTax === TaxesTypes.CORP || currentTax === TaxesTypes.VAT},
               )}
-              onClick={() => setCurrentTax(TaxesTypes.CORP)}
+              onClick={() => dispatch(setCurrentTax(TaxesTypes.CORP))}
             >
               Юрлицом
             </button>
@@ -149,7 +151,7 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                   classes.secondary,
                   {[classes.current]: currentTax === TaxesTypes.PERS},
                 )}
-                  onClick={() => setCurrentTax(TaxesTypes.PERS)}
+                  onClick={() => dispatch(setCurrentTax(TaxesTypes.PERS))}
                 >
                   Для себя
                 </button>
@@ -159,7 +161,7 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                   classes.secondary,
                   {[classes.current]: currentTax === TaxesTypes.SELL},
                 )}
-                  onClick={() => setCurrentTax(TaxesTypes.SELL)}
+                  onClick={() => dispatch(setCurrentTax(TaxesTypes.SELL))}
                 >
                   Перепродажа / Повышенный утиль
                 </button>
@@ -181,7 +183,7 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                     classes.secondary,
                     {[classes.current]: currentTax === TaxesTypes.CORP},
                   )}
-                  onClick={() => setCurrentTax(TaxesTypes.CORP)}
+                  onClick={() => dispatch(setCurrentTax(TaxesTypes.CORP))}
                 >
                   Без вычета НДС
                 </button>
@@ -191,7 +193,7 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs, cu
                     classes.secondary,
                     {[classes.current]: currentTax === TaxesTypes.VAT},
                   )}
-                  onClick={() => setCurrentTax(TaxesTypes.VAT)}
+                  onClick={() => dispatch(setCurrentTax(TaxesTypes.VAT))}
                 >
                   С вычетом НДС
                 </button>
