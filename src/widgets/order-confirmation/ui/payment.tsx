@@ -1,10 +1,14 @@
+import { useFormContext } from 'react-hook-form';
 import cn from 'classnames';
 
+import { OrderFormType } from '../lib/types';
 import classes from './payment.module.sass';
 
 type PaymentProps = {};
 
 export const Payment = ({}: PaymentProps) => {
+  const { register, watch } = useFormContext<OrderFormType>();
+
   return (
     <div className={classes.wrapper}>
       <div>
@@ -19,17 +23,27 @@ export const Payment = ({}: PaymentProps) => {
 
       <ul>
         <li>
-          <label className={classes.checked}>
-            <div className={cn(classes.checked, classes.checkbox)}>
-              <svg
-                width='20'
-                height='20'
-                aria-hidden="true"
-              >
-                <use xlinkHref="#v" />
-              </svg>
+          <label className={cn(watch('paymentType.1') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.1') && classes.checked
+            )}>
+              {
+                watch('paymentType.1') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
 
-              <input type='checkbox' className='visually-hidden'/>
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.1')}
+              />
             </div>
 
             <div>
@@ -45,9 +59,27 @@ export const Payment = ({}: PaymentProps) => {
         </li>
 
         <li>
-          <label>
-            <div className={classes.checkbox}>
-              <input type='checkbox' className='visually-hidden'/>
+          <label className={cn(watch('paymentType.2') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.2') && classes.checked
+            )}>
+              {
+                watch('paymentType.2') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.2')}
+              />
             </div>
 
             <div>
@@ -63,9 +95,27 @@ export const Payment = ({}: PaymentProps) => {
         </li>
 
         <li>
-          <label>
-            <div className={classes.checkbox}>
-              <input type='checkbox' className='visually-hidden'/>
+          <label className={cn(watch('paymentType.3') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.3') && classes.checked
+            )}>
+              {
+                watch('paymentType.3') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.3')}
+              />
             </div>
 
             <div>
@@ -81,9 +131,27 @@ export const Payment = ({}: PaymentProps) => {
         </li>
 
         <li>
-          <label>
-            <div className={classes.checkbox}>
-              <input type='checkbox' className='visually-hidden'/>
+          <label className={cn(watch('paymentType.4') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.4') && classes.checked
+            )}>
+              {
+                watch('paymentType.4') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.4')}
+              />
             </div>
 
             <div>
@@ -99,9 +167,27 @@ export const Payment = ({}: PaymentProps) => {
         </li>
 
         <li>
-          <label>
-            <div className={classes.checkbox}>
-              <input type='checkbox' className='visually-hidden'/>
+          <label className={cn(watch('paymentType.5') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.5') && classes.checked
+            )}>
+              {
+                watch('paymentType.5') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.5')}
+              />
             </div>
 
             <div>
@@ -117,9 +203,27 @@ export const Payment = ({}: PaymentProps) => {
         </li>
 
         <li>
-          <label>
-            <div className={classes.checkbox}>
-              <input type='checkbox' className='visually-hidden'/>
+          <label className={cn(watch('paymentType.6') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.6') && classes.checked
+            )}>
+              {
+                watch('paymentType.6') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.6')}
+              />
             </div>
 
             <div>

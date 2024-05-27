@@ -1,13 +1,17 @@
+import { useFormContext } from 'react-hook-form';
 import cn from 'classnames';
 
 import { getExtColors, getIntColors } from '../../../entities/specification';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 
+import { OrderFormType } from '../lib/types';
 import classes from './colors.module.sass';
 
 type ColorsProps = {};
 
 export const Colors = ({}: ColorsProps) => {
+  const { register, watch } = useFormContext<OrderFormType>();
+
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
 
@@ -31,39 +35,49 @@ export const Colors = ({}: ColorsProps) => {
 
           <ul>
             {
-              extColors.map((color) => (
+              extColors.map((color, id) => (
                 <li
                   className={classes.row}
                   key={color.color.id}
                 >
                   <label>
-                    <div className={cn(classes.checked, classes.checkbox)}>
-                      <svg
-                        width='20'
-                        height='20'
-                        aria-hidden="true"
-                      >
-                        <use xlinkHref="#v" />
-                      </svg>
+                    <div className={cn(
+                      classes.checkbox,
+                      watch(`colors.external.${id}.value`) && classes.checked,
+                    )}>
+                      {
+                        watch(`colors.external.${id}.value`) &&
+                        <svg
+                          width='20'
+                          height='20'
+                          aria-hidden="true"
+                        >
+                          <use xlinkHref="#v" />
+                        </svg>
+                      }
 
-                      <input type='checkbox' className='visually-hidden'/>
+                      <input
+                        type='checkbox'
+                        className='visually-hidden'
+                        {...register(`colors.external.${id}.value`)}
+                      />
                     </div>
 
                     <div className={classes.colorWrapper}>
                       <div className={classes.colors}>
                         <div
                           className={classes.color}
-                          style={{backgroundColor: `#${color.color.hexList[0]}`}}
+                          style={{backgroundColor: `#${extColors[id].color.hexList[0]}`}}
                         />
 
                         <div
                           className={classes.color}
-                          style={{backgroundColor: `#${color.color.hexList[1] || color.color.hexList[0]}`}}
+                          style={{backgroundColor: `#${extColors[id].color.hexList[1] || extColors[id].color.hexList[0]}`}}
                         />
                       </div>
 
                       <p className={classes.sublabel}>
-                        {color.color.name.ru || color.color.name.ch}
+                        {extColors[id].color.name.ru || extColors[id].color.name.ch}
                       </p>
                     </div>
                   </label>
@@ -81,22 +95,32 @@ export const Colors = ({}: ColorsProps) => {
 
           <ul>
             {
-              intColors.map((color) => (
+              intColors.map((color, id) => (
                 <li
                   className={classes.row}
                   key={color.color.id}
                 >
                   <label>
-                    <div className={cn(classes.checked, classes.checkbox)}>
-                      <svg
-                        width='20'
-                        height='20'
-                        aria-hidden="true"
-                      >
-                        <use xlinkHref="#v" />
-                      </svg>
+                    <div className={cn(
+                      classes.checkbox,
+                      watch(`colors.interior.${id}.value`) && classes.checked,
+                    )}>
+                      {
+                        watch(`colors.interior.${id}.value`) &&
+                        <svg
+                          width='20'
+                          height='20'
+                          aria-hidden="true"
+                        >
+                          <use xlinkHref="#v" />
+                        </svg>
+                      }
 
-                      <input type='checkbox' className='visually-hidden'/>
+                      <input
+                        type='checkbox'
+                        className='visually-hidden'
+                        {...register(`colors.interior.${id}.value`)}
+                      />
                     </div>
 
                     <div className={classes.colorWrapper}>

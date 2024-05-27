@@ -1,8 +1,8 @@
 import { memo } from 'react';
 
-import { getAddItems, getCurrentTax } from '../../../entities/order';
+import { getAddItems, getCurrentTax, postOrder } from '../../../entities/order';
 import { Currencies, getCurrentCurrency } from '../../../entities/currency';
-import { getCurrentCity, getGeolocation, postOrder } from '../../../entities/user';
+import { getCurrentCity, getGeolocation } from '../../../entities/user';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 

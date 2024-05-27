@@ -13,4 +13,5 @@ export enum APIRoute {
   AuthRefresh = '/auth/refresh',
   PostStatistics = '/statistics/car-calculation',
   PostOrder = '/statistics/car-order',
+  PostAnswers = '/statistics/answers',
 }
