@@ -30,6 +30,15 @@ export const orderSlice = createSlice({
   name: NameSpace.Currency,
   initialState,
   reducers: {
+    resetOrder: (state) => {
+      state.currentTax = initialState.currentTax;
+      state.adds = initialState.adds;
+      state.addItems = initialState.addItems;
+      state.addItemsPrice = initialState.addItemsPrice;
+      state.currentColor = initialState.currentColor;
+      state.order = initialState.order;
+      state.orderLoadingStatus = initialState.orderLoadingStatus;
+    },
     setCurrentTax: (state, action: PayloadAction<TaxesTypes>) => {
       state.currentTax = action.payload;
     },
@@ -71,4 +80,4 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor } = orderSlice.actions;
+export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder } = orderSlice.actions;

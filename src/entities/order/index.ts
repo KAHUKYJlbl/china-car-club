@@ -8,6 +8,7 @@ export {
   increasePrice,
   decreasePrice,
   setCurrentColor,
+  resetOrder,
 } from './model/order-slice';
 export {
   getCurrentTax,

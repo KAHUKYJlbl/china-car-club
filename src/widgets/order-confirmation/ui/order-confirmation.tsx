@@ -415,6 +415,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
                 methods.watch('colors.interior').some((color) => color.value) && classes.filled,
               )}
               onClick={() => setIsColors(true)}
+              disabled={!extColors || extColors.length === 0}
             >
               Предпочтительные цвета машины
 

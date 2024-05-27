@@ -10,7 +10,7 @@ import {
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Currencies, getCurrency, getCurrencyExchange } from '../../../entities/currency';
-import { addItem, getAddItems, getAddItemsPrice, increasePrice, removeItem, setAdd } from '../../../entities/order';
+import { addItem, decreasePrice, getAddItems, getAddItemsPrice, increasePrice, removeItem, setAdd } from '../../../entities/order';
 import { getName } from '../../../entities/manufacturer';
 import { getShorts, SpecsType } from '../../../entities/model';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
@@ -46,7 +46,7 @@ export const Adds = ({ currentSpecification, setCurrentSpecification, techs }: A
   const addItemHandler = (items: AddItemType[]) => {
     if (addItems.includes(getCurrentItem(activeItems, items)!.id)) {
       dispatch(removeItem( getCurrentItem(activeItems, items)!.id ));
-      dispatch(increasePrice( getCurrentItem(activeItems, items)!.price ));
+      dispatch(decreasePrice( getCurrentItem(activeItems, items)!.price ));
       if (addItemsPrice - getCurrentItem(activeItems, items)!.price === 0) {
         dispatch(setAdd({add: 'options', value: false}));
       }

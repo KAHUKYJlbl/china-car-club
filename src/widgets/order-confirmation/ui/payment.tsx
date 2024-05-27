@@ -17,7 +17,7 @@ export const Payment = ({}: PaymentProps) => {
         </p>
 
         <p className={classes.subheader}>
-          Выбор способа оплаты влияет на#nbsp;цены, условия и#nbsp;количество предложений от#nbsp;партнёров
+          Выбор способа оплаты влияет на&nbsp;цены, условия и&nbsp;количество предложений от&nbsp;партнёров
         </p>
       </div>
 

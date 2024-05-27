@@ -23,7 +23,7 @@ import {
   getCurrentCurrency
 } from '../../../entities/currency';
 import { Gallery } from '../../../entities/gallery';
-import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax, setCurrentColor } from '../../../entities/order';
+import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax, resetOrder, setCurrentColor } from '../../../entities/order';
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
 import { fetchManufacturers, getManufacturerByModel, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
@@ -76,6 +76,10 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
   const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
   const initSlide = useAppSelector((state) => getInitSlide(state, currentColor));
+
+  useEffect(() => {
+    dispatch(resetOrder());
+  }, []);
 
   useEffect(() => {
     if (specificationImgLoadingStatus.isSuccess) {
