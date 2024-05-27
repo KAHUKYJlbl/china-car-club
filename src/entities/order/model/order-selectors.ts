@@ -1,5 +1,8 @@
+import { createSelector } from '@reduxjs/toolkit';
+
 import { NameSpace, State } from '../../../app/provider/store';
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
+import { FetchStatus } from '../../../shared/api/fetch-status';
 
 export const getCurrentTax = (state: State): TaxesTypes => state[NameSpace.Order].currentTax;
 
@@ -10,3 +13,15 @@ export const getAddItems = (state: State): number[] => state[NameSpace.Order].ad
 export const getAddItemsPrice = (state: State): number => state[NameSpace.Order].addItemsPrice;
 
 export const getCurrentColor = (state: State): CurrentColorType => state[NameSpace.Order].currentColor;
+
+export const getCurrentOrder = (state: State): number | null => state[NameSpace.Order].order;
+
+export const getOrderLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Order].orderLoadingStatus,
+  (status) => ({
+    isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+

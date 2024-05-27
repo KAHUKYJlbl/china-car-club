@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NameSpace } from '../../../app/provider/store';
+import { FetchStatus } from '../../../shared/api/fetch-status';
 
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
+import { postOrder } from './api-actions/post-order';
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -10,6 +12,8 @@ type InitialState = {
   addItems: number[];
   addItemsPrice: number;
   currentColor: CurrentColorType;
+  order: number | null;
+  orderLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -18,6 +22,8 @@ const initialState: InitialState = {
   addItems: [],
   addItemsPrice: 0,
   currentColor: {int: null, ext: null, isInteriorFirst: false},
+  order: null,
+  orderLoadingStatus: FetchStatus.Idle,
 };
 
 export const orderSlice = createSlice({
@@ -49,6 +55,19 @@ export const orderSlice = createSlice({
     setCurrentColor: (state, action: PayloadAction<CurrentColorType>) => {
       state.currentColor = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(postOrder.fulfilled, (state, action) => {
+        state.order = action.payload;
+        state.orderLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(postOrder.pending, (state) => {
+        state.orderLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(postOrder.rejected, (state) => {
+        state.orderLoadingStatus = FetchStatus.Failed;
+      })
   },
 });
 

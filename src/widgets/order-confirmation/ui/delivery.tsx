@@ -1,10 +1,31 @@
+import { useFormContext } from 'react-hook-form';
 import cn from 'classnames';
 
+import { OrderFormType } from '../lib/types';
 import classes from './delivery.module.sass';
 
 type DeliveryProps = {};
 
 export const Delivery = ({}: DeliveryProps) => {
+  const { register, watch, setValue } = useFormContext<OrderFormType>();
+
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (e.target.value[0] === '0') {
+      setValue('preferredDeliveryTime.maxDays', '');
+      return;
+    }
+
+    if (e.target.value.length > 3) {
+      setValue('preferredDeliveryTime.maxDays', e.target.value.slice(0, 3));
+      return;
+    }
+
+    if (!/[0-9]/.test(e.target.value.slice(-1))) {
+      setValue('preferredDeliveryTime.maxDays', e.target.value.slice(0, -1));
+      return;
+    }
+  };
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.block}>
@@ -22,7 +43,11 @@ export const Delivery = ({}: DeliveryProps) => {
           <p>Не&nbsp;дольше</p>
 
           <div className={classes.input}>
-            <input type='text' placeholder='0' />
+            <input
+              type='text'
+              placeholder='0'
+              {...register('preferredDeliveryTime.maxDays', {onChange})}
+            />
 
             <p>дней</p>
           </div>
@@ -31,16 +56,26 @@ export const Delivery = ({}: DeliveryProps) => {
 
       <div className={classes.block}>
         <label className={classes.checkboxLabel}>
-          <div className={cn(classes.checkbox, classes.checked)}>
-            <svg
-              width='16'
-              height='16'
-              aria-hidden="true"
-            >
-              <use xlinkHref="#v" />
-            </svg>
+          <div className={cn(
+            classes.checkbox,
+            watch('preferredDeliveryTime.highPricedOption') && classes.checked
+          )}>
+            {
+              watch('preferredDeliveryTime.highPricedOption') &&
+              <svg
+                width='16'
+                height='16'
+                aria-hidden="true"
+              >
+                <use xlinkHref="#v" />
+              </svg>
+            }
 
-            <input type='checkbox' className='visually-hidden' />
+            <input
+              type='checkbox'
+              className='visually-hidden'
+              {...register('preferredDeliveryTime.highPricedOption')}
+            />
           </div>
 
           Могу рассмотреть варианты в&nbsp;России с&nbsp;ценой выше

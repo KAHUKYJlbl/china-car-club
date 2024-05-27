@@ -40,7 +40,6 @@ export const ConfirmPhone = ({ phone, setMode, onClose, onLogin }: ConfirmPhoneP
     }
   };
 
-
   const onConfirmSubmit: SubmitHandler<ConfirmFormType> = (data) => {
     if (user) {
       dispatch(postConfirm({
