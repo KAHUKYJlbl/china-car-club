@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
 
@@ -8,7 +8,7 @@ import { getPrices, getTotal } from '../../../features/choose-options';
 import { getName } from '../../../entities/manufacturer';
 import { getCurrentCity } from '../../../entities/user';
 import { getSpecificationParams } from '../../../entities/model';
-import { getAddItems, getAddItemsPrice, getAdds, getCurrentOrder, getCurrentTax, postAnswers, resetOrder } from '../../../entities/order';
+import { getAddItems, getAddItemsPrice, getAdds, getCurrentOrder, getCurrentTax, postAnswers } from '../../../entities/order';
 import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { AddItemType, getExtColors, getIntColors, getSpecificationAddProducts, getSpecifications } from '../../../entities/specification';
 import { Modal } from '../../../shared/ui/modal';
@@ -25,6 +25,7 @@ import { Supplier } from './supplier';
 import { OrderFormType } from '../lib/types';
 import { TAX_NAMES, TAX_SUBNAMES } from '../lib/const';
 import classes from './order-confirmation.module.sass';
+import { AppRoute } from '../../../app/provider/router';
 
 type OrderConfirmationProps = {
   cancelConfirmation: () => void;
@@ -34,6 +35,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [ searchParams, _setSearchParams ] = useSearchParams();
   const [ fieldErrors, setFieldErrors ] = useState({
@@ -492,15 +494,9 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
         {
           isDone &&
           <Modal
-            onClose={() => {
-              dispatch(resetOrder());
-              cancelConfirmation();
-            }}
+            onClose={() => {navigate(AppRoute.Main)}}
           >
-            <Done onDone={() => {
-              dispatch(resetOrder());
-              cancelConfirmation();
-            }} />
+            <Done onDone={() => {navigate(AppRoute.Main)}} />
           </Modal>
         }
       </form>
