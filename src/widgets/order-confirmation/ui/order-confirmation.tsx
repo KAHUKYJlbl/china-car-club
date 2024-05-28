@@ -8,7 +8,7 @@ import { getPrices, getTotal } from '../../../features/choose-options';
 import { getName } from '../../../entities/manufacturer';
 import { getCurrentCity } from '../../../entities/user';
 import { getSpecificationParams } from '../../../entities/model';
-import { getAddItems, getAddItemsPrice, getAdds, getCurrentOrder, getCurrentTax, postAnswers } from '../../../entities/order';
+import { getAddItems, getAddItemsPrice, getAdds, getCurrentOrder, getCurrentTax, postAnswers, resetOrder } from '../../../entities/order';
 import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { AddItemType, getExtColors, getIntColors, getSpecificationAddProducts, getSpecifications } from '../../../entities/specification';
 import { Modal } from '../../../shared/ui/modal';
@@ -17,6 +17,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
+import { Done } from './done';
 import { Colors } from './colors';
 import { Delivery } from './delivery';
 import { Payment } from './payment';
@@ -86,6 +87,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
   const [ isPayment, setIsPayment ] = useState(false);
   const [ isDelivery, setIsDelivery ] = useState(false);
   const [ isColors, setIsColors ] = useState(false);
+  const [ isDone, setIsDone ] = useState(false);
 
   const isPaymentTypeEmpty = () => {
     return (
@@ -146,7 +148,9 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
         }
       },
     }))
-    .then(() => cancelConfirmation());
+    .then(() => {
+      setIsDone(true);
+    });
   };
 
   const errorHandler: SubmitErrorHandler<OrderFormType> = (errors) => {
@@ -459,30 +463,44 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
 
         {
           isSupplier &&
-          <Modal onClose={() => setIsSupplier(false)}>
-            <Supplier />
+          <Modal onClose={() => setIsSupplier(false)} >
+            <Supplier onClose={() => setIsSupplier(false)} />
           </Modal>
         }
 
         {
           isPayment &&
-          <Modal onClose={() => setIsPayment(false)}>
-            <Payment />
+          <Modal onClose={() => setIsPayment(false)} >
+            <Payment onClose={() => setIsPayment(false)} />
           </Modal>
         }
 
         {
           isDelivery &&
-          <Modal onClose={() => setIsDelivery(false)}>
-            <Delivery />
+          <Modal onClose={() => setIsDelivery(false)} >
+            <Delivery onClose={() => setIsDelivery(false)} />
           </Modal>
         }
 
         {
           isColors &&
-          <Modal onClose={() => setIsColors(false)}>
-            <Colors
-            />
+          <Modal onClose={() => setIsColors(false)} >
+            <Colors onClose={() => setIsColors(false)} />
+          </Modal>
+        }
+
+        {
+          isDone &&
+          <Modal
+            onClose={() => {
+              dispatch(resetOrder());
+              cancelConfirmation();
+            }}
+          >
+            <Done onDone={() => {
+              dispatch(resetOrder());
+              cancelConfirmation();
+            }} />
           </Modal>
         }
       </form>

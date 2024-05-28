@@ -4,9 +4,11 @@ import cn from 'classnames';
 import { OrderFormType } from '../lib/types';
 import classes from './payment.module.sass';
 
-type PaymentProps = {};
+type PaymentProps = {
+  onClose: () => void;
+};
 
-export const Payment = ({}: PaymentProps) => {
+export const Payment = ({ onClose }: PaymentProps) => {
   const { register, watch } = useFormContext<OrderFormType>();
 
   return (
@@ -238,6 +240,10 @@ export const Payment = ({}: PaymentProps) => {
           </label>
         </li>
       </ul>
+
+      <button className={classes.saveButton} onClick={onClose}>
+        Сохранить
+      </button>
     </div>
   );
 };

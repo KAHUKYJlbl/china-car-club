@@ -7,9 +7,11 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { OrderFormType } from '../lib/types';
 import classes from './colors.module.sass';
 
-type ColorsProps = {};
+type ColorsProps = {
+  onClose: () => void;
+};
 
-export const Colors = ({}: ColorsProps) => {
+export const Colors = ({ onClose }: ColorsProps) => {
   const { register, watch } = useFormContext<OrderFormType>();
 
   const extColors = useAppSelector(getExtColors);
@@ -147,6 +149,10 @@ export const Colors = ({}: ColorsProps) => {
           </ul>
         </div>
       }
+
+      <button className={classes.saveButton} onClick={onClose}>
+        Сохранить
+      </button>
     </div>
   );
 };

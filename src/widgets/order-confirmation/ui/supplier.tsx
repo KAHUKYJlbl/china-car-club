@@ -4,9 +4,11 @@ import cn from 'classnames';
 import { OrderFormType } from '../lib/types';
 import classes from './supplier.module.sass';
 
-type SupplierProps = {};
+type SupplierProps = {
+  onClose: () => void;
+};
 
-export const Supplier = ({}: SupplierProps) => {
+export const Supplier = ({ onClose }: SupplierProps) => {
   const { register, watch } = useFormContext<OrderFormType>();
 
   return (
@@ -178,6 +180,10 @@ export const Supplier = ({}: SupplierProps) => {
           </label>
         </li>
       </ul>
+
+      <button className={classes.saveButton} onClick={onClose}>
+        Сохранить
+      </button>
     </div>
   );
 };

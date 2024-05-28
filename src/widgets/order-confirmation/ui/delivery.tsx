@@ -4,9 +4,11 @@ import cn from 'classnames';
 import { OrderFormType } from '../lib/types';
 import classes from './delivery.module.sass';
 
-type DeliveryProps = {};
+type DeliveryProps = {
+  onClose: () => void;
+};
 
-export const Delivery = ({}: DeliveryProps) => {
+export const Delivery = ({ onClose }: DeliveryProps) => {
   const { register, watch, setValue } = useFormContext<OrderFormType>();
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -102,6 +104,10 @@ export const Delivery = ({}: DeliveryProps) => {
           Здесь самые быстрые сроки поставки, но&nbsp;выбор меньше и&nbsp;цена может быть немного выше
         </p>
       </div>
+
+      <button className={classes.saveButton} onClick={onClose}>
+        Сохранить
+      </button>
     </div>
   );
 };
