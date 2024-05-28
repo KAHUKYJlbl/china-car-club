@@ -27,7 +27,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
 
   if (userLoadingStatus.isLoading || !user) {
     return (
-      <Modal onClose={onClose}>
+      <Modal onClose={onClose} button>
         <div className={classes.wrapperLoader}>
           <LoadingSpinner spinnerType='widget' />
         </div>
@@ -36,7 +36,7 @@ export const Login = ({ onClose, onLogin }: LoginProps): JSX.Element => {
   }
 
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose} button>
       <div className={classes.wrapper}>
         {
           (mode === 'init') &&

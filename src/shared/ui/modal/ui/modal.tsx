@@ -11,9 +11,10 @@ ReactModal.setAppElement('#root');
 
 type ModalProps = {
   onClose: () => void;
+  button?: boolean;
 }
 
-export function CustomModal ({onClose, children}: PropsWithChildren<ModalProps>): JSX.Element {
+export function CustomModal ({onClose, button = false, children}: PropsWithChildren<ModalProps>): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside([ref], onClose);
 
@@ -58,16 +59,19 @@ export function CustomModal ({onClose, children}: PropsWithChildren<ModalProps>)
           <div className={classes.modalContent} ref={ref}>
             {children}
 
-            <button
-              className={classes.crossBtn}
-              type="button"
-              aria-label="Закрыть попап"
-              onClick={onClose}
-            >
-              <svg width="10" height="10" aria-hidden="true">
-                <use xlinkHref="#icon-close"></use>
-              </svg>
-            </button>
+            {
+              button &&
+              <button
+                className={classes.crossBtn}
+                type="button"
+                aria-label="Закрыть попап"
+                onClick={onClose}
+              >
+                <svg width="10" height="10" aria-hidden="true">
+                  <use xlinkHref="#icon-close"></use>
+                </svg>
+              </button>
+            }
           </div>
         </div>
       </div>

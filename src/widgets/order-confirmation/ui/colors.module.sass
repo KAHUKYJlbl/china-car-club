@@ -1,0 +1,131 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+
+  ul
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+    list-style: none
+
+  .block
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+    padding: 0 4px 12px
+    border-bottom: 2px solid $secondary
+
+    font-size: 14px
+    line-height: 18px
+
+  .block:nth-last-child(-n+2)
+    border: none
+    padding-bottom: 0
+
+  .header
+    font-size: 18px
+    font-weight: 700
+    line-height: 22px
+
+  .subheader
+    margin-top: -8px
+    font-size: 12px
+    line-height: 16px
+    color: $text-light
+
+  label
+    display: flex
+    gap: 8px
+
+    padding: 0 4px
+
+    cursor: pointer
+
+    .color-wrapper
+      flex-grow: 1
+
+    .checkbox
+      height: 24px
+      width: 24px
+      flex-shrink: 0
+
+      border-radius: 8px
+      border: 2px solid $border
+
+    .checkbox:hover
+      border-color: $accent
+
+    .checked
+      border-color: $accent
+      background-color: $accent
+      color: $white
+
+    .checked:hover
+      border-color: $primary-light
+      background-color: $primary-light
+      color: $accent
+
+  .sublabel
+    margin-top: 4px
+    font-size: 12px
+    line-height: 16px
+    color: $text-light
+
+  .checkbox-label
+    display: flex
+    gap: 8px
+
+    cursor: pointer
+
+    .checkbox
+      height: 24px
+      width: 24px
+      margin-top: 2px
+      padding: 2px
+      flex-shrink: 0
+
+      border: 2px solid $border
+      border-radius: 8px
+
+    .checkbox:hover
+      border-color: $accent
+
+    .checked
+      border-color: $accent
+      background-color: $accent
+      color: $white
+
+    .checked:hover
+      border-color: $primary-light
+      background-color: $primary-light
+      color: $accent
+
+  .colors
+    display: flex
+
+    border: 1px solid #B3BBC6
+
+    .color
+      flex-grow: 1
+      height: 18px
+
+  .saveButton
+    height: 40px
+
+    border-radius: 12px
+    background-color: $secondary
+
+  .saveButton:hover
+    background-color: $primary-light

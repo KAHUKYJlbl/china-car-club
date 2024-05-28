@@ -4,10 +4,10 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { OrderType } from '../../lib/types';
+import { OrderResponseType, OrderType } from '../lib/types';
 
 export const postOrder = createAsyncThunk<
-  void,
+  number,
   OrderType,
   {
     dispatch: AppDispatch;
@@ -18,9 +18,11 @@ export const postOrder = createAsyncThunk<
   'Statistics/postOrder',
   async ( order, {extra: axios}) => {
     try {
-      await axios.post(APIRoute.PostOrder, order)
+      const { data } = await axios.post<OrderResponseType>(APIRoute.PostOrder, order)
+
+      return data.id
     } catch (err) {
-      throw Error('Unable to post statistics');
+      throw Error('Unable to post order');
     }
   },
 );

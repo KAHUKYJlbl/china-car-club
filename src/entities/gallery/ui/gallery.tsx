@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import cn from 'classnames';
 
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
@@ -23,9 +22,9 @@ type GalleryProps = {
 
 export const Gallery = memo(
   ({ specificationId, modelId, manufacturerId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
-    const [ isNext, setIsNext ] = useState<boolean | null>(null);
     const [ currentImage, setCurrentImage ] = useState(initSlide);
-    const [ gallery, setGallery ] = useState<GalleryType[] | null>(null);
+    const [ preloadedImages, setPreloadedImages ] = useState<string[]>([]);
+    const [ gallery, setGallery ] = useState<GalleryType[]>([]);
     const name = useAppSelector((state) => getName(state, modelId));
     const promoGallery = useAppSelector(getPromoGallery);
     const promoGalleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
@@ -64,8 +63,27 @@ export const Gallery = memo(
       }
     }, [specificationId, galleryList, promoGallery.length]);
 
+    useEffect(() => {
+      const promises = gallery.map((image) =>
+        new Promise<string>((resolve, reject) => {
+          const img = new Image();
+          img.src = `${process.env.STATIC_URL}${image.url.big}`;
+          img.onload = () => resolve(`${process.env.STATIC_URL}${image.url.big}`);
+          img.onerror = () => reject();
+        })
+      );
+
+      const preload = async () => {
+        const images = await Promise.all(promises);
+
+        setPreloadedImages(images);
+      };
+
+      preload();
+    }, [gallery]);
+
+
     function handleNext () {
-      setIsNext(true);
       setCurrentImage((current) =>
         current + 1 === gallery!.length
         ? 0
@@ -74,7 +92,6 @@ export const Gallery = memo(
     };
 
     function handlePrev () {
-      setIsNext(false);
       setCurrentImage((current) =>
         current === 0
         ? gallery!.length - 1
@@ -83,7 +100,6 @@ export const Gallery = memo(
     };
 
     function handlePage (page: number) {
-      setIsNext(null);
       setCurrentImage(page);
     }
 
@@ -96,8 +112,8 @@ export const Gallery = memo(
     }
 
     if (
-      !gallery
-      || gallery.length === 0
+      gallery.length === 0
+      || preloadedImages.length === 0
       || handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading)
     ) {
       return <LoadingSpinner spinnerType='widget' />
@@ -110,19 +126,13 @@ export const Gallery = memo(
         {...handlers}
       >
         <div
-          className={cn(
-            {
-              [classes.next]: isNext,
-              [classes.prev]: isNext === false,
-            },
-            classes.background
-          )}
+          className={classes.background}
           style={{
             backgroundImage: `url(${process.env.STATIC_URL}${gallery[currentImage].url.original})`,
             backgroundSize: "cover"
           }}
         >
-          {/* <img src={`${process.env.STATIC_URL}${gallery[currentImage].url.big}`} /> */}
+          <img src={preloadedImages[currentImage]} />
         </div>
 
         <div className={classes.overlay}>

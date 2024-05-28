@@ -10,27 +10,25 @@ import {
   getSpecificationsLoadingStatus
 } from '../../../entities/specification';
 import { Currencies, getCurrency, getCurrencyExchange } from '../../../entities/currency';
+import { addItem, decreasePrice, getAddItems, getAddItemsPrice, increasePrice, removeItem, setAdd } from '../../../entities/order';
 import { getName } from '../../../entities/manufacturer';
 import { getShorts, SpecsType } from '../../../entities/model';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { DropdownBlocks } from '../../../shared/ui/dropdown';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 import { getCurrentItem } from '../lib/utils/get-current-item';
 import classes from './adds.module.sass';
-import { AddsType } from '../lib/types';
 
 type AddsProps = {
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
-  setAdds: React.Dispatch<React.SetStateAction<Record<AddsType, boolean>>>;
-  addItems: number[];
-  setAddItems: React.Dispatch<React.SetStateAction<number[]>>;
-  setAddItemsPrice: React.Dispatch<React.SetStateAction<number>>;
   techs: SpecsType;
 };
 
-export const Adds = ({ currentSpecification, setCurrentSpecification, techs, setAddItems, addItems, setAddItemsPrice, setAdds }: AddsProps) => {
+export const Adds = ({ currentSpecification, setCurrentSpecification, techs }: AddsProps) => {
+  const dispatch = useAppDispatch();
   const [ searchParams, _setSearchParams ] = useSearchParams();
 
   const name = useAppSelector((state) => getName(state, Number( searchParams.get('model') )));
@@ -40,24 +38,23 @@ export const Adds = ({ currentSpecification, setCurrentSpecification, techs, set
   const specifications = useAppSelector(getSpecifications);
   const addsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+  const addItems = useAppSelector(getAddItems);
+  const addItemsPrice = useAppSelector(getAddItemsPrice);
 
   const [ activeItems, setActiveItems] = useState(adds ? adds.groups.map((group) => group.items[0].id) : []);
 
   const addItemHandler = (items: AddItemType[]) => {
     if (addItems.includes(getCurrentItem(activeItems, items)!.id)) {
-      setAddItems((current) => current.filter((item) => item !== getCurrentItem(activeItems, items)!.id));
-      setAddItemsPrice((current) => {
-        const updated = current - getCurrentItem(activeItems, items)!.price;
-        if (!updated) {
-          setAdds((current) => ({...current, options: false}))
-        }
-        return updated;
-      });
+      dispatch(removeItem( getCurrentItem(activeItems, items)!.id ));
+      dispatch(decreasePrice( getCurrentItem(activeItems, items)!.price ));
+      if (addItemsPrice - getCurrentItem(activeItems, items)!.price === 0) {
+        dispatch(setAdd({add: 'options', value: false}));
+      }
       return;
     }
-    setAddItems( (current) => [...current, getCurrentItem(activeItems, items)!.id] );
-    setAddItemsPrice((current) => current + getCurrentItem(activeItems, items)!.price);
-    setAdds((current) => ({...current, options: true}))
+    dispatch(addItem( getCurrentItem(activeItems, items)!.id ));
+    dispatch(increasePrice( getCurrentItem(activeItems, items)!.price ));
+    dispatch(setAdd({add: 'options', value: true}));
   };
 
   if (

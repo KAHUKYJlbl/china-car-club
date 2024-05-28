@@ -5,4 +5,5 @@ export enum NameSpace {
   Currency = 'Currency',
   User = 'User',
   Gallery = 'Gallery',
+  Order = 'Order',
 }
