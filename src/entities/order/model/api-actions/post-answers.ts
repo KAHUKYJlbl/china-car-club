@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
+import { decamelizeKeys } from 'humps';
 
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
@@ -19,7 +20,7 @@ export const postAnswers = createAsyncThunk<
   'Statistics/postAnswers',
   async ( answers, {extra: axios}) => {
     try {
-      await axios.post(APIRoute.PostAnswers, answers)
+      await axios.post(APIRoute.PostAnswers, decamelizeKeys(answers))
     } catch (err) {
       throw Error('Unable to post answers');
     }
