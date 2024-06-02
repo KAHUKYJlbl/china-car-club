@@ -8,7 +8,7 @@ import { getPrices, getTotal } from '../../../features/choose-options';
 import { getName } from '../../../entities/manufacturer';
 import { getCurrentCity } from '../../../entities/user';
 import { getSpecificationParams } from '../../../entities/model';
-import { getAddItems, getAddItemsPrice, getAdds, getCurrentOrder, getCurrentTax, postAnswers } from '../../../entities/order';
+import { getAddItems, getAddItemsPrice, getAdds, getCurrentOrder, getCurrentTax, getQuestions, postAnswers } from '../../../entities/order';
 import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from '../../../entities/currency';
 import { AddItemType, getExtColors, getIntColors, getSpecificationAddProducts, getSpecifications } from '../../../entities/specification';
 import { Modal } from '../../../shared/ui/modal';
@@ -34,6 +34,7 @@ type OrderConfirmationProps = {
 export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps ) => {
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
+  const questions = useAppSelector(getQuestions);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -49,15 +50,8 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
       comment: '',
       recommendOtherModels: true,
       withoutCalling: false,
-      carSupplier: undefined,
-      paymentType: {
-        '1': false,
-        '2': false,
-        '3': false,
-        '4': false,
-        '5': false,
-        '6': false,
-      },
+      carSupplier: questions.carSupplier,
+      paymentType: questions.paymentType,
       preferredDeliveryTime: {
         maxDays: null,
         highPricedOption: true,
@@ -98,7 +92,6 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
       && !methods.watch('paymentType.3')
       && !methods.watch('paymentType.4')
       && !methods.watch('paymentType.5')
-      && !methods.watch('paymentType.6')
     )
   };
 
@@ -109,7 +102,11 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
     || !currency
     || !specificationParams
     || currencyLoadingStatus.isLoading) {
-    return <LoadingSpinner spinnerType='widget' />
+    return (
+      <div className={classes.wrapper}>
+        <LoadingSpinner spinnerType='widget' />
+      </div>
+    )
   }
 
   const submitHandler: SubmitHandler<OrderFormType> = (data) => {
@@ -350,6 +347,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
               className={cn(
                 classes.conditionButton,
                 methods.watch('carSupplier') && classes.filled,
+                // questions.carSupplier && classes.filled,
                 fieldErrors.carSupplier && classes.buttonError
               )}
               onClick={() => setIsSupplier(true)}
@@ -373,6 +371,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
               className={cn(
                 classes.conditionButton,
                 !isPaymentTypeEmpty() && classes.filled,
+                // questions.paymentType && classes.filled,
                 fieldErrors.paymentType && classes.buttonError,
               )}
               onClick={() => setIsPayment(true)}

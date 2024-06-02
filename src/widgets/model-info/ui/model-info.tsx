@@ -34,6 +34,7 @@ import { Modal } from '../../../shared/ui/modal';
 import { TaxesTypes } from '../lib/const';
 import { PriceHistory } from './price-history';
 import { OrderButtons } from './order-buttons';
+import { Questions } from './questions';
 import { InfoBar } from './info-bar';
 import { Prices } from './prices';
 import { Techs } from './techs';
@@ -70,6 +71,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const [ isAddProducts, setIsAddProducts ] = useState(false);
   const [ isTaxes, setIsTaxes ] = useState(false);
   const [ isPriceHistory, setIsPriceHistory ] = useState(false);
+  const [ isQuestions, setIsQuestions ] = useState(false);
 
   const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
 
@@ -139,7 +141,11 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
     || !specificationParams
     || !currency
   ) {
-    return <LoadingSpinner spinnerType='page' />
+    return (
+      <div className={classes.wrapper}>
+        <LoadingSpinner spinnerType='page' />
+      </div>
+    )
   }
 
   if (!searchParams.get('model') || !searchParams.get('spec') ) {
@@ -197,7 +203,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
         <OrderButtons
           specificationId={currentSpecification}
           epts={options.epts}
-          setConfirmation={setConfirmation}
+          onOrder={() => setIsQuestions(true)}
           prices={{
             totalPrice: Number(
               getTotal({
@@ -262,6 +268,15 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           <PriceHistory
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
+          />
+        </Modal>
+      }
+
+      {
+        isQuestions &&
+        <Modal onClose={() => setIsQuestions(false)}>
+          <Questions
+            setConfirmation={setConfirmation}
           />
         </Modal>
       }

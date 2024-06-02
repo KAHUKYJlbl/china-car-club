@@ -72,7 +72,7 @@ export const Supplier = ({ onClose }: SupplierProps) => {
               />
             </div>
 
-            Ещё думаю, есть вопросы по&nbsp;выбору машины
+            Ещё думаю, нужна помощь с&nbsp;выбором машины
           </label>
         </li>
 

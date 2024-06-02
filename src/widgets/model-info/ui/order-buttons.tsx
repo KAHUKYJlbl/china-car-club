@@ -11,7 +11,7 @@ import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { TaxesTypes } from '../lib/const';
 
 type OrderButtonsProps = {
-  setConfirmation: () => void;
+  onOrder: () => void;
   specificationId: number | null;
   prices: {
     totalPrice: number;
@@ -25,7 +25,7 @@ type OrderButtonsProps = {
 }
 
 export const OrderButtons = memo(
-  ({ specificationId, epts, prices, setConfirmation }: OrderButtonsProps): JSX.Element => {
+  ({ specificationId, epts, prices, onOrder }: OrderButtonsProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const currentTax = useAppSelector(getCurrentTax);
     const geolocation = useAppSelector(getGeolocation);
@@ -76,7 +76,7 @@ export const OrderButtons = memo(
         },
       }));
 
-      setConfirmation();
+      onOrder();
     };
 
     return (
