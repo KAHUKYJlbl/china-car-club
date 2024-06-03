@@ -20,7 +20,6 @@ type LoginPhoneProps = {
 export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
-
   const { register, handleSubmit, watch, setValue } = useForm<SmsFormType>();
 
   const getMask = () => {
@@ -49,7 +48,7 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
     if (phone !== '') {
       toast.error('Мы не можем отправить сообщение в вашу страну', {toastId: 'phoneError'});
     }
-    return '+999999999999999';
+    return '+99999999999';
   }
 
   const onInitSubmit: SubmitHandler<SmsFormType> = (data) => {
@@ -70,7 +69,7 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
   };
 
   const onInitError = () => {
-    toast.error('Необходимо ввести номер телефона.')
+    toast.error('Необходимо ввести номер телефона страны СНГ.')
   }
 
   return (
@@ -87,7 +86,18 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
               className={classes.input}
               mask={getMask()}
               maskChar={null}
-              {...register("msisdn", { required: true })}
+              {...register("msisdn", {
+                required: true,
+                minLength: 18,
+                validate: (v) => {
+                  return (
+                    v.startsWith('+7')
+                    || v.startsWith('+37')
+                    || v.startsWith('+38')
+                    || v.startsWith('+99')
+                  )
+                }
+              })}
             />
 
             <button
