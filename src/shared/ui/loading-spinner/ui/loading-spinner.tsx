@@ -7,7 +7,7 @@ const spinnerTypes = {
     width: '160',
     color: '#7E7E7E',
     wrapperStyle: {
-      height: '100vh',
+      height: '75vh',
     },
   },
   widget: {

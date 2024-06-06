@@ -61,42 +61,6 @@ export const Payment = ({ onClose }: PaymentProps) => {
         </li>
 
         <li>
-          <label className={cn(watch('paymentType.2') && classes.checked)}>
-            <div className={cn(
-              classes.checkbox,
-              watch('paymentType.2') && classes.checked
-            )}>
-              {
-                watch('paymentType.2') &&
-                <svg
-                  width='20'
-                  height='20'
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#v" />
-                </svg>
-              }
-
-              <input
-                type='checkbox'
-                className='visually-hidden'
-                {...register('paymentType.2')}
-              />
-            </div>
-
-            <div>
-              <p>
-                30-50% предоплата по договору
-              </p>
-
-              <p className={classes.sublabel}>
-                Остальное после доставки в РФ
-              </p>
-            </div>
-          </label>
-        </li>
-
-        <li>
           <label className={cn(watch('paymentType.3') && classes.checked)}>
             <div className={cn(
               classes.checkbox,
@@ -122,11 +86,11 @@ export const Payment = ({ onClose }: PaymentProps) => {
 
             <div>
               <p>
-                Покупка в кредит
+                30-50% предоплата по договору
               </p>
 
               <p className={classes.sublabel}>
-                Оформляется после доставки в РФ
+                Остальное после доставки в РФ
               </p>
             </div>
           </label>
@@ -153,6 +117,42 @@ export const Payment = ({ onClose }: PaymentProps) => {
                 type='checkbox'
                 className='visually-hidden'
                 {...register('paymentType.4')}
+              />
+            </div>
+
+            <div>
+              <p>
+                Покупка в кредит
+              </p>
+
+              <p className={classes.sublabel}>
+                Оформляется после доставки в РФ
+              </p>
+            </div>
+          </label>
+        </li>
+
+        <li>
+          <label className={cn(watch('paymentType.6') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.6') && classes.checked
+            )}>
+              {
+                watch('paymentType.6') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.6')}
               />
             </div>
 

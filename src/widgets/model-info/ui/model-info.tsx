@@ -141,11 +141,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
     || !specificationParams
     || !currency
   ) {
-    return (
-      <div className={classes.wrapper}>
-        <LoadingSpinner spinnerType='page' />
-      </div>
-    )
+    return <LoadingSpinner spinnerType='page' />
   }
 
   if (!searchParams.get('model') || !searchParams.get('spec') ) {

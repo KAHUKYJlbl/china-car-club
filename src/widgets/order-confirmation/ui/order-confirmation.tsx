@@ -40,7 +40,6 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
   const dispatch = useAppDispatch();
   const [ searchParams, _setSearchParams ] = useSearchParams();
   const [ fieldErrors, setFieldErrors ] = useState({
-    firstName: false,
     carSupplier: false,
     paymentType: false,
   });
@@ -88,10 +87,10 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
   const isPaymentTypeEmpty = () => {
     return (
       !methods.watch('paymentType.1')
-      && !methods.watch('paymentType.2')
       && !methods.watch('paymentType.3')
       && !methods.watch('paymentType.4')
       && !methods.watch('paymentType.5')
+      && !methods.watch('paymentType.6')
     )
   };
 
@@ -110,7 +109,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
   }
 
   const submitHandler: SubmitHandler<OrderFormType> = (data) => {
-    if (!methods.getFieldState('carSupplier').isTouched) {
+    if (!methods.watch('carSupplier')) {
       setFieldErrors((current) => ({...current, carSupplier: true}));
     };
 
@@ -118,7 +117,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
       setFieldErrors((current) => ({...current, paymentType: true}));
     };
 
-    if (!methods.getFieldState('carSupplier').isTouched || isPaymentTypeEmpty()) {
+    if (!methods.watch('carSupplier') || isPaymentTypeEmpty()) {
       return;
     }
 
@@ -152,9 +151,8 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
     });
   };
 
-  const errorHandler: SubmitErrorHandler<OrderFormType> = (errors) => {
+  const errorHandler: SubmitErrorHandler<OrderFormType> = () => {
     setFieldErrors({
-      firstName: !!errors.firstName,
       carSupplier: !methods.getFieldState('carSupplier').isTouched,
       paymentType: isPaymentTypeEmpty(),
     });
@@ -444,8 +442,7 @@ export const OrderConfirmation = ({ cancelConfirmation }:OrderConfirmationProps 
               autoComplete='off'
               placeholder='Ваше имя'
               onInput={() => setFieldErrors((current) => ({...current, firstName: false}))}
-              className={cn(fieldErrors.firstName && classes.error)}
-              {...methods.register("firstName", {required: true})}
+              {...methods.register("firstName")}
             />
 
             <textarea
