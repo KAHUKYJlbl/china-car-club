@@ -9,6 +9,7 @@ export {
   decreasePrice,
   setCurrentColor,
   resetOrder,
+  setQuestions,
 } from './model/order-slice';
 export {
   getCurrentTax,
@@ -17,7 +18,8 @@ export {
   getAddItemsPrice,
   getCurrentColor,
   getCurrentOrder,
-  getOrderLoadingStatus
+  getOrderLoadingStatus,
+  getQuestions,
 } from './model/order-selectors';
 export { postOrder } from './model/api-actions/post-order';
 export { postAnswers } from './model/api-actions/post-answers';

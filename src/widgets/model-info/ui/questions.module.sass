@@ -1,0 +1,142 @@
+@use '../../../assets/styles/_variables' as *
+
+form
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+  font-size: 12px
+  line-height: 16px
+
+  .header
+    padding: 0 4px
+
+    font-size: 18px
+    line-height: 22px
+    font-weight: 700
+
+    span
+      color: $text-light
+      font-weight: 400
+
+  ul.radio
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    list-style: none
+
+    label
+      display: flex
+      gap: 8px
+      align-items: center
+
+      padding: 8px 12px
+
+      background-color: $secondary
+      border-radius: 12px
+
+      font-size: 16px
+      line-height: 20px
+      cursor: pointer
+
+      div
+        height: 20px
+        width: 20px
+        flex-shrink: 0
+
+        border-radius: 50%
+        border: 2px solid $border
+
+      div:hover
+        border-color: $accent
+
+    .sublabel
+      font-size: 12px
+      line-height: 16px
+      color: $text-light
+
+    .checked
+        border: none
+        background-color: $primary-light
+
+    label:hover
+      background-color: $primary-light
+
+  ul.checkboxes
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    list-style: none
+
+    label
+      display: flex
+      gap: 8px
+      align-items: center
+
+      padding: 8px 12px
+
+      background-color: $secondary
+      border-radius: 12px
+
+      font-size: 16px
+      line-height: 20px
+      cursor: pointer
+
+      .checkbox
+        height: 24px
+        width: 24px
+        flex-shrink: 0
+
+        border-radius: 8px
+        border: 2px solid $border
+
+      .checkbox:hover
+        border-color: $accent
+
+      .checked
+        border-color: $accent
+        background-color: $accent
+        color: $white
+
+      .checked:hover
+        border-color: $primary-light
+        background-color: $primary-light
+        color: $accent
+
+    label.checked
+        border: none
+        background-color: $primary-light
+
+    label:hover
+      background-color: $primary-light
+
+    .sublabel
+      font-size: 12px
+      line-height: 16px
+      color: $text-light
+
+  .saveButton
+    height: 40px
+
+    border-radius: 12px
+    background-color: $secondary
+
+    font-size: 14px
+    line-height: 18px
+
+  .saveButton:hover
+    background-color: $primary-light
+

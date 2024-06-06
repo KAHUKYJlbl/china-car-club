@@ -20,9 +20,11 @@ export function CustomModal ({onClose, button = false, children}: PropsWithChild
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    document.getElementById("root")!.style.filter = 'blur(12px)';
 
     return () => {
       document.body.style.overflow = 'visible';
+      document.getElementById("root")!.style.filter = '';
     };
   });
 

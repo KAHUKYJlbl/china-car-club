@@ -5,6 +5,7 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
 import { postOrder } from './api-actions/post-order';
+import { QuestionsType } from './lib/types';
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -14,6 +15,7 @@ type InitialState = {
   currentColor: CurrentColorType;
   order: number | null;
   orderLoadingStatus: FetchStatus;
+  questions: QuestionsType;
 };
 
 const initialState: InitialState = {
@@ -24,6 +26,16 @@ const initialState: InitialState = {
   currentColor: {int: null, ext: null, isInteriorFirst: false},
   order: null,
   orderLoadingStatus: FetchStatus.Idle,
+  questions: {
+    carSupplier: undefined,
+    paymentType: {
+      1: false,
+      3: false,
+      4: false,
+      5: false,
+      6: false,
+    },
+  }
 };
 
 export const orderSlice = createSlice({
@@ -38,6 +50,19 @@ export const orderSlice = createSlice({
       state.currentColor = initialState.currentColor;
       state.order = initialState.order;
       state.orderLoadingStatus = initialState.orderLoadingStatus;
+      state.questions = {
+        carSupplier: undefined,
+        paymentType: {
+          1: false,
+          3: false,
+          4: false,
+          5: false,
+          6: false,
+        },
+      };
+    },
+    setQuestions: (state, action: PayloadAction<QuestionsType>) => {
+      state.questions = action.payload;
     },
     setCurrentTax: (state, action: PayloadAction<TaxesTypes>) => {
       state.currentTax = action.payload;
@@ -80,4 +105,4 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder } = orderSlice.actions;
+export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder, setQuestions } = orderSlice.actions;

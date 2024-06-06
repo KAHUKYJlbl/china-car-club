@@ -50,47 +50,11 @@ export const Payment = ({ onClose }: PaymentProps) => {
 
             <div>
               <p>
-                100% предоплата от физлица
+                100% предоплата по договору
               </p>
 
               <p className={classes.sublabel}>
-                Цены ниже. Больше предложений
-              </p>
-            </div>
-          </label>
-        </li>
-
-        <li>
-          <label className={cn(watch('paymentType.2') && classes.checked)}>
-            <div className={cn(
-              classes.checkbox,
-              watch('paymentType.2') && classes.checked
-            )}>
-              {
-                watch('paymentType.2') &&
-                <svg
-                  width='20'
-                  height='20'
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#v" />
-                </svg>
-              }
-
-              <input
-                type='checkbox'
-                className='visually-hidden'
-                {...register('paymentType.2')}
-              />
-            </div>
-
-            <div>
-              <p>
-                100% предоплата от Юрлица
-              </p>
-
-              <p className={classes.sublabel}>
-                Можно получить налоговый вычет 20%
+                Больше предложений с лучшей ценой
               </p>
             </div>
           </label>
@@ -122,11 +86,11 @@ export const Payment = ({ onClose }: PaymentProps) => {
 
             <div>
               <p>
-                30-50% предоплата
+                30-50% предоплата по договору
               </p>
 
               <p className={classes.sublabel}>
-                Остальное после доставки в Россию
+                Остальное после доставки в РФ
               </p>
             </div>
           </label>
@@ -162,7 +126,43 @@ export const Payment = ({ onClose }: PaymentProps) => {
               </p>
 
               <p className={classes.sublabel}>
-                Потребуется одобрение банка
+                Оформляется после доставки в РФ
+              </p>
+            </div>
+          </label>
+        </li>
+
+        <li>
+          <label className={cn(watch('paymentType.6') && classes.checked)}>
+            <div className={cn(
+              classes.checkbox,
+              watch('paymentType.6') && classes.checked
+            )}>
+              {
+                watch('paymentType.6') &&
+                <svg
+                  width='20'
+                  height='20'
+                  aria-hidden="true"
+                >
+                  <use xlinkHref="#v" />
+                </svg>
+              }
+
+              <input
+                type='checkbox'
+                className='visually-hidden'
+                {...register('paymentType.6')}
+              />
+            </div>
+
+            <div>
+              <p>
+                Покупка в лизинг
+              </p>
+
+              <p className={classes.sublabel}>
+                Оформляется после доставки в РФ
               </p>
             </div>
           </label>
@@ -199,42 +199,6 @@ export const Payment = ({ onClose }: PaymentProps) => {
 
               <p className={classes.sublabel}>
                 Потребуется оценка вашего авто
-              </p>
-            </div>
-          </label>
-        </li>
-
-        <li>
-          <label className={cn(watch('paymentType.6') && classes.checked)}>
-            <div className={cn(
-              classes.checkbox,
-              watch('paymentType.6') && classes.checked
-            )}>
-              {
-                watch('paymentType.6') &&
-                <svg
-                  width='20'
-                  height='20'
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#v" />
-                </svg>
-              }
-
-              <input
-                type='checkbox'
-                className='visually-hidden'
-                {...register('paymentType.6')}
-              />
-            </div>
-
-            <div>
-              <p>
-                Покупка в лизинг
-              </p>
-
-              <p className={classes.sublabel}>
-                Потребуется одобрение эксперта
               </p>
             </div>
           </label>
