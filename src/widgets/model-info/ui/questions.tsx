@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { getCurrentOrder, postAnswers, setQuestions } from '../../../entities/order';
+import { getCurrentOrder, getQuestionsLoadingStatus, postAnswers, setQuestions } from '../../../entities/order';
 import { getExtColors, getIntColors } from '../../../entities/specification';
 import { OrderFormType } from '../../order-confirmation';
 
@@ -19,6 +19,7 @@ type QuestionsProps = {
 export const Questions = ({setConfirmation}: QuestionsProps) => {
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
+  const questionsLoadingStatus = useAppSelector(getQuestionsLoadingStatus);
 
   const dispatch = useAppDispatch();
   const [ _fieldErrors, setFieldErrors ] = useState({
@@ -484,7 +485,11 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
           type='submit'
           className={classes.saveButton}
         >
-          Сохранить
+          {
+            questionsLoadingStatus.isLoading
+            ? <LoadingSpinner spinnerType='button' />
+            : 'Сохранить'
+          }
         </button>
       </div>
     </form>

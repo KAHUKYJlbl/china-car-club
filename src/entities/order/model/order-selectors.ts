@@ -29,3 +29,11 @@ export const getOrderLoadingStatus = createSelector(
   })
 );
 
+export const getQuestionsLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Order].questionsLoadingStatus,
+  (status) => ({
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);

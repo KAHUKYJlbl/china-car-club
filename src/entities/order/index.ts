@@ -18,6 +18,7 @@ export {
   getAddItemsPrice,
   getCurrentColor,
   getCurrentOrder,
+  getQuestionsLoadingStatus,
   getOrderLoadingStatus,
   getQuestions,
 } from './model/order-selectors';

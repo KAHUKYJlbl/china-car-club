@@ -270,7 +270,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
       {
         isQuestions &&
-        <Modal onClose={() => setIsQuestions(false)}>
+        <Modal onClose={() => null}>
           <Questions
             setConfirmation={setConfirmation}
           />

@@ -12,7 +12,7 @@ type LayoutProps = {
 
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>): JSX.Element => {
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} id='layout'>
       <Helmet>
         <title>{title || 'Купить новый автомобиль из Китая под ключ по цене завода'}</title>
         <meta
