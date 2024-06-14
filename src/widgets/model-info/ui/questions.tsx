@@ -26,7 +26,7 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
     carSupplier: false,
     paymentType: false,
   });
-  const { register, watch, handleSubmit, getFieldState } = useForm<OrderFormType>({
+  const { register, watch, handleSubmit } = useForm<OrderFormType>({
     defaultValues: {
       firstName: '',
       comment: '',
@@ -72,7 +72,7 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
   };
 
   const submitHandler: SubmitHandler<OrderFormType> = (data) => {
-    if (!getFieldState('carSupplier').isTouched) {
+    if (!watch('carSupplier')) {
       setFieldErrors((current) => ({...current, carSupplier: true}));
     };
 
@@ -80,7 +80,8 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
       setFieldErrors((current) => ({...current, paymentType: true}));
     };
 
-    if (!getFieldState('carSupplier').isTouched || isPaymentTypeEmpty()) {
+    if (!watch('carSupplier') || isPaymentTypeEmpty()) {
+      toast.dismiss();
       toast.error('Необходимо ответить на вопросы');
       return;
     }
