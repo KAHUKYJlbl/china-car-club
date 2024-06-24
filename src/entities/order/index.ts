@@ -1,3 +1,5 @@
+export { Order } from './ui/order';
+export { Calculation } from './ui/calculation';
 export {
   orderSlice,
   setCurrentTax,
@@ -18,6 +20,7 @@ export {
   getAddItemsPrice,
   getCurrentColor,
   getCurrentOrder,
+  getQuestionsLoadingStatus,
   getOrderLoadingStatus,
   getQuestions,
 } from './model/order-selectors';

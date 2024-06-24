@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { getCurrentOrder, postAnswers, setQuestions } from '../../../entities/order';
+import { getCurrentOrder, getQuestionsLoadingStatus, postAnswers, setQuestions } from '../../../entities/order';
 import { getExtColors, getIntColors } from '../../../entities/specification';
 import { OrderFormType } from '../../order-confirmation';
 
@@ -19,13 +19,14 @@ type QuestionsProps = {
 export const Questions = ({setConfirmation}: QuestionsProps) => {
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
+  const questionsLoadingStatus = useAppSelector(getQuestionsLoadingStatus);
 
   const dispatch = useAppDispatch();
   const [ _fieldErrors, setFieldErrors ] = useState({
     carSupplier: false,
     paymentType: false,
   });
-  const { register, watch, handleSubmit, getFieldState } = useForm<OrderFormType>({
+  const { register, watch, handleSubmit } = useForm<OrderFormType>({
     defaultValues: {
       firstName: '',
       comment: '',
@@ -71,7 +72,7 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
   };
 
   const submitHandler: SubmitHandler<OrderFormType> = (data) => {
-    if (!getFieldState('carSupplier').isTouched) {
+    if (!watch('carSupplier')) {
       setFieldErrors((current) => ({...current, carSupplier: true}));
     };
 
@@ -79,7 +80,8 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
       setFieldErrors((current) => ({...current, paymentType: true}));
     };
 
-    if (!getFieldState('carSupplier').isTouched || isPaymentTypeEmpty()) {
+    if (!watch('carSupplier') || isPaymentTypeEmpty()) {
+      toast.dismiss();
       toast.error('Необходимо ответить на вопросы');
       return;
     }
@@ -484,7 +486,11 @@ export const Questions = ({setConfirmation}: QuestionsProps) => {
           type='submit'
           className={classes.saveButton}
         >
-          Сохранить
+          {
+            questionsLoadingStatus.isLoading
+            ? <LoadingSpinner spinnerType='button' />
+            : 'Сохранить'
+          }
         </button>
       </div>
     </form>

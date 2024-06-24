@@ -5,6 +5,7 @@ import { FetchStatus } from '../../../shared/api/fetch-status';
 
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
 import { postOrder } from './api-actions/post-order';
+import { postAnswers } from './api-actions/post-answers';
 import { QuestionsType } from './lib/types';
 
 type InitialState = {
@@ -15,6 +16,7 @@ type InitialState = {
   currentColor: CurrentColorType;
   order: number | null;
   orderLoadingStatus: FetchStatus;
+  questionsLoadingStatus: FetchStatus;
   questions: QuestionsType;
 };
 
@@ -26,6 +28,7 @@ const initialState: InitialState = {
   currentColor: {int: null, ext: null, isInteriorFirst: false},
   order: null,
   orderLoadingStatus: FetchStatus.Idle,
+  questionsLoadingStatus: FetchStatus.Idle,
   questions: {
     carSupplier: undefined,
     paymentType: {
@@ -101,6 +104,16 @@ export const orderSlice = createSlice({
       })
       .addCase(postOrder.rejected, (state) => {
         state.orderLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(postAnswers.fulfilled, (state) => {
+        state.questionsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(postAnswers.pending, (state) => {
+        console.log('loading');
+        state.questionsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(postAnswers.rejected, (state) => {
+        state.questionsLoadingStatus = FetchStatus.Failed;
       })
   },
 });

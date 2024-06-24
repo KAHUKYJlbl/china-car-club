@@ -13,4 +13,5 @@ export {
   getSpecsLoadingStatus,
   getManuacturersList,
   getModelsList,
+  getFullListCount,
 } from './model/manufacturer-selectors';

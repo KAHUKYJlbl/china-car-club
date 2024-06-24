@@ -19,9 +19,9 @@ const spinnerTypes = {
     },
   },
   button: {
-    height: '15',
-    width: '15',
-    color: '#ffffff',
+    height: '24',
+    width: '24',
+    color: '#1D1D1F',
     wrapperStyle: {
       height: '100%'
     },
