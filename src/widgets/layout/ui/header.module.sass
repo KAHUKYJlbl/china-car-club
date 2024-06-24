@@ -1,0 +1,58 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+  .links
+    display: flex
+    justify-content: space-between
+
+    padding: 0 12px 8px
+
+    color: $text-light
+    font-size: 14px
+    line-height: 18px
+
+    @media screen and (max-width:640px)
+      flex-direction: column
+      align-items: center
+
+    .link
+      cursor: pointer
+
+    .phone
+      background-color: transparent
+      color: $text-primary
+
+  .main-wrapper
+    display: flex
+    justify-content: space-between
+    gap: 4px
+
+    padding: 4px
+
+    border-radius: 12px
+    background-color: $white
+
+    .menu-wrapper
+      display: flex
+      gap: 4px
+
+      a
+        display: flex
+        align-items: center
+        justify-content: center
+
+        background: none
+        width: 238px
+        height: 52px
+
+        @media screen and (max-width:960px)
+          width: 164px
+          height: 42px
+
+  .mobile-wrapper
+    display: flex
+    gap: 4px

@@ -16,6 +16,15 @@ export const getCarsCount = createSelector(
   })
 );
 
+export const getFullListCount = createSelector(
+  getFullList,
+  (manufacturers) => ({
+    manufacturersCount: manufacturers?.manufacturersCount,
+    seriesCount: manufacturers?.seriesCount,
+    specificationsCount: manufacturers?.specificationsCount,
+  })
+);
+
 export const getManufacturersLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Manufacturer].manufacturersLoadingStatus,
   (status) => ({

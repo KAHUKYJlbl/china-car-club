@@ -1,8 +1,9 @@
+import { AppRoute } from '../../../app/provider/router';
 import classes from './not-found.module.css';
 import { Link } from 'react-router-dom';
 
 export const NotFound = (): JSX.Element => (
-  <Link to="/">
+  <Link to={AppRoute.Main}>
     <div className={classes.container404}>
       <figure className={classes.figure404}>
         <figcaption className={classes.figcaption404}>
