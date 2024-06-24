@@ -1,3 +1,5 @@
+export { Order } from './ui/order';
+export { Calculation } from './ui/calculation';
 export {
   orderSlice,
   setCurrentTax,

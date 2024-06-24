@@ -2,6 +2,7 @@ import { useState } from 'react';
 import cn from 'classnames';
 
 import classes from './mycars.module.sass';
+import { Calculation, Order } from '../../../entities/order';
 
 type MycarsProps = {};
 
@@ -46,7 +47,21 @@ export const Mycars = ({}: MycarsProps) => {
       </div>
 
       <ul className={classes.list}>
+        <li>
+          <Order />
+        </li>
 
+        <li>
+          <Calculation />
+        </li>
+
+        <li>
+          <Calculation />
+        </li>
+
+        <li>
+          <Calculation />
+        </li>
       </ul>
     </div>
   );
