@@ -23,6 +23,9 @@ export {
   getQuestionsLoadingStatus,
   getOrderLoadingStatus,
   getQuestions,
+  getMycars,
+  getMycarsLoadingStatus,
 } from './model/order-selectors';
 export { postOrder } from './model/api-actions/post-order';
 export { postAnswers } from './model/api-actions/post-answers';
+export { fetchMycars } from './model/api-actions/fetch-mycars';

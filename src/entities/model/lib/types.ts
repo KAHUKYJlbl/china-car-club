@@ -79,24 +79,26 @@ export type SpecsApiType = {
 }
 
 export type ModelApiType = {
-  data: {
+  data: SeriesApiType;
+}
+
+export type SeriesApiType = {
+  id: number;
+  name: {
+    ch: string;
+    ru: string;
+  };
+  officially_in_russia: boolean;
+  manufacturer: {
     id: number;
     name: {
       ch: string;
       ru: string;
     };
-    officially_in_russia: boolean;
-    manufacturer: {
-      id: number;
-      name: {
-        ch: string;
-        ru: string;
-      };
-      top: boolean;
-      region_id: number | null;
-    };
-    specifications: SpecsApiType[];
-  }
+    top: boolean;
+    region_id: number | null;
+  };
+  specifications: SpecsApiType[];
 }
 
 export type PriceType = {

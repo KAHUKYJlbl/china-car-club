@@ -53,7 +53,7 @@ export const modelSlice = createSlice({
             transmissionType: `${FILTERS.transmission!.elements.find((element) =>
               element.elementId === specification.parameters?.transmissionType.id
             )?.name} коробка передач` || '',
-          }
+          },
         }))
 
         state.model = {

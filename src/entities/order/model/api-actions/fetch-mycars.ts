@@ -4,25 +4,26 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { OrderResponseType, OrderType } from '../../lib/types';
+import { MycarsType } from '../../lib/types';
 
-export const postOrder = createAsyncThunk<
-  number,
-  OrderType,
+
+export const fetchMycars = createAsyncThunk<
+  MycarsType,
+  undefined,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
 > (
-  'Statistics/postOrder',
-  async ( order, {extra: axios}) => {
+  'Statistics/fetchMycars',
+  async ( _arg, {extra: axios}) => {
     try {
-      const { data } = await axios.post<OrderResponseType>(APIRoute.PostOrder, order)
+      const { data } = await axios.get<MycarsType>(APIRoute.GetMycars);
 
-      return data.id
+      return data;
     } catch (err) {
-      throw Error('Unable to post order');
+      throw Error('Unable to get Mycars');
     }
   },
 );
