@@ -2,11 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
-
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
+
 import { postOrder } from './api-actions/post-order';
 import { postAnswers } from './api-actions/post-answers';
-import { QuestionsType } from './lib/types';
+import { fetchMycars } from './api-actions/fetch-mycars';
+import { MycarsType, QuestionsType } from '../lib/types';
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -16,8 +17,10 @@ type InitialState = {
   currentColor: CurrentColorType;
   order: number | null;
   orderLoadingStatus: FetchStatus;
-  questionsLoadingStatus: FetchStatus;
   questions: QuestionsType;
+  questionsLoadingStatus: FetchStatus;
+  mycars: MycarsType;
+  mycarsLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -38,7 +41,12 @@ const initialState: InitialState = {
       5: false,
       6: false,
     },
-  }
+  },
+  mycars: {
+    carCalculations: [],
+    carOrders: [],
+  },
+  mycarsLoadingStatus: FetchStatus.Idle,
 };
 
 export const orderSlice = createSlice({
@@ -109,11 +117,20 @@ export const orderSlice = createSlice({
         state.questionsLoadingStatus = FetchStatus.Success;
       })
       .addCase(postAnswers.pending, (state) => {
-        console.log('loading');
         state.questionsLoadingStatus = FetchStatus.Pending;
       })
       .addCase(postAnswers.rejected, (state) => {
         state.questionsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchMycars.fulfilled, (state, action) => {
+        state.mycars = action.payload;
+        state.mycarsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchMycars.pending, (state) => {
+        state.mycarsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchMycars.rejected, (state) => {
+        state.mycarsLoadingStatus = FetchStatus.Failed;
       })
   },
 });

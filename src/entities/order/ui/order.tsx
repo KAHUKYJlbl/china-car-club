@@ -1,15 +1,21 @@
+import dayjs from 'dayjs';
+
+import { StatisticEventType } from '../lib/types';
+
 import classes from './order.module.sass';
 
-type OrderProps = {};
+type OrderProps = {
+  order: StatisticEventType;
+};
 
-export const Order = ({}: OrderProps) => {
+export const Order = ({ order }: OrderProps) => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.info}>
         <p className={classes.header}>
           <span>Заявка</span>
 
-          <span className={classes.grey}>17 апр, в 22:09</span>
+          <span className={classes.grey}>{dayjs(order.createdAt).format('D MMM, в H:mm')}</span>
         </p>
 
         <img
@@ -18,12 +24,13 @@ export const Order = ({}: OrderProps) => {
 
         <p className={classes.model}>
           <p className={classes.bold}>
-            Xiaomi<br/>SU7
+            {order.specification.series.manufacturer.name.ru || order.specification.series.manufacturer.name.ch}<br/>
+            {order.specification.series.name.ru || order.specification.series.name.ch}
           </p>
 
-          <span>800km 4WD Max</span>
+          <span>{order.specification.name.ru || order.specification.name.ch}</span>
 
-          <span className={classes.grey}>2024 поколение • 2024 выпуск</span>
+          <span className={classes.grey}>{order.specification.year} поколение • 2024 выпуск</span>
         </p>
 
         <p className={classes.properties}>

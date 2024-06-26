@@ -1,13 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 
+import { Calculation, fetchMycars, getMycars, getMycarsLoadingStatus, Order } from '../../../entities/order';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+
 import classes from './mycars.module.sass';
-import { Calculation, Order } from '../../../entities/order';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 
 type MycarsProps = {};
 
 export const Mycars = ({}: MycarsProps) => {
+  const dispatch = useAppDispatch();
+
+  const mycarsLoadingStatus = useAppSelector(getMycarsLoadingStatus);
+  const mycars = useAppSelector(getMycars);
+
   const [ currentFolder, setCurrentFolder ] = useState<'orders' | 'favorites'>('orders');
+
+  useEffect(() => {
+    dispatch(fetchMycars());
+  }, []);
+
+  if (mycarsLoadingStatus.isIdle || mycarsLoadingStatus.isLoading) {
+    return <LoadingSpinner spinnerType='page' />
+  }
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.bar}>
@@ -47,21 +65,19 @@ export const Mycars = ({}: MycarsProps) => {
       </div>
 
       <ul className={classes.list}>
-        <li>
-          <Order />
-        </li>
-
-        <li>
-          <Calculation />
-        </li>
-
-        <li>
-          <Calculation />
-        </li>
-
-        <li>
-          <Calculation />
-        </li>
+        {
+          mycars.carOrders
+            .map((order) => (
+              <li>
+                <Order order={order} />
+              </li>
+            ))
+            .concat(mycars.carCalculations.map((calculation) => (
+              <li>
+                <Calculation calculation={calculation} />
+              </li>
+            )))
+        }
       </ul>
     </div>
   );
