@@ -7,7 +7,8 @@ import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-i
 import { postOrder } from './api-actions/post-order';
 import { postAnswers } from './api-actions/post-answers';
 import { fetchMycars } from './api-actions/fetch-mycars';
-import { MycarsType, QuestionsType } from '../lib/types';
+import { MycarsType, OfferType, QuestionsType } from '../lib/types';
+import { fetchOffers } from './api-actions/fetch-offers';
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -21,6 +22,8 @@ type InitialState = {
   questionsLoadingStatus: FetchStatus;
   mycars: MycarsType;
   mycarsLoadingStatus: FetchStatus;
+  offers: OfferType[];
+  offersLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -47,6 +50,8 @@ const initialState: InitialState = {
     carOrders: [],
   },
   mycarsLoadingStatus: FetchStatus.Idle,
+  offers: [],
+  offersLoadingStatus: FetchStatus.Idle,
 };
 
 export const orderSlice = createSlice({
@@ -131,6 +136,16 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchMycars.rejected, (state) => {
         state.mycarsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchOffers.fulfilled, (state, action) => {
+        state.offers = action.payload;
+        state.offersLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchOffers.pending, (state) => {
+        state.offersLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchOffers.rejected, (state) => {
+        state.offersLoadingStatus = FetchStatus.Failed;
       })
   },
 });

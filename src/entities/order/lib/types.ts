@@ -1,5 +1,5 @@
 import { ParametrApiType, PriceApiType, SeriesApiType } from "../../model";
-import { LocationType, StatisticsType } from "../../user";
+import { LocationType } from "../../user";
 
 export type OrderResponseType = {
   id: number;
@@ -40,7 +40,6 @@ export type OrderType = {
       currencyQuantity: number,
       currencyId: number,
     };
-
   },
 };
 
@@ -80,11 +79,12 @@ export type StatisticEventType = {
   typeId: number,
   price: number,
   currency: number,
-  post: StatisticsType,
+  post: OrderApiType,
   createdAt: string,
   priceTypeId: null,
   clientId: number,
   specificationId: number,
+  dealerOffersCount: number;
   specification: {
     id: number,
     name: {
@@ -133,3 +133,11 @@ export type MycarsType = {
   carCalculations: StatisticEventType[];
   carOrders: StatisticEventType[];
 };
+
+export type OrderApiType = Omit<OrderType, 'addItems'> & {
+  addItems: string[];
+};
+
+export type OfferType = {
+  id: number;
+}

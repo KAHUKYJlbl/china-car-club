@@ -25,7 +25,7 @@ export const Calculation = ({ calculation }: CalculationProps) => {
         </p>
 
         <img
-          src='/images/noimage.jpg'
+          src={`${process.env.STATIC_URL}/specification/${calculation.specification.id}.jpg`}
         />
 
         <p className={classes.model}>
@@ -67,9 +67,15 @@ export const Calculation = ({ calculation }: CalculationProps) => {
       </div>
 
       <div className={classes.buttons}>
-        <button onClick={() => navigate(`${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}`)}>
-          Перейти к расчету
-        </button>
+        {
+          calculation.specification.calcVisible
+            ? <button onClick={() => navigate(`${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}`)}>
+              Перейти к расчету
+            </button>
+            : <p>
+              Комплектация недоступна
+            </p>
+        }
 
         <button className={classes.xbutton}>
           <svg width="10" height="10" aria-hidden="true">

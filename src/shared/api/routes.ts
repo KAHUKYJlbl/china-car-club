@@ -15,4 +15,5 @@ export enum APIRoute {
   PostOrder = '/statistics/car-order',
   PostAnswers = '/statistics/answers',
   GetMycars = '/statistics/my-cars',
+  GetOffers = '/statistics/:id/dealer-offers',
 }

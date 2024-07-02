@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import plural from 'plural-ru';
 
 import { AppRoute } from '../../../app/provider/router';
 import { fetchManufacturers, getFullListCount, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
@@ -41,7 +42,11 @@ export const NewHeader = ({}: NewHeaderProps) => {
           {
             isDesktop &&
             <p className={classes.count}>
-              {`${carsCount.manufacturersCount || 123} марок и ${carsCount.seriesCount || 1048} моделей под заказ из Китая`}
+              {
+                plural(carsCount.manufacturersCount, '%d марка', '%d марки', '%d марок')
+              }&#32;и {
+                plural(carsCount.seriesCount, '%d модель', '%d модели', '%d моделей')
+              }&#32;под заказ из Китая
             </p>
           }
         </div>
