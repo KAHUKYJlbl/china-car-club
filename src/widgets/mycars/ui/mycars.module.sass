@@ -21,28 +21,39 @@
       display: flex
       gap: 4px
 
-    .button
-      display: flex
-      justify-content: center
-      align-items: center
-      gap: 6px
-
-      width: 149px
-      height: 52px
-
-      border: 2px solid $secondary
-      border-radius: 12px
-
-    .button-active
-      border: none
-      background-color: $white
-
-    .button:hover
-      background-color: $hover
-
   .list
     display: flex
     gap: 16px
     flex-wrap: wrap
 
     list-style: none
+
+  .button
+    display: flex
+    justify-content: center
+    align-items: center
+    gap: 6px
+
+    width: 149px
+    height: 52px
+
+    border: 2px solid $secondary
+    border-radius: 12px
+    cursor: pointer
+
+  .button-active
+    border: none
+    background-color: $white
+
+  .button:hover
+    background-color: $hover
+
+  .display-button
+    height: 50px
+    width: 100%
+
+    background-color: $primary
+    border: none
+
+    font-size: 14px
+    line-height: 18px

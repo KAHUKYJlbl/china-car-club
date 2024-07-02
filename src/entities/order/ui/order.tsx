@@ -1,14 +1,19 @@
 import dayjs from 'dayjs';
+import plural from 'plural-ru';
 
 import { StatisticEventType } from '../lib/types';
 
 import classes from './order.module.sass';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
+import { fetchOffers } from '../model/api-actions/fetch-offers';
 
 type OrderProps = {
   order: StatisticEventType;
 };
 
 export const Order = ({ order }: OrderProps) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.info}>
@@ -19,14 +24,14 @@ export const Order = ({ order }: OrderProps) => {
         </p>
 
         <img
-          src='/images/noimage.jpg'
+          src={`${process.env.STATIC_URL}/specification/${order.specification.id}.jpg`}
         />
 
         <p className={classes.model}>
-          <p className={classes.bold}>
+          <span className={classes.bold}>
             {order.specification.series.manufacturer.name.ru || order.specification.series.manufacturer.name.ch}<br/>
             {order.specification.series.name.ru || order.specification.series.name.ch}
-          </p>
+          </span>
 
           <span>{order.specification.name.ru || order.specification.name.ch}</span>
 
@@ -34,15 +39,28 @@ export const Order = ({ order }: OrderProps) => {
         </p>
 
         <p className={classes.properties}>
-          <span>Растаможивание на физлицо</span>
-          <span>Для личного пользования</span>
-          <span>Получение ЭПТС и СБКТС</span>
-          <span>Доп. товары на автомобиль</span>
-          <span>Гарантия на автомобиль</span>
+          <span>Растаможивание на {order.post.prices.priceTypeId === 2 ? 'физлицо' : 'юрлицо'}</span>
+
+          <span>{order.post.prices.priceTypeId === 2 ? 'Для личного пользования' : 'Без вычета НДС'}</span>
+
+          {
+            order.post.prices.availabilityOfEpts &&
+            <span>Получение ЭПТС и СБКТС</span>
+          }
+
+          {
+            order.post.addItems.map((item) => (
+              <span key={item}>{item}</span>
+            ))
+          }
         </p>
       </div>
 
-      <button>1 предложение цены</button>
+      <button
+        onClick={() => dispatch(fetchOffers(order.id))}
+      >
+        {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены
+      </button>
     </div>
   );
 };

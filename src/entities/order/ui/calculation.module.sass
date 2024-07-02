@@ -55,26 +55,32 @@
   .buttons
     display: flex
     gap: 4px
-
-  .xbutton
-    width: 40px
-    flex-grow: 0
-
-  button
     justify-self: end
-    flex-grow: 1
 
-    height: 40px
+    .xbutton
+      width: 40px
+      flex-grow: 0
 
-    background-color: $secondary
-    border-radius: 12px
+    p
+      display: flex
+      justify-content: center
+      align-items: center
+      flex-grow: 1
 
-    font-size: 14px
-    line-height: 18px
-    cursor: pointer
+    button
+      flex-grow: 1
 
-  button:hover
-    background-color: $hover
+      height: 40px
+
+      background-color: $secondary
+      border-radius: 12px
+
+      font-size: 14px
+      line-height: 18px
+      cursor: pointer
+
+    button:hover
+      background-color: $hover
 
   .grey
     color: $text-light
