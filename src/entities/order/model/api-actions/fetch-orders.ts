@@ -9,7 +9,7 @@ import { MycarsOrderType } from '../../lib/types';
 
 export const fetchOrders = createAsyncThunk<
   MycarsOrderType,
-  undefined,
+  number | undefined,
   {
     dispatch: AppDispatch;
     state: State;
@@ -17,9 +17,9 @@ export const fetchOrders = createAsyncThunk<
   }
 > (
   'Statistics/fetchOrders',
-  async ( _arg, {extra: axios}) => {
+  async ( page = 1, {extra: axios}) => {
     try {
-      const { data } = await axios.get<MycarsOrderType>(APIRoute.GetOrders);
+      const { data } = await axios.get<MycarsOrderType>(APIRoute.GetOrders, { params: { page } });
 
       return data;
     } catch (err) {

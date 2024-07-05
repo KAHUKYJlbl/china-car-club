@@ -9,7 +9,7 @@ import { MycarsCalculationType } from '../../lib/types';
 
 export const fetchCalculations = createAsyncThunk<
 MycarsCalculationType,
-  undefined,
+  number | undefined,
   {
     dispatch: AppDispatch;
     state: State;
@@ -17,9 +17,9 @@ MycarsCalculationType,
   }
 > (
   'Statistics/fetchCalculations',
-  async ( _arg, {extra: axios}) => {
+  async ( page, {extra: axios}) => {
     try {
-      const { data } = await axios.get<MycarsCalculationType>(APIRoute.GetCalculations);
+      const { data } = await axios.get<MycarsCalculationType>(APIRoute.GetCalculations, {params: { page }});
 
       return data;
     } catch (err) {

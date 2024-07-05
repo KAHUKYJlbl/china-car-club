@@ -121,7 +121,7 @@ export type MycarsOrderType = {
   data: StatisticOrderType[];
   meta: {
     currentPage: number;
-    total: number;
+    lastPage: number;
   };
 };
 
@@ -173,7 +173,7 @@ export type MycarsCalculationType = {
   data: StatisticCalculationType[];
   meta: {
     currentPage: number;
-    total: number;
+    lastPage: number;
   };
 };
 

@@ -8,19 +8,23 @@
 
   list-style: none
 
+  @media screen and (max-width: 1280px)
+    gap: 32px
+
+  @media screen and (max-width: 960px)
+    flex-flow: column
+
 .button
   height: 50px
   width: 100%
 
   background-color: $primary
-  border: none
+  border-radius: 16px
 
   font-size: 14px
   line-height: 18px
 
-.button-active
-  border: none
-  background-color: $white
+  cursor: pointer
 
 .button:hover
-  background-color: $hover
+  background-color: $primary-light

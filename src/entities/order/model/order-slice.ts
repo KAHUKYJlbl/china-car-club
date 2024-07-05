@@ -21,15 +21,15 @@ type InitialState = {
   orderLoadingStatus: FetchStatus;
   questions: QuestionsType;
   questionsLoadingStatus: FetchStatus;
+  offers: OfferType[];
+  offersLoadingStatus: FetchStatus;
   mycarsOrders: StatisticOrderType[];
   mycarsOrdersLoadingStatus: FetchStatus;
   mycarsCalculations: StatisticCalculationType[];
   mycarsCalculationsLoadingStatus: FetchStatus;
-  offers: OfferType[];
-  offersLoadingStatus: FetchStatus;
   mycarsPagination: {
     currentPage: number,
-    total: number,
+    lastPage: number,
   };
 };
 
@@ -60,7 +60,7 @@ const initialState: InitialState = {
   offersLoadingStatus: FetchStatus.Idle,
   mycarsPagination: {
     currentPage: 1,
-    total: 1,
+    lastPage: 1,
   },
 };
 
@@ -85,6 +85,16 @@ export const orderSlice = createSlice({
           5: false,
           6: false,
         },
+      };
+    },
+    resetMycars: (state) => {
+      state.mycarsCalculations = [];
+      state.mycarsCalculationsLoadingStatus = FetchStatus.Idle;
+      state.mycarsOrders = [];
+      state.mycarsOrdersLoadingStatus = FetchStatus.Idle;
+      state.mycarsPagination = {
+        currentPage: 1,
+        lastPage: 1,
       };
     },
     setQuestions: (state, action: PayloadAction<QuestionsType>) => {
@@ -138,7 +148,7 @@ export const orderSlice = createSlice({
         state.questionsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.mycarsOrders = action.payload.data;
+        state.mycarsOrders = state.mycarsOrders.concat(action.payload.data);
         state.mycarsPagination = action.payload.meta;
         state.mycarsOrdersLoadingStatus = FetchStatus.Success;
       })
@@ -149,7 +159,7 @@ export const orderSlice = createSlice({
         state.mycarsOrdersLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchCalculations.fulfilled, (state, action) => {
-        state.mycarsCalculations = action.payload.data;
+        state.mycarsCalculations = state.mycarsCalculations.concat(action.payload.data);
         state.mycarsPagination = action.payload.meta;
         state.mycarsCalculationsLoadingStatus = FetchStatus.Success;
       })
@@ -172,4 +182,4 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder, setQuestions } = orderSlice.actions;
+export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder, setQuestions, resetMycars } = orderSlice.actions;

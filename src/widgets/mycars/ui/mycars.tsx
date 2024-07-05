@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import cn from 'classnames';
 
 import { Calculations } from './calculations';
@@ -8,6 +9,8 @@ import classes from './mycars.module.sass';
 type MycarsProps = {};
 
 export const Mycars = ({}: MycarsProps) => {
+  const isDesktop = useMediaQuery({ query: '(min-width: 961px)' });
+
   const [ currentFolder, setCurrentFolder ] = useState<'orders' | 'favorites' | 'calculations'>('orders');
   const [ currentSort, setCurrentSort ] = useState<'increase' | 'decrease'>('decrease');
 
@@ -20,7 +23,7 @@ export const Mycars = ({}: MycarsProps) => {
               classes.button,
               {[classes.buttonActive]: currentFolder === 'orders'},
             )}
-            onClick={() => setCurrentFolder('orders')}
+            onClick={() => {setCurrentFolder('orders')}}
           >
             Заявки
           </button>
@@ -30,7 +33,7 @@ export const Mycars = ({}: MycarsProps) => {
               classes.button,
               {[classes.buttonActive]: currentFolder === 'calculations'},
             )}
-            onClick={() => setCurrentFolder('calculations')}
+            onClick={() => {setCurrentFolder('calculations')}}
           >
             Расчеты
           </button>
@@ -51,14 +54,17 @@ export const Mycars = ({}: MycarsProps) => {
           onClick={() => setCurrentSort((current) => current === 'increase' ? 'decrease' : 'increase')}
         >
           <svg
-            width={14}
-            height={12}
+            width={12}
+            height={14}
             aria-hidden="true"
           >
             <use xlinkHref="#sort" />
           </svg>
 
-          <span>Сортировка</span>
+          {
+            isDesktop &&
+            <span>Сортировка</span>
+          }
         </button>
       </div>
 

@@ -12,6 +12,7 @@ export {
   setCurrentColor,
   resetOrder,
   setQuestions,
+  resetMycars,
 } from './model/order-slice';
 export {
   getCurrentTax,
@@ -27,7 +28,7 @@ export {
   getOrdersLoadingStatus,
   getCalculations,
   getCalculationsLoadingStatus,
-
+  getPagination
 } from './model/order-selectors';
 export { postOrder } from './model/api-actions/post-order';
 export { postAnswers } from './model/api-actions/post-answers';

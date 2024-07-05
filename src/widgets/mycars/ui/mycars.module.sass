@@ -11,6 +11,7 @@
     display: flex
     justify-content: space-between
     align-items: center
+    gap: 4px
 
     padding: 4px
 
@@ -21,22 +22,33 @@
       display: flex
       gap: 4px
 
-  .button
-    display: flex
-    justify-content: center
-    align-items: center
-    gap: 6px
+    .button
+      display: flex
+      justify-content: center
+      align-items: center
+      gap: 6px
 
-    width: 149px
-    height: 52px
+      width: 149px
+      height: 52px
+      padding: 0 12px
 
-    border: 2px solid $secondary
-    border-radius: 12px
-    cursor: pointer
+      border: 2px solid $secondary
+      border-radius: 12px
+      cursor: pointer
 
-  .button-active
-    border: none
-    background-color: $white
+      @media screen and (max-width: 960px)
+        width: auto
+        height: 40px
 
-  .button:hover
-    background-color: $hover
+        font-size: 14px
+        line-height: 18px
+
+    .button-active
+      border: none
+      background-color: $white
+
+    .button:hover
+      background-color: $hover
+
+    .sort-button
+      flex-grow: 0

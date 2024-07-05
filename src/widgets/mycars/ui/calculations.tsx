@@ -5,7 +5,7 @@ import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { fetchCurrency, getCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
-import { Calculation, getCalculations, getCalculationsLoadingStatus } from "../../../entities/order";
+import { Calculation, getCalculations, getCalculationsLoadingStatus, getPagination, resetMycars } from "../../../entities/order";
 import { fetchCalculations } from "../../../entities/order";
 
 import classes from './calculations.module.sass';
@@ -21,8 +21,10 @@ export const Calculations = ({ currentSort }: CalculationsProps) => {
   const calculationsLoadingStatus = useAppSelector(getCalculationsLoadingStatus);
   const currency = useAppSelector(getCurrency);
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+  const pagination = useAppSelector(getPagination);
 
   useEffect(() => {
+    dispatch(resetMycars());
     dispatch(fetchCalculations());
   }, []);
 
@@ -35,7 +37,7 @@ export const Calculations = ({ currentSort }: CalculationsProps) => {
   if (
     !currency
     || calculationsLoadingStatus.isIdle
-    || calculationsLoadingStatus.isLoading
+    || ( calculationsLoadingStatus.isLoading && !calculations.length )
   ) {
     return <LoadingSpinner spinnerType='page' />
   }
@@ -56,15 +58,19 @@ export const Calculations = ({ currentSort }: CalculationsProps) => {
         }
       </ul>
 
-      {/* {
-        currentDisplayed < mycars.carOrders.length + mycars.carCalculations.length &&
+      {
+        pagination.currentPage < pagination.lastPage &&
         <button
-          className={cn(classes.button, classes.displayButton)}
-          onClick={() => setCurrentDisplayed((current) => current + DISPLAYED_STEP)}
+          className={classes.button}
+          onClick={() => dispatch(fetchCalculations( pagination.currentPage + 1 ))}
         >
-          Показать еще
+          {
+            calculationsLoadingStatus.isLoading
+            ? <LoadingSpinner spinnerType="button" />
+            : 'Показать еще'
+          }
         </button>
-      } */}
+      }
     </>
   );
 };

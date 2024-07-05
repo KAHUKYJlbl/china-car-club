@@ -10,6 +10,8 @@ export const getOrders = (state: State): StatisticOrderType[] => state[NameSpace
 
 export const getCalculations = (state: State): StatisticCalculationType[] => state[NameSpace.Order].mycarsCalculations;
 
+export const getPagination = (state: State) => state[NameSpace.Order].mycarsPagination;
+
 export const getCurrentTax = (state: State): TaxesTypes => state[NameSpace.Order].currentTax;
 
 export const getAdds = (state: State): Record<AddsType, boolean> => state[NameSpace.Order].adds;
@@ -44,7 +46,7 @@ export const getOrdersLoadingStatus = createSelector(
 );
 
 export const getCalculationsLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.Order].mycarsOrdersLoadingStatus,
+  (state: State): FetchStatus => state[NameSpace.Order].mycarsCalculationsLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,
