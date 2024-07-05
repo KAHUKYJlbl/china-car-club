@@ -1,22 +1,37 @@
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import cn from 'classnames';
 
+import {
+  Currencies,
+  getCurrencyExchange,
+} from '../../../entities/currency';
 import { FILTERS } from '../../../app/settings/filters';
-import { StatisticEventType } from '../lib/types';
+import { AppRoute } from '../../../app/provider/router';
+import priceFormat from '../../../shared/lib/utils/price-format';
+
+import { StatisticCalculationType } from '../lib/types';
 
 import classes from './calculation.module.sass';
-import priceFormat from '../../../shared/lib/utils/price-format';
-import { useNavigate } from 'react-router-dom';
-import { AppRoute } from '../../../app/provider/router';
 
 type CalculationProps = {
-  calculation: StatisticEventType;
+  calculation: StatisticCalculationType;
+  currency: {
+    cny: number;
+    usd: number;
+  }
 };
 
-export const Calculation = ({ calculation }: CalculationProps) => {
+export const Calculation = ({ calculation, currency }: CalculationProps) => {
   const navigate = useNavigate();
 
   return (
-    <div className={classes.wrapper}>
+    <div
+      className={cn(
+        classes.wrapper,
+        !calculation.specification.calcVisible && classes.opacity
+      )}
+    >
       <div className={classes.info}>
         <p className={classes.header}>
           <span>Быстрый расчет</span>
@@ -29,10 +44,10 @@ export const Calculation = ({ calculation }: CalculationProps) => {
         />
 
         <p className={classes.model}>
-          <p className={classes.bold}>
+          <span className={classes.bold}>
             {calculation.specification.series.manufacturer.name.ru || calculation.specification.series.manufacturer.name.ch}<br/>
             {calculation.specification.series.name.ru || calculation.specification.series.name.ch}
-          </p>
+          </span>
 
           <span>{calculation.specification.name.ru || calculation.specification.name.ch}</span>
 
@@ -42,16 +57,16 @@ export const Calculation = ({ calculation }: CalculationProps) => {
         <p className={classes.properties}>
           {Object.values({
             engineType: FILTERS.engine!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters.engineType.id
+              element.elementId === calculation.specification.parameters.engineTypeId
             )?.name || '',
             bodyType: FILTERS.body!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.bodyType.id
+              element.elementId === calculation.specification.parameters?.bodyTypeId
             )?.name || '',
             driveType: `${FILTERS.drive!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.driveType.id
+              element.elementId === calculation.specification.parameters?.driveTypeId
             )?.name} привод` || '',
             transmissionType: `${FILTERS.transmission!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.transmissionType.id
+              element.elementId === calculation.specification.parameters?.transmissionTypeId
             )?.name} коробка передач` || '',
           }).join(' • ')}
         </p>
@@ -59,9 +74,23 @@ export const Calculation = ({ calculation }: CalculationProps) => {
         <p className={classes.price}>
           <span className={classes.grey}>Цена в России с растаможкой</span>
           <span className={classes.bold}>
-            {priceFormat(calculation.specification.priceListWithLogisticsByCurrentDay.toSorted((a , b) => a.price - b.price)[0].price.toString())} ₽
-            {` — `}
-            {priceFormat(calculation.specification.priceListWithLogisticsByCurrentDay.toSorted((a , b) => b.price - a.price)[0].price.toString())} ₽
+            {
+              priceFormat(
+                getCurrencyExchange(
+                  calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted((a , b) => a.price - b.price)[0].price,
+                  Currencies.RUB,
+                  currency
+                )
+              )
+            } ₽ — {
+              priceFormat(
+                getCurrencyExchange(
+                  calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted((a , b) => b.price - a.price)[0].price,
+                  Currencies.RUB,
+                  currency
+                )
+              )
+            } ₽
           </span>
         </p>
       </div>
