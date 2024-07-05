@@ -1,7 +1,14 @@
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 
-import { fetchOrders, getOrders, getOrdersLoadingStatus, Order } from '../../../entities/order';
+import {
+  fetchOrders,
+  getOrders,
+  getOrdersLoadingStatus,
+  Order,
+  getPagination,
+  resetMycars
+} from '../../../entities/order';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
@@ -17,12 +24,17 @@ export const Orders = ({ currentSort }: OrdersProps) => {
 
   const orders = useAppSelector(getOrders);
   const ordersLoadingStatus = useAppSelector(getOrdersLoadingStatus);
+  const pagination = useAppSelector(getPagination);
 
   useEffect(() => {
+    dispatch(resetMycars());
     dispatch(fetchOrders());
   }, []);
 
-  if (ordersLoadingStatus.isIdle || ordersLoadingStatus.isLoading) {
+  if (
+    ordersLoadingStatus.isIdle
+    || ( ordersLoadingStatus.isLoading && !orders.length )
+  ) {
     return <LoadingSpinner spinnerType='page' />
   }
 
@@ -42,15 +54,19 @@ export const Orders = ({ currentSort }: OrdersProps) => {
         }
       </ul>
 
-      {/* {
-        currentDisplayed < mycars.carOrders.length + mycars.carCalculations.length &&
+      {
+        pagination.currentPage < pagination.lastPage &&
         <button
-          className={cn(classes.button, classes.displayButton)}
-          onClick={() => setCurrentDisplayed((current) => current + DISPLAYED_STEP)}
+          className={classes.button}
+          onClick={() => dispatch(fetchOrders( pagination.currentPage + 1 ))}
         >
-          Показать еще
+          {
+            ordersLoadingStatus.isLoading
+            ? <LoadingSpinner spinnerType='button' />
+            : 'Показать еще'
+          }
         </button>
-      } */}
+      }
     </>
   );
 };
