@@ -43,19 +43,19 @@ export const Calculator = (): JSX.Element => {
     if (manufacturersLoadingStatus.isIdle) {
       dispatch(fetchManufacturers());
     }
-  }, [manufacturersLoadingStatus.isIdle]);
+  }, []);
 
   useEffect(() => {
     if (currencyLoadingStatus.isIdle) {
       dispatch(fetchCurrency());
     }
-  }, [currencyLoadingStatus.isIdle]);
+  }, []);
 
   useEffect(() => {
     if (galleryLoadingStatus.isIdle) {
       dispatch(fetchPromo());
     }
-  }, [galleryLoadingStatus.isIdle]);
+  }, []);
 
   useEffect(() => {
     if (currentSpecification) {

@@ -1,4 +1,3 @@
-import { ParametrApiType, PriceApiType, SeriesApiType } from "../../model";
 import { LocationType } from "../../user";
 
 export type OrderResponseType = {
@@ -74,68 +73,108 @@ export type QuestionsType = {
   };
 };
 
-export type StatisticEventType = {
+export type StatisticOrderType = {
   id: number,
-  typeId: number,
-  price: number,
-  currency: number,
-  post: OrderApiType,
-  createdAt: string,
-  priceTypeId: null,
-  clientId: number,
-  specificationId: number,
+  createdAt: string;
   dealerOffersCount: number;
+  priceTypeId: number;
+  availabilityOfEpts: boolean;
+  addItems: string[];
   specification: {
     id: number,
     name: {
         ch: string,
         ru: string
     },
-    stateId: number,
     calcVisible: boolean,
     year: number,
     parameters: {
-      engineType: ParametrApiType,
-      bodyType: ParametrApiType,
-      driveType: ParametrApiType,
-      transmissionType: ParametrApiType,
-      power: number,
-      torque: number | null,
-      batteryCapacity: number | null,
+      bodyTypeId: number,
+      engineTypeId: number,
+      transmissionTypeId: number,
+      driveTypeId: number,
       powerReserve: number | null,
-      electricPowerReserve: number | null,
-      engineCount: number | null,
-      seats: string[],
-      lengthWidthHeight: string,
-      groundClearance: number | null,
-      curbWeight: number,
-      acceleration: number | null,
-      engineCapacity: number | null,
-      totalFuelConsumption: number | null,
-      wheelSize: {
-        front: string,
-        rear: string,
-      },
     },
-    series_id: number,
-    series: SeriesApiType,
-    price: PriceApiType,
-    priceListWithLogisticsByCurrentDay: {
-      id: number,
-      type_id: number,
-      price: number,
-      date: string
-    }[]
+    series: {
+      id: number;
+      name: {
+        ch: string;
+        ru: string;
+      };
+      manufacturer: {
+        id: number;
+        name: {
+          ch: string;
+          ru: string;
+        };
+      };
+      priceListWithLogisticsByCurrentDay: {
+        typeId: number,
+        price: number,
+        date: string
+      }[]
+    },
   }
 };
 
-export type MycarsType = {
-  carCalculations: StatisticEventType[];
-  carOrders: StatisticEventType[];
+export type MycarsOrderType = {
+  data: StatisticOrderType[];
+  meta: {
+    currentPage: number;
+    total: number;
+  };
 };
 
-export type OrderApiType = Omit<OrderType, 'addItems'> & {
+export type StatisticCalculationType = {
+  id: number,
+  createdAt: string;
+  dealerOffersCount: number;
+  priceTypeId: number;
+  availabilityOfEpts: boolean;
   addItems: string[];
+  specification: {
+    id: number,
+    name: {
+        ch: string,
+        ru: string
+    },
+    calcVisible: boolean,
+    year: number,
+    parameters: {
+      bodyTypeId: number,
+      engineTypeId: number,
+      transmissionTypeId: number,
+      driveTypeId: number,
+      powerReserve: number | null,
+    },
+    series: {
+      id: number;
+      name: {
+        ch: string;
+        ru: string;
+      };
+      manufacturer: {
+        id: number;
+        name: {
+          ch: string;
+          ru: string;
+        };
+      };
+      priceListWithLogisticsByCurrentDay: {
+        typeId: number,
+        price: number,
+        date: string
+      }[]
+    },
+  }
+};
+
+export type MycarsCalculationType = {
+  data: StatisticCalculationType[];
+  meta: {
+    currentPage: number;
+    total: number;
+  };
 };
 
 export type OfferType = {

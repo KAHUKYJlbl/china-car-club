@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
 import plural from 'plural-ru';
 
-import { StatisticEventType } from '../lib/types';
+import { StatisticOrderType } from '../lib/types';
 
 import classes from './order.module.sass';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { fetchOffers } from '../model/api-actions/fetch-offers';
 
 type OrderProps = {
-  order: StatisticEventType;
+  order: StatisticOrderType;
 };
 
 export const Order = ({ order }: OrderProps) => {
@@ -20,7 +20,7 @@ export const Order = ({ order }: OrderProps) => {
         <p className={classes.header}>
           <span>Заявка</span>
 
-          <span className={classes.grey}>{dayjs(order.createdAt).format('D MMM, в H:mm')}</span>
+          <span className={classes.grey}>{dayjs(order.createdAt).locale('ru').format('D MMM, в H:mm')}</span>
         </p>
 
         <img
@@ -39,17 +39,17 @@ export const Order = ({ order }: OrderProps) => {
         </p>
 
         <p className={classes.properties}>
-          <span>Растаможивание на {order.post.prices.priceTypeId === 2 ? 'физлицо' : 'юрлицо'}</span>
+          <span>Растаможивание на {order.priceTypeId === 2 ? 'физлицо' : 'юрлицо'}</span>
 
-          <span>{order.post.prices.priceTypeId === 2 ? 'Для личного пользования' : 'Без вычета НДС'}</span>
+          <span>{order.priceTypeId === 2 ? 'Для личного пользования' : 'Без вычета НДС'}</span>
 
           {
-            order.post.prices.availabilityOfEpts &&
+            order.availabilityOfEpts &&
             <span>Получение ЭПТС и СБКТС</span>
           }
 
           {
-            order.post.addItems.map((item) => (
+            order.addItems.map((item) => (
               <span key={item}>{item}</span>
             ))
           }

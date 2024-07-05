@@ -23,10 +23,14 @@ export {
   getQuestionsLoadingStatus,
   getOrderLoadingStatus,
   getQuestions,
-  getMycars,
-  getMycarsLoadingStatus,
+  getOrders,
+  getOrdersLoadingStatus,
+  getCalculations,
+  getCalculationsLoadingStatus,
+
 } from './model/order-selectors';
 export { postOrder } from './model/api-actions/post-order';
 export { postAnswers } from './model/api-actions/post-answers';
-export { fetchMycars } from './model/api-actions/fetch-mycars';
+export { fetchOrders } from './model/api-actions/fetch-orders';
+export { fetchCalculations } from './model/api-actions/fetch-calculations';
 export { fetchOffers } from './model/api-actions/fetch-offers';

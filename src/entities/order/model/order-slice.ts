@@ -4,11 +4,12 @@ import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
 
+import { OfferType, QuestionsType, StatisticCalculationType, StatisticOrderType } from '../lib/types';
 import { postOrder } from './api-actions/post-order';
 import { postAnswers } from './api-actions/post-answers';
-import { fetchMycars } from './api-actions/fetch-mycars';
-import { MycarsType, OfferType, QuestionsType } from '../lib/types';
+import { fetchOrders } from './api-actions/fetch-orders';
 import { fetchOffers } from './api-actions/fetch-offers';
+import { fetchCalculations } from './api-actions/fetch-calculations';
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -20,10 +21,16 @@ type InitialState = {
   orderLoadingStatus: FetchStatus;
   questions: QuestionsType;
   questionsLoadingStatus: FetchStatus;
-  mycars: MycarsType;
-  mycarsLoadingStatus: FetchStatus;
+  mycarsOrders: StatisticOrderType[];
+  mycarsOrdersLoadingStatus: FetchStatus;
+  mycarsCalculations: StatisticCalculationType[];
+  mycarsCalculationsLoadingStatus: FetchStatus;
   offers: OfferType[];
   offersLoadingStatus: FetchStatus;
+  mycarsPagination: {
+    currentPage: number,
+    total: number,
+  };
 };
 
 const initialState: InitialState = {
@@ -45,13 +52,16 @@ const initialState: InitialState = {
       6: false,
     },
   },
-  mycars: {
-    carCalculations: [],
-    carOrders: [],
-  },
-  mycarsLoadingStatus: FetchStatus.Idle,
+  mycarsOrders: [],
+  mycarsOrdersLoadingStatus: FetchStatus.Idle,
+  mycarsCalculations: [],
+  mycarsCalculationsLoadingStatus: FetchStatus.Idle,
   offers: [],
   offersLoadingStatus: FetchStatus.Idle,
+  mycarsPagination: {
+    currentPage: 1,
+    total: 1,
+  },
 };
 
 export const orderSlice = createSlice({
@@ -127,15 +137,27 @@ export const orderSlice = createSlice({
       .addCase(postAnswers.rejected, (state) => {
         state.questionsLoadingStatus = FetchStatus.Failed;
       })
-      .addCase(fetchMycars.fulfilled, (state, action) => {
-        state.mycars = action.payload;
-        state.mycarsLoadingStatus = FetchStatus.Success;
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.mycarsOrders = action.payload.data;
+        state.mycarsPagination = action.payload.meta;
+        state.mycarsOrdersLoadingStatus = FetchStatus.Success;
       })
-      .addCase(fetchMycars.pending, (state) => {
-        state.mycarsLoadingStatus = FetchStatus.Pending;
+      .addCase(fetchOrders.pending, (state) => {
+        state.mycarsOrdersLoadingStatus = FetchStatus.Pending;
       })
-      .addCase(fetchMycars.rejected, (state) => {
-        state.mycarsLoadingStatus = FetchStatus.Failed;
+      .addCase(fetchOrders.rejected, (state) => {
+        state.mycarsOrdersLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchCalculations.fulfilled, (state, action) => {
+        state.mycarsCalculations = action.payload.data;
+        state.mycarsPagination = action.payload.meta;
+        state.mycarsCalculationsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchCalculations.pending, (state) => {
+        state.mycarsCalculationsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchCalculations.rejected, (state) => {
+        state.mycarsCalculationsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchOffers.fulfilled, (state, action) => {
         state.offers = action.payload;
