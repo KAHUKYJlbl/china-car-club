@@ -9,7 +9,7 @@ import classes from './mycars.module.sass';
 type MycarsProps = {};
 
 export const Mycars = ({}: MycarsProps) => {
-  const isDesktop = useMediaQuery({ query: '(min-width: 961px)' });
+  const isDesktop = useMediaQuery({ query: '(min-width: 721px)' });
 
   const [ currentFolder, setCurrentFolder ] = useState<'orders' | 'favorites' | 'calculations'>('orders');
   const [ currentSort, setCurrentSort ] = useState<'increase' | 'decrease'>('decrease');

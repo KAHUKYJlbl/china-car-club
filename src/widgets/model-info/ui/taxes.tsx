@@ -136,6 +136,16 @@ export const Taxes = ({ currentSpecification, setCurrentSpecification, techs }: 
               <p>{priceFormat(getCurrencyExchange(getTaxes(currentTax, techs.price).recyclingFee, Currencies.RUB, currency))} {Currencies.RUB}</p>
             </div>
 
+            <div className={classes.flexRow}>
+              <p>парковка СВХ + эвакуатор</p>
+              <p>{priceFormat(getCurrencyExchange(getTaxes(currentTax, techs.price).parkingTowTruck, Currencies.RUB, currency))} {Currencies.RUB}</p>
+            </div>
+
+            <div className={classes.flexRow}>
+              <p>услуги таможенного брокера</p>
+              <p>{priceFormat(getCurrencyExchange(getTaxes(currentTax, techs.price).customsBrokerServices, Currencies.RUB, currency))} {Currencies.RUB}</p>
+            </div>
+
             <div className={cn(classes.flexRow, classes.bold)}>
               <p>Итого, растаможка автомобиля</p>
               <p>{priceFormat(getCurrencyExchange(getTaxes(currentTax, techs.price).final, Currencies.RUB, currency))} {Currencies.RUB}</p>

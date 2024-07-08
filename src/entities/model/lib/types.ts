@@ -30,6 +30,8 @@ export type CustomsType = {
   recyclingFee: number,
   exciseTax: number,
   nds: number,
+  parkingTowTruck: number;
+  customsBrokerServices: number;
 };
 
 export type PriceApiType = {
