@@ -2,56 +2,36 @@
 
 .wrapper
   display: flex
-  flex-direction: column
   gap: 4px
+  justify-content: space-between
+  align-items: center
 
-  .links
+  .logo
     display: flex
-    justify-content: space-between
+    gap: 20px
 
-    padding: 0 12px 8px
-
-    color: $text-light
-    font-size: 14px
-    line-height: 18px
-
-    @media screen and (max-width:640px)
-      flex-direction: column
-      align-items: center
-
-    .link
-      cursor: pointer
-
-    .phone
-      background-color: transparent
-      color: $text-primary
-
-  .main-wrapper
-    display: flex
-    justify-content: space-between
-
-    padding: 4px
-
-    border-radius: 12px
-    background-color: $white
-
-    .menu-wrapper
+    a
       display: flex
-      gap: 4px
+      align-items: center
+      justify-content: center
 
-      a
-        display: flex
-        align-items: center
-        justify-content: center
+      background: none
+      width: 238px
+      height: 52px
 
-        background: none
-        width: 238px
-        height: 52px
+      @media screen and (max-width:960px)
+        width: 164px
+        height: 42px
 
-        @media screen and (max-width:960px)
-          width: 164px
-          height: 42px
+    .count
+      display: flex
+      align-items: center
+      justify-content: center
 
-  .mobile-wrapper
+      font-size: 12px
+      line-height: 16px
+      color: $text-light
+
+  .cabinet-buttons
     display: flex
     gap: 4px

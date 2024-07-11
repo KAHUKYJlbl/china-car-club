@@ -5,7 +5,7 @@ import { decamelizeKeys } from 'humps';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { AnswersType } from '../lib/types';
+import { AnswersType } from '../../lib/types';
 
 
 export const postAnswers = createAsyncThunk<

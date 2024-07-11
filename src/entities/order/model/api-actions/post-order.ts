@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { OrderResponseType, OrderType } from '../lib/types';
+import { OrderResponseType, OrderType } from '../../lib/types';
 
 export const postOrder = createAsyncThunk<
   number,

@@ -1,4 +1,5 @@
 import { memo, useEffect } from 'react';
+import plural from 'plural-ru';
 
 import {
   fetchManufacturersWithSpectsCount,
@@ -72,11 +73,11 @@ export const ChooseModel = memo(
       <div className={classes.wrapper}>
         <div className={classes.count}>
           <p>
-            {carsCount.manufacturersCount} марок
-            <span>•</span>
-            {carsCount.seriesCount} моделей
-            <span>•</span>
-            {carsCount.specificationsCount} комплектаций
+            {plural(carsCount.manufacturersCount, '%d марка', '%d марки', '%d марок')}
+            &#32;•&#32;
+            {plural(carsCount.seriesCount, '%d модель', '%d модели', '%d моделей')}
+            &#32;•&#32;
+            {plural(carsCount.specificationsCount, '%d комплектация', '%d комплектации', '%d комплектаций')}
           </p>
         </div>
 

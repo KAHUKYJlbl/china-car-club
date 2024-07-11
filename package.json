@@ -68,6 +68,7 @@
     "history": "^5.3.0",
     "humps": "^2.0.1",
     "js-cookie": "^3.0.5",
+    "plural-ru": "^2.0.2",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-cookie": "^7.1.0",

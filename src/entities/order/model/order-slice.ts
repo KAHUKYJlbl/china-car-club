@@ -2,11 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NameSpace } from '../../../app/provider/store';
 import { FetchStatus } from '../../../shared/api/fetch-status';
-
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
+
+import { OfferType, QuestionsType, StatisticCalculationType, StatisticOrderType } from '../lib/types';
 import { postOrder } from './api-actions/post-order';
 import { postAnswers } from './api-actions/post-answers';
-import { QuestionsType } from './lib/types';
+import { fetchOrders } from './api-actions/fetch-orders';
+import { fetchOffers } from './api-actions/fetch-offers';
+import { fetchCalculations } from './api-actions/fetch-calculations';
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -16,8 +19,18 @@ type InitialState = {
   currentColor: CurrentColorType;
   order: number | null;
   orderLoadingStatus: FetchStatus;
-  questionsLoadingStatus: FetchStatus;
   questions: QuestionsType;
+  questionsLoadingStatus: FetchStatus;
+  offers: OfferType[];
+  offersLoadingStatus: FetchStatus;
+  mycarsOrders: StatisticOrderType[];
+  mycarsOrdersLoadingStatus: FetchStatus;
+  mycarsCalculations: StatisticCalculationType[];
+  mycarsCalculationsLoadingStatus: FetchStatus;
+  mycarsPagination: {
+    currentPage: number,
+    lastPage: number,
+  };
 };
 
 const initialState: InitialState = {
@@ -38,7 +51,17 @@ const initialState: InitialState = {
       5: false,
       6: false,
     },
-  }
+  },
+  mycarsOrders: [],
+  mycarsOrdersLoadingStatus: FetchStatus.Idle,
+  mycarsCalculations: [],
+  mycarsCalculationsLoadingStatus: FetchStatus.Idle,
+  offers: [],
+  offersLoadingStatus: FetchStatus.Idle,
+  mycarsPagination: {
+    currentPage: 1,
+    lastPage: 1,
+  },
 };
 
 export const orderSlice = createSlice({
@@ -62,6 +85,16 @@ export const orderSlice = createSlice({
           5: false,
           6: false,
         },
+      };
+    },
+    resetMycars: (state) => {
+      state.mycarsCalculations = [];
+      state.mycarsCalculationsLoadingStatus = FetchStatus.Idle;
+      state.mycarsOrders = [];
+      state.mycarsOrdersLoadingStatus = FetchStatus.Idle;
+      state.mycarsPagination = {
+        currentPage: 1,
+        lastPage: 1,
       };
     },
     setQuestions: (state, action: PayloadAction<QuestionsType>) => {
@@ -109,13 +142,44 @@ export const orderSlice = createSlice({
         state.questionsLoadingStatus = FetchStatus.Success;
       })
       .addCase(postAnswers.pending, (state) => {
-        console.log('loading');
         state.questionsLoadingStatus = FetchStatus.Pending;
       })
       .addCase(postAnswers.rejected, (state) => {
         state.questionsLoadingStatus = FetchStatus.Failed;
       })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.mycarsOrders = state.mycarsOrders.concat(action.payload.data);
+        state.mycarsPagination = action.payload.meta;
+        state.mycarsOrdersLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchOrders.pending, (state) => {
+        state.mycarsOrdersLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchOrders.rejected, (state) => {
+        state.mycarsOrdersLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchCalculations.fulfilled, (state, action) => {
+        state.mycarsCalculations = state.mycarsCalculations.concat(action.payload.data);
+        state.mycarsPagination = action.payload.meta;
+        state.mycarsCalculationsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchCalculations.pending, (state) => {
+        state.mycarsCalculationsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchCalculations.rejected, (state) => {
+        state.mycarsCalculationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchOffers.fulfilled, (state, action) => {
+        state.offers = action.payload;
+        state.offersLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchOffers.pending, (state) => {
+        state.offersLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchOffers.rejected, (state) => {
+        state.offersLoadingStatus = FetchStatus.Failed;
+      })
   },
 });
 
-export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder, setQuestions } = orderSlice.actions;
+export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder, setQuestions, resetMycars } = orderSlice.actions;

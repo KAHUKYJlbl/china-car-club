@@ -110,13 +110,13 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
     if (manufacturersLoadingStatus.isIdle) {
       dispatch(fetchManufacturers());
     }
-  }, [manufacturersLoadingStatus.isIdle]);
+  }, []);
 
   useEffect(() => {
     if (currencyLoadingStatus.isIdle) {
       dispatch(fetchCurrency());
     }
-  }, [currencyLoadingStatus.isIdle]);
+  }, []);
 
   useEffect(() => {
     if (currentSpecification) {

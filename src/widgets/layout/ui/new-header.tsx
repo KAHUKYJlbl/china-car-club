@@ -1,107 +1,63 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import plural from 'plural-ru';
 
 import { AppRoute } from '../../../app/provider/router';
-import { DROPDOWN_CITIES } from '../../../app/settings/cities';
+import { fetchManufacturers, getFullListCount, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
+import { CabinetButton } from '../../../shared/ui/header-button';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { HeaderButton } from '../../../shared/ui/header-button';
-import { DropdownHeader } from '../../../shared/ui/dropdown';
-import { Currencies, getCurrencyName, getCurrentCurrency } from '../../../entities/currency';
-import { getCurrentCity, HeaderUser, setCity } from '../../../entities/user';
 
 import classes from './new-header.module.sass';
-import { setCurrentCurrency } from '../../../entities/currency/model/currency-slice';
 
 type NewHeaderProps = {};
 
 export const NewHeader = ({}: NewHeaderProps) => {
   const dispatch = useAppDispatch();
   const isDesktop = useMediaQuery({ query: '(min-width: 961px)' });
-  const city = useAppSelector(getCurrentCity);
-  const currentCurrency = useAppSelector(getCurrentCurrency);
 
-  const setCityHandler = (id: number) => {
-    dispatch(setCity(id));
-  }
+  const carsCount = useAppSelector(getFullListCount);
+  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
 
-  const toggleCurrency = () => {
-    switch (currentCurrency) {
-      case Currencies.RUB:
-        dispatch(setCurrentCurrency(Currencies.USD));
-        break;
-      case Currencies.USD:
-        dispatch(setCurrentCurrency(Currencies.CNY));
-        break;
-      case Currencies.CNY:
-        dispatch(setCurrentCurrency(Currencies.RUB));
-        break;
-    };
-  }
+  useEffect(() => {
+    if (manufacturersLoadingStatus.isIdle) {
+      dispatch(fetchManufacturers());
+    }
+  }, [manufacturersLoadingStatus.isIdle]);
 
   return (
     <div className={classes.wrapper}>
-      <div className={classes.links}>
-        <p>
-          <span className={classes.link}>Стать продавцом</span>
-          <span> • </span>
-          <span className={classes.link}>Покупать как компания</span>
-        </p>
-
-        <p>
-          <span>Бесплатно по России: </span>
-          <Link to='tel:+78007001895' className={classes.phone}>8 800 700 18 95</Link>
-        </p>
-      </div>
-
-      <div className={classes.mainWrapper}>
-        <div className={classes.menuWrapper}>
+        <div className={classes.logo}>
           <Link to={AppRoute.Main} >
             <svg
               width={ isDesktop ? 220 : 148 }
               height={ isDesktop ? 36 : 24 }
               aria-hidden="true"
             >
-              <use xlinkHref="#logo-new" />
+              <use xlinkHref="#logo" />
             </svg>
           </Link>
 
-          <HeaderButton icon='menu' onClick={() => null} />
-
           {
             isDesktop &&
-            <>
-              <DropdownHeader
-                currentElement={city}
-                setCurrent={setCityHandler}
-                list={DROPDOWN_CITIES}
-                placeholder='Город доставки авто'
-              />
-
-              <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
-            </>
+            <p className={classes.count}>
+              {
+                plural(carsCount.manufacturersCount, '%d марка', '%d марки', '%d марок')
+              }&#32;и {
+                plural(carsCount.seriesCount, '%d модель', '%d модели', '%d моделей')
+              }&#32;под заказ из Китая
+            </p>
           }
         </div>
 
-        <HeaderUser />
-      </div>
+        <div className={classes.cabinetButtons}>
+          <CabinetButton icon='cabinet-mycars' />
 
-      {
-        !isDesktop &&
-        <div className={classes.mobileWrapper}>
-          <DropdownHeader
-            currentElement={city}
-            setCurrent={setCityHandler}
-            list={DROPDOWN_CITIES}
-            placeholder='Город доставки авто'
-          />
+          <CabinetButton icon='cabinet-favorite' />
 
-          <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
+          <CabinetButton icon='cabinet-profile' />
         </div>
-      }
-
-      {/* <div className={classes.breadcrumbs}></div> */}
     </div>
   );
 };
-

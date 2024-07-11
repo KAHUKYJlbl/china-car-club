@@ -1,0 +1,54 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 36px
+
+  margin-top: 20px
+
+  .bar
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 4px
+
+    padding: 4px
+
+    background-color: $primary
+    border-radius: 16px
+
+    .button-wrapper
+      display: flex
+      gap: 4px
+
+    .button
+      display: flex
+      justify-content: center
+      align-items: center
+      gap: 6px
+
+      width: 149px
+      height: 52px
+      padding: 0 12px
+
+      border: 2px solid $secondary
+      border-radius: 12px
+      cursor: pointer
+
+      @media screen and (max-width: 720px)
+        width: auto
+        height: 40px
+
+        font-size: 14px
+        line-height: 18px
+
+    .button-active
+      border: none
+      background-color: $white
+
+    .button:hover
+      background-color: $hover
+
+    .sort-button
+      flex-grow: 0
