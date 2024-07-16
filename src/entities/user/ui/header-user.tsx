@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
@@ -18,13 +18,13 @@ import {
 import { login, logout, setGeolocation } from "../model/user-slice";
 import { Login } from "./login";
 import classes from './header-user.module.sass';
-import { AppRoute } from "../../../app/provider/router";
+// import { AppRoute } from "../../../app/provider/router";
 
 type headerUserProps = {};
 
 export const HeaderUser = memo(({}: headerUserProps) => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const storedLocation = useAppSelector(getGeolocation);
   const locationMode = useAppSelector(getGeolocationMode);
   const isAuth = useAppSelector(getAuthStatus);
@@ -58,14 +58,14 @@ export const HeaderUser = memo(({}: headerUserProps) => {
   return (
     <>
       <div className={classes.wrapper}>
-        {
+        {/* {
           isAuth &&
           <>
             <HeaderButton icon='mycars' text='Мои&nbsp;автомобили' type='light' onClick={() => navigate(AppRoute.MyCars)} />
 
             <HeaderButton icon='favorite' text='Избранное' type='light' onClick={() => null} />
           </>
-        }
+        } */}
 
         <HeaderButton icon='profile' text={isAuth ? 'Выйти' : 'Войти'} type='light' onClick={handleLoginClick} />
       </div>
