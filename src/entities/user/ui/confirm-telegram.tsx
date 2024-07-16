@@ -12,7 +12,7 @@ import { unmask } from '../../../shared/lib/utils/unmask';
 
 import { ConfirmFormType, LoginModeType } from '../lib/types';
 import { NEW_PIN_TIME } from '../lib/const';
-import { postConfirm } from '../model/api-actons/post-confirm';
+import { postConfirm } from '../model/api-actions/post-confirm';
 import { getUser } from '../model/user-selectors';
 import classes from './confirm-telegram.module.sass';
 

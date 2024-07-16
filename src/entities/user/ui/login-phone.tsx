@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { unmask } from '../../../shared/lib/utils/unmask';
 
-import { postSms } from '../model/api-actons/post-sms';
+import { postSms } from '../model/api-actions/post-sms';
 import { getUser } from '../model/user-selectors';
 import { LoginModeType, SmsFormType } from '../lib/types';
 import classes from './login-phone.module.sass';

@@ -11,8 +11,8 @@ import { unmask } from '../../../shared/lib/utils/unmask';
 
 import { NEW_PIN_TIME } from '../lib/const';
 import { ConfirmFormType, LoginModeType } from '../lib/types';
-import { postConfirm } from '../model/api-actons/post-confirm';
-import { postSms } from '../model/api-actons/post-sms';
+import { postConfirm } from '../model/api-actions/post-confirm';
+import { postSms } from '../model/api-actions/post-sms';
 import { getUser } from '../model/user-selectors';
 import classes from './confirm-phone.module.sass';
 

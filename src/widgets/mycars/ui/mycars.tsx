@@ -43,7 +43,7 @@ export const Mycars = ({}: MycarsProps) => {
               classes.button,
               {[classes.buttonActive]: currentFolder === 'favorites'}
             )}
-            onClick={() => null}
+            onClick={() => {setCurrentFolder('favorites')}}
           >
             Избранное
           </button>

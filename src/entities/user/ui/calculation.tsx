@@ -5,17 +5,17 @@ import cn from 'classnames';
 import {
   Currencies,
   getCurrencyExchange,
-} from '../../../entities/currency';
+} from '../../currency';
 import { FILTERS } from '../../../app/settings/filters';
 import { AppRoute } from '../../../app/provider/router';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
-import { StatisticCalculationType } from '../lib/types';
 
+import { MycarsCalculationType } from '../lib/types';
 import classes from './calculation.module.sass';
 
 type CalculationProps = {
-  calculation: StatisticCalculationType;
+  calculation: MycarsCalculationType;
   currency: {
     cny: number;
     usd: number;

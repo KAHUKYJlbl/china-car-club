@@ -8,8 +8,8 @@ import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { HeaderButton } from "../../../shared/ui/header-button/ui/header-button";
 
 import { useGeolocation } from "../lib/hooks/use-geolocation";
-import { fetchCity } from "../model/api-actons/fetch-city";
-import { fetchHash } from "../model/api-actons/fetch-hash";
+import { fetchCity } from "../model/api-actions/fetch-city";
+import { fetchHash } from "../model/api-actions/fetch-hash";
 import {
   getAuthStatus,
   getGeolocation,

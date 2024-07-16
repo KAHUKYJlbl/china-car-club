@@ -5,8 +5,7 @@ import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { fetchCurrency, getCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
-import { Calculation, getCalculations, getCalculationsLoadingStatus, getPagination, resetMycars } from "../../../entities/order";
-import { fetchCalculations } from "../../../entities/order";
+import { Calculation, getCalculations, getCalculationsLoadingStatus, getPagination, resetMycars, fetchCalculations } from "../../../entities/user";
 
 import classes from './calculations.module.sass';
 
@@ -53,7 +52,11 @@ export const Calculations = ({ currentSort }: CalculationsProps) => {
               : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
             )
             .map((calculation) => (
-              <Calculation currency={currency} calculation={calculation} key={calculation.id} />
+              <Calculation
+                currency={currency}
+                calculation={calculation}
+                key={calculation.id}
+              />
             ))
         }
       </ul>

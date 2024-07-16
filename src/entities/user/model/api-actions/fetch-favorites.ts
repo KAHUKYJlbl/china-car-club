@@ -4,11 +4,10 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { MycarsOrderType } from '../../lib/types';
+import { ApiFavoriteType } from '../../lib/types';
 
-
-export const fetchOrders = createAsyncThunk<
-  MycarsOrderType,
+export const fetchFavorites = createAsyncThunk<
+  ApiFavoriteType,
   number | undefined,
   {
     dispatch: AppDispatch;
@@ -16,14 +15,14 @@ export const fetchOrders = createAsyncThunk<
     extra: AxiosInstance;
   }
 > (
-  'Statistics/fetchOrders',
-  async ( page = 1, {extra: axios}) => {
+  'User/fetchFavorites',
+  async ( page, {extra: axios}) => {
     try {
-      const { data } = await axios.get<MycarsOrderType>(APIRoute.GetOrders, { params: { page } });
+      const { data } = await axios.get<ApiFavoriteType>(APIRoute.GetFavorites, { params: { page } });
 
       return data;
     } catch (err) {
-      throw Error('Unable to get Orders');
+      throw Error('Unable to get Favorites');
     }
   },
 );
