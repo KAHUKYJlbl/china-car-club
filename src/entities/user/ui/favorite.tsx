@@ -97,18 +97,20 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
             ? [
                 FILTERS.engine!.elements.find((element) =>
                   element.elementId === favorite.cardData.parameters.engineTypeId
-                )?.name || '',
+                )?.name || null,
                 FILTERS.body!.elements.find((element) =>
                   element.elementId === favorite.cardData.parameters?.bodyTypeId
-                )?.name || '',
+                )?.name || null,
                 `${FILTERS.drive!.elements.find((element) =>
                   element.elementId === favorite.cardData.parameters?.driveTypeId
-                )?.name} привод` || '',
+                )?.name} привод` || null,
                 `${FILTERS.transmission!.elements.find((element) =>
                   element.elementId === favorite.cardData.parameters?.transmissionTypeId
-                )?.name} коробка передач` || '',
-                `Запас\u00A0хода ${favorite.cardData.parameters.powerReserve}\u00A0км`
-              ].join('\u00A0•\u00A0')
+                )?.name} коробка передач` || null,
+                favorite.cardData.parameters.powerReserve && `Запас\u00A0хода ${favorite.cardData.parameters.powerReserve}\u00A0км`
+              ]
+              .filter(value => value !== null)
+              .join('\u00A0•\u00A0')
             : favorite.cardData.description
           }
           </p>
