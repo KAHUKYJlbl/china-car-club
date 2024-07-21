@@ -1,13 +1,16 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
+import cn from 'classnames';
 
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { getName } from '../../../entities/manufacturer';
 import { ImgUrlType } from '../../../entities/specification';
+import { deleteFavorite, fetchFavoritesById, getFavoritesById, postFavorite } from '../../user';
 
-import { GalleryPagination } from './gallery-pagination';
 import { getPromoGallery, getPromoGalleryLoadingStatus } from '../model/gallery-selectors';
+import { GalleryPagination } from './gallery-pagination';
 import { GalleryType } from '../lib/types';
 import classes from './gallery.module.sass';
 
@@ -22,12 +25,15 @@ type GalleryProps = {
 
 export const Gallery = memo(
   ({ specificationId, modelId, manufacturerId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+
     const [ currentImage, setCurrentImage ] = useState(initSlide);
     const [ preloadedImages, setPreloadedImages ] = useState<string[]>([]);
     const [ gallery, setGallery ] = useState<GalleryType[]>([]);
     const name = useAppSelector((state) => getName(state, modelId));
     const promoGallery = useAppSelector(getPromoGallery);
     const promoGalleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
+    const favoritesList = useAppSelector(getFavoritesById);
 
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
@@ -55,13 +61,19 @@ export const Gallery = memo(
               name: name?.manufacturer as string,
             },
             url,
-        })));
-      }
+          })));
+        }
 
-      if (handlePromo) {
-        setGallery(promoGallery);
-      }
+        if (handlePromo) {
+          setGallery(promoGallery);
+        }
     }, [specificationId, galleryList, promoGallery.length]);
+
+    useEffect(() => {
+      if (gallery.length > 0) {
+        dispatch(fetchFavoritesById({typeId: 1, favorableIds: gallery.map((element) => element.specificationId)}));
+      }
+    }, [gallery]);
 
     useEffect(() => {
       const promises = gallery.map((image) =>
@@ -81,7 +93,6 @@ export const Gallery = memo(
 
       preload();
     }, [gallery]);
-
 
     function handleNext () {
       setCurrentImage((current) =>
@@ -117,6 +128,24 @@ export const Gallery = memo(
       || handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading)
     ) {
       return <LoadingSpinner spinnerType='widget' />
+    }
+
+    const useFavoriteList = () => {
+      return favoritesList.find((element) =>
+        element.favorableId === gallery[currentImage].specificationId
+      )?.id
+    }
+
+    const handleFavorite = () => {
+      if (useFavoriteList()) {
+        dispatch(deleteFavorite( useFavoriteList() as number ));
+        return;
+      }
+
+      dispatch(postFavorite({
+        typeId: 1,
+        favorableId: gallery[currentImage].specificationId
+      }))
     }
 
     return (
@@ -158,7 +187,7 @@ export const Gallery = memo(
           <div className={classes.controls}>
             {
               gallery.length > 1 &&
-              <div className={classes.arrows}>
+              <div className={classes.buttons}>
                 <button onClick={handlePrev}>
                   <svg width="9" height="8" aria-hidden="true">
                     <use xlinkHref="#arrow-left" />
@@ -173,12 +202,27 @@ export const Gallery = memo(
               </div>
             }
 
-            {
-              handlePromo &&
-              <button onClick={handlePromoClick}>
-                Рассчитать спеццену
+            <div className={cn(classes.buttons, classes.end)}>
+              {
+                handlePromo &&
+                <button onClick={handlePromoClick}>
+                  Рассчитать спеццену
+                </button>
+              }
+
+              <button
+                className={classes.favorite}
+                onClick={handleFavorite}
+              >
+                <svg width="16" height="16" aria-hidden="true">
+                  <use
+                    xlinkHref={`#${
+                      useFavoriteList() ? 'favorite-remove' : 'favorite-add'
+                    }`}
+                  />
+                </svg>
               </button>
-            }
+            </div>
           </div>
         </div>
       </div>

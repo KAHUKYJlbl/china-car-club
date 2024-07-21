@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
 import plural from 'plural-ru';
 
-import { StatisticOrderType } from '../lib/types';
-
-import classes from './order.module.sass';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { fetchOffers } from '../model/api-actions/fetch-offers';
+import { fetchOffers } from '../../order';
+
+import { MycarsOrderType } from '../lib/types';
+import classes from './order.module.sass';
 
 type OrderProps = {
-  order: StatisticOrderType;
+  order: MycarsOrderType;
 };
 
 export const Order = ({ order }: OrderProps) => {

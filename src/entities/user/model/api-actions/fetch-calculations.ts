@@ -4,11 +4,10 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { MycarsCalculationType } from '../../lib/types';
-
+import { ApiCalculationType } from '../../lib/types';
 
 export const fetchCalculations = createAsyncThunk<
-MycarsCalculationType,
+ApiCalculationType,
   number | undefined,
   {
     dispatch: AppDispatch;
@@ -16,10 +15,10 @@ MycarsCalculationType,
     extra: AxiosInstance;
   }
 > (
-  'Statistics/fetchCalculations',
+  'User/fetchCalculations',
   async ( page, {extra: axios}) => {
     try {
-      const { data } = await axios.get<MycarsCalculationType>(APIRoute.GetCalculations, {params: { page }});
+      const { data } = await axios.get<ApiCalculationType>(APIRoute.GetCalculations, {params: { page }});
 
       return data;
     } catch (err) {

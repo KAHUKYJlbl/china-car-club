@@ -28,7 +28,7 @@ export const HeaderButton = ({text, icon, type = 'dark', onClick}: HeaderButtonP
             height="24"
             aria-hidden="true"
           >
-            <use xlinkHref={`#${icon}`} />
+            <use style={{color: '#00000033'}} xlinkHref={`#${icon}`} />
         </svg>
       }
 

@@ -57,14 +57,26 @@
   display: flex
   justify-content: space-between
 
-  button
-    padding: 8px 16px
+  .end
+    align-self: end
 
-    border-radius: 8px
+  .buttons
+    display: flex
+    gap: 4px
 
-    @media screen and (max-width: 640px)
-      font-size: 12px
+    .favorite
+      padding: 8px 12px
+      color: $text-primary
 
-.arrows
-  display: flex
-  gap: 4px
+    button
+      display: flex
+      align-items: center
+      justify-content: center
+
+      padding: 8px 16px
+
+      border-radius: 8px
+
+      @media screen and (max-width: 640px)
+        font-size: 12px
+

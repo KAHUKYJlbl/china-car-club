@@ -5,17 +5,17 @@ import cn from 'classnames';
 import {
   Currencies,
   getCurrencyExchange,
-} from '../../../entities/currency';
+} from '../../currency';
 import { FILTERS } from '../../../app/settings/filters';
 import { AppRoute } from '../../../app/provider/router';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
-import { StatisticCalculationType } from '../lib/types';
 
+import { MycarsCalculationType } from '../lib/types';
 import classes from './calculation.module.sass';
 
 type CalculationProps = {
-  calculation: StatisticCalculationType;
+  calculation: MycarsCalculationType;
   currency: {
     cny: number;
     usd: number;
@@ -55,20 +55,23 @@ export const Calculation = ({ calculation, currency }: CalculationProps) => {
         </p>
 
         <p className={classes.properties}>
-          {Object.values({
-            engineType: FILTERS.engine!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters.engineTypeId
-            )?.name || '',
-            bodyType: FILTERS.body!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.bodyTypeId
-            )?.name || '',
-            driveType: `${FILTERS.drive!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.driveTypeId
-            )?.name} привод` || '',
-            transmissionType: `${FILTERS.transmission!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.transmissionTypeId
-            )?.name} коробка передач` || '',
-          }).join(' • ')}
+          {
+            [
+              FILTERS.engine!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters.engineTypeId
+              )?.name || '',
+              FILTERS.body!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters?.bodyTypeId
+              )?.name || '',
+              `${FILTERS.drive!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters?.driveTypeId
+              )?.name} привод` || '',
+              `${FILTERS.transmission!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters?.transmissionTypeId
+              )?.name} коробка передач` || '',
+              `Запас хода ${calculation.specification.parameters.powerReserve} км`
+            ].join('\u00A0•\u00A0')
+          }
         </p>
 
         <p className={classes.price}>

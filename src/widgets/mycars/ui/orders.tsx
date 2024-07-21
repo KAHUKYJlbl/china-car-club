@@ -8,7 +8,7 @@ import {
   Order,
   getPagination,
   resetMycars
-} from '../../../entities/order';
+} from '../../../entities/user';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';

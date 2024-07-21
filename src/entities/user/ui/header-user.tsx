@@ -8,8 +8,8 @@ import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { HeaderButton } from "../../../shared/ui/header-button/ui/header-button";
 
 import { useGeolocation } from "../lib/hooks/use-geolocation";
-import { fetchCity } from "../model/api-actons/fetch-city";
-import { fetchHash } from "../model/api-actons/fetch-hash";
+import { fetchCity } from "../model/api-actions/fetch-city";
+import { fetchHash } from "../model/api-actions/fetch-hash";
 import {
   getAuthStatus,
   getGeolocation,
@@ -61,9 +61,19 @@ export const HeaderUser = memo(({}: headerUserProps) => {
         {
           isAuth &&
           <>
-            <HeaderButton icon='mycars' text='Мои&nbsp;автомобили' type='light' onClick={() => navigate(AppRoute.MyCars)} />
+            <HeaderButton
+              icon='mycars'
+              text='Мои&nbsp;автомобили'
+              type='light'
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+            />
 
-            <HeaderButton icon='favorite' text='Избранное' type='light' onClick={() => null} />
+            <HeaderButton
+              icon='favorite'
+              text='Избранное'
+              type='light'
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
+            />
           </>
         }
 
