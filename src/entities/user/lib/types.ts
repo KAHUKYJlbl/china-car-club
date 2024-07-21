@@ -32,6 +32,14 @@ export type LocationType = {
   longitude: number | null,
 };
 
+export type ParametersType = {
+  bodyTypeId: number,
+  engineTypeId: number,
+  transmissionTypeId: number,
+  driveTypeId: number,
+  powerReserve: number | null,
+}
+
 export type StatisticsType = {
   specificationId: number,
   customerLocation: LocationType,
@@ -74,13 +82,7 @@ export type MycarsOrderType = {
     name: NameType;
     calcVisible: boolean,
     year: number,
-    parameters: {
-      bodyTypeId: number,
-      engineTypeId: number,
-      transmissionTypeId: number,
-      driveTypeId: number,
-      powerReserve: number | null,
-    },
+    parameters: ParametersType,
     series: {
       id: number;
       name: NameType;
@@ -117,13 +119,7 @@ export type MycarsCalculationType = {
     name: NameType;
     calcVisible: boolean,
     year: number,
-    parameters: {
-      bodyTypeId: number,
-      engineTypeId: number,
-      transmissionTypeId: number,
-      driveTypeId: number,
-      powerReserve: number | null,
-    },
+    parameters: ParametersType,
     series: {
       id: number;
       name: NameType;
@@ -153,20 +149,29 @@ export type MycarsFavoriteType = {
   type: number;
   createdAt: string;
   cardData: {
-      id: number;
-      name: NameType;
-      manufacturer: {
-          id: number;
-          name: NameType;
-      },
-      bodyTypeId: number;
-      description: string;
-      price: {
-          min: number;
-          max: number;
-      },
-      specificationId: number;
+    manufacturer: {
+        id: number;
+        name: NameType;
+    };
+    series: {
+        id: number;
+        name: NameType;
+    };
+    specification: {
+        id: number;
+        name: NameType;
+    };
+    description: string;
+    year: number;
+    parameters: ParametersType;
+    bodyTypeId: number;
+    price: {
+        min: number;
+        max: number;
+    };
+    extra: {
       specificationCount: number;
+    }
   }
 };
 

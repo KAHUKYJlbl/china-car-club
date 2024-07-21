@@ -1,17 +1,23 @@
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
+
+import { AppRoute } from '../../../app/provider/router';
 
 import { Calculations } from './calculations';
 import { Orders } from './orders';
+import { Favorites } from './favorites';
 import classes from './mycars.module.sass';
 
-type MycarsProps = {};
+type MycarsProps = {
+  folder: 'orders' | 'favorites' | 'calculations';
+};
 
-export const Mycars = ({}: MycarsProps) => {
+export const Mycars = ({ folder }: MycarsProps) => {
+  const navigate = useNavigate();
   const isDesktop = useMediaQuery({ query: '(min-width: 721px)' });
 
-  const [ currentFolder, setCurrentFolder ] = useState<'orders' | 'favorites' | 'calculations'>('orders');
   const [ currentSort, setCurrentSort ] = useState<'increase' | 'decrease'>('decrease');
 
   return (
@@ -21,9 +27,9 @@ export const Mycars = ({}: MycarsProps) => {
           <button
             className={cn(
               classes.button,
-              {[classes.buttonActive]: currentFolder === 'orders'},
+              {[classes.buttonActive]: folder === 'orders'},
             )}
-            onClick={() => {setCurrentFolder('orders')}}
+            onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
           >
             Заявки
           </button>
@@ -31,9 +37,9 @@ export const Mycars = ({}: MycarsProps) => {
           <button
             className={cn(
               classes.button,
-              {[classes.buttonActive]: currentFolder === 'calculations'},
+              {[classes.buttonActive]: folder === 'calculations'},
             )}
-            onClick={() => {setCurrentFolder('calculations')}}
+            onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsCalculations].join('') )}
           >
             Расчеты
           </button>
@@ -41,9 +47,9 @@ export const Mycars = ({}: MycarsProps) => {
           <button
             className={cn(
               classes.button,
-              {[classes.buttonActive]: currentFolder === 'favorites'}
+              {[classes.buttonActive]: folder === 'favorites'}
             )}
-            onClick={() => {setCurrentFolder('favorites')}}
+            onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
           >
             Избранное
           </button>
@@ -69,11 +75,18 @@ export const Mycars = ({}: MycarsProps) => {
       </div>
 
       {
-        currentFolder === 'orders'
-        ? <Orders currentSort={currentSort} />
-        : currentFolder === 'calculations'
-          ? <Calculations currentSort={currentSort} />
-          : <div>Favorites</div>
+        folder === 'orders' &&
+        <Orders currentSort={currentSort} />
+      }
+
+      {
+        folder === 'calculations' &&
+        <Calculations currentSort={currentSort} />
+      }
+
+      {
+        folder === 'favorites' &&
+        <Favorites currentSort={currentSort} />
       }
     </div>
   );

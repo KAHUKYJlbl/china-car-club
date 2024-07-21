@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { getName } from '../../../entities/manufacturer';
 import { ImgUrlType } from '../../../entities/specification';
-import { fetchFavoritesById, getFavoritesById, postFavorite } from '../../user';
+import { deleteFavorite, fetchFavoritesById, getFavoritesById, postFavorite } from '../../user';
 
 import { getPromoGallery, getPromoGalleryLoadingStatus } from '../model/gallery-selectors';
 import { GalleryPagination } from './gallery-pagination';
@@ -71,7 +71,6 @@ export const Gallery = memo(
 
     useEffect(() => {
       if (gallery.length > 0) {
-        console.log(gallery);
         dispatch(fetchFavoritesById({typeId: 1, favorableIds: gallery.map((element) => element.specificationId)}));
       }
     }, [gallery]);
@@ -129,6 +128,24 @@ export const Gallery = memo(
       || handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading)
     ) {
       return <LoadingSpinner spinnerType='widget' />
+    }
+
+    const useFavoriteList = () => {
+      return favoritesList.find((element) =>
+        element.favorableId === gallery[currentImage].specificationId
+      )?.id
+    }
+
+    const handleFavorite = () => {
+      if (useFavoriteList()) {
+        dispatch(deleteFavorite( useFavoriteList() as number ));
+        return;
+      }
+
+      dispatch(postFavorite({
+        typeId: 1,
+        favorableId: gallery[currentImage].specificationId
+      }))
     }
 
     return (
@@ -195,14 +212,12 @@ export const Gallery = memo(
 
               <button
                 className={classes.favorite}
-                onClick={() => dispatch(postFavorite({typeId: 1, favorableId: gallery[currentImage].specificationId}))}
+                onClick={handleFavorite}
               >
                 <svg width="16" height="16" aria-hidden="true">
                   <use
                     xlinkHref={`#${
-                      favoritesList.find((element) =>
-                        element.favorableId === gallery[currentImage].specificationId
-                      ) ? 'favorite-remove' : 'favorite-add'
+                      useFavoriteList() ? 'favorite-remove' : 'favorite-add'
                     }`}
                   />
                 </svg>

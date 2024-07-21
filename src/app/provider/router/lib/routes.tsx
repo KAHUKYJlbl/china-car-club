@@ -3,5 +3,8 @@ export enum AppRoute {
   Calc = '/calculator',
   Model = '/model',
   MyCars = '/mycars',
+  MyCarsFavorites = '/favorites',
+  MyCarsOrders = '/orders',
+  MyCarsCalculations = '/calculations',
   NotFound = '/not-found',
 }

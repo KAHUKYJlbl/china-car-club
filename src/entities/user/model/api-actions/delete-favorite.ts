@@ -18,7 +18,7 @@ export const deleteFavorite = createAsyncThunk<
   'User/deleteFavorite',
   async ( id, {extra: axios}) => {
     try {
-      await axios.delete<ApiFavoriteType>(APIRoute.DeleteFavorite, { params: { id } });
+      await axios.post<ApiFavoriteType>(APIRoute.DeleteFavorite, { id });
 
       return id;
     } catch (err) {

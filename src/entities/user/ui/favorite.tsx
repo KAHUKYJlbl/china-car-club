@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
-import cn from 'classnames';
+// import dayjs from 'dayjs';
+// import cn from 'classnames';
 
 import {
   Currencies,
@@ -8,11 +8,17 @@ import {
 } from '../../currency';
 import { FILTERS } from '../../../app/settings/filters';
 import { AppRoute } from '../../../app/provider/router';
+import { postFavorite } from '../model/api-actions/post-favorite';
+import { deleteFavorite } from '../model/api-actions/delete-favorite';
+import { getFavoritesById } from '../model/user-selectors';
 import priceFormat from '../../../shared/lib/utils/price-format';
+import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
 import { MycarsFavoriteType } from '../lib/types';
 
-import classes from './calculation.module.sass';
+
+import classes from './favorite.module.sass';
 
 type FavoriteProps = {
   favorite: MycarsFavoriteType;
@@ -24,6 +30,26 @@ type FavoriteProps = {
 
 export const Favorite = ({ favorite, currency }: FavoriteProps) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const favoritesList = useAppSelector(getFavoritesById);
+
+  const useFavoriteList = () => {
+    return favoritesList.find((element) =>
+      element.favorableId === favorite.cardData.specification.id
+    )?.id
+  }
+
+  const handleFavorite = () => {
+    if (useFavoriteList()) {
+      dispatch(deleteFavorite( useFavoriteList() as number ));
+      return;
+    }
+
+    dispatch(postFavorite({
+      typeId: 1,
+      favorableId: favorite.cardData.specification.id
+    }))
+  }
 
   return (
     <div
@@ -33,85 +59,96 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
         <p className={classes.header}>
           <span>
             {
-              FILTERS.engine!.elements.find((element) =>
+              FILTERS.body!.elements.find((element) =>
                 element.elementId === favorite.cardData.bodyTypeId
               )?.name || ''
             }
           </span>
 
-          <span className={classes.grey}>{}</span>
+          <span className={classes.grey}>{favorite.type === 1 ? 'Комплектация модели' : 'Модель авто'}</span>
         </p>
 
         <img
-          src={`${process.env.STATIC_URL}/specification/${favorite.cardData.specificationId}.jpg`}
+          src={
+            favorite.cardData.specification
+            ? `${process.env.STATIC_URL}/specification/${favorite.cardData.specification.id}.jpg`
+            : './images/noimage.jpg'
+          }
         />
 
         <p className={classes.model}>
           <span className={classes.bold}>
             {favorite.cardData.manufacturer.name.ru || favorite.cardData.manufacturer.name.ru}<br/>
-            {favorite.specification.series.name.ru || favorite.specification.series.name.ch}
+            {favorite.cardData.series.name.ru || favorite.cardData.series.name.ch}
           </span>
 
-          <span>{favorite.specification.name.ru || favorite.specification.name.ch}</span>
+          <span>{favorite.cardData.specification.name.ru || favorite.cardData.specification.name.ch}</span>
 
-          <span className={classes.grey}>{favorite.specification.year} поколение • 2024 выпуск</span>
+          <span className={classes.grey}>{favorite.cardData.year} поколение • 2024 выпуск</span>
         </p>
 
         <p className={classes.properties}>
-          {Object.values({
-            engineType: FILTERS.engine!.elements.find((element) =>
-              element.elementId === favorite.specification.parameters.engineTypeId
-            )?.name || '',
-            bodyType: FILTERS.body!.elements.find((element) =>
-              element.elementId === favorite.specification.parameters?.bodyTypeId
-            )?.name || '',
-            driveType: `${FILTERS.drive!.elements.find((element) =>
-              element.elementId === favorite.specification.parameters?.driveTypeId
-            )?.name} привод` || '',
-            transmissionType: `${FILTERS.transmission!.elements.find((element) =>
-              element.elementId === favorite.specification.parameters?.transmissionTypeId
-            )?.name} коробка передач` || '',
-          }).join(' • ')}
+          {
+            [
+              FILTERS.engine!.elements.find((element) =>
+                element.elementId === favorite.cardData.parameters.engineTypeId
+              )?.name || '',
+              FILTERS.body!.elements.find((element) =>
+                element.elementId === favorite.cardData.parameters?.bodyTypeId
+              )?.name || '',
+              `${FILTERS.drive!.elements.find((element) =>
+                element.elementId === favorite.cardData.parameters?.driveTypeId
+              )?.name} привод` || '',
+              `${FILTERS.transmission!.elements.find((element) =>
+                element.elementId === favorite.cardData.parameters?.transmissionTypeId
+              )?.name} коробка передач` || '',
+              `Запас\u00A0хода ${favorite.cardData.parameters.powerReserve}\u00A0км`
+            ].join(' • ')
+          }
         </p>
 
         <p className={classes.price}>
-          <span className={classes.grey}>Цена в России с растаможкой</span>
+          <span className={classes.grey}>Мин. цена в китае</span>
           <span className={classes.bold}>
             {
               priceFormat(
                 getCurrencyExchange(
-                  favorite.specification.series.priceListWithLogisticsByCurrentDay.toSorted((a , b) => a.price - b.price)[0].price,
-                  Currencies.RUB,
-                  currency
-                )
-              )
-            } ₽ — {
-              priceFormat(
-                getCurrencyExchange(
-                  favorite.specification.series.priceListWithLogisticsByCurrentDay.toSorted((a , b) => b.price - a.price)[0].price,
+                  favorite.cardData.price.min,
                   Currencies.RUB,
                   currency
                 )
               )
             } ₽
+            {
+              favorite.cardData.price.max &&
+              ` —
+              ${priceFormat(
+                getCurrencyExchange(
+                  favorite.cardData.price.max,
+                  Currencies.RUB,
+                  currency
+                )
+              )} ₽`
+            }
           </span>
         </p>
       </div>
 
       <div className={classes.buttons}>
-        {
-          favorite.specification.calcVisible
-            ? <button onClick={() => navigate(`${AppRoute.Model}?model=${favorite.specification.series.id}&spec=${favorite.specification.id}`)}>
-              Перейти к расчету
-            </button>
-            : <p>
-              Комплектация недоступна
-            </p>
-        }
+        <button onClick={() => navigate(`${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${favorite.cardData.specification.id}`)}>
+          Рассчитать цену
+        </button>
 
-        <button className={classes.xbutton}>
-          <svg width="10" height="10" aria-hidden="true">
-            <use xlinkHref="#icon-close"></use>
+        <button
+          className={classes.favorite}
+          onClick={handleFavorite}
+        >
+          <svg width="16" height="16" aria-hidden="true">
+            <use
+              xlinkHref={`#${
+                useFavoriteList() ? 'favorite-remove' : 'favorite-add'
+              }`}
+            />
           </svg>
         </button>
       </div>

@@ -18,7 +18,7 @@ export const fetchFavoritesById = createAsyncThunk<
   'User/fetchFavoritesById',
   async ( requestData, {extra: axios}) => {
     try {
-      const { data } = await axios.get<FavoriteByIdType[]>(APIRoute.GetFavoritesById, { params: requestData });
+      const { data } = await axios.post<FavoriteByIdType[]>(APIRoute.GetFavoritesById, requestData);
 
       return data;
     } catch (err) {

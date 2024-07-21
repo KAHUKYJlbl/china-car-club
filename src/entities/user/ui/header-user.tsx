@@ -61,9 +61,19 @@ export const HeaderUser = memo(({}: headerUserProps) => {
         {
           isAuth &&
           <>
-            <HeaderButton icon='mycars' text='Мои&nbsp;автомобили' type='light' onClick={() => navigate(AppRoute.MyCars)} />
+            <HeaderButton
+              icon='mycars'
+              text='Мои&nbsp;автомобили'
+              type='light'
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+            />
 
-            <HeaderButton icon='favorite' text='Избранное' type='light' onClick={() => null} />
+            <HeaderButton
+              icon='favorite'
+              text='Избранное'
+              type='light'
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
+            />
           </>
         }
 

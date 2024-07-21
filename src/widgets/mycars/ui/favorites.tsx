@@ -41,7 +41,6 @@ export const Favorites = ({ currentSort }: FavoritesProps) => {
     return <LoadingSpinner spinnerType='page' />
   }
 
-
   return (
     <>
       <ul className={classes.list}>
