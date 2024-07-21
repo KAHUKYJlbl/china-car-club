@@ -35,19 +35,19 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
 
   const useFavoriteList = () => {
     return favoritesList.find((element) =>
-      element.favorableId === favorite.cardData.specification.id
+      element.favorableId === (favorite.cardData.specification.id || favorite.cardData.series.id)
     )?.id
   }
 
   const handleFavorite = () => {
     if (useFavoriteList()) {
-      dispatch(deleteFavorite( useFavoriteList() as number ));
+      dispatch(deleteFavorite( favorite.id ));
       return;
     }
 
     dispatch(postFavorite({
-      typeId: 1,
-      favorableId: favorite.cardData.specification.id
+      typeId: favorite.type,
+      favorableId: favorite.cardData.specification.id || favorite.cardData.series.id
     }))
   }
 
@@ -82,30 +82,36 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
             {favorite.cardData.series.name.ru || favorite.cardData.series.name.ch}
           </span>
 
-          <span>{favorite.cardData.specification.name.ru || favorite.cardData.specification.name.ch}</span>
-
-          <span className={classes.grey}>{favorite.cardData.year} поколение • 2024 выпуск</span>
+          {
+            favorite.cardData.specification &&
+            <>
+              <span>{favorite.cardData.specification.name.ru || favorite.cardData.specification.name.ch}</span>
+              <span className={classes.grey}>{favorite.cardData.year} поколение • 2024 выпуск</span>
+            </>
+          }
         </p>
 
         <p className={classes.properties}>
           {
-            [
-              FILTERS.engine!.elements.find((element) =>
-                element.elementId === favorite.cardData.parameters.engineTypeId
-              )?.name || '',
-              FILTERS.body!.elements.find((element) =>
-                element.elementId === favorite.cardData.parameters?.bodyTypeId
-              )?.name || '',
-              `${FILTERS.drive!.elements.find((element) =>
-                element.elementId === favorite.cardData.parameters?.driveTypeId
-              )?.name} привод` || '',
-              `${FILTERS.transmission!.elements.find((element) =>
-                element.elementId === favorite.cardData.parameters?.transmissionTypeId
-              )?.name} коробка передач` || '',
-              `Запас\u00A0хода ${favorite.cardData.parameters.powerReserve}\u00A0км`
-            ].join(' • ')
+            favorite.cardData.specification
+            ? [
+                FILTERS.engine!.elements.find((element) =>
+                  element.elementId === favorite.cardData.parameters.engineTypeId
+                )?.name || '',
+                FILTERS.body!.elements.find((element) =>
+                  element.elementId === favorite.cardData.parameters?.bodyTypeId
+                )?.name || '',
+                `${FILTERS.drive!.elements.find((element) =>
+                  element.elementId === favorite.cardData.parameters?.driveTypeId
+                )?.name} привод` || '',
+                `${FILTERS.transmission!.elements.find((element) =>
+                  element.elementId === favorite.cardData.parameters?.transmissionTypeId
+                )?.name} коробка передач` || '',
+                `Запас\u00A0хода ${favorite.cardData.parameters.powerReserve}\u00A0км`
+              ].join('\u00A0•\u00A0')
+            : favorite.cardData.description
           }
-        </p>
+          </p>
 
         <p className={classes.price}>
           <span className={classes.grey}>Мин. цена в китае</span>
@@ -119,6 +125,7 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
                 )
               )
             } ₽
+
             {
               favorite.cardData.price.max &&
               ` —

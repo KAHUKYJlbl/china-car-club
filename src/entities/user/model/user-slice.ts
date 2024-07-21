@@ -16,8 +16,6 @@ import { fetchCalculations } from './api-actions/fetch-calculations';
 import { fetchFavoritesById } from './api-actions/fetch-favorites-by-id';
 import { FavoriteByIdType, LocationType, MycarsCalculationType, MycarsFavoriteType, MycarsOrderType, UserType } from '../lib/types';
 
-
-
 type InitialState = {
   user: UserType | null;
   isAuth: boolean;
@@ -178,6 +176,12 @@ export const userSlice = createSlice({
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
         state.mycarsFavorites = action.payload.data
+        state.mycarsFavoritesById = action.payload.data.map((favorite) => (
+          {
+            id: favorite.id,
+            favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
+          }
+        ));
         state.mycarsPagination = action.payload.meta;
         state.mycarsFavoritesLoadingStatus = FetchStatus.Success;
       })
@@ -198,7 +202,26 @@ export const userSlice = createSlice({
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Failed;
       })
       .addCase(postFavorite.fulfilled, (state, action) => {
-        state.mycarsFavoritesById = [...state.mycarsFavoritesById, action.payload],
+        state.mycarsFavoritesById = [
+          ...state.mycarsFavoritesById,
+          {
+            id: action.payload.id,
+            favorableId: action.payload.favorableId,
+          }
+        ];
+
+        const update = state.mycarsFavorites.find((favorite) =>
+          action.payload.favorableId === (action.payload.typeId === 1 ? favorite.cardData.specification.id : favorite.cardData.series.id)
+        );
+        if (update) {
+          state.mycarsFavorites = [...state.mycarsFavorites]
+            .filter((favorite) => favorite.id !== update.id)
+            .concat({
+              ...update,
+              id: action.payload.id,
+            })
+        }
+
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success;
       })
       .addCase(postFavorite.pending, (state) => {

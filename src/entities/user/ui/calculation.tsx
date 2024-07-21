@@ -70,7 +70,7 @@ export const Calculation = ({ calculation, currency }: CalculationProps) => {
                 element.elementId === calculation.specification.parameters?.transmissionTypeId
               )?.name} коробка передач` || '',
               `Запас хода ${calculation.specification.parameters.powerReserve} км`
-            ].join(' • ')
+            ].join('\u00A0•\u00A0')
           }
         </p>
 

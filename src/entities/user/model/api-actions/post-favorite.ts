@@ -4,10 +4,10 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../../../app/provider/store';
 import { APIRoute } from '../../../../shared/api/routes';
 
-import { FavoriteByIdType, FavoriteRequestType } from '../../lib/types';
+import { FavoriteByIdApiType, FavoriteRequestType } from '../../lib/types';
 
 export const postFavorite = createAsyncThunk<
-  FavoriteByIdType,
+  FavoriteByIdApiType,
   FavoriteRequestType,
   {
     dispatch: AppDispatch;
@@ -21,6 +21,7 @@ export const postFavorite = createAsyncThunk<
       const { data } = await axios.post<{id: number}>(APIRoute.AddFavorite, reqData);
 
       return {
+        typeId: reqData.typeId,
         id: data.id,
         favorableId: reqData.favorableId
       };

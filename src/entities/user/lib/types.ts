@@ -188,6 +188,10 @@ export type FavoriteByIdType = {
   favorableId: number;
 };
 
+export type FavoriteByIdApiType = FavoriteByIdType & {
+  typeId: number;
+};
+
 export type FavoriteByIdRequestType = {
   typeId: number;
   favorableIds: number[];
