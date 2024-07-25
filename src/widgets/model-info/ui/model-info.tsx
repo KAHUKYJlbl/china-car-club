@@ -160,18 +160,18 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
         />
       </div>
 
+      <div className={classes.specification}>
+        <SpecificationInfo
+          currentSpecification={currentSpecification}
+          setCurrentSpecification={setCurrentSpecification}
+        />
+      </div>
+
       <div className={classes.info}>
         <InfoBar
           currentSpecification={currentSpecification}
           setIsTechs={setIsTechs}
           setIsPriceHistory={setIsPriceHistory}
-        />
-      </div>
-
-      <div className={classes.specification}>
-        <SpecificationInfo
-          currentSpecification={currentSpecification}
-          setCurrentSpecification={setCurrentSpecification}
         />
       </div>
 

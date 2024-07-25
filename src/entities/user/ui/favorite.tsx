@@ -8,13 +8,13 @@ import {
 } from '../../currency';
 import { FILTERS } from '../../../app/settings/filters';
 import { AppRoute } from '../../../app/provider/router';
-import { postFavorite } from '../model/api-actions/post-favorite';
-import { deleteFavorite } from '../model/api-actions/delete-favorite';
-import { getFavoritesById } from '../model/user-selectors';
 import priceFormat from '../../../shared/lib/utils/price-format';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
+import { postFavorite } from '../model/api-actions/post-favorite';
+import { deleteFavorite } from '../model/api-actions/delete-favorite';
+import { getFavoritesById } from '../model/user-selectors';
 import { MycarsFavoriteType } from '../lib/types';
 
 
@@ -25,7 +25,7 @@ type FavoriteProps = {
   currency: {
     cny: number;
     usd: number;
-  }
+  };
 };
 
 export const Favorite = ({ favorite, currency }: FavoriteProps) => {

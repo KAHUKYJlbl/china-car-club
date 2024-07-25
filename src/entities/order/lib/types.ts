@@ -73,6 +73,23 @@ export type QuestionsType = {
   };
 };
 
+export type ContactType = {
+  typeId: number;
+  priority: boolean;
+  contact: string;
+};
+
 export type OfferType = {
   id: number;
-}
+  priority: number;
+  price: number;
+  comment: string;
+  created_at: string;
+  statistic_event_id: number;
+  dealer_id: number;
+  dealer: {
+    id: number;
+    name: string;
+    contacts: ContactType[];
+  };
+};

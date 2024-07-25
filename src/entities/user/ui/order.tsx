@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import plural from 'plural-ru';
 
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { fetchOffers } from '../../order';
+import { Modal } from '../../../shared/ui/modal';
+import { Offers } from '../../order';
 
 import { MycarsOrderType } from '../lib/types';
 import classes from './order.module.sass';
@@ -12,7 +13,7 @@ type OrderProps = {
 };
 
 export const Order = ({ order }: OrderProps) => {
-  const dispatch = useAppDispatch();
+  const [ isOffers, setIsOffers ] = useState(false);
 
   return (
     <div className={classes.wrapper}>
@@ -57,10 +58,18 @@ export const Order = ({ order }: OrderProps) => {
       </div>
 
       <button
-        onClick={() => dispatch(fetchOffers(order.id))}
+        onClick={() => setIsOffers(true)}
       >
         {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены
       </button>
+
+      {
+        isOffers &&
+        <Modal onClose={() => setIsOffers(false)}>
+          <Offers orderId={order.id} />
+        </Modal>
+      }
     </div>
+
   );
 };

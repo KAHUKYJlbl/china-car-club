@@ -105,18 +105,18 @@ export const Calculation = ({ calculation, currency }: CalculationProps) => {
         {
           calculation.specification.calcVisible
             ? <button onClick={() => navigate(`${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}`)}>
-              Перейти к расчету
+              Перейти к расчёту
             </button>
             : <p>
               Комплектация недоступна
             </p>
         }
 
-        <button className={classes.xbutton}>
+        {/* <button className={classes.xbutton}>
           <svg width="10" height="10" aria-hidden="true">
             <use xlinkHref="#icon-close"></use>
           </svg>
-        </button>
+        </button> */}
       </div>
     </div>
   );

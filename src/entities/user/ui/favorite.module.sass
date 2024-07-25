@@ -7,7 +7,7 @@
   gap: 12px
 
   max-width: 276px
-  padding: 12px 16px
+  padding: 12px 16px 16px
 
   border-radius: 16px
   background-color: $primary
@@ -20,6 +20,7 @@
     min-width: 320px
     flex-basis: 320px
     flex-grow: 1
+    gap: 8px
 
   @media screen and (max-width: 720px)
     max-width: 672px
@@ -52,10 +53,16 @@
 
     padding: 0 4px
 
+    @media screen and (max-width: 1280px)
+      line-height: 14px
+
   .price
     display: flex
     flex-direction: column
     gap: 4px
+
+    @media screen and (max-width: 1280px)
+      gap: 2px
 
     padding: 0 4px
 

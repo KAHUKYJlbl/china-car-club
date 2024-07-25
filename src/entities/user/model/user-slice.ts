@@ -152,7 +152,8 @@ export const userSlice = createSlice({
       })
       .addCase(fetchCity.rejected, (state) => {
         state.userLoadingStatus = FetchStatus.Failed;
-      })      .addCase(fetchOrders.fulfilled, (state, action) => {
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
         state.mycarsOrders = state.mycarsOrders.concat(action.payload.data);
         state.mycarsPagination = action.payload.meta;
         state.mycarsOrdersLoadingStatus = FetchStatus.Success;

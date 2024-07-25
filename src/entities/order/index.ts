@@ -21,7 +21,10 @@ export {
   getQuestionsLoadingStatus,
   getOrderLoadingStatus,
   getQuestions,
+  getOffers,
+  getOffersLoadingStatus,
 } from './model/order-selectors';
 export { postOrder } from './model/api-actions/post-order';
 export { postAnswers } from './model/api-actions/post-answers';
 export { fetchOffers } from './model/api-actions/fetch-offers';
+export { Offers } from './ui/offers';

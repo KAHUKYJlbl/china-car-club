@@ -7,4 +7,4 @@ export enum AppRoute {
   MyCarsOrders = '/orders',
   MyCarsCalculations = '/calculations',
   NotFound = '/not-found',
-}
+};
