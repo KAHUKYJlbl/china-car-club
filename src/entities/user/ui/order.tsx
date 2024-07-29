@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import plural from 'plural-ru';
+// import plural from 'plural-ru';
 
 import { Modal } from '../../../shared/ui/modal';
 import { Offers } from '../../order';
@@ -58,9 +58,10 @@ export const Order = ({ order }: OrderProps) => {
       </div>
 
       <button
-        onClick={() => setIsOffers(true)}
+        // onClick={() => setIsOffers(true)}
       >
-        {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены
+        {/* {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены */}
+        {'Предложения цены (скоро)'}
       </button>
 
       {

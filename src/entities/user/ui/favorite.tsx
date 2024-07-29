@@ -41,7 +41,10 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
 
   const handleFavorite = () => {
     if (useFavoriteList()) {
-      dispatch(deleteFavorite( favorite.id ));
+      dispatch(deleteFavorite(
+        favorite.id
+      ))
+      // .then(() => dispatch(fetchFavorites()));;
       return;
     }
 
@@ -49,6 +52,7 @@ export const Favorite = ({ favorite, currency }: FavoriteProps) => {
       typeId: favorite.type,
       favorableId: favorite.cardData.specification.id || favorite.cardData.series.id
     }))
+    // .then(() => dispatch(fetchFavorites()));
   }
 
   return (

@@ -41,6 +41,12 @@ export const Calculations = ({ currentSort }: CalculationsProps) => {
     return <LoadingSpinner spinnerType='page' />
   }
 
+  if (calculations.length === 0) {
+    return <p className={classes.empty}>
+      У Вас пока нет рассчитанных автомобилей
+    </p>
+  }
+
   return (
     <>
       <ul className={classes.list}>

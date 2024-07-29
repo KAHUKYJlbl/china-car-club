@@ -38,6 +38,12 @@ export const Orders = ({ currentSort }: OrdersProps) => {
     return <LoadingSpinner spinnerType='page' />
   }
 
+  if (orders.length === 0) {
+    return <p className={classes.empty}>
+      У Вас пока нет заказанных автомобилей
+    </p>
+  }
+
   return (
     <>
       <ul className={classes.list}>

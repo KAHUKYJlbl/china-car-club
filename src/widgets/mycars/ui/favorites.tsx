@@ -36,9 +36,16 @@ export const Favorites = ({ currentSort }: FavoritesProps) => {
   if (
     !currency
     || favoritesLoadingStatus.isIdle
+    || favoritesLoadingStatus.isLoading
     || ( favoritesLoadingStatus.isLoading && !favorites.length )
   ) {
     return <LoadingSpinner spinnerType='page' />
+  }
+
+  if (favorites.length === 0) {
+    return <p className={classes.empty}>
+      У Вас пока нет избранных автомобилей
+    </p>
   }
 
   return (
@@ -46,6 +53,7 @@ export const Favorites = ({ currentSort }: FavoritesProps) => {
       <ul className={classes.list}>
         {
           favorites
+            .filter((favorite) => favorite.type === 1)
             .toSorted((a, b) =>
               currentSort === 'increase'
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
