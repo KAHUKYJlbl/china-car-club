@@ -7,10 +7,11 @@ type HeaderButtonProps = {
   text?: string;
   icon?: string;
   type?: 'dark' | 'light';
+  labelCount?: number;
   onClick: () => void;
 };
 
-export const HeaderButton = ({text, icon, type = 'dark', onClick}: HeaderButtonProps) => {
+export const HeaderButton = ({text, icon, type = 'dark', labelCount, onClick}: HeaderButtonProps) => {
   const isMobile = useMediaQuery({ maxWidth: 960 });
 
   return (
@@ -37,6 +38,13 @@ export const HeaderButton = ({text, icon, type = 'dark', onClick}: HeaderButtonP
         <div className={classes.textWrapper} >
           {text}
         </div>
+      }
+
+      {
+        !!labelCount &&
+        <p className={classes.labelCount}>
+          {labelCount}
+        </p>
       }
     </div>
   );

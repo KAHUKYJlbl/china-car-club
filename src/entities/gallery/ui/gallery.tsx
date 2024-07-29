@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
 import { getName } from '../../../entities/manufacturer';
 import { ImgUrlType } from '../../../entities/specification';
-import { deleteFavorite, fetchFavoritesById, getFavoritesById, postFavorite } from '../../user';
+import { deleteFavorite, fetchFavorites, fetchFavoritesById, getFavoritesById, postFavorite } from '../../user';
 
 import { getPromoGallery, getPromoGalleryLoadingStatus } from '../model/gallery-selectors';
 import { GalleryPagination } from './gallery-pagination';
@@ -138,14 +138,16 @@ export const Gallery = memo(
 
     const handleFavorite = () => {
       if (useFavoriteList()) {
-        dispatch(deleteFavorite( useFavoriteList() as number ));
+        dispatch(deleteFavorite(
+          useFavoriteList() as number
+        )).then(() => dispatch(fetchFavorites()));
         return;
       }
 
       dispatch(postFavorite({
         typeId: 1,
         favorableId: gallery[currentImage].specificationId
-      }))
+      })).then(() => dispatch(fetchFavorites()));
     }
 
     return (

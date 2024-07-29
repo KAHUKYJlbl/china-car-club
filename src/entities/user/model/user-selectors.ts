@@ -20,6 +20,8 @@ export const getCalculations = (state: State): MycarsCalculationType[] => state[
 
 export const getFavorites = (state: State): MycarsFavoriteType[] => state[NameSpace.User].mycarsFavorites;
 
+export const getFavoritesCount = (state: State): number => state[NameSpace.User].mycarsFavorites.length;
+
 export const getPagination = (state: State) => state[NameSpace.User].mycarsPagination;
 
 export const getFavoritesById = (state: State): FavoriteByIdType[] => state[NameSpace.User].mycarsFavoritesById;

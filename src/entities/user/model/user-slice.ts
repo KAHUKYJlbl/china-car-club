@@ -98,8 +98,8 @@ export const userSlice = createSlice({
       state.mycarsCalculationsLoadingStatus = FetchStatus.Idle;
       state.mycarsOrders = [];
       state.mycarsOrdersLoadingStatus = FetchStatus.Idle;
-      state.mycarsFavorites = [];
-      state.mycarsFavoritesLoadingStatus = FetchStatus.Idle;
+      // state.mycarsFavorites = [];
+      // state.mycarsFavoritesLoadingStatus = FetchStatus.Idle;
       state.mycarsPagination = {
         currentPage: 1,
         lastPage: 1,

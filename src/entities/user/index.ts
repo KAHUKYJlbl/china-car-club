@@ -1,6 +1,7 @@
 export { Order } from './ui/order';
 export { Calculation } from './ui/calculation';
 export { Favorite } from './ui/favorite';
+export { NewHeaderUser } from './ui/new-header-user';
 export {
   getUser,
   getUserLoadingStatus,
@@ -15,6 +16,7 @@ export {
   getFavoritesLoadingStatus,
   getPagination,
   getFavoritesById,
+  getFavoritesCount,
 } from "./model/user-selectors";
 export { userSlice, setCity, setAutoLocation, login, resetMycars } from "./model/user-slice";
 export { fetchHash } from "./model/api-actions/fetch-hash";
