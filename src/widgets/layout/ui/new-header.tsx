@@ -5,7 +5,7 @@ import plural from 'plural-ru';
 
 import { AppRoute } from '../../../app/provider/router';
 import { fetchManufacturers, getFullListCount, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
-import { CabinetButton } from '../../../shared/ui/header-button';
+import { NewHeaderUser } from '../../../entities/user';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
@@ -51,13 +51,7 @@ export const NewHeader = ({}: NewHeaderProps) => {
           }
         </div>
 
-        <div className={classes.cabinetButtons}>
-          <CabinetButton icon='cabinet-mycars' />
-
-          <CabinetButton icon='cabinet-favorite' />
-
-          <CabinetButton icon='cabinet-profile' />
-        </div>
+        <NewHeaderUser />
     </div>
   );
 };

@@ -5,17 +5,17 @@ import cn from 'classnames';
 import {
   Currencies,
   getCurrencyExchange,
-} from '../../../entities/currency';
+} from '../../currency';
 import { FILTERS } from '../../../app/settings/filters';
 import { AppRoute } from '../../../app/provider/router';
 import priceFormat from '../../../shared/lib/utils/price-format';
 
-import { StatisticCalculationType } from '../lib/types';
 
+import { MycarsCalculationType } from '../lib/types';
 import classes from './calculation.module.sass';
 
 type CalculationProps = {
-  calculation: StatisticCalculationType;
+  calculation: MycarsCalculationType;
   currency: {
     cny: number;
     usd: number;
@@ -55,20 +55,26 @@ export const Calculation = ({ calculation, currency }: CalculationProps) => {
         </p>
 
         <p className={classes.properties}>
-          {Object.values({
-            engineType: FILTERS.engine!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters.engineTypeId
-            )?.name || '',
-            bodyType: FILTERS.body!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.bodyTypeId
-            )?.name || '',
-            driveType: `${FILTERS.drive!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.driveTypeId
-            )?.name} привод` || '',
-            transmissionType: `${FILTERS.transmission!.elements.find((element) =>
-              element.elementId === calculation.specification.parameters?.transmissionTypeId
-            )?.name} коробка передач` || '',
-          }).join(' • ')}
+          {
+            [
+              FILTERS.engine!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters.engineTypeId
+              )?.name || null,
+              FILTERS.body!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters?.bodyTypeId
+              )?.name || null,
+              `${FILTERS.drive!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters?.driveTypeId
+              )?.name} привод` || null,
+              `${FILTERS.transmission!.elements.find((element) =>
+                element.elementId === calculation.specification.parameters?.transmissionTypeId
+              )?.name} коробка передач` || null,
+              calculation.specification.parameters.powerReserve && `Запас\u00A0хода ${calculation.specification.parameters.powerReserve}\u00A0км`
+            ]
+            .filter(value => value !== null)
+            .join('\u00A0•\u00A0')
+
+          }
         </p>
 
         <p className={classes.price}>
@@ -99,18 +105,18 @@ export const Calculation = ({ calculation, currency }: CalculationProps) => {
         {
           calculation.specification.calcVisible
             ? <button onClick={() => navigate(`${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}`)}>
-              Перейти к расчету
+              Перейти к расчёту
             </button>
             : <p>
               Комплектация недоступна
             </p>
         }
 
-        <button className={classes.xbutton}>
+        {/* <button className={classes.xbutton}>
           <svg width="10" height="10" aria-hidden="true">
             <use xlinkHref="#icon-close"></use>
           </svg>
-        </button>
+        </button> */}
       </div>
     </div>
   );

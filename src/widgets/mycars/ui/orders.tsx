@@ -8,7 +8,7 @@ import {
   Order,
   getPagination,
   resetMycars
-} from '../../../entities/order';
+} from '../../../entities/user';
 import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
@@ -36,6 +36,12 @@ export const Orders = ({ currentSort }: OrdersProps) => {
     || ( ordersLoadingStatus.isLoading && !orders.length )
   ) {
     return <LoadingSpinner spinnerType='page' />
+  }
+
+  if (orders.length === 0) {
+    return <p className={classes.empty}>
+      У Вас пока нет заказанных автомобилей
+    </p>
   }
 
   return (

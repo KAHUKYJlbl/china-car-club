@@ -1,6 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 import { MYCARS_HEADING } from "../../../app/settings/headings";
 import { Layout } from "../../../widgets/layout"
-import { Mycars } from "../../../widgets/mycars";
 
 const MycarsPage = (): JSX.Element => (
     <Layout
@@ -10,7 +11,7 @@ const MycarsPage = (): JSX.Element => (
       }}
       newHeader
     >
-      <Mycars />
+      <Outlet />
     </Layout>
 );
 

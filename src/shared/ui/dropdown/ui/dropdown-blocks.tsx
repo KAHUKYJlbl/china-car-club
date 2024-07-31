@@ -80,90 +80,87 @@ export const DropdownBlocks = ({
   }
 
   return (
-    <>
-      <div
-        className={classes.wrapper}
-        ref={fieldRef}
-        onClick={disabled ? () => null : toggleOpen}
-      >
-        <input
-          type="text"
-          name="search"
-          autoComplete="off"
-          className={classes.currentElement}
-          placeholder={disabled ? 'Загрузка...' : placeholder}
-          disabled={disabled || !list}
-          value={currentValue}
-          onChange={(e) => handleInput(e)}
-          onBlur={handleInputBlur}
-        />
+    <div
+      className={classes.wrapper}
+      ref={fieldRef}
+      onClick={disabled ? () => null : toggleOpen}
+    >
+      <input
+        type="text"
+        name="search"
+        autoComplete="off"
+        className={classes.currentElement}
+        placeholder={disabled ? 'Загрузка...' : placeholder}
+        disabled={disabled || !list}
+        value={currentValue}
+        onChange={(e) => handleInput(e)}
+        onBlur={handleInputBlur}
+      />
 
-        <svg
-          className={classes.arrow}
-          width="8"
-          height="7"
-          aria-hidden="true"
-          style={isOpen
-            ? {transform: 'rotate(180deg)', transitionDuration: '100ms'}
-            : !list || disabled
-              ? {transitionDuration: '100ms', cursor: 'default'}
-              : {transitionDuration: '100ms'}
-          }
-        >
-          <use xlinkHref="#dropdown" />
-        </svg>
-
-        {
-          isOpen && displayedList &&
-          <div className={classes.listWrapper} ref={listRef}>
-            {
-              Array.from(new Set(list?.map((element) => element.year)))
-                .toSorted((a, b) => (a && b) ? b - a : 0)
-                .map((year) =>
-                  <div key={year}>
-                    <p className={classes.listHeader}>
-                      {`${year} поколение • 2024 выпуск`}
-                    </p>
-
-                    <ul className={classes.list}>
-                      {
-                        displayedList.length === 0
-                          ? <li className={classes.listItem}>Ничего не найдено</li>
-                          : displayedList
-                            .filter((item) => item.year === year)
-                            .map((item) => (
-                              <li
-                                key={item.id}
-                                className={classes.listItem}
-                                onClick={(e) => handleItemClick(item.id, e)}
-                              >
-                                <p>
-                                  <span>{item.name}</span>
-                                  {
-                                    item.price && item.chinaPrice &&
-                                    <span className={classes.price}>
-                                      {
-                                        isPrices
-                                          ? `Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`
-                                          : `В Китае: ${priceFormat( (item.chinaPrice * currency!.cny).toFixed() )} ₽`
-                                      }
-                                    </span>
-                                  }
-                                </p>
-
-                                <span className={classes.listItemCount}>{ item.sublistLength }</span>
-                              </li>
-                            ))
-                      }
-                    </ul>
-                  </div>
-              )
-            }
-
-          </div>
+      <svg
+        className={classes.arrow}
+        width="8"
+        height="7"
+        aria-hidden="true"
+        style={isOpen
+          ? {transform: 'rotate(180deg)', transitionDuration: '100ms'}
+          : !list || disabled
+            ? {transitionDuration: '100ms', cursor: 'default'}
+            : {transitionDuration: '100ms'}
         }
-      </div>
+      >
+        <use xlinkHref="#dropdown" />
+      </svg>
 
-    </>
+      {
+        isOpen && displayedList &&
+        <div className={classes.listWrapper} ref={listRef}>
+          {
+            Array.from(new Set(list?.map((element) => element.year)))
+              .toSorted((a, b) => (a && b) ? b - a : 0)
+              .map((year) =>
+                <div key={year}>
+                  <p className={classes.listHeader}>
+                    {`${year} поколение • 2024 выпуск`}
+                  </p>
+
+                  <ul className={classes.list}>
+                    {
+                      displayedList.length === 0
+                        ? <li className={classes.listItem}>Ничего не найдено</li>
+                        : displayedList
+                          .filter((item) => item.year === year)
+                          .map((item) => (
+                            <li
+                              key={item.id}
+                              className={classes.listItem}
+                              onClick={(e) => handleItemClick(item.id, e)}
+                            >
+                              <p>
+                                <span>{item.name}</span>
+                                {
+                                  item.price && item.chinaPrice &&
+                                  <span className={classes.price}>
+                                    {
+                                      isPrices
+                                        ? `Под ключ: ${priceFormat( (item.price * currency!.cny).toFixed() )} ₽`
+                                        : `В Китае: ${priceFormat( (item.chinaPrice * currency!.cny).toFixed() )} ₽`
+                                    }
+                                  </span>
+                                }
+                              </p>
+
+                              <span className={classes.listItemCount}>{ item.sublistLength }</span>
+                            </li>
+                          ))
+                    }
+                  </ul>
+                </div>
+            )
+          }
+
+        </div>
+      }
+    </div>
   )
 }

@@ -1,0 +1,67 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+  font-size: 12px
+  line-height: 16px
+
+  .header
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+    font-size: 18px
+    line-height: 22px
+    font-weight: 700
+
+  .contacts
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 8px
+
+    button
+      background-color: transparent
+      cursor: pointer
+
+    a
+      display: flex
+      justify-content: center
+      align-items: center
+      gap: 12px
+      width: max-content
+
+      cursor: pointer
+
+    .contact-button
+      height: 40px
+      width: 100%
+
+      border-radius: 12px
+      background-color: $secondary
+
+      font-size: 14px
+      line-height: 18px
+      font-weight: 700
+
+    .contact-button:hover
+      background-color: $hover
+
+      color: $text-primary
+
+    .telegram
+      background-color: #229ED9
+      color: $white
+
+    .whatsapp
+      background-color: #25d366
+      color: $white

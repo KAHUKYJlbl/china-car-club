@@ -1,6 +1,7 @@
 @use '../../../../assets/styles/_variables' as *
 
 .wrapper
+  position: relative
   display: flex
   flex-direction: column
   justify-content: center
@@ -21,18 +22,29 @@
     min-width: 42px
     padding: 0
 
+  .light
+    background-color: $primary-light
+
+  .iconWrapper
+    height: 24px
+    width: 24px
+
+  .text-wrapper
+    font-size: 14px
+    line-height: 18px
+
+  .labelCount
+    position: absolute
+    top: 4px
+    right: 4px
+
+    background-color: $accent
+    border-radius: 12px
+    padding: 2px 8px
+
+    font-size: 10px
+    line-height: 12px
+    color: $white
 
 .wrapper:hover
   background-color: $hover
-
-.light
-  background-color: $primary-light
-
-.iconWrapper
-  height: 24px
-  width: 24px
-
-.text-wrapper
-  font-size: 14px
-  line-height: 18px
-

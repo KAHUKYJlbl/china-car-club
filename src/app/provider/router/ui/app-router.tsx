@@ -7,6 +7,7 @@ import { MycarsPage } from '../../../../pages/mycars-page';
 
 import { AppRoute } from '../lib/routes';
 import { PrivateRoute } from './private-route';
+import { Mycars } from '../../../../widgets/mycars';
 
 export const AppRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -34,7 +35,11 @@ export const AppRouter = createBrowserRouter(
             <MycarsPage />
           </PrivateRoute>
         }
-      />
+      >
+        <Route path='orders' element={<Mycars folder='orders' />} />
+        <Route path='favorites' element={<Mycars folder='favorites' />} />
+        <Route path='calculations' element={<Mycars folder='calculations' />} />
+      </Route>
 
       <Route
         path="*"

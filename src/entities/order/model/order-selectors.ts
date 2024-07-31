@@ -4,13 +4,7 @@ import { NameSpace, State } from '../../../app/provider/store';
 import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
 import { FetchStatus } from '../../../shared/api/fetch-status';
 
-import { QuestionsType, StatisticCalculationType, StatisticOrderType } from '../lib/types';
-
-export const getOrders = (state: State): StatisticOrderType[] => state[NameSpace.Order].mycarsOrders;
-
-export const getCalculations = (state: State): StatisticCalculationType[] => state[NameSpace.Order].mycarsCalculations;
-
-export const getPagination = (state: State) => state[NameSpace.Order].mycarsPagination;
+import { OfferType, QuestionsType } from '../lib/types';
 
 export const getCurrentTax = (state: State): TaxesTypes => state[NameSpace.Order].currentTax;
 
@@ -26,8 +20,10 @@ export const getCurrentOrder = (state: State): number | null => state[NameSpace.
 
 export const getQuestions = (state: State): QuestionsType => state[NameSpace.Order].questions;
 
-export const getOrderLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.Order].orderLoadingStatus,
+export const getOffers = (state: State): OfferType[] => state[NameSpace.Order].offers;
+
+export const getOffersLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Order].offersLoadingStatus,
   (status) => ({
     isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
     isSuccess: status === FetchStatus.Success,
@@ -35,21 +31,10 @@ export const getOrderLoadingStatus = createSelector(
   })
 );
 
-export const getOrdersLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.Order].mycarsOrdersLoadingStatus,
+export const getOrderLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Order].orderLoadingStatus,
   (status) => ({
-    isIdle: status === FetchStatus.Idle,
-    isLoading: status === FetchStatus.Pending,
-    isSuccess: status === FetchStatus.Success,
-    isFailed: status === FetchStatus.Failed,
-  })
-);
-
-export const getCalculationsLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.Order].mycarsCalculationsLoadingStatus,
-  (status) => ({
-    isIdle: status === FetchStatus.Idle,
-    isLoading: status === FetchStatus.Pending,
+    isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
   })

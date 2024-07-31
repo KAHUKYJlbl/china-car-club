@@ -16,5 +16,9 @@ export enum APIRoute {
   PostAnswers = '/statistics/answers',
   GetOrders = '/client/car/orders',
   GetCalculations = '/client/car/calculations',
+  GetFavorites = '/client/car/favorites',
+  AddFavorite = '/client/car/favorites/add',
+  DeleteFavorite = '/client/car/favorites/delete',
+  GetFavoritesById = '/client/car/favorites/by-favorable-ids',
   GetOffers = '/statistics/:id/dealer-offers',
 }

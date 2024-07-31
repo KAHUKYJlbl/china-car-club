@@ -14,7 +14,7 @@ export const postStatistics = createAsyncThunk<
     extra: AxiosInstance;
   }
 > (
-  'Statistics/postStatistics',
+  'User/postStatistics',
   async ( statistics, {extra: axios}) => {
     try {
       await axios.post(APIRoute.PostStatistics, statistics)

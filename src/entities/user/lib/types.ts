@@ -1,3 +1,5 @@
+import { NameType } from "../../../shared/lib/types";
+
 export type LoginModeType = 'init' | 'phone' | 'confirm-telegram' | 'confirm-phone';
 
 export type UserType = {
@@ -30,6 +32,14 @@ export type LocationType = {
   longitude: number | null,
 };
 
+export type ParametersType = {
+  bodyTypeId: number,
+  engineTypeId: number,
+  transmissionTypeId: number,
+  driveTypeId: number,
+  powerReserve: number | null,
+}
+
 export type StatisticsType = {
   specificationId: number,
   customerLocation: LocationType,
@@ -59,3 +69,135 @@ export type StatisticsType = {
     fbclid: string | null,
   },
 };
+
+export type MycarsOrderType = {
+  id: number,
+  createdAt: string;
+  dealerOffersCount: number;
+  priceTypeId: number;
+  availabilityOfEpts: boolean;
+  addItems: string[];
+  specification: {
+    id: number,
+    name: NameType;
+    calcVisible: boolean,
+    year: number,
+    parameters: ParametersType,
+    series: {
+      id: number;
+      name: NameType;
+      manufacturer: {
+        id: number;
+        name: NameType;
+      };
+      priceListWithLogisticsByCurrentDay: {
+        typeId: number,
+        price: number,
+        date: string
+      }[]
+    },
+  }
+};
+
+export type ApiOrderType = {
+  data: MycarsOrderType[];
+  meta: {
+    currentPage: number;
+    lastPage: number;
+  };
+};
+
+export type MycarsCalculationType = {
+  id: number,
+  createdAt: string;
+  dealerOffersCount: number;
+  priceTypeId: number;
+  availabilityOfEpts: boolean;
+  addItems: string[];
+  specification: {
+    id: number,
+    name: NameType;
+    calcVisible: boolean,
+    year: number,
+    parameters: ParametersType,
+    series: {
+      id: number;
+      name: NameType;
+      manufacturer: {
+        id: number;
+        name: NameType;
+      };
+      priceListWithLogisticsByCurrentDay: {
+        typeId: number,
+        price: number,
+        date: string
+      }[]
+    },
+  }
+};
+
+export type ApiCalculationType = {
+  data: MycarsCalculationType[];
+  meta: {
+    currentPage: number;
+    lastPage: number;
+  };
+};
+
+export type MycarsFavoriteType = {
+  id: number;
+  type: number;
+  createdAt: string;
+  cardData: {
+    manufacturer: {
+        id: number;
+        name: NameType;
+    };
+    series: {
+        id: number;
+        name: NameType;
+    };
+    specification: {
+        id: number;
+        name: NameType;
+    };
+    description: string;
+    year: number;
+    parameters: ParametersType;
+    bodyTypeId: number;
+    price: {
+        min: number;
+        max: number;
+    };
+    extra: {
+      specificationCount: number;
+    }
+  }
+};
+
+export type ApiFavoriteType = {
+  data: MycarsFavoriteType[];
+  meta: {
+    currentPage: number;
+    lastPage: number;
+  };
+};
+
+export type FavoriteByIdType = {
+  id: number;
+  favorableId: number;
+};
+
+export type FavoriteByIdApiType = FavoriteByIdType & {
+  typeId: number;
+};
+
+export type FavoriteByIdRequestType = {
+  typeId: number;
+  favorableIds: number[];
+};
+
+export type FavoriteRequestType = {
+  typeId: number;
+  favorableId: number;
+}

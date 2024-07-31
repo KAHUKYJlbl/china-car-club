@@ -73,110 +73,23 @@ export type QuestionsType = {
   };
 };
 
-export type StatisticOrderType = {
-  id: number,
-  createdAt: string;
-  dealerOffersCount: number;
-  priceTypeId: number;
-  availabilityOfEpts: boolean;
-  addItems: string[];
-  specification: {
-    id: number,
-    name: {
-        ch: string,
-        ru: string
-    },
-    calcVisible: boolean,
-    year: number,
-    parameters: {
-      bodyTypeId: number,
-      engineTypeId: number,
-      transmissionTypeId: number,
-      driveTypeId: number,
-      powerReserve: number | null,
-    },
-    series: {
-      id: number;
-      name: {
-        ch: string;
-        ru: string;
-      };
-      manufacturer: {
-        id: number;
-        name: {
-          ch: string;
-          ru: string;
-        };
-      };
-      priceListWithLogisticsByCurrentDay: {
-        typeId: number,
-        price: number,
-        date: string
-      }[]
-    },
-  }
-};
-
-export type MycarsOrderType = {
-  data: StatisticOrderType[];
-  meta: {
-    currentPage: number;
-    lastPage: number;
-  };
-};
-
-export type StatisticCalculationType = {
-  id: number,
-  createdAt: string;
-  dealerOffersCount: number;
-  priceTypeId: number;
-  availabilityOfEpts: boolean;
-  addItems: string[];
-  specification: {
-    id: number,
-    name: {
-        ch: string,
-        ru: string
-    },
-    calcVisible: boolean,
-    year: number,
-    parameters: {
-      bodyTypeId: number,
-      engineTypeId: number,
-      transmissionTypeId: number,
-      driveTypeId: number,
-      powerReserve: number | null,
-    },
-    series: {
-      id: number;
-      name: {
-        ch: string;
-        ru: string;
-      };
-      manufacturer: {
-        id: number;
-        name: {
-          ch: string;
-          ru: string;
-        };
-      };
-      priceListWithLogisticsByCurrentDay: {
-        typeId: number,
-        price: number,
-        date: string
-      }[]
-    },
-  }
-};
-
-export type MycarsCalculationType = {
-  data: StatisticCalculationType[];
-  meta: {
-    currentPage: number;
-    lastPage: number;
-  };
+export type ContactType = {
+  typeId: number;
+  priority: boolean;
+  contact: string;
 };
 
 export type OfferType = {
   id: number;
-}
+  priority: number;
+  price: number;
+  comment: string;
+  created_at: string;
+  statistic_event_id: number;
+  dealer_id: number;
+  dealer: {
+    id: number;
+    name: string;
+    contacts: ContactType[];
+  };
+};
