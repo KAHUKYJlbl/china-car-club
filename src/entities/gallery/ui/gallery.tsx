@@ -163,7 +163,7 @@ export const Gallery = memo(
             backgroundSize: "cover"
           }}
         >
-          <img src={preloadedImages[currentImage]} />
+          <img src={preloadedImages[currentImage]} alt={`автомобиль ${name?.manufacturer} ${name?.model}`} />
         </div>
 
         <div className={classes.overlay}>
@@ -190,13 +190,13 @@ export const Gallery = memo(
             {
               gallery.length > 1 &&
               <div className={classes.buttons}>
-                <button onClick={handlePrev}>
+                <button onClick={handlePrev} aria-label='предыдущее изображение'>
                   <svg width="9" height="8" aria-hidden="true">
                     <use xlinkHref="#arrow-left" />
                   </svg>
                 </button>
 
-                <button onClick={handleNext}>
+                <button onClick={handleNext} aria-label='следующее изображение'>
                   <svg width="9" height="8" aria-hidden="true">
                     <use xlinkHref="#arrow-right" />
                   </svg>
@@ -207,12 +207,13 @@ export const Gallery = memo(
             <div className={cn(classes.buttons, classes.end)}>
               {
                 handlePromo &&
-                <button onClick={handlePromoClick}>
+                <button aria-label='рассчитать спеццену' onClick={handlePromoClick}>
                   Рассчитать спеццену
                 </button>
               }
 
               <button
+                aria-label='добавить в избранное'
                 className={classes.favorite}
                 onClick={handleFavorite}
               >

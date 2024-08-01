@@ -41,7 +41,7 @@ export const SpecificationInfo = memo(
             {name.manufacturer}<br/>{name.model}
           </h2>
 
-          <Link to={AppRoute.Main}>Назад</Link>
+          <Link aria-label='вернуться назад' to={AppRoute.Main}>Назад</Link>
         </div>
 
         <div className={classes.bottom}>

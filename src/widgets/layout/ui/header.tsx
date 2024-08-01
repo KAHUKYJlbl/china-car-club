@@ -50,13 +50,13 @@ export const Header = ({}: NewHeaderProps) => {
 
         <p>
           <span>Бесплатно по России: </span>
-          <Link to='tel:+78007001895' className={classes.phone}>8 800 700 18 95</Link>
+          <Link aria-label='позвонить нам' to='tel:+78007001895' className={classes.phone}>8 800 700 18 95</Link>
         </p>
       </div>
 
       <div className={classes.mainWrapper}>
         <div className={classes.menuWrapper}>
-          <Link to={AppRoute.Main} >
+          <Link aria-label='на главную' to={AppRoute.Main} >
             <svg
               width={ isDesktop ? 220 : 148 }
               height={ isDesktop ? 36 : 24 }
@@ -66,7 +66,11 @@ export const Header = ({}: NewHeaderProps) => {
             </svg>
           </Link>
 
-          <HeaderButton icon='menu' onClick={() => null} />
+          <HeaderButton
+          label='menu'
+            icon='menu'
+            onClick={() => null}
+          />
 
           {
             isDesktop &&
@@ -78,7 +82,11 @@ export const Header = ({}: NewHeaderProps) => {
                 placeholder='Город доставки авто'
               />
 
-              <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
+              <HeaderButton
+                label='валюта'
+                text={getCurrencyName(currentCurrency)}
+                onClick={toggleCurrency}
+              />
             </>
           }
         </div>
@@ -96,7 +104,11 @@ export const Header = ({}: NewHeaderProps) => {
             placeholder='Город доставки авто'
           />
 
-          <HeaderButton text={getCurrencyName(currentCurrency)} onClick={toggleCurrency} />
+          <HeaderButton
+            label='валюта'
+            text={getCurrencyName(currentCurrency)}
+            onClick={toggleCurrency}
+          />
         </div>
       }
 

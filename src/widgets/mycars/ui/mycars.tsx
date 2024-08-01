@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
@@ -14,80 +14,86 @@ type MycarsProps = {
   folder: 'orders' | 'favorites' | 'calculations';
 };
 
-export const Mycars = ({ folder }: MycarsProps) => {
-  const navigate = useNavigate();
-  const isDesktop = useMediaQuery({ query: '(min-width: 721px)' });
+export const Mycars = memo(
+  ({ folder }: MycarsProps) => {
+    const navigate = useNavigate();
+    const isDesktop = useMediaQuery({ query: '(min-width: 721px)' });
 
-  const [ currentSort, setCurrentSort ] = useState<'increase' | 'decrease'>('decrease');
+    const [ currentSort, setCurrentSort ] = useState<'increase' | 'decrease'>('decrease');
 
-  return (
-    <div className={classes.wrapper}>
-      <div className={classes.bar}>
-        <div className={classes.buttonWrapper}>
+    return (
+      <div className={classes.wrapper}>
+        <div className={classes.bar}>
+          <div className={classes.buttonWrapper}>
+            <button
+              aria-label='заявки'
+              className={cn(
+                classes.button,
+                {[classes.buttonActive]: folder === 'orders'},
+              )}
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+            >
+              Заявки
+            </button>
+
+            <button
+              aria-label='расчеты'
+              className={cn(
+                classes.button,
+                {[classes.buttonActive]: folder === 'calculations'},
+              )}
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsCalculations].join('') )}
+            >
+              Расчеты
+            </button>
+
+            <button
+              aria-label='избранное'
+              className={cn(
+                classes.button,
+                {[classes.buttonActive]: folder === 'favorites'}
+              )}
+              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
+            >
+              Избранное
+            </button>
+          </div>
+
           <button
-            className={cn(
-              classes.button,
-              {[classes.buttonActive]: folder === 'orders'},
-            )}
-            onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+            aria-label='сортировка'
+            className={cn(classes.button, classes.sortButton)}
+            onClick={() => setCurrentSort((current) => current === 'increase' ? 'decrease' : 'increase')}
           >
-            Заявки
-          </button>
+            <svg
+              width={12}
+              height={14}
+              aria-hidden="true"
+            >
+              <use xlinkHref="#sort" />
+            </svg>
 
-          <button
-            className={cn(
-              classes.button,
-              {[classes.buttonActive]: folder === 'calculations'},
-            )}
-            onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsCalculations].join('') )}
-          >
-            Расчеты
-          </button>
-
-          <button
-            className={cn(
-              classes.button,
-              {[classes.buttonActive]: folder === 'favorites'}
-            )}
-            onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
-          >
-            Избранное
+            {
+              isDesktop &&
+              <span>Сортировка</span>
+            }
           </button>
         </div>
 
-        <button
-          className={cn(classes.button, classes.sortButton)}
-          onClick={() => setCurrentSort((current) => current === 'increase' ? 'decrease' : 'increase')}
-        >
-          <svg
-            width={12}
-            height={14}
-            aria-hidden="true"
-          >
-            <use xlinkHref="#sort" />
-          </svg>
+        {
+          folder === 'orders' &&
+          <Orders currentSort={currentSort} />
+        }
 
-          {
-            isDesktop &&
-            <span>Сортировка</span>
-          }
-        </button>
+        {
+          folder === 'calculations' &&
+          <Calculations currentSort={currentSort} />
+        }
+
+        {
+          folder === 'favorites' &&
+          <Favorites currentSort={currentSort} />
+        }
       </div>
-
-      {
-        folder === 'orders' &&
-        <Orders currentSort={currentSort} />
-      }
-
-      {
-        folder === 'calculations' &&
-        <Calculations currentSort={currentSort} />
-      }
-
-      {
-        folder === 'favorites' &&
-        <Favorites currentSort={currentSort} />
-      }
-    </div>
-  );
-};
+    );
+  }
+);

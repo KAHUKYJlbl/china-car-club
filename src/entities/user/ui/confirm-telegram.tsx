@@ -59,6 +59,7 @@ export const ConfirmTelegram = ({ onClose, onLogin, setMode }: ConfirmPhoneProps
         <p className={classes.grey}>
           Откройте в Telegram бот<br/>
           <Link
+            aria-label='написать нам'
             to={`tg://resolve?domain=${process.env.TELEGRAM_BOT}`}
             className={classes.timer}
           >
@@ -80,6 +81,7 @@ export const ConfirmTelegram = ({ onClose, onLogin, setMode }: ConfirmPhoneProps
             />
 
             <button
+              aria-label='войти'
               type='submit'
               className={cn(classes.button, classes.submit)}
             >
@@ -95,6 +97,7 @@ export const ConfirmTelegram = ({ onClose, onLogin, setMode }: ConfirmPhoneProps
                 <span className={classes.timer}> {timer.seconds} сек</span>
               </span>
               : <Link
+                aria-label='запросить новый код'
                 to={`tg://resolve?domain=${process.env.TELEGRAM_BOT}&start=auth_hash_${user!.hash}`}
                 className={cn(classes.small, classes.timer, classes.new)}
                 onClick={() => timer.restart(dayjs().add(NEW_PIN_TIME, 's').toDate())}
@@ -107,6 +110,7 @@ export const ConfirmTelegram = ({ onClose, onLogin, setMode }: ConfirmPhoneProps
       </div>
 
       <button
+        aria-label='изменить способ входа'
         className={classes.button}
         onClick={() => setMode('init')}
       >

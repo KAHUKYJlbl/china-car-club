@@ -29,7 +29,7 @@ export const NewHeader = ({}: NewHeaderProps) => {
   return (
     <div className={classes.wrapper}>
         <div className={classes.logo}>
-          <Link to={AppRoute.Main} >
+          <Link aria-label='на главную' to={AppRoute.Main} >
             <svg
               width={ isDesktop ? 220 : 148 }
               height={ isDesktop ? 36 : 24 }

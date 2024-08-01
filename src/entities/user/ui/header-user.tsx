@@ -73,6 +73,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
           isAuth &&
           <>
             <HeaderButton
+              label='мои автомобили'
               icon='mycars'
               text='Мои&nbsp;автомобили'
               type='light'
@@ -80,6 +81,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
             />
 
             <HeaderButton
+              label='избранное'
               icon='favorite'
               text='Избранное'
               type='light'
@@ -89,7 +91,13 @@ export const HeaderUser = memo(({}: headerUserProps) => {
           </>
         }
 
-        <HeaderButton icon='profile' text={isAuth ? 'Выйти' : 'Войти'} type='light' onClick={handleLoginClick} />
+        <HeaderButton
+          label={isAuth ? 'Выйти' : 'Войти'}
+          icon='profile'
+          text={isAuth ? 'Выйти' : 'Войти'}
+          type='light'
+          onClick={handleLoginClick}
+        />
       </div>
 
       {

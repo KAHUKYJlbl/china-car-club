@@ -1,14 +1,16 @@
 import classes from './cabinet-button.module.sass';
 
 type CabinetButtonProps = {
+  label: string;
   icon: string;
   labelCount?: number;
   callback: () => void;
 };
 
-export const CabinetButton = ({ icon, callback, labelCount }: CabinetButtonProps) => {
+export const CabinetButton = ({ icon, callback, labelCount, label }: CabinetButtonProps) => {
   return (
-    <div
+    <button
+    aria-label={label}
       className={classes.wrapper}
       onClick={callback}
     >
@@ -27,6 +29,6 @@ export const CabinetButton = ({ icon, callback, labelCount }: CabinetButtonProps
         </p>
       }
 
-  </div>
+  </button>
 );
 };

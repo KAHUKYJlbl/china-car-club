@@ -29,15 +29,21 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
 
   return (
     <div className={classes.wrapper}>
-      <CabinetButton icon='cabinet-mycars' callback={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )} />
+      <CabinetButton
+        label='мои автомобили'
+        icon='cabinet-mycars'
+        callback={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+      />
 
       <CabinetButton
+        label='избранное'
         icon='cabinet-favorite'
         labelCount={favoritesCount}
         callback={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
       />
 
       <CabinetButton
+        label='выход'
         icon='cabinet-profile'
         callback={() => {
           clearToken();

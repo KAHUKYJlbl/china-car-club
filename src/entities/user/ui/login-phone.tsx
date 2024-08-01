@@ -101,6 +101,7 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
             />
 
             <button
+              aria-label='получить код в смс'
               type='submit'
               className={cn(classes.button, classes.submit)}
             >
@@ -116,6 +117,7 @@ export const LoginPhone = ({ setMode, setPhone }: LoginPhoneProps) => {
       </div>
 
       <button
+        aria-label='зменить способ входа'
         className={classes.button}
         onClick={() => setMode('init')}
       >

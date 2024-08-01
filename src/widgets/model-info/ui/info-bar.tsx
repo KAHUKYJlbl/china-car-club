@@ -27,6 +27,7 @@ export const InfoBar = memo(
 
         <div className={classes.row}>
           <button
+            aria-label='характеристики'
             className={classes.button}
             onClick={() => setIsTechs((current) => !current)}
           >
@@ -34,13 +35,17 @@ export const InfoBar = memo(
           </button>
 
           <button
+            aria-label='история цены'
             className={classes.button}
             onClick={() => setIsPriceHistory((current) => !current)}
           >
             История цены
           </button>
 
-          <button className={classes.button}>
+          <button
+            aria-label='следить за скидками'
+            className={classes.button}
+          >
             Следить за скидками
           </button>
         </div>
