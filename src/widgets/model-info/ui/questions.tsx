@@ -23,10 +23,11 @@ export const Questions = memo(
     const questionsLoadingStatus = useAppSelector(getQuestionsLoadingStatus);
 
     const dispatch = useAppDispatch();
-    const [ _fieldErrors, setFieldErrors ] = useState({
-      carSupplier: false,
-      paymentType: false,
-    });
+    // const [ _fieldErrors, setFieldErrors ] = useState({
+    //   carSupplier: false,
+    //   paymentType: false,
+    // });
+    const [ formStep, setFormStep ] = useState(1);
     const { register, watch, handleSubmit } = useForm<OrderFormType>({
       defaultValues: {
         firstName: '',
@@ -73,21 +74,21 @@ export const Questions = memo(
     };
 
     const submitHandler: SubmitHandler<OrderFormType> = (data) => {
-      if (!watch('carSupplier')) {
-        setFieldErrors((current) => ({...current, carSupplier: true}));
-      };
+      // if (!watch('carSupplier')) {
+      //   setFieldErrors((current) => ({...current, carSupplier: true}));
+      // };
 
-      if (isPaymentTypeEmpty()) {
-        setFieldErrors((current) => ({...current, paymentType: true}));
-      };
+      // if (isPaymentTypeEmpty()) {
+      //   setFieldErrors((current) => ({...current, paymentType: true}));
+      // };
 
-      if (!watch('carSupplier') || isPaymentTypeEmpty()) {
-        toast.dismiss();
+      toast.dismiss();
+
+      if ((!watch('carSupplier') && formStep === 1) || (isPaymentTypeEmpty() && formStep === 2)) {
         toast.error('Необходимо ответить на вопросы');
         return;
       }
 
-      toast.dismiss();
       dispatch(postAnswers({
         statisticsEventId: order,
         data: {
@@ -114,12 +115,17 @@ export const Questions = memo(
         },
       }))
       .then(() => {
+        setFormStep((current) => {
+          return ++current;
+        });
         dispatch(setQuestions({
           carSupplier: data.carSupplier ? data.carSupplier : '',
           paymentType: data.paymentType,
         }));
 
-        setConfirmation();
+        if (formStep === 2) {
+          setConfirmation();
+        }
       });
     };
 
@@ -132,368 +138,385 @@ export const Questions = memo(
           </p>
         </div>
 
-        <div className={classes.wrapper}>
-          <p className={classes.header}>
-            Вы готовы заказывать авто из&nbsp;Китая или ещё думаете?
-          </p>
+        {
+          formStep === 1 &&
+          <div className={classes.wrapper}>
+            <p className={classes.header}>
+              Вы готовы заказывать авто из&nbsp;Китая или ещё думаете?
+            </p>
 
-          <ul className={classes.radio}>
-            <li>
-              <label className={cn(watch('carSupplier') === '1' && classes.checked)}>
-                <div className={cn(watch('carSupplier') === '1' && classes.checked)}>
-                  {
-                    watch('carSupplier') === '1' &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#checked" />
-                    </svg>
-                  }
+            <ul className={classes.radio}>
+              <li>
+                <label className={cn(watch('carSupplier') === '1' && classes.checked)}>
+                  <div className={cn(watch('carSupplier') === '1' && classes.checked)}>
+                    {
+                      watch('carSupplier') === '1' &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#checked" />
+                      </svg>
+                    }
 
-                  <input
-                    type='radio'
-                    className='visually-hidden'
-                    value='1'
-                    {...register('carSupplier')}
-                  />
-                </div>
+                    <input
+                      type='radio'
+                      className='visually-hidden'
+                      value='1'
+                      {...register('carSupplier')}
+                    />
+                  </div>
 
-                Знаю какую машину хочу, выбираю поставщика
-              </label>
-            </li>
+                  Знаю какую машину хочу, выбираю поставщика
+                </label>
+              </li>
 
-            <li>
-              <label className={cn(watch('carSupplier') === '2' && classes.checked)}>
-                <div className={cn(watch('carSupplier') === '2' && classes.checked)}>
-                  {
-                    watch('carSupplier') === '2' &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#checked" />
-                    </svg>
-                  }
+              <li>
+                <label className={cn(watch('carSupplier') === '2' && classes.checked)}>
+                  <div className={cn(watch('carSupplier') === '2' && classes.checked)}>
+                    {
+                      watch('carSupplier') === '2' &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#checked" />
+                      </svg>
+                    }
 
-                  <input
-                    type='radio'
-                    className='visually-hidden'
-                    value='2'
-                    {...register('carSupplier')}
-                  />
-                </div>
+                    <input
+                      type='radio'
+                      className='visually-hidden'
+                      value='2'
+                      {...register('carSupplier')}
+                    />
+                  </div>
 
-                Ещё думаю, нужна помощь с&nbsp;выбором машины
-              </label>
-            </li>
+                  Ещё думаю, нужна помощь с&nbsp;выбором машины
+                </label>
+              </li>
 
-            <li>
-              <label className={cn(watch('carSupplier') === '3' && classes.checked)}>
-                <div className={cn(watch('carSupplier') === '3' && classes.checked)}>
-                  {
-                    watch('carSupplier') === '3' &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#checked" />
-                    </svg>
-                  }
+              <li>
+                <label className={cn(watch('carSupplier') === '3' && classes.checked)}>
+                  <div className={cn(watch('carSupplier') === '3' && classes.checked)}>
+                    {
+                      watch('carSupplier') === '3' &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#checked" />
+                      </svg>
+                    }
 
-                  <input
-                    type='radio'
-                    className='visually-hidden'
-                    value='3'
-                    {...register('carSupplier')}
-                  />
-                </div>
+                    <input
+                      type='radio'
+                      className='visually-hidden'
+                      value='3'
+                      {...register('carSupplier')}
+                    />
+                  </div>
 
-                Ещё думаю, посмотрю предложения и&nbsp;решу
-              </label>
-            </li>
+                  Ещё думаю, посмотрю предложения и&nbsp;решу
+                </label>
+              </li>
 
-            <li>
-              <label className={cn(watch('carSupplier') === '4' && classes.checked)}>
-                <div className={cn(watch('carSupplier') === '4' && classes.checked)}>
-                  {
-                    watch('carSupplier') === '4' &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#checked" />
-                    </svg>
-                  }
+              <li>
+                <label className={cn(watch('carSupplier') === '4' && classes.checked)}>
+                  <div className={cn(watch('carSupplier') === '4' && classes.checked)}>
+                    {
+                      watch('carSupplier') === '4' &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#checked" />
+                      </svg>
+                    }
 
-                  <input
-                    type='radio'
-                    className='visually-hidden'
-                    value='4'
-                    {...register('carSupplier')}
-                  />
-                </div>
+                    <input
+                      type='radio'
+                      className='visually-hidden'
+                      value='4'
+                      {...register('carSupplier')}
+                    />
+                  </div>
 
-                Сейчас не&nbsp;ищу поставщика, но&nbsp;прицениваюсь на&nbsp;будущее
-              </label>
-            </li>
+                  Сейчас не&nbsp;ищу поставщика, но&nbsp;прицениваюсь на&nbsp;будущее
+                </label>
+              </li>
 
-            <li>
-              <label className={cn(watch('carSupplier') === '5' && classes.checked)}>
-                <div className={cn(watch('carSupplier') === '5' && classes.checked)}>
-                  {
-                    watch('carSupplier') === '5' &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#checked" />
-                    </svg>
-                  }
+              <li>
+                <label className={cn(watch('carSupplier') === '5' && classes.checked)}>
+                  <div className={cn(watch('carSupplier') === '5' && classes.checked)}>
+                    {
+                      watch('carSupplier') === '5' &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#checked" />
+                      </svg>
+                    }
 
-                  <input
-                    type='radio'
-                    className='visually-hidden'
-                    value='5'
-                    {...register('carSupplier')}
-                  />
-                </div>
+                    <input
+                      type='radio'
+                      className='visually-hidden'
+                      value='5'
+                      {...register('carSupplier')}
+                    />
+                  </div>
 
-                Просто смотрю, покупать не&nbsp;планирую
-              </label>
-            </li>
+                  Просто смотрю, покупать не&nbsp;планирую
+                </label>
+              </li>
 
-            <li>
-              <label className={cn(watch('carSupplier') === '6' && classes.checked)}>
-                <div className={cn(watch('carSupplier') === '6' && classes.checked)}>
-                  {
-                    watch('carSupplier') === '6' &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#checked" />
-                    </svg>
-                  }
+              <li>
+                <label className={cn(watch('carSupplier') === '6' && classes.checked)}>
+                  <div className={cn(watch('carSupplier') === '6' && classes.checked)}>
+                    {
+                      watch('carSupplier') === '6' &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#checked" />
+                      </svg>
+                    }
 
-                  <input
-                    type='radio'
-                    className='visually-hidden'
-                    value='6'
-                    {...register('carSupplier')}
-                  />
-                </div>
+                    <input
+                      type='radio'
+                      className='visually-hidden'
+                      value='6'
+                      {...register('carSupplier')}
+                    />
+                  </div>
 
-                Я перепродаю машины, хочу сравнить цены
-              </label>
-            </li>
-          </ul>
-        </div>
+                  Я перепродаю машины, хочу сравнить цены
+                </label>
+              </li>
+            </ul>
 
-        <div className={classes.wrapper}>
-          <p className={classes.header}>
-            Какие способы оплаты заказа вам подходят?
-          </p>
+            <button
+              type='submit'
+              className={classes.saveButton}
+            >
+              {
+                questionsLoadingStatus.isLoading
+                ? <LoadingSpinner spinnerType='button' />
+                : 'Далее'
+              }
+            </button>
+          </div>
+        }
 
-          <ul className={classes.checkboxes}>
-            <li>
-              <label className={cn(watch('paymentType.1') && classes.checked)}>
-                <div className={cn(
-                  classes.checkbox,
-                  watch('paymentType.1') && classes.checked
-                )}>
-                  {
-                    watch('paymentType.1') &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#v" />
-                    </svg>
-                  }
+        {
+          formStep === 2 &&
+          <div className={classes.wrapper}>
+            <p className={classes.header}>
+              Какие способы оплаты заказа вам подходят?
+            </p>
 
-                  <input
-                    type='checkbox'
-                    className='visually-hidden'
-                    {...register('paymentType.1')}
-                  />
-                </div>
+            <ul className={classes.checkboxes}>
+              <li>
+                <label className={cn(watch('paymentType.1') && classes.checked)}>
+                  <div className={cn(
+                    classes.checkbox,
+                    watch('paymentType.1') && classes.checked
+                  )}>
+                    {
+                      watch('paymentType.1') &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#v" />
+                      </svg>
+                    }
 
-                <div>
-                  <p>
-                    100% предоплата по договору
-                  </p>
+                    <input
+                      type='checkbox'
+                      className='visually-hidden'
+                      {...register('paymentType.1')}
+                    />
+                  </div>
 
-                  <p className={classes.sublabel}>
-                    Больше предложений с лучшей ценой
-                  </p>
-                </div>
-              </label>
-            </li>
+                  <div>
+                    <p>
+                      100% предоплата по договору
+                    </p>
 
-            <li>
-              <label className={cn(watch('paymentType.3') && classes.checked)}>
-                <div className={cn(
-                  classes.checkbox,
-                  watch('paymentType.3') && classes.checked
-                )}>
-                  {
-                    watch('paymentType.3') &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#v" />
-                    </svg>
-                  }
+                    <p className={classes.sublabel}>
+                      Больше предложений с лучшей ценой
+                    </p>
+                  </div>
+                </label>
+              </li>
 
-                  <input
-                    type='checkbox'
-                    className='visually-hidden'
-                    {...register('paymentType.3')}
-                  />
-                </div>
+              <li>
+                <label className={cn(watch('paymentType.3') && classes.checked)}>
+                  <div className={cn(
+                    classes.checkbox,
+                    watch('paymentType.3') && classes.checked
+                  )}>
+                    {
+                      watch('paymentType.3') &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#v" />
+                      </svg>
+                    }
 
-                <div>
-                  <p>
-                    30-50% предоплата по договору
-                  </p>
+                    <input
+                      type='checkbox'
+                      className='visually-hidden'
+                      {...register('paymentType.3')}
+                    />
+                  </div>
 
-                  <p className={classes.sublabel}>
-                    Остальное после доставки в РФ
-                  </p>
-                </div>
-              </label>
-            </li>
+                  <div>
+                    <p>
+                      30-50% предоплата по договору
+                    </p>
 
-            <li>
-              <label className={cn(watch('paymentType.4') && classes.checked)}>
-                <div className={cn(
-                  classes.checkbox,
-                  watch('paymentType.4') && classes.checked
-                )}>
-                  {
-                    watch('paymentType.4') &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#v" />
-                    </svg>
-                  }
+                    <p className={classes.sublabel}>
+                      Остальное после доставки в РФ
+                    </p>
+                  </div>
+                </label>
+              </li>
 
-                  <input
-                    type='checkbox'
-                    className='visually-hidden'
-                    {...register('paymentType.4')}
-                  />
-                </div>
+              <li>
+                <label className={cn(watch('paymentType.4') && classes.checked)}>
+                  <div className={cn(
+                    classes.checkbox,
+                    watch('paymentType.4') && classes.checked
+                  )}>
+                    {
+                      watch('paymentType.4') &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#v" />
+                      </svg>
+                    }
 
-                <div>
-                  <p>
-                    Покупка в кредит
-                  </p>
+                    <input
+                      type='checkbox'
+                      className='visually-hidden'
+                      {...register('paymentType.4')}
+                    />
+                  </div>
 
-                  <p className={classes.sublabel}>
-                    Оформляется после доставки в РФ
-                  </p>
-                </div>
-              </label>
-            </li>
+                  <div>
+                    <p>
+                      Покупка в кредит
+                    </p>
 
-            <li>
-              <label className={cn(watch('paymentType.6') && classes.checked)}>
-                <div className={cn(
-                  classes.checkbox,
-                  watch('paymentType.6') && classes.checked
-                )}>
-                  {
-                    watch('paymentType.6') &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#v" />
-                    </svg>
-                  }
+                    <p className={classes.sublabel}>
+                      Оформляется после доставки в РФ
+                    </p>
+                  </div>
+                </label>
+              </li>
 
-                  <input
-                    type='checkbox'
-                    className='visually-hidden'
-                    {...register('paymentType.6')}
-                  />
-                </div>
+              <li>
+                <label className={cn(watch('paymentType.6') && classes.checked)}>
+                  <div className={cn(
+                    classes.checkbox,
+                    watch('paymentType.6') && classes.checked
+                  )}>
+                    {
+                      watch('paymentType.6') &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#v" />
+                      </svg>
+                    }
 
-                <div>
-                  <p>
-                    Покупка в лизинг
-                  </p>
+                    <input
+                      type='checkbox'
+                      className='visually-hidden'
+                      {...register('paymentType.6')}
+                    />
+                  </div>
 
-                  <p className={classes.sublabel}>
-                    Оформляется после доставки в РФ
-                  </p>
-                </div>
-              </label>
-            </li>
+                  <div>
+                    <p>
+                      Покупка в лизинг
+                    </p>
 
-            <li>
-              <label className={cn(watch('paymentType.5') && classes.checked)}>
-                <div className={cn(
-                  classes.checkbox,
-                  watch('paymentType.5') && classes.checked
-                )}>
-                  {
-                    watch('paymentType.5') &&
-                    <svg
-                      width='20'
-                      height='20'
-                      aria-hidden="true"
-                    >
-                      <use xlinkHref="#v" />
-                    </svg>
-                  }
+                    <p className={classes.sublabel}>
+                      Оформляется после доставки в РФ
+                    </p>
+                  </div>
+                </label>
+              </li>
 
-                  <input
-                    type='checkbox'
-                    className='visually-hidden'
-                    {...register('paymentType.5')}
-                  />
-                </div>
+              <li>
+                <label className={cn(watch('paymentType.5') && classes.checked)}>
+                  <div className={cn(
+                    classes.checkbox,
+                    watch('paymentType.5') && classes.checked
+                  )}>
+                    {
+                      watch('paymentType.5') &&
+                      <svg
+                        width='20'
+                        height='20'
+                        aria-hidden="true"
+                      >
+                        <use xlinkHref="#v" />
+                      </svg>
+                    }
 
-                <div>
-                  <p>
-                    Покупка в Trade-In
-                  </p>
+                    <input
+                      type='checkbox'
+                      className='visually-hidden'
+                      {...register('paymentType.5')}
+                    />
+                  </div>
 
-                  <p className={classes.sublabel}>
-                    Потребуется оценка вашего авто
-                  </p>
-                </div>
-              </label>
-            </li>
-          </ul>
+                  <div>
+                    <p>
+                      Покупка в Trade-In
+                    </p>
 
-          <button
-            type='submit'
-            className={classes.saveButton}
-          >
-            {
-              questionsLoadingStatus.isLoading
-              ? <LoadingSpinner spinnerType='button' />
-              : 'Сохранить'
-            }
-          </button>
-        </div>
+                    <p className={classes.sublabel}>
+                      Потребуется оценка вашего авто
+                    </p>
+                  </div>
+                </label>
+              </li>
+            </ul>
+
+            <button
+              type='submit'
+              className={classes.saveButton}
+            >
+              {
+                questionsLoadingStatus.isLoading
+                ? <LoadingSpinner spinnerType='button' />
+                : 'Сохранить'
+              }
+            </button>
+          </div>
+        }
       </form>
     );
   }

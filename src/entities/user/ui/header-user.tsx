@@ -9,7 +9,7 @@ import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { HeaderButton } from "../../../shared/ui/header-button/ui/header-button";
 
 import { useGeolocation } from "../lib/hooks/use-geolocation";
-import { fetchFavorites } from "../model/api-actions/fetch-favorites";
+import { fetchFavoritesCount } from "../model/api-actions/fetch-favorites-count";
 import { fetchCity } from "../model/api-actions/fetch-city";
 import { fetchHash } from "../model/api-actions/fetch-hash";
 import {
@@ -39,7 +39,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
 
   useEffect(() => {
     if (favoritesLoadingStatus.isIdle) {
-      dispatch(fetchFavorites());
+      dispatch(fetchFavoritesCount());
     }
   }, []);
 

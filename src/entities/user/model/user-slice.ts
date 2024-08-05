@@ -14,6 +14,7 @@ import { deleteFavorite } from './api-actions/delete-favorite';
 import { fetchFavorites } from './api-actions/fetch-favorites';
 import { fetchCalculations } from './api-actions/fetch-calculations';
 import { fetchFavoritesById } from './api-actions/fetch-favorites-by-id';
+import { fetchFavoritesCount } from './api-actions/fetch-favorites-count';
 import { FavoriteByIdType, LocationType, MycarsCalculationType, MycarsFavoriteType, MycarsOrderType, UserType } from '../lib/types';
 
 type InitialState = {
@@ -30,6 +31,7 @@ type InitialState = {
   mycarsCalculations: MycarsCalculationType[];
   mycarsCalculationsLoadingStatus: FetchStatus;
   mycarsFavorites: MycarsFavoriteType[];
+  mycarsFavoritesCount: number;
   mycarsFavoritesLoadingStatus: FetchStatus;
   mycarsPagination: {
     currentPage: number,
@@ -56,6 +58,7 @@ const initialState: InitialState = {
   mycarsCalculations: [],
   mycarsCalculationsLoadingStatus: FetchStatus.Idle,
   mycarsFavorites: [],
+  mycarsFavoritesCount: 0,
   mycarsFavoritesLoadingStatus: FetchStatus.Idle,
   mycarsPagination: {
     currentPage: 1,
@@ -98,8 +101,8 @@ export const userSlice = createSlice({
       state.mycarsCalculationsLoadingStatus = FetchStatus.Idle;
       state.mycarsOrders = [];
       state.mycarsOrdersLoadingStatus = FetchStatus.Idle;
-      // state.mycarsFavorites = [];
-      // state.mycarsFavoritesLoadingStatus = FetchStatus.Idle;
+      state.mycarsFavorites = [];
+      state.mycarsFavoritesLoadingStatus = FetchStatus.Idle;
       state.mycarsPagination = {
         currentPage: 1,
         lastPage: 1,
@@ -176,13 +179,16 @@ export const userSlice = createSlice({
         state.mycarsCalculationsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
-        state.mycarsFavorites = action.payload.data
-        state.mycarsFavoritesById = action.payload.data.map((favorite) => (
-          {
-            id: favorite.id,
-            favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
-          }
-        ));
+        state.mycarsFavorites = state.mycarsFavorites.concat(action.payload.data);
+        state.mycarsFavoritesCount = action.payload.meta.total;
+        state.mycarsFavoritesById = state.mycarsFavoritesById.concat(
+          action.payload.data.map((favorite) => (
+            {
+              id: favorite.id,
+              favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
+            }
+          ))
+        );
         state.mycarsPagination = action.payload.meta;
         state.mycarsFavoritesLoadingStatus = FetchStatus.Success;
       })
@@ -190,6 +196,15 @@ export const userSlice = createSlice({
         state.mycarsFavoritesLoadingStatus = FetchStatus.Pending;
       })
       .addCase(fetchFavorites.rejected, (state) => {
+        state.mycarsFavoritesLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchFavoritesCount.fulfilled, (state, action) => {
+        state.mycarsFavoritesCount = action.payload;
+      })
+      .addCase(fetchFavoritesCount.pending, (state) => {
+        state.mycarsFavoritesLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchFavoritesCount.rejected, (state) => {
         state.mycarsFavoritesLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchFavoritesById.fulfilled, (state, action) => {

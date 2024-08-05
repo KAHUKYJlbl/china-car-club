@@ -180,6 +180,7 @@ export type ApiFavoriteType = {
   meta: {
     currentPage: number;
     lastPage: number;
+    total: number;
   };
 };
 

@@ -11,24 +11,7 @@ type DeliveryProps = {
 
 export const Delivery = memo(
   ({ onClose }: DeliveryProps) => {
-    const { register, watch, setValue } = useFormContext<OrderFormType>();
-
-    const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      if (e.target.value[0] === '0') {
-        setValue('preferredDeliveryTime.maxDays', '');
-        return;
-      }
-
-      if (e.target.value.length > 3) {
-        setValue('preferredDeliveryTime.maxDays', e.target.value.slice(0, 3));
-        return;
-      }
-
-      if (!/[0-9]/.test(e.target.value.slice(-1))) {
-        setValue('preferredDeliveryTime.maxDays', e.target.value.slice(0, -1));
-        return;
-      }
-    };
+    const { register, watch } = useFormContext<OrderFormType>();
 
     return (
       <div className={classes.wrapper}>
@@ -42,21 +25,85 @@ export const Delivery = memo(
           </p>
         </div>
 
-        <div className={classes.block}>
-          <label>
-            <p>Не&nbsp;дольше</p>
+        <ul className={classes.radio}>
+          <li>
+            <label className={cn(watch('preferredDeliveryTime.maxDays') === '30' && classes.checked)}>
+              <div className={cn(watch('preferredDeliveryTime.maxDays') === '30' && classes.checked)}>
+                {
+                  watch('preferredDeliveryTime.maxDays') === '30' &&
+                  <svg
+                    width='20'
+                    height='20'
+                    aria-hidden="true"
+                  >
+                    <use xlinkHref="#checked" />
+                  </svg>
+                }
 
-            <div className={classes.input}>
-              <input
-                type='text'
-                placeholder='0'
-                {...register('preferredDeliveryTime.maxDays', {onChange})}
-              />
+                <input
+                  type='radio'
+                  className='visually-hidden'
+                  value='30'
+                  {...register('preferredDeliveryTime.maxDays')}
+                />
+              </div>
 
-              <p>дней</p>
-            </div>
-          </label>
-        </div>
+              Не дольше 30 дней
+            </label>
+          </li>
+
+          <li>
+            <label className={cn(watch('preferredDeliveryTime.maxDays') === '45' && classes.checked)}>
+              <div className={cn(watch('preferredDeliveryTime.maxDays') === '45' && classes.checked)}>
+                {
+                  watch('preferredDeliveryTime.maxDays') === '45' &&
+                  <svg
+                    width='20'
+                    height='20'
+                    aria-hidden="true"
+                  >
+                    <use xlinkHref="#checked" />
+                  </svg>
+                }
+
+                <input
+                  type='radio'
+                  className='visually-hidden'
+                  value='45'
+                  {...register('preferredDeliveryTime.maxDays')}
+                />
+              </div>
+
+              Не дольше 45 дней
+            </label>
+          </li>
+
+          <li>
+            <label className={cn(watch('preferredDeliveryTime.maxDays') === '60' && classes.checked)}>
+              <div className={cn(watch('preferredDeliveryTime.maxDays') === '60' && classes.checked)}>
+                {
+                  watch('preferredDeliveryTime.maxDays') === '60' &&
+                  <svg
+                    width='20'
+                    height='20'
+                    aria-hidden="true"
+                  >
+                    <use xlinkHref="#checked" />
+                  </svg>
+                }
+
+                <input
+                  type='radio'
+                  className='visually-hidden'
+                  value='60'
+                  {...register('preferredDeliveryTime.maxDays')}
+                />
+              </div>
+
+              Не дольше 60 дней
+            </label>
+          </li>
+        </ul>
 
         <div className={classes.block}>
           <label className={classes.checkboxLabel}>

@@ -53,7 +53,7 @@ export const OrderConfirmation = memo(
         carSupplier: questions.carSupplier,
         paymentType: questions.paymentType,
         preferredDeliveryTime: {
-          maxDays: null,
+          maxDays: '30',
           highPricedOption: true,
         },
         colors: {
@@ -347,7 +347,6 @@ export const OrderConfirmation = memo(
                 className={cn(
                   classes.conditionButton,
                   methods.watch('carSupplier') && classes.filled,
-                  // questions.carSupplier && classes.filled,
                   fieldErrors.carSupplier && classes.buttonError
                 )}
                 onClick={() => setIsSupplier(true)}
@@ -372,7 +371,6 @@ export const OrderConfirmation = memo(
                 className={cn(
                   classes.conditionButton,
                   !isPaymentTypeEmpty() && classes.filled,
-                  // questions.paymentType && classes.filled,
                   fieldErrors.paymentType && classes.buttonError,
                 )}
                 onClick={() => setIsPayment(true)}
