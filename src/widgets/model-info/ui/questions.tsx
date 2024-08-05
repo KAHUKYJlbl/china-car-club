@@ -23,10 +23,6 @@ export const Questions = memo(
     const questionsLoadingStatus = useAppSelector(getQuestionsLoadingStatus);
 
     const dispatch = useAppDispatch();
-    // const [ _fieldErrors, setFieldErrors ] = useState({
-    //   carSupplier: false,
-    //   paymentType: false,
-    // });
     const [ formStep, setFormStep ] = useState(1);
     const { register, watch, handleSubmit } = useForm<OrderFormType>({
       defaultValues: {
@@ -74,14 +70,6 @@ export const Questions = memo(
     };
 
     const submitHandler: SubmitHandler<OrderFormType> = (data) => {
-      // if (!watch('carSupplier')) {
-      //   setFieldErrors((current) => ({...current, carSupplier: true}));
-      // };
-
-      // if (isPaymentTypeEmpty()) {
-      //   setFieldErrors((current) => ({...current, paymentType: true}));
-      // };
-
       toast.dismiss();
 
       if ((!watch('carSupplier') && formStep === 1) || (isPaymentTypeEmpty() && formStep === 2)) {
@@ -133,7 +121,7 @@ export const Questions = memo(
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className={classes.wrapper}>
           <p className={classes.header}>
-            Ответьте на 2 вопроса
+            {formStep === 1 ? 'Ответьте на 2 вопроса' : 'Последний вопрос'}
             <span> — чтобы получить несколько предложений по&nbsp;цене и&nbsp;условиям</span>
           </p>
         </div>

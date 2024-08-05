@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
@@ -53,7 +53,7 @@ export const OrderConfirmation = memo(
         carSupplier: questions.carSupplier,
         paymentType: questions.paymentType,
         preferredDeliveryTime: {
-          maxDays: '30',
+          maxDays: '45',
           highPricedOption: true,
         },
         colors: {
@@ -84,6 +84,10 @@ export const OrderConfirmation = memo(
     const [ isDelivery, setIsDelivery ] = useState(false);
     const [ isColors, setIsColors ] = useState(false);
     const [ isDone, setIsDone ] = useState(false);
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    });
 
     const isPaymentTypeEmpty = () => {
       return (
@@ -394,14 +398,14 @@ export const OrderConfirmation = memo(
                 type='button'
                 className={cn(
                   classes.conditionButton,
-                  methods.watch('preferredDeliveryTime.maxDays') && classes.filled
+                  methods.getFieldState('preferredDeliveryTime.maxDays').isTouched && classes.filled
                 )}
                 onClick={() => setIsDelivery(true)}
               >
                 Предпочтительный срок поставки
 
                 {
-                  methods.watch('preferredDeliveryTime.maxDays') &&
+                  methods.getFieldState('preferredDeliveryTime.maxDays').isTouched &&
                   <svg
                     width='16'
                     height='16'
