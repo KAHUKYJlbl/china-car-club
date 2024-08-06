@@ -102,6 +102,7 @@ export const ConfirmPhone = ({ phone, setMode, onClose, onLogin }: ConfirmPhoneP
             />
 
             <button
+              aria-label='подтвердить вход'
               type='submit'
               className={cn(classes.button, classes.submit)}
             >
@@ -128,6 +129,7 @@ export const ConfirmPhone = ({ phone, setMode, onClose, onLogin }: ConfirmPhoneP
       </div>
 
       <button
+        aria-label='изменить номер телефона'
         className={classes.button}
         onClick={() => setMode('phone')}
       >

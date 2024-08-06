@@ -72,7 +72,11 @@ export const Filter = memo(
           {
             isActiveFilters &&
             <div className={classes.buttonWrapper}>
-              <button className={classes.xButton} onClick={handleClearAllFiltersClick}>
+              <button
+                aria-label='очистить все фильтры'
+                className={classes.xButton}
+                onClick={handleClearAllFiltersClick}
+              >
                 <svg width="16" height="16" aria-hidden="true">
                   <use xlinkHref="#x" />
                 </svg>
@@ -84,7 +88,8 @@ export const Filter = memo(
         <div className={classes.row}>
           {
             Object.keys(FILTERS).map((filter) => (
-              <div
+              <button
+                aria-label={FILTERS[filter as FilterId]?.name}
                 key={filter}
                 className={cn(classes.filterButton, {[classes.active]: filter === currentFilter})}
                 onClick={() => setCurrentFilter(filter as FilterId)}
@@ -103,7 +108,7 @@ export const Filter = memo(
                   ))))
                   && <div className={classes.activeFilter} />
                 }
-              </div>
+              </button>
             ))
           }
         </div>
@@ -111,7 +116,8 @@ export const Filter = memo(
         <div className={classes.row}>
           {
             FILTERS[currentFilter]?.elements.map((element) => (
-              <div
+              <button
+                aria-label={element.name}
                 key={element.elementId}
                 className={cn(
                   classes.filterElementButton,
@@ -127,7 +133,7 @@ export const Filter = memo(
                 onClick={() => handleActiveFiltersClick(element.filterId || currentFilter, element.elementId)}
               >
                 { element.name }
-              </div>
+              </button>
             ))
           }
 
@@ -138,7 +144,11 @@ export const Filter = memo(
               && activeFilters[element.filterId]
               && ( activeFilters[element.filterId]?.length !== 0 )
             )))) &&
-            <button className={classes.xButton} onClick={() => handleClearFilterClick(currentFilter)}>
+            <button
+              aria-label='очистить фильтры этого типа'
+              className={classes.xButton}
+              onClick={() => handleClearFilterClick(currentFilter)}
+            >
               <svg width="16" height="16" aria-hidden="true">
                 <use xlinkHref="#x" />
               </svg>

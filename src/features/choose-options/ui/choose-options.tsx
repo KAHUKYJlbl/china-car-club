@@ -78,6 +78,7 @@ export const ChooseOptions = memo(
             </div>
 
             <button
+              aria-label={getCurrencyName(currentCurrency)}
               className={classes.button}
               onClick={toggleCurrency}
             >
@@ -86,7 +87,8 @@ export const ChooseOptions = memo(
           </div>
 
           <div className={classes.options}>
-            <div
+            <button
+              aria-label='ЭПТС и СБКТС'
               onClick={() => dispatch(toggleAdd('epts'))}
               className={cn(
                 classes.optionsItem,
@@ -94,9 +96,10 @@ export const ChooseOptions = memo(
               )}
             >
               ЭПТС и СБКТС
-            </div>
+            </button>
 
-            <div
+            <button
+              aria-label='Доп. товары на авто'
               onClick={() => setIsAddProducts(true)}
               className={cn(
                 classes.optionsItem,
@@ -104,9 +107,10 @@ export const ChooseOptions = memo(
               )}
             >
               Доп. товары на авто
-            </div>
+            </button>
 
-            <div
+            <button
+              aria-label='Гарантия на авто'
               onClick={() => dispatch(toggleAdd('guarantee'))}
               className={cn(
                 classes.disabled,
@@ -115,7 +119,7 @@ export const ChooseOptions = memo(
               )}
             >
               Гарантия на авто
-            </div>
+            </button>
           </div>
         </div>
       </div>

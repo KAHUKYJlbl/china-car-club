@@ -9,7 +9,7 @@ import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
 import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
 
 import { getFavoritesCount, getFavoritesLoadingStatus } from '../model/user-selectors';
-import { fetchFavorites } from '../model/api-actions/fetch-favorites';
+import { fetchFavoritesCount } from '../model/api-actions/fetch-favorites-count';
 import classes from './new-header-user.module.sass';
 
 type NewHeaderUserProps = {};
@@ -22,22 +22,28 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
 
   useEffect(() => {
     if (favoritesLoadingStatus.isIdle) {
-      dispatch(fetchFavorites());
+      dispatch(fetchFavoritesCount());
     }
   }, []);
 
 
   return (
     <div className={classes.wrapper}>
-      <CabinetButton icon='cabinet-mycars' callback={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )} />
+      <CabinetButton
+        label='мои автомобили'
+        icon='cabinet-mycars'
+        callback={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+      />
 
       <CabinetButton
+        label='избранное'
         icon='cabinet-favorite'
         labelCount={favoritesCount}
         callback={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
       />
 
       <CabinetButton
+        label='выход'
         icon='cabinet-profile'
         callback={() => {
           clearToken();

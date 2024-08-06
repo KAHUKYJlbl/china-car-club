@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import classes from './header-button.module.sass';
 
 type HeaderButtonProps = {
+  label: string;
   text?: string;
   icon?: string;
   type?: 'dark' | 'light';
@@ -11,16 +12,17 @@ type HeaderButtonProps = {
   onClick: () => void;
 };
 
-export const HeaderButton = ({text, icon, type = 'dark', labelCount, onClick}: HeaderButtonProps) => {
+export const HeaderButton = ({text, icon, type = 'dark', labelCount, onClick, label}: HeaderButtonProps) => {
   const isMobile = useMediaQuery({ maxWidth: 960 });
 
   return (
-    <div
+    <button
       className={cn(
         {[classes.light]: type === 'light'},
         classes.wrapper
       )}
       onClick={onClick}
+      aria-label={label}
     >
       {
         icon &&
@@ -46,6 +48,6 @@ export const HeaderButton = ({text, icon, type = 'dark', labelCount, onClick}: H
           {labelCount}
         </p>
       }
-    </div>
+    </button>
   );
 };

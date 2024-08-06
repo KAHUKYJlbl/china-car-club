@@ -82,7 +82,7 @@ export const OrderButtons = memo(
     return (
       <div className={classes.wrapper}>
         <div className={classes.mainButtons}>
-          <button onClick={orderHandler}>
+          <button aria-label='заказать машину' onClick={orderHandler}>
             Хочу спеццену дешевле
           </button>
         </div>

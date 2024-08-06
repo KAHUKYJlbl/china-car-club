@@ -9,7 +9,7 @@ import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { HeaderButton } from "../../../shared/ui/header-button/ui/header-button";
 
 import { useGeolocation } from "../lib/hooks/use-geolocation";
-import { fetchFavorites } from "../model/api-actions/fetch-favorites";
+import { fetchFavoritesCount } from "../model/api-actions/fetch-favorites-count";
 import { fetchCity } from "../model/api-actions/fetch-city";
 import { fetchHash } from "../model/api-actions/fetch-hash";
 import {
@@ -39,7 +39,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
 
   useEffect(() => {
     if (favoritesLoadingStatus.isIdle) {
-      dispatch(fetchFavorites());
+      dispatch(fetchFavoritesCount());
     }
   }, []);
 
@@ -73,6 +73,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
           isAuth &&
           <>
             <HeaderButton
+              label='мои автомобили'
               icon='mycars'
               text='Мои&nbsp;автомобили'
               type='light'
@@ -80,6 +81,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
             />
 
             <HeaderButton
+              label='избранное'
               icon='favorite'
               text='Избранное'
               type='light'
@@ -89,7 +91,13 @@ export const HeaderUser = memo(({}: headerUserProps) => {
           </>
         }
 
-        <HeaderButton icon='profile' text={isAuth ? 'Выйти' : 'Войти'} type='light' onClick={handleLoginClick} />
+        <HeaderButton
+          label={isAuth ? 'Выйти' : 'Войти'}
+          icon='profile'
+          text={isAuth ? 'Выйти' : 'Войти'}
+          type='light'
+          onClick={handleLoginClick}
+        />
       </div>
 
       {

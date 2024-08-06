@@ -25,6 +25,7 @@ export { postRefresh } from "./model/api-actions/post-refresh";
 export { fetchOrders } from './model/api-actions/fetch-orders';
 export { fetchCalculations } from './model/api-actions/fetch-calculations';
 export { fetchFavorites } from './model/api-actions/fetch-favorites';
+export { fetchFavoritesCount } from './model/api-actions/fetch-favorites-count';
 export { fetchFavoritesById } from './model/api-actions/fetch-favorites-by-id';
 export { postFavorite } from './model/api-actions/post-favorite';
 export { deleteFavorite } from './model/api-actions/delete-favorite';

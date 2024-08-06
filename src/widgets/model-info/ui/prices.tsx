@@ -87,6 +87,7 @@ export const Prices = memo(
           <div className={classes.row}>
             <div className={classes.buttons}>
               <button
+                aria-label={TaxesTypes.PERS}
                 className={cn({[classes.current]: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL})}
                 onClick={() => dispatch(setCurrentTax(TaxesTypes.PERS))}
               >
@@ -94,6 +95,7 @@ export const Prices = memo(
               </button>
 
               <button
+                aria-label={TaxesTypes.CORP}
                 className={cn({[classes.current]: currentTax === TaxesTypes.CORP || currentTax === TaxesTypes.VAT})}
                 onClick={() => dispatch(setCurrentTax(TaxesTypes.CORP))}
               >
@@ -103,6 +105,7 @@ export const Prices = memo(
             </div>
 
             <button
+              aria-label='подробнее о налогах'
               onClick={() => setIsTaxes(true)}
             >
               Подробнее

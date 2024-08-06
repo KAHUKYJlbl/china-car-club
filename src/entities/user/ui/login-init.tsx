@@ -36,6 +36,7 @@ export const LoginInit = ({setMode}: LoginInitProps) => {
 
         <div className={classes.main}>
           <button
+            aria-label='войти по номеру телефона'
             className={classes.button}
             onClick={() => setMode('phone')}
           >
@@ -47,6 +48,7 @@ export const LoginInit = ({setMode}: LoginInitProps) => {
           </p>
 
           <Link
+            aria-label='войти через телеграм'
             to={`tg://resolve?domain=ID_ChinaCarClub_bot&start=auth_hash_${user.hash}`}
             className={cn(classes.button, classes.telegram)}
             onClick={() => setMode('confirm-telegram')}
@@ -69,7 +71,7 @@ export const LoginInit = ({setMode}: LoginInitProps) => {
       </div>
 
       <div className={cn(classes.wrapper, classes.secondary)}>
-        <button className={classes.button}>
+        <button aria-label='вход для дилеров' className={classes.button}>
           Вход для дилеров и поставщиков
         </button>
 

@@ -82,6 +82,7 @@ export const ChooseDelivery = memo(
         </p>
 
         <button
+          aria-label='рассчитать стоимость'
           className={classes.button}
           onClick={calculateHandler}
         >
