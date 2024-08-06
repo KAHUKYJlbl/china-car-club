@@ -11,7 +11,12 @@ type DeliveryProps = {
 
 export const Delivery = memo(
   ({ onClose }: DeliveryProps) => {
-    const { register, watch } = useFormContext<OrderFormType>();
+    const { register, watch, setValue } = useFormContext<OrderFormType>();
+
+    const closeHandler = () => {
+      setValue('preferredDeliveryTime.maxDays', watch('preferredDeliveryTime.maxDays'), { shouldTouch: true });
+      onClose();
+    }
 
     return (
       <div className={classes.wrapper}>
@@ -154,7 +159,7 @@ export const Delivery = memo(
           </p>
         </div>
 
-        <button aria-label='сохранить' className={classes.saveButton} onClick={onClose}>
+        <button aria-label='сохранить' className={classes.saveButton} onClick={closeHandler}>
           Сохранить
         </button>
       </div>
