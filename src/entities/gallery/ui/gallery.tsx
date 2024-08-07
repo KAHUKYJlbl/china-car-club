@@ -159,7 +159,7 @@ export const Gallery = memo(
         <div
           className={classes.background}
           style={{
-            backgroundImage: `url(${process.env.STATIC_URL}${gallery[currentImage].url.original})`,
+            backgroundImage: `url(${process.env.STATIC_URL || `${window.location.origin}/storage`}${gallery[currentImage].url.original})`,
             backgroundSize: "cover"
           }}
         >
