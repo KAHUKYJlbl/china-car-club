@@ -111,9 +111,15 @@ export const Gallery = memo(
         (image) =>
           new Promise<string>((resolve, reject) => {
             const img = new Image();
-            img.src = `${process.env.STATIC_URL}${image.url.big}`;
+            img.src = `${
+              process.env.STATIC_URL || `${window.location.origin}/storage`
+            }${image.url.big}`;
             img.onload = () =>
-              resolve(`${process.env.STATIC_URL}${image.url.big}`);
+              resolve(
+                `${
+                  process.env.STATIC_URL || `${window.location.origin}/storage`
+                }${image.url.big}`
+              );
             img.onerror = () => reject();
           })
       );
@@ -193,7 +199,9 @@ export const Gallery = memo(
         <div
           className={classes.background}
           style={{
-            backgroundImage: `url(/storage${gallery[currentImage].url.original})`,
+            backgroundImage: `url(${
+              process.env.STATIC_URL || `${window.location.origin}/storage`
+            }${gallery[currentImage].url.original})`,
             backgroundSize: "cover",
           }}
         >
