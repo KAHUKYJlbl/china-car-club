@@ -193,7 +193,7 @@ export const Gallery = memo(
         <div
           className={classes.background}
           style={{
-            backgroundImage: `url(${window.location.origin}/storage}${gallery[currentImage].url.original})`,
+            backgroundImage: `url(/storage${gallery[currentImage].url.original})`,
             backgroundSize: "cover",
           }}
         >
