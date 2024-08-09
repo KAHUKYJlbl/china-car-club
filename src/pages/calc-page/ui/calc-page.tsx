@@ -1,6 +1,6 @@
-import { MAIN_HEADING, MAIN_SUBHEADING } from '../../../app/settings/headings';
-import { Calculator } from '../../../widgets/calculator';
-import { Layout } from '../../../widgets/layout'
+import { MAIN_HEADING, MAIN_SUBHEADING } from "../../../app/settings/headings";
+import { Calculator } from "../../../widgets/calculator";
+import { Layout } from "../../../widgets/layout";
 
 const CalcPage = (): JSX.Element => {
   return (
@@ -12,7 +12,7 @@ const CalcPage = (): JSX.Element => {
     >
       <Calculator />
     </Layout>
-  )
-}
+  );
+};
 
 export default CalcPage;

@@ -1,7 +1,5 @@
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
-// import dayjs from 'dayjs';
-// import cn from 'classnames';
 
 import { Currencies, getCurrencyExchange } from "../../currency";
 import { FILTERS } from "../../../app/settings/filters";
@@ -32,9 +30,7 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
 
   const useFavoriteList = () => {
     return favoritesList.find(
-      (element) =>
-        element.favorableId ===
-        (favorite.cardData.specification.id || favorite.cardData.series.id)
+      (element) => element.favorableId === (favorite.cardData.specification.id || favorite.cardData.series.id)
     )?.id;
   };
 
@@ -47,8 +43,7 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
     dispatch(
       postFavorite({
         typeId: favorite.type,
-        favorableId:
-          favorite.cardData.specification.id || favorite.cardData.series.id,
+        favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
       })
     );
   };
@@ -58,44 +53,33 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
       <div className={classes.info}>
         <p className={classes.header}>
           <span>
-            {FILTERS.body!.elements.find(
-              (element) => element.elementId === favorite.cardData.bodyTypeId
-            )?.name || ""}
+            {FILTERS.body!.elements.find((element) => element.elementId === favorite.cardData.bodyTypeId)?.name || ""}
           </span>
 
-          <span className={classes.grey}>
-            {favorite.type === 1 ? "Комплектация модели" : "Модель авто"}
-          </span>
+          <span className={classes.grey}>{favorite.type === 1 ? "Комплектация модели" : "Модель авто"}</span>
         </p>
 
         <img
           src={
             favorite.cardData.specification
-              ? `${
-                  process.env.STATIC_URL || `${window.location.origin}/storage`
-                }/specification/${favorite.cardData.specification.id}.jpg`
+              ? `${process.env.STATIC_URL || `${window.location.origin}/storage`}/specification/${
+                  favorite.cardData.specification.id
+                }.jpg`
               : "./images/noimage.jpg"
           }
         />
 
         <p className={classes.model}>
           <span className={classes.bold}>
-            {favorite.cardData.manufacturer.name.ru ||
-              favorite.cardData.manufacturer.name.ru}
+            {favorite.cardData.manufacturer.name.ru || favorite.cardData.manufacturer.name.ru}
             <br />
-            {favorite.cardData.series.name.ru ||
-              favorite.cardData.series.name.ch}
+            {favorite.cardData.series.name.ru || favorite.cardData.series.name.ch}
           </span>
 
           {favorite.cardData.specification && (
             <>
-              <span>
-                {favorite.cardData.specification.name.ru ||
-                  favorite.cardData.specification.name.ch}
-              </span>
-              <span className={classes.grey}>
-                {favorite.cardData.year} поколение • 2024 выпуск
-              </span>
+              <span>{favorite.cardData.specification.name.ru || favorite.cardData.specification.name.ch}</span>
+              <span className={classes.grey}>{favorite.cardData.year} поколение • 2024 выпуск</span>
             </>
           )}
         </p>
@@ -104,27 +88,18 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
           {favorite.cardData.specification
             ? [
                 FILTERS.engine!.elements.find(
-                  (element) =>
-                    element.elementId ===
-                    favorite.cardData.parameters.engineTypeId
+                  (element) => element.elementId === favorite.cardData.parameters.engineTypeId
                 )?.name || null,
-                FILTERS.body!.elements.find(
-                  (element) =>
-                    element.elementId ===
-                    favorite.cardData.parameters?.bodyTypeId
-                )?.name || null,
+                FILTERS.body!.elements.find((element) => element.elementId === favorite.cardData.parameters?.bodyTypeId)
+                  ?.name || null,
                 `${
                   FILTERS.drive!.elements.find(
-                    (element) =>
-                      element.elementId ===
-                      favorite.cardData.parameters?.driveTypeId
+                    (element) => element.elementId === favorite.cardData.parameters?.driveTypeId
                   )?.name
                 } привод` || null,
                 `${
                   FILTERS.transmission!.elements.find(
-                    (element) =>
-                      element.elementId ===
-                      favorite.cardData.parameters?.transmissionTypeId
+                    (element) => element.elementId === favorite.cardData.parameters?.transmissionTypeId
                   )?.name
                 } коробка передач` || null,
                 favorite.cardData.parameters.powerReserve &&
@@ -138,23 +113,10 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
         <p className={classes.price}>
           <span className={classes.grey}>Мин. цена в китае</span>
           <span className={classes.bold}>
-            {priceFormat(
-              getCurrencyExchange(
-                favorite.cardData.price.min,
-                Currencies.RUB,
-                currency
-              )
-            )}{" "}
-            ₽
+            {priceFormat(getCurrencyExchange(favorite.cardData.price.min, Currencies.RUB, currency))} ₽
             {favorite.cardData.price.max &&
               ` —
-                ${priceFormat(
-                  getCurrencyExchange(
-                    favorite.cardData.price.max,
-                    Currencies.RUB,
-                    currency
-                  )
-                )} ₽`}
+                ${priceFormat(getCurrencyExchange(favorite.cardData.price.max, Currencies.RUB, currency))} ₽`}
           </span>
         </p>
       </div>
@@ -172,18 +134,16 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
         </button>
 
         <button
-          aria-label={
-            useFavoriteList() ? "удалить из избранного" : "добавить в избранное"
-          }
+          aria-label={useFavoriteList() ? "удалить из избранного" : "добавить в избранное"}
           className={classes.favorite}
           onClick={handleFavorite}
         >
-          <svg width="16" height="16" aria-hidden="true">
-            <use
-              xlinkHref={`#${
-                useFavoriteList() ? "favorite-remove" : "favorite-add"
-              }`}
-            />
+          <svg
+            width="16"
+            height="16"
+            aria-hidden="true"
+          >
+            <use xlinkHref={`#${useFavoriteList() ? "favorite-remove" : "favorite-add"}`} />
           </svg>
         </button>
       </div>

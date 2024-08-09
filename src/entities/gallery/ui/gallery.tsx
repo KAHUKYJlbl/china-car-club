@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import cn from "classnames";
 
@@ -9,28 +9,21 @@ import { getName } from "../../../entities/manufacturer";
 import { ImgUrlType } from "../../../entities/specification";
 import {
   deleteFavorite,
-  fetchFavorites,
   fetchFavoritesById,
+  fetchHash,
+  getAuthStatus,
   getFavoritesById,
+  Login,
   postFavorite,
 } from "../../user";
 
-import {
-  getPromoGallery,
-  getPromoGalleryLoadingStatus,
-} from "../model/gallery-selectors";
+import { getPromoGallery, getPromoGalleryLoadingStatus } from "../model/gallery-selectors";
 import { GalleryPagination } from "./gallery-pagination";
 import { GalleryType } from "../lib/types";
 import classes from "./gallery.module.sass";
 
 type GalleryProps = {
-  handlePromo?:
-    | ((
-        promoManufacturer: number,
-        promoModel: number,
-        promoSpecification: number
-      ) => void)
-    | null;
+  handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void) | null;
   manufacturerId: number | null | undefined;
   specificationId: number | null;
   modelId: number | null;
@@ -52,11 +45,12 @@ export const Gallery = memo(
     const [currentImage, setCurrentImage] = useState(initSlide);
     const [preloadedImages, setPreloadedImages] = useState<string[]>([]);
     const [gallery, setGallery] = useState<GalleryType[]>([]);
+    const [isLogin, setIsLogin] = useState(false);
+    const [favoriteIdToAdd, setFavoriteIdToAdd] = useState<number | null>(null);
+    const isAuth = useAppSelector(getAuthStatus);
     const name = useAppSelector((state) => getName(state, modelId));
     const promoGallery = useAppSelector(getPromoGallery);
-    const promoGalleryLoadingStatus = useAppSelector(
-      getPromoGalleryLoadingStatus
-    );
+    const promoGalleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
     const favoritesList = useAppSelector(getFavoritesById);
 
     const handlers = useSwipeable({
@@ -96,7 +90,7 @@ export const Gallery = memo(
     }, [specificationId, galleryList, promoGallery.length]);
 
     useEffect(() => {
-      if (gallery.length > 0) {
+      if (gallery.length > 0 && isAuth) {
         dispatch(
           fetchFavoritesById({
             typeId: 1,
@@ -104,22 +98,16 @@ export const Gallery = memo(
           })
         );
       }
-    }, [gallery]);
+    }, [gallery, isAuth]);
 
     useEffect(() => {
       const promises = gallery.map(
         (image) =>
           new Promise<string>((resolve, reject) => {
             const img = new Image();
-            img.src = `${
-              process.env.STATIC_URL || `${window.location.origin}/storage`
-            }${image.url.big}`;
+            img.src = `${process.env.STATIC_URL || `${window.location.origin}/storage`}${image.url.big}`;
             img.onload = () =>
-              resolve(
-                `${
-                  process.env.STATIC_URL || `${window.location.origin}/storage`
-                }${image.url.big}`
-              );
+              resolve(`${process.env.STATIC_URL || `${window.location.origin}/storage`}${image.url.big}`);
             img.onerror = () => reject();
           })
       );
@@ -134,22 +122,12 @@ export const Gallery = memo(
     }, [gallery]);
 
     function handleNext() {
-      setCurrentImage((current) =>
-        current + 1 === gallery!.length ? 0 : current + 1
-      );
+      setCurrentImage((current) => (current + 1 === gallery!.length ? 0 : current + 1));
     }
 
     function handlePrev() {
-      setCurrentImage((current) =>
-        current === 0 ? gallery!.length - 1 : current - 1
-      );
+      setCurrentImage((current) => (current === 0 ? gallery!.length - 1 : current - 1));
     }
-
-    function handlePage(page: number) {
-      setCurrentImage(page);
-    }
-
-    const handlePagination = useCallback(handlePage, []);
 
     const handlePromoClick = () => {
       if (handlePromo && gallery) {
@@ -164,44 +142,60 @@ export const Gallery = memo(
     if (
       gallery.length === 0 ||
       preloadedImages.length === 0 ||
-      (handlePromo &&
-        (promoGalleryLoadingStatus.isIdle ||
-          promoGalleryLoadingStatus.isLoading))
+      (handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading))
     ) {
       return <LoadingSpinner spinnerType="widget" />;
     }
 
-    const useFavoriteList = () => {
-      return favoritesList.find(
-        (element) =>
-          element.favorableId === gallery[currentImage].specificationId
-      )?.id;
+    const useFavoriteList = (id: number) => {
+      return favoritesList.find((element) => element.favorableId === gallery[id].specificationId)?.id;
     };
 
-    const handleFavorite = () => {
-      if (useFavoriteList()) {
-        dispatch(deleteFavorite(useFavoriteList() as number)).then(() =>
-          dispatch(fetchFavorites())
+    const onLogin = () => {
+      if (favoriteIdToAdd !== null) {
+        handleFavorite(favoriteIdToAdd, true);
+        setFavoriteIdToAdd(null);
+      }
+      setIsLogin(false);
+    };
+
+    const handleLogin = (id: number) => {
+      setFavoriteIdToAdd(id);
+      dispatch(fetchHash());
+      setIsLogin(true);
+    };
+
+    const handleFavorite = (id: number, auth: boolean = isAuth) => {
+      if (useFavoriteList(id)) {
+        dispatch(deleteFavorite(useFavoriteList(id) as number));
+        return;
+      }
+
+      if (auth) {
+        dispatch(
+          postFavorite({
+            typeId: 1,
+            favorableId: gallery[id || currentImage].specificationId,
+          })
         );
         return;
       }
 
-      dispatch(
-        postFavorite({
-          typeId: 1,
-          favorableId: gallery[currentImage].specificationId,
-        })
-      ).then(() => dispatch(fetchFavorites()));
+      handleLogin(id);
     };
 
     return (
-      <div key={currentImage} className={classes.wrapper} {...handlers}>
+      <div
+        key={currentImage}
+        className={classes.wrapper}
+        {...handlers}
+      >
         <div
           className={classes.background}
           style={{
-            backgroundImage: `url(${
-              process.env.STATIC_URL || `${window.location.origin}/storage`
-            }${gallery[currentImage].url.original})`,
+            backgroundImage: `url(${process.env.STATIC_URL || `${window.location.origin}/storage`}${
+              gallery[currentImage].url.original
+            })`,
             backgroundSize: "cover",
           }}
         >
@@ -217,7 +211,7 @@ export const Gallery = memo(
               <GalleryPagination
                 count={gallery.length}
                 current={currentImage}
-                onClick={handlePagination}
+                onClick={setCurrentImage}
               />
             )}
 
@@ -235,13 +229,24 @@ export const Gallery = memo(
                   onClick={handlePrev}
                   aria-label="предыдущее изображение"
                 >
-                  <svg width="9" height="8" aria-hidden="true">
+                  <svg
+                    width="9"
+                    height="8"
+                    aria-hidden="true"
+                  >
                     <use xlinkHref="#arrow-left" />
                   </svg>
                 </button>
 
-                <button onClick={handleNext} aria-label="следующее изображение">
-                  <svg width="9" height="8" aria-hidden="true">
+                <button
+                  onClick={handleNext}
+                  aria-label="следующее изображение"
+                >
+                  <svg
+                    width="9"
+                    height="8"
+                    aria-hidden="true"
+                  >
                     <use xlinkHref="#arrow-right" />
                   </svg>
                 </button>
@@ -261,19 +266,26 @@ export const Gallery = memo(
               <button
                 aria-label="добавить в избранное"
                 className={classes.favorite}
-                onClick={handleFavorite}
+                onClick={() => handleFavorite(currentImage)}
               >
-                <svg width="16" height="16" aria-hidden="true">
-                  <use
-                    xlinkHref={`#${
-                      useFavoriteList() ? "favorite-remove" : "favorite-add"
-                    }`}
-                  />
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <use xlinkHref={`#${useFavoriteList(currentImage) ? "favorite-remove" : "favorite-add"}`} />
                 </svg>
               </button>
             </div>
           </div>
         </div>
+
+        {isLogin && (
+          <Login
+            onClose={() => setIsLogin(false)}
+            onLogin={onLogin}
+          />
+        )}
       </div>
     );
   }

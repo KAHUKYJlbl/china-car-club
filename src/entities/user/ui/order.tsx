@@ -21,45 +21,31 @@ export const Order = memo(({ order }: OrderProps) => {
         <p className={classes.header}>
           <span>Заявка</span>
 
-          <span className={classes.grey}>
-            {dayjs(order.createdAt).locale("ru").format("D MMM, в H:mm")}
-          </span>
+          <span className={classes.grey}>{dayjs(order.createdAt).locale("ru").format("D MMM, в H:mm")}</span>
         </p>
 
         <img
-          src={`${
-            process.env.STATIC_URL || `${window.location.origin}/storage`
-          }/specification/${order.specification.id}.jpg`}
+          src={`${process.env.STATIC_URL || `${window.location.origin}/storage`}/specification/${
+            order.specification.id
+          }.jpg`}
         />
 
         <p className={classes.model}>
           <span className={classes.bold}>
-            {order.specification.series.manufacturer.name.ru ||
-              order.specification.series.manufacturer.name.ch}
+            {order.specification.series.manufacturer.name.ru || order.specification.series.manufacturer.name.ch}
             <br />
-            {order.specification.series.name.ru ||
-              order.specification.series.name.ch}
+            {order.specification.series.name.ru || order.specification.series.name.ch}
           </span>
 
-          <span>
-            {order.specification.name.ru || order.specification.name.ch}
-          </span>
+          <span>{order.specification.name.ru || order.specification.name.ch}</span>
 
-          <span className={classes.grey}>
-            {order.specification.year} поколение • 2024 выпуск
-          </span>
+          <span className={classes.grey}>{order.specification.year} поколение • 2024 выпуск</span>
         </p>
 
         <p className={classes.properties}>
-          <span>
-            Растаможивание на {order.priceTypeId === 2 ? "физлицо" : "юрлицо"}
-          </span>
+          <span>Растаможивание на {order.priceTypeId === 2 ? "физлицо" : "юрлицо"}</span>
 
-          <span>
-            {order.priceTypeId === 2
-              ? "Для личного пользования"
-              : "Без вычета НДС"}
-          </span>
+          <span>{order.priceTypeId === 2 ? "Для личного пользования" : "Без вычета НДС"}</span>
 
           {order.availabilityOfEpts && <span>Получение ЭПТС и СБКТС</span>}
 
