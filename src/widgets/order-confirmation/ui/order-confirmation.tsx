@@ -107,7 +107,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   const isPaymentTypeEmpty = () => {
     return (
       !methods.watch("paymentType.1") &&
-      !methods.watch("paymentType.3") &&
+      !methods.watch("paymentType.7") &&
       !methods.watch("paymentType.4") &&
       !methods.watch("paymentType.5") &&
       !methods.watch("paymentType.6")

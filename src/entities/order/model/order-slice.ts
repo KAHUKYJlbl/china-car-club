@@ -1,16 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { NameSpace } from '../../../app/provider/store';
-import { FetchStatus } from '../../../shared/api/fetch-status';
-import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
+import { NameSpace } from "../../../app/provider/store";
+import { FetchStatus } from "../../../shared/api/fetch-status";
+import { AddsType, CurrentColorType, TaxesTypes } from "../../../widgets/model-info";
 
-import {
-  OfferType,
-  QuestionsType,
-} from '../lib/types';
-import { postOrder } from './api-actions/post-order';
-import { postAnswers } from './api-actions/post-answers';
-import { fetchOffers } from './api-actions/fetch-offers';
+import { OfferType, QuestionsType } from "../lib/types";
+import { postOrder } from "./api-actions/post-order";
+import { postAnswers } from "./api-actions/post-answers";
+import { fetchOffers } from "./api-actions/fetch-offers";
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -28,10 +25,10 @@ type InitialState = {
 
 const initialState: InitialState = {
   currentTax: TaxesTypes.PERS,
-  adds: {epts: false, guarantee: false, options: false},
+  adds: { epts: false, guarantee: false, options: false },
   addItems: [],
   addItemsPrice: 0,
-  currentColor: {int: null, ext: null, isInteriorFirst: false},
+  currentColor: { int: null, ext: null, isInteriorFirst: false },
   order: null,
   orderLoadingStatus: FetchStatus.Idle,
   questionsLoadingStatus: FetchStatus.Idle,
@@ -39,10 +36,10 @@ const initialState: InitialState = {
     carSupplier: undefined,
     paymentType: {
       1: false,
-      3: false,
       4: false,
       5: false,
       6: false,
+      7: false,
     },
   },
   offers: [],
@@ -65,10 +62,10 @@ export const orderSlice = createSlice({
         carSupplier: undefined,
         paymentType: {
           1: false,
-          3: false,
           4: false,
           5: false,
           6: false,
+          7: false,
         },
       };
     },
@@ -78,12 +75,12 @@ export const orderSlice = createSlice({
     setCurrentTax: (state, action: PayloadAction<TaxesTypes>) => {
       state.currentTax = action.payload;
     },
-    setAdd: (state, action: PayloadAction<{add: AddsType, value: boolean}>) => {
-      state.adds = {...state.adds, [action.payload.add]: action.payload.value};
+    setAdd: (state, action: PayloadAction<{ add: AddsType; value: boolean }>) => {
+      state.adds = { ...state.adds, [action.payload.add]: action.payload.value };
     },
     toggleAdd: (state, action: PayloadAction<AddsType>) => {
       console.log(action.payload);
-      state.adds = {...state.adds, [action.payload]: !state.adds[action.payload]};
+      state.adds = { ...state.adds, [action.payload]: !state.adds[action.payload] };
     },
     addItem: (state, action: PayloadAction<number>) => {
       state.addItems = [...state.addItems, action.payload];
@@ -131,8 +128,19 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchOffers.rejected, (state) => {
         state.offersLoadingStatus = FetchStatus.Failed;
-      })
+      });
   },
 });
 
-export const { setCurrentTax, setAdd, toggleAdd, addItem, removeItem, increasePrice, decreasePrice, setCurrentColor, resetOrder, setQuestions } = orderSlice.actions;
+export const {
+  setCurrentTax,
+  setAdd,
+  toggleAdd,
+  addItem,
+  removeItem,
+  increasePrice,
+  decreasePrice,
+  setCurrentColor,
+  resetOrder,
+  setQuestions,
+} = orderSlice.actions;

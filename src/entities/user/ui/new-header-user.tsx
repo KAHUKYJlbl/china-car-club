@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
-import { logout, setGeolocation } from "../../../entities/user/model/user-slice";
+import { login, logout, setGeolocation } from "../../../entities/user/model/user-slice";
 import { AppRoute } from "../../../app/provider/router";
-import { clearToken } from "../../../shared/api/token";
+import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
 import { CabinetButton } from "../../../shared/ui/header-button";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -30,6 +31,7 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const dispatch = useAppDispatch();
   const storedLocation = useAppSelector(getGeolocation);
   const location = useGeolocation(storedLocation);
+  const [cookies] = useCookies([AUTH_TOKEN_KEY_NAME]);
 
   const [isLogin, setIsLogin] = useState(false);
 
@@ -44,6 +46,12 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
       dispatch(fetchFavoritesCount());
     }
   }, [isAuth, favoritesByIdLoadingStatus.isSuccess]);
+
+  useEffect(() => {
+    if (cookies[AUTH_TOKEN_KEY_NAME]) {
+      dispatch(login());
+    }
+  }, [cookies[AUTH_TOKEN_KEY_NAME]]);
 
   useEffect(() => {
     if (location.latitude && location.longitude) {

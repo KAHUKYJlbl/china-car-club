@@ -52,9 +52,9 @@ export const Payment = memo(({ onClose }: PaymentProps) => {
         </li>
 
         <li>
-          <label className={cn(watch("paymentType.3") && classes.checked)}>
-            <div className={cn(classes.checkbox, watch("paymentType.3") && classes.checked)}>
-              {watch("paymentType.3") && (
+          <label className={cn(watch("paymentType.7") && classes.checked)}>
+            <div className={cn(classes.checkbox, watch("paymentType.7") && classes.checked)}>
+              {watch("paymentType.7") && (
                 <svg
                   width="20"
                   height="20"
@@ -67,7 +67,7 @@ export const Payment = memo(({ onClose }: PaymentProps) => {
               <input
                 type="checkbox"
                 className="visually-hidden"
-                {...register("paymentType.3")}
+                {...register("paymentType.7")}
               />
             </div>
 

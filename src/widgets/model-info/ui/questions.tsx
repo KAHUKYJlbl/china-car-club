@@ -32,10 +32,10 @@ export const Questions = memo(({ setConfirmation }: QuestionsProps) => {
       carSupplier: undefined,
       paymentType: {
         "1": false,
-        "3": false,
         "4": false,
         "5": false,
         "6": false,
+        "7": false,
       },
       preferredDeliveryTime: {
         maxDays: null,
@@ -53,7 +53,7 @@ export const Questions = memo(({ setConfirmation }: QuestionsProps) => {
   const isPaymentTypeEmpty = () => {
     return (
       !watch("paymentType.1") &&
-      !watch("paymentType.3") &&
+      !watch("paymentType.7") &&
       !watch("paymentType.4") &&
       !watch("paymentType.5") &&
       !watch("paymentType.6")
@@ -317,9 +317,9 @@ export const Questions = memo(({ setConfirmation }: QuestionsProps) => {
             </li>
 
             <li>
-              <label className={cn(watch("paymentType.3") && classes.checked)}>
-                <div className={cn(classes.checkbox, watch("paymentType.3") && classes.checked)}>
-                  {watch("paymentType.3") && (
+              <label className={cn(watch("paymentType.7") && classes.checked)}>
+                <div className={cn(classes.checkbox, watch("paymentType.7") && classes.checked)}>
+                  {watch("paymentType.7") && (
                     <svg
                       width="20"
                       height="20"
@@ -332,7 +332,7 @@ export const Questions = memo(({ setConfirmation }: QuestionsProps) => {
                   <input
                     type="checkbox"
                     className="visually-hidden"
-                    {...register("paymentType.3")}
+                    {...register("paymentType.7")}
                   />
                 </div>
 
