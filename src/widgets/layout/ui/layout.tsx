@@ -24,7 +24,7 @@ type LayoutProps = {
   };
 };
 
-export const Layout = ({ title, children, heading, isMycars }: PropsWithChildren<LayoutProps>): JSX.Element => {
+export const Layout = ({ title, children, isMycars }: PropsWithChildren<LayoutProps>): JSX.Element => {
   const dispatch = useAppDispatch();
   const rne = new RussianNounsJS.Engine();
 
@@ -86,7 +86,7 @@ export const Layout = ({ title, children, heading, isMycars }: PropsWithChildren
           )}`}
         </h1>
 
-        {heading.subheading && <p className={classes.subheading}>{heading.subheading}</p>}
+        {/* {heading.subheading && <p className={classes.subheading}>{heading.subheading}</p>} */}
       </div>
 
       {children}
