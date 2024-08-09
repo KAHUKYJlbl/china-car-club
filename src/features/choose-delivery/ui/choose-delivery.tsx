@@ -1,9 +1,9 @@
-import { memo, useState } from 'react';
-import queryString from 'query-string';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { memo, useState } from "react";
+import queryString from "query-string";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import { AppRoute } from '../../../app/provider/router';
+import { AppRoute } from "../../../app/provider/router";
 import {
   fetchHash,
   postStatistics,
@@ -11,54 +11,56 @@ import {
   Login,
   getCurrentCity,
   getAuthStatus,
-  postRefresh
-} from '../../../entities/user';
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
+  postRefresh,
+} from "../../../entities/user";
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
-import { useUtm } from '../lib/hooks/use-utm';
-import classes from './choose-delivery.module.sass';
+import { useUtm } from "../lib/hooks/use-utm";
+import classes from "./choose-delivery.module.sass";
 
 type ChooseDeliveryProps = {
   modelId: number | null;
   specificationId: number | null;
-}
+};
 
 export const ChooseDelivery = memo(
   ({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [ isLogin, setIsLogin ] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
     const isAuth = useAppSelector(getAuthStatus);
     const geolocation = useAppSelector(getGeolocation);
     const city = useAppSelector(getCurrentCity);
     const utm = useUtm();
 
     const loginHandler = () => {
-      if ( modelId && specificationId ) {
-        dispatch(postStatistics({
-          specificationId: specificationId,
-          customerLocation: geolocation,
-          customerDelivery: {
-            countryId: null,
-            cityId: city,
-          },
-          utm,
-        }))
-          .then(() => {
-            dispatch(postRefresh());
-          });
+      if (modelId && specificationId) {
+        dispatch(
+          postStatistics({
+            specificationId: specificationId,
+            customerLocation: geolocation,
+            customerDelivery: {
+              countryId: null,
+              cityId: city,
+            },
+            utm,
+          })
+        ).then(() => {
+          dispatch(postRefresh());
+        });
 
-
-        navigate(queryString.stringifyUrl({
-          url: AppRoute.Model,
-          query: {
-            model: modelId.toString(),
-            spec: specificationId.toString(),
-          }
-        }))
+        navigate(
+          queryString.stringifyUrl({
+            url: AppRoute.Model,
+            query: {
+              model: modelId.toString(),
+              spec: specificationId.toString(),
+            },
+          })
+        );
       }
-    }
+    };
 
     const calculateHandler = () => {
       if (modelId && specificationId) {
@@ -69,20 +71,24 @@ export const ChooseDelivery = memo(
           setIsLogin(true);
         }
       } else {
-        toast('Выберите комплектацию', {type: 'warning'});
+        toast("Выберите комплектацию", { type: "warning" });
       }
-    }
+    };
 
     return (
       <div className={classes.wrapper}>
         <p>
-          <span className={classes.big}>❷ Рассчитайте под&nbsp;ключ доставку из&nbsp;Китая</span>
-
-          <br/>Сравните варианты растаможивания по&nbsp;каждой комплектации автомобиля. Запросите цены наших партнёров, чтобы выбрать лучшее предложение на&nbsp;рынке
+          <span className={classes.big}>
+            ❷ Рассчитайте под&nbsp;ключ доставку из&nbsp;Китая
+          </span>
+          <br />
+          Сравните варианты растаможивания по&nbsp;каждой комплектации
+          автомобиля. Запросите цены наших партнёров, чтобы выбрать лучшее
+          предложение на&nbsp;рынке
         </p>
 
         <button
-          aria-label='рассчитать стоимость'
+          aria-label="рассчитать стоимость"
           className={classes.button}
           onClick={calculateHandler}
         >
@@ -90,17 +96,14 @@ export const ChooseDelivery = memo(
         </button>
 
         <p className={classes.small}>
-          Нажимая кнопку, даю согласие на&nbsp;обработку моих персональных данных в&nbsp;соответствии с&nbsp;политикой конфиденциальности
+          Нажимая кнопку, даю согласие на&nbsp;обработку моих персональных
+          данных в&nbsp;соответствии с&nbsp;политикой конфиденциальности
         </p>
 
-        {
-          isLogin &&
-          <Login
-            onClose={() => setIsLogin(false)}
-            onLogin={loginHandler}
-          />
-        }
+        {isLogin && (
+          <Login onClose={() => setIsLogin(false)} onLogin={loginHandler} />
+        )}
       </div>
-    )
+    );
   }
 );

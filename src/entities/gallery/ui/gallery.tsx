@@ -1,18 +1,26 @@
-import { memo, useCallback, useEffect, useState } from 'react';
-import { useSwipeable } from 'react-swipeable';
-import cn from 'classnames';
+import { memo, useEffect, useState } from "react";
+import { useSwipeable } from "react-swipeable";
+import cn from "classnames";
 
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { getName } from '../../../entities/manufacturer';
-import { ImgUrlType } from '../../../entities/specification';
-import { deleteFavorite, fetchFavorites, fetchFavoritesById, getFavoritesById, postFavorite } from '../../user';
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+import { getName } from "../../../entities/manufacturer";
+import { ImgUrlType } from "../../../entities/specification";
+import {
+  deleteFavorite,
+  fetchFavoritesById,
+  fetchHash,
+  getAuthStatus,
+  getFavoritesById,
+  Login,
+  postFavorite,
+} from "../../user";
 
-import { getPromoGallery, getPromoGalleryLoadingStatus } from '../model/gallery-selectors';
-import { GalleryPagination } from './gallery-pagination';
-import { GalleryType } from '../lib/types';
-import classes from './gallery.module.sass';
+import { getPromoGallery, getPromoGalleryLoadingStatus } from "../model/gallery-selectors";
+import { GalleryPagination } from "./gallery-pagination";
+import { GalleryType } from "../lib/types";
+import classes from "./gallery.module.sass";
 
 type GalleryProps = {
   handlePromo?: ((promoManufacturer: number, promoModel: number, promoSpecification: number) => void) | null;
@@ -21,15 +29,25 @@ type GalleryProps = {
   modelId: number | null;
   galleryList?: ImgUrlType[];
   initSlide?: number;
-}
+};
 
 export const Gallery = memo(
-  ({ specificationId, modelId, manufacturerId, galleryList, handlePromo, initSlide = 0 }: GalleryProps): JSX.Element => {
+  ({
+    specificationId,
+    modelId,
+    manufacturerId,
+    galleryList,
+    handlePromo,
+    initSlide = 0,
+  }: GalleryProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
-    const [ currentImage, setCurrentImage ] = useState(initSlide);
-    const [ preloadedImages, setPreloadedImages ] = useState<string[]>([]);
-    const [ gallery, setGallery ] = useState<GalleryType[]>([]);
+    const [currentImage, setCurrentImage] = useState(initSlide);
+    const [preloadedImages, setPreloadedImages] = useState<string[]>([]);
+    const [gallery, setGallery] = useState<GalleryType[]>([]);
+    const [isLogin, setIsLogin] = useState(false);
+    const [favoriteIdToAdd, setFavoriteIdToAdd] = useState<number | null>(null);
+    const isAuth = useAppSelector(getAuthStatus);
     const name = useAppSelector((state) => getName(state, modelId));
     const promoGallery = useAppSelector(getPromoGallery);
     const promoGalleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
@@ -50,7 +68,8 @@ export const Gallery = memo(
 
     useEffect(() => {
       if (specificationId && modelId && manufacturerId && galleryList) {
-        setGallery(galleryList.map((url) => ({
+        setGallery(
+          galleryList.map((url) => ({
             specificationId: specificationId as number,
             model: {
               id: modelId as number,
@@ -61,28 +80,36 @@ export const Gallery = memo(
               name: name?.manufacturer as string,
             },
             url,
-          })));
-        }
+          }))
+        );
+      }
 
-        if (handlePromo) {
-          setGallery(promoGallery);
-        }
+      if (handlePromo) {
+        setGallery(promoGallery);
+      }
     }, [specificationId, galleryList, promoGallery.length]);
 
     useEffect(() => {
-      if (gallery.length > 0) {
-        dispatch(fetchFavoritesById({typeId: 1, favorableIds: gallery.map((element) => element.specificationId)}));
+      if (gallery.length > 0 && isAuth) {
+        dispatch(
+          fetchFavoritesById({
+            typeId: 1,
+            favorableIds: gallery.map((element) => element.specificationId),
+          })
+        );
       }
-    }, [gallery]);
+    }, [gallery, isAuth]);
 
     useEffect(() => {
-      const promises = gallery.map((image) =>
-        new Promise<string>((resolve, reject) => {
-          const img = new Image();
-          img.src = `${process.env.STATIC_URL}${image.url.big}`;
-          img.onload = () => resolve(`${process.env.STATIC_URL}${image.url.big}`);
-          img.onerror = () => reject();
-        })
+      const promises = gallery.map(
+        (image) =>
+          new Promise<string>((resolve, reject) => {
+            const img = new Image();
+            img.src = `${process.env.STATIC_URL || `${window.location.origin}/storage`}${image.url.big}`;
+            img.onload = () =>
+              resolve(`${process.env.STATIC_URL || `${window.location.origin}/storage`}${image.url.big}`);
+            img.onerror = () => reject();
+          })
       );
 
       const preload = async () => {
@@ -94,61 +121,68 @@ export const Gallery = memo(
       preload();
     }, [gallery]);
 
-    function handleNext () {
-      setCurrentImage((current) =>
-        current + 1 === gallery!.length
-        ? 0
-        : current + 1
-      )
-    };
-
-    function handlePrev () {
-      setCurrentImage((current) =>
-        current === 0
-        ? gallery!.length - 1
-        : current - 1
-      )
-    };
-
-    function handlePage (page: number) {
-      setCurrentImage(page);
+    function handleNext() {
+      setCurrentImage((current) => (current + 1 === gallery!.length ? 0 : current + 1));
     }
 
-    const handlePagination = useCallback( handlePage, [] );
+    function handlePrev() {
+      setCurrentImage((current) => (current === 0 ? gallery!.length - 1 : current - 1));
+    }
 
     const handlePromoClick = () => {
       if (handlePromo && gallery) {
-        handlePromo(gallery[currentImage].manufacturer.id, gallery[currentImage].model.id, gallery[currentImage].specificationId);
+        handlePromo(
+          gallery[currentImage].manufacturer.id,
+          gallery[currentImage].model.id,
+          gallery[currentImage].specificationId
+        );
       }
-    }
+    };
 
     if (
-      gallery.length === 0
-      || preloadedImages.length === 0
-      || handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading)
+      gallery.length === 0 ||
+      preloadedImages.length === 0 ||
+      (handlePromo && (promoGalleryLoadingStatus.isIdle || promoGalleryLoadingStatus.isLoading))
     ) {
-      return <LoadingSpinner spinnerType='widget' />
+      return <LoadingSpinner spinnerType="widget" />;
     }
 
-    const useFavoriteList = () => {
-      return favoritesList.find((element) =>
-        element.favorableId === gallery[currentImage].specificationId
-      )?.id
-    }
+    const useFavoriteList = (id: number) => {
+      return favoritesList.find((element) => element.favorableId === gallery[id].specificationId)?.id;
+    };
 
-    const handleFavorite = () => {
-      if (useFavoriteList()) {
-        dispatch(deleteFavorite(
-          useFavoriteList() as number
-        )).then(() => dispatch(fetchFavorites()));
+    const onLogin = () => {
+      if (favoriteIdToAdd !== null) {
+        handleFavorite(favoriteIdToAdd, true);
+        setFavoriteIdToAdd(null);
+      }
+      setIsLogin(false);
+    };
+
+    const handleLogin = (id: number) => {
+      setFavoriteIdToAdd(id);
+      dispatch(fetchHash());
+      setIsLogin(true);
+    };
+
+    const handleFavorite = (id: number, auth: boolean = isAuth) => {
+      if (useFavoriteList(id)) {
+        dispatch(deleteFavorite(useFavoriteList(id) as number));
         return;
       }
 
-      dispatch(postFavorite({
-        typeId: 1,
-        favorableId: gallery[currentImage].specificationId
-      })).then(() => dispatch(fetchFavorites()));
-    }
+      if (auth) {
+        dispatch(
+          postFavorite({
+            typeId: 1,
+            favorableId: gallery[id || currentImage].specificationId,
+          })
+        );
+        return;
+      }
+
+      handleLogin(id);
+    };
 
     return (
       <div
@@ -159,76 +193,100 @@ export const Gallery = memo(
         <div
           className={classes.background}
           style={{
-            backgroundImage: `url(${process.env.STATIC_URL || `${window.location.origin}/storage`}${gallery[currentImage].url.original})`,
-            backgroundSize: "cover"
+            backgroundImage: `url(${process.env.STATIC_URL || `${window.location.origin}/storage`}${
+              gallery[currentImage].url.original
+            })`,
+            backgroundSize: "cover",
           }}
         >
-          <img src={preloadedImages[currentImage]} alt={`автомобиль ${name?.manufacturer} ${name?.model}`} />
+          <img
+            src={preloadedImages[currentImage]}
+            alt={`автомобиль ${name?.manufacturer} ${name?.model}`}
+          />
         </div>
 
         <div className={classes.overlay}>
           <div>
-            {
-              gallery.length > 1 &&
+            {gallery.length > 1 && (
               <GalleryPagination
                 count={gallery.length}
                 current={currentImage}
-                onClick={handlePagination}
+                onClick={setCurrentImage}
               />
-            }
+            )}
 
             <p>
-              {
-                name
+              {name
                 ? `${name?.manufacturer} ${name?.model}`
-                : `${gallery[currentImage].manufacturer.name} ${gallery[currentImage].model.name}`
-              }
+                : `${gallery[currentImage].manufacturer.name} ${gallery[currentImage].model.name}`}
             </p>
           </div>
 
           <div className={classes.controls}>
-            {
-              gallery.length > 1 &&
+            {gallery.length > 1 && (
               <div className={classes.buttons}>
-                <button onClick={handlePrev} aria-label='предыдущее изображение'>
-                  <svg width="9" height="8" aria-hidden="true">
+                <button
+                  onClick={handlePrev}
+                  aria-label="предыдущее изображение"
+                >
+                  <svg
+                    width="9"
+                    height="8"
+                    aria-hidden="true"
+                  >
                     <use xlinkHref="#arrow-left" />
                   </svg>
                 </button>
 
-                <button onClick={handleNext} aria-label='следующее изображение'>
-                  <svg width="9" height="8" aria-hidden="true">
+                <button
+                  onClick={handleNext}
+                  aria-label="следующее изображение"
+                >
+                  <svg
+                    width="9"
+                    height="8"
+                    aria-hidden="true"
+                  >
                     <use xlinkHref="#arrow-right" />
                   </svg>
                 </button>
               </div>
-            }
+            )}
 
             <div className={cn(classes.buttons, classes.end)}>
-              {
-                handlePromo &&
-                <button aria-label='рассчитать спеццену' onClick={handlePromoClick}>
+              {handlePromo && (
+                <button
+                  aria-label="рассчитать спеццену"
+                  onClick={handlePromoClick}
+                >
                   Рассчитать спеццену
                 </button>
-              }
+              )}
 
               <button
-                aria-label='добавить в избранное'
+                aria-label="добавить в избранное"
                 className={classes.favorite}
-                onClick={handleFavorite}
+                onClick={() => handleFavorite(currentImage)}
               >
-                <svg width="16" height="16" aria-hidden="true">
-                  <use
-                    xlinkHref={`#${
-                      useFavoriteList() ? 'favorite-remove' : 'favorite-add'
-                    }`}
-                  />
+                <svg
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <use xlinkHref={`#${useFavoriteList(currentImage) ? "favorite-remove" : "favorite-add"}`} />
                 </svg>
               </button>
             </div>
           </div>
         </div>
+
+        {isLogin && (
+          <Login
+            onClose={() => setIsLogin(false)}
+            onLogin={onLogin}
+          />
+        )}
       </div>
-    )
+    );
   }
 );

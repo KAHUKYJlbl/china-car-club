@@ -3,5 +3,6 @@
 .git
 .gitignore
 .editorconfig
+.prettierrc
 vercel.json
 *.md

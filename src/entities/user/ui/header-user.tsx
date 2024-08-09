@@ -14,14 +14,15 @@ import { fetchCity } from "../model/api-actions/fetch-city";
 import { fetchHash } from "../model/api-actions/fetch-hash";
 import {
   getAuthStatus,
+  getFavoritesByIdLoadingStatus,
   getFavoritesCount,
   getFavoritesLoadingStatus,
   getGeolocation,
-  getGeolocationMode
+  getGeolocationMode,
 } from "../model/user-selectors";
 import { login, logout, setGeolocation } from "../model/user-slice";
 import { Login } from "./login";
-import classes from './header-user.module.sass';
+import classes from "./header-user.module.sass";
 
 type headerUserProps = {};
 
@@ -32,16 +33,22 @@ export const HeaderUser = memo(({}: headerUserProps) => {
   const locationMode = useAppSelector(getGeolocationMode);
   const favoritesCount = useAppSelector(getFavoritesCount);
   const favoritesLoadingStatus = useAppSelector(getFavoritesLoadingStatus);
+  const favoritesByIdLoadingStatus = useAppSelector(
+    getFavoritesByIdLoadingStatus
+  );
   const isAuth = useAppSelector(getAuthStatus);
-  const [ cookies ] = useCookies([AUTH_TOKEN_KEY_NAME]);
-  const [ isLogin, setIsLogin ] = useState(false);
+  const [cookies] = useCookies([AUTH_TOKEN_KEY_NAME]);
+  const [isLogin, setIsLogin] = useState(false);
   const location = useGeolocation(storedLocation);
 
   useEffect(() => {
-    if (favoritesLoadingStatus.isIdle) {
+    if (
+      (favoritesLoadingStatus.isIdle && isAuth) ||
+      favoritesByIdLoadingStatus.isSuccess
+    ) {
       dispatch(fetchFavoritesCount());
     }
-  }, []);
+  }, [isAuth, favoritesByIdLoadingStatus.isSuccess]);
 
   useEffect(() => {
     if (cookies[AUTH_TOKEN_KEY_NAME]) {
@@ -69,44 +76,43 @@ export const HeaderUser = memo(({}: headerUserProps) => {
   return (
     <>
       <div className={classes.wrapper}>
-        {
-          isAuth &&
+        {isAuth && (
           <>
             <HeaderButton
-              label='мои автомобили'
-              icon='mycars'
-              text='Мои&nbsp;автомобили'
-              type='light'
-              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsOrders].join('') )}
+              label="мои автомобили"
+              icon="mycars"
+              text="Мои&nbsp;автомобили"
+              type="light"
+              onClick={() =>
+                navigate([AppRoute.MyCars, AppRoute.MyCarsOrders].join(""))
+              }
             />
 
             <HeaderButton
-              label='избранное'
-              icon='favorite'
-              text='Избранное'
-              type='light'
+              label="избранное"
+              icon="favorite"
+              text="Избранное"
+              type="light"
               labelCount={favoritesCount}
-              onClick={() => navigate( [AppRoute.MyCars, AppRoute.MyCarsFavorites].join('') )}
+              onClick={() =>
+                navigate([AppRoute.MyCars, AppRoute.MyCarsFavorites].join(""))
+              }
             />
           </>
-        }
+        )}
 
         <HeaderButton
-          label={isAuth ? 'Выйти' : 'Войти'}
-          icon='profile'
-          text={isAuth ? 'Выйти' : 'Войти'}
-          type='light'
+          label={isAuth ? "Выйти" : "Войти"}
+          icon="profile"
+          text={isAuth ? "Выйти" : "Войти"}
+          type="light"
           onClick={handleLoginClick}
         />
       </div>
 
-      {
-        isLogin &&
-        <Login
-          onClose={() => setIsLogin(false)}
-          onLogin={() => null}
-        />
-      }
+      {isLogin && (
+        <Login onClose={() => setIsLogin(false)} onLogin={() => null} />
+      )}
     </>
   );
 });
