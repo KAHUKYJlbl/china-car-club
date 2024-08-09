@@ -49,9 +49,11 @@ export const Order = memo(({ order }: OrderProps) => {
 
           {order.availabilityOfEpts && <span>Получение ЭПТС и СБКТС</span>}
 
-          {order.addItems.map((item) => (
+          {/* {order.addItems.map((item) => (
             <span key={item}>{item}</span>
-          ))}
+          ))} */}
+
+          {order.addItems.length > 0 && <span>Доп. товары на автомобиль</span>}
         </p>
       </div>
 
