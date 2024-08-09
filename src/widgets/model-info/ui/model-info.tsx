@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 
-import { AppRoute } from '../../../app/provider/router';
-import { ChooseOptions, getPrices, getTotal } from '../../../features/choose-options';
-import { SpecificationInfo } from '../../../features/choose-specification';
+import { AppRoute } from "../../../app/provider/router";
+import { getTotal } from "../../../features/choose-options/lib/utils/get-total";
+import { getPrices } from "../../../features/choose-options/lib/utils/get-prices";
+import { ChooseOptions } from "../../../features/choose-options/ui/choose-options";
+import { SpecificationInfo } from "../../../features/choose-specification/ui/specification-info";
 import {
   fetchSpecificationAddProducts,
   fetchSpecificationsImage,
@@ -13,43 +15,48 @@ import {
   getInitSlide,
   getIntColors,
   getSpecificationImgLoadingStatus,
-  getSpecificationsLoadingStatus
-} from '../../../entities/specification';
+  getSpecificationsLoadingStatus,
+} from "../../../entities/specification";
 import {
   Currency,
   fetchCurrency,
   getCurrency,
   getCurrencyLoadingStatus,
-  getCurrentCurrency
-} from '../../../entities/currency';
-import { Gallery } from '../../../entities/gallery';
-import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax, setCurrentColor } from '../../../entities/order';
-import { fetchModel, getModelLoadingStatus, getSpecificationParams } from '../../../entities/model';
-import { fetchManufacturers, getManufacturerByModel, getManufacturersLoadingStatus } from '../../../entities/manufacturer';
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { Modal } from '../../../shared/ui/modal';
+  getCurrentCurrency,
+} from "../../../entities/currency";
+import {
+  fetchManufacturers,
+  getManufacturerByModel,
+  getManufacturersLoadingStatus,
+} from "../../../entities/manufacturer";
+import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax } from "../../../entities/order/index";
+import { setCurrentColor } from "../../../entities/order/model/order-slice";
+import { fetchModel, getModelLoadingStatus, getSpecificationParams } from "../../../entities/model";
+import { Gallery } from "../../../entities/gallery/ui/gallery";
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+import { Modal } from "../../../shared/ui/modal";
 
-import { TaxesTypes } from '../lib/const';
-import { PriceHistory } from './price-history';
-import { OrderButtons } from './order-buttons';
-import { Questions } from './questions';
-import { InfoBar } from './info-bar';
-import { Prices } from './prices';
-import { Techs } from './techs';
-import { Taxes } from './taxes';
-import { Adds } from './adds';
-import classes from './model-info.module.sass';
+import { TaxesTypes } from "../lib/const";
+import { PriceHistory } from "./price-history";
+import { OrderButtons } from "./order-buttons";
+import { Questions } from "./questions";
+import { InfoBar } from "./info-bar";
+import { Prices } from "./prices";
+import { Techs } from "./techs";
+import { Taxes } from "./taxes";
+import { Adds } from "./adds";
+import classes from "./model-info.module.sass";
 
 type ModelInfoProps = {
   setConfirmation: () => void;
-}
+};
 
 export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [ searchParams, setSearchParams ] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -60,20 +67,20 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const intColors = useAppSelector(getIntColors);
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
-  const manufacturerId = useAppSelector((state) => getManufacturerByModel( state, Number( searchParams.get('model') ) ));
+  const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, Number(searchParams.get("model"))));
   const currentTax = useAppSelector(getCurrentTax);
   const options = useAppSelector(getAdds);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currentColor = useAppSelector(getCurrentColor);
 
   // popups
-  const [ isTechs, setIsTechs ] = useState(false);
-  const [ isAddProducts, setIsAddProducts ] = useState(false);
-  const [ isTaxes, setIsTaxes ] = useState(false);
-  const [ isPriceHistory, setIsPriceHistory ] = useState(false);
-  const [ isQuestions, setIsQuestions ] = useState(false);
+  const [isTechs, setIsTechs] = useState(false);
+  const [isAddProducts, setIsAddProducts] = useState(false);
+  const [isTaxes, setIsTaxes] = useState(false);
+  const [isPriceHistory, setIsPriceHistory] = useState(false);
+  const [isQuestions, setIsQuestions] = useState(false);
 
-  const [ currentSpecification, setCurrentSpecification ] = useState<number | null>( Number(searchParams.get('spec')) );
+  const [currentSpecification, setCurrentSpecification] = useState<number | null>(Number(searchParams.get("spec")));
 
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
   const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
@@ -81,28 +88,32 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
   useEffect(() => {
     if (specificationImgLoadingStatus.isSuccess) {
-      dispatch(setCurrentColor({
-        int: intColors ? intColors[0].color.id : null,
-        ext: extColors ? extColors[0].color?.id : null,
-        isInteriorFirst: false,
-      }));
+      dispatch(
+        setCurrentColor({
+          int: intColors ? intColors[0].color.id : null,
+          ext: extColors ? extColors[0].color?.id : null,
+          isInteriorFirst: false,
+        })
+      );
     }
   }, [specificationImgLoadingStatus.isSuccess]);
 
   useEffect(() => {
-    if (searchParams.get('model')) {
-      dispatch(fetchModel(searchParams.get('model')!));
-      dispatch(fetchSpecificationsInfo({
-        modelId: Number(searchParams.get('model')),
-        filters: {},
-      }));
+    if (searchParams.get("model")) {
+      dispatch(fetchModel(searchParams.get("model")!));
+      dispatch(
+        fetchSpecificationsInfo({
+          modelId: Number(searchParams.get("model")),
+          filters: {},
+        })
+      );
     }
   }, []);
 
   useEffect(() => {
     if (currentSpecification) {
-      dispatch( fetchSpecificationsImage(currentSpecification) );
-      dispatch( fetchSpecificationAddProducts(currentSpecification) );
+      dispatch(fetchSpecificationsImage(currentSpecification));
+      dispatch(fetchSpecificationAddProducts(currentSpecification));
     }
   }, [currentSpecification]);
 
@@ -121,31 +132,31 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   useEffect(() => {
     if (currentSpecification) {
       setSearchParams({
-        model: searchParams.get('model')!,
+        model: searchParams.get("model")!,
         spec: currentSpecification.toString(),
       });
     }
   }, [currentSpecification]);
 
   useEffect(() => {
-    if ( modelLoadingStatus.isFailed ) {
+    if (modelLoadingStatus.isFailed) {
       navigate(AppRoute.NotFound);
     }
   }, [modelLoadingStatus.isFailed]);
 
   if (
-    specificationImgLoadingStatus.isLoading
-    || specificationsLoadingStatus.isLoading
-    || manufacturersLoadingStatus.isLoading
-    || modelLoadingStatus.isLoading
-    || !specificationParams
-    || !currency
+    specificationImgLoadingStatus.isLoading ||
+    specificationsLoadingStatus.isLoading ||
+    manufacturersLoadingStatus.isLoading ||
+    modelLoadingStatus.isLoading ||
+    !specificationParams ||
+    !currency
   ) {
-    return <LoadingSpinner spinnerType='page' />
+    return <LoadingSpinner spinnerType="page" />;
   }
 
-  if (!searchParams.get('model') || !searchParams.get('spec') ) {
-    return <Navigate to={AppRoute.NotFound} />
+  if (!searchParams.get("model") || !searchParams.get("spec")) {
+    return <Navigate to={AppRoute.NotFound} />;
   }
 
   return (
@@ -154,7 +165,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
         <Gallery
           galleryList={imgList}
           specificationId={currentSpecification}
-          modelId={Number(searchParams.get('model'))}
+          modelId={Number(searchParams.get("model"))}
           manufacturerId={manufacturerId}
           initSlide={initSlide}
         />
@@ -187,7 +198,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           <ChooseOptions
             prices={specificationParams.price}
             setIsAddProducts={setIsAddProducts}
-            />
+          />
         </div>
       </div>
 
@@ -218,64 +229,70 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
             tax: specificationParams.price.tax,
             comission: specificationParams.price.commission,
             borderPrice: specificationParams.price.borderPrice,
-            customsPrice: currentTax === TaxesTypes.PERS
-              ? specificationParams.price.customsClearancePers.final
-              : specificationParams.price.customsClearanceCorp.final,
+            customsPrice:
+              currentTax === TaxesTypes.PERS
+                ? specificationParams.price.customsClearancePers.final
+                : specificationParams.price.customsClearanceCorp.final,
           }}
         />
       </div>
 
-      {
-        isTechs &&
-        <Modal onClose={() => setIsTechs(false)} button>
+      {isTechs && (
+        <Modal
+          onClose={() => setIsTechs(false)}
+          button
+        >
           <Techs
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}
           />
         </Modal>
-      }
+      )}
 
-      {
-        isAddProducts &&
-        <Modal onClose={() => setIsAddProducts(false)} button>
+      {isAddProducts && (
+        <Modal
+          onClose={() => setIsAddProducts(false)}
+          button
+        >
           <Adds
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}
           />
         </Modal>
-      }
+      )}
 
-      {
-        isTaxes &&
-        <Modal onClose={() => setIsTaxes(false)} button>
+      {isTaxes && (
+        <Modal
+          onClose={() => setIsTaxes(false)}
+          button
+        >
           <Taxes
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}
           />
         </Modal>
-      }
+      )}
 
-      {
-        isPriceHistory &&
-        <Modal onClose={() => setIsPriceHistory(false)} button>
+      {isPriceHistory && (
+        <Modal
+          onClose={() => setIsPriceHistory(false)}
+          button
+        >
           <PriceHistory
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
           />
         </Modal>
-      }
+      )}
 
-      {
-        isQuestions &&
+      {isQuestions && (
         <Modal onClose={() => null}>
-          <Questions
-            setConfirmation={setConfirmation}
-          />
+          <Questions setConfirmation={setConfirmation} />
         </Modal>
-      }
+      )}
     </div>
-  )
-}
+  );
+};

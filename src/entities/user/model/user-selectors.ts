@@ -2,29 +2,47 @@ import { createSelector } from "@reduxjs/toolkit";
 
 import { NameSpace, State } from "../../../app/provider/store";
 import { FetchStatus } from "../../../shared/api/fetch-status";
-import { LocationType, MycarsOrderType, MycarsCalculationType, MycarsFavoriteType, UserType, FavoriteByIdType } from "../lib/types";
+import {
+  LocationType,
+  MycarsOrderType,
+  MycarsCalculationType,
+  MycarsFavoriteType,
+  UserType,
+  FavoriteByIdType,
+} from "../lib/types";
 
-export const getUser = (state: State): UserType | null => state[NameSpace.User].user;
+export const getUser = (state: State): UserType | null =>
+  state[NameSpace.User].user;
 
-export const getCurrentCity = (state: State): number => state[NameSpace.User].city.id;
+export const getCurrentCity = (state: State): number =>
+  state[NameSpace.User].city.id;
 
-export const getGeolocationMode = (state: State): boolean => state[NameSpace.User].city.manualMode;
+export const getGeolocationMode = (state: State): boolean =>
+  state[NameSpace.User].city.manualMode;
 
-export const getGeolocation = (state: State): LocationType => state[NameSpace.User].geolocation;
+export const getGeolocation = (state: State): LocationType =>
+  state[NameSpace.User].geolocation;
 
-export const getAuthStatus = (state: State): boolean => state[NameSpace.User].isAuth;
+export const getAuthStatus = (state: State): boolean =>
+  state[NameSpace.User].isAuth;
 
-export const getOrders = (state: State): MycarsOrderType[] => state[NameSpace.User].mycarsOrders;
+export const getOrders = (state: State): MycarsOrderType[] =>
+  state[NameSpace.User].mycarsOrders;
 
-export const getCalculations = (state: State): MycarsCalculationType[] => state[NameSpace.User].mycarsCalculations;
+export const getCalculations = (state: State): MycarsCalculationType[] =>
+  state[NameSpace.User].mycarsCalculations;
 
-export const getFavorites = (state: State): MycarsFavoriteType[] => state[NameSpace.User].mycarsFavorites;
+export const getFavorites = (state: State): MycarsFavoriteType[] =>
+  state[NameSpace.User].mycarsFavorites;
 
-export const getFavoritesCount = (state: State): number => state[NameSpace.User].mycarsFavoritesCount;
+export const getFavoritesCount = (state: State): number =>
+  state[NameSpace.User].mycarsFavoritesCount;
 
-export const getPagination = (state: State) => state[NameSpace.User].mycarsPagination;
+export const getPagination = (state: State) =>
+  state[NameSpace.User].mycarsPagination;
 
-export const getFavoritesById = (state: State): FavoriteByIdType[] => state[NameSpace.User].mycarsFavoritesById;
+export const getFavoritesById = (state: State): FavoriteByIdType[] =>
+  state[NameSpace.User].mycarsFavoritesById;
 
 export const getUserLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.User].userLoadingStatus,
@@ -36,7 +54,8 @@ export const getUserLoadingStatus = createSelector(
 );
 
 export const getOrdersLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.User].mycarsOrdersLoadingStatus,
+  (state: State): FetchStatus =>
+    state[NameSpace.User].mycarsOrdersLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,
@@ -46,7 +65,8 @@ export const getOrdersLoadingStatus = createSelector(
 );
 
 export const getCalculationsLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.User].mycarsCalculationsLoadingStatus,
+  (state: State): FetchStatus =>
+    state[NameSpace.User].mycarsCalculationsLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,
@@ -56,7 +76,19 @@ export const getCalculationsLoadingStatus = createSelector(
 );
 
 export const getFavoritesLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.User].mycarsFavoritesLoadingStatus,
+  (state: State): FetchStatus =>
+    state[NameSpace.User].mycarsFavoritesLoadingStatus,
+  (status) => ({
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+
+export const getFavoritesByIdLoadingStatus = createSelector(
+  (state: State): FetchStatus =>
+    state[NameSpace.User].mycarsFavoritesByIdLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,

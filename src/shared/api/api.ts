@@ -8,13 +8,6 @@ import { camelizeKeys } from "humps";
 import { getToken } from "./token";
 
 export const createAPI = (): AxiosInstance => {
-  // const location = window.location.hostname;
-  // console.log(location);
-  // const location2 = window.location.origin;
-  // console.log(location2);
-  const location3 = process.env.NODE_ENV;
-  console.log(location3);
-
   const api = axios.create({
     baseURL: process.env.API_URL || `${window.location.origin}/api`,
     timeout: 6000,

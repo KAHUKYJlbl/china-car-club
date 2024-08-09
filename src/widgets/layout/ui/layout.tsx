@@ -1,54 +1,97 @@
-import { PropsWithChildren } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { PropsWithChildren, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import RussianNounsJS from "russian-nouns-js";
 
-import { SvgSprite } from '../../../shared/ui/svg-sprite';
+import { CITIES } from "../../../app/settings/cities";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { SvgSprite } from "../../../shared/ui/svg-sprite";
+import { getName } from "../../../entities/manufacturer";
+import { getCurrentCity } from "../../../entities/user";
+import { fetchSettings, getIsNew, getPalette, getSettingsLoadingStatus } from "../../../entities/settings";
 
-import { Header } from './header';
-import { NewHeader } from './new-header';
-import classes from './layout.module.sass';
+import { NewHeader } from "./new-header";
+import classes from "./layout.module.sass";
+import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 
 type LayoutProps = {
- title?: string;
- newHeader?: boolean;
- heading: {
-  heading: string;
-  subheading: string | null;
- }
+  title?: string;
+  isMycars?: boolean;
+  heading: {
+    heading: string;
+    subheading: string | null;
+  };
 };
 
-export const Layout = ({ title, children, heading, newHeader = false }: PropsWithChildren<LayoutProps>): JSX.Element => {
+export const Layout = ({ title, children, heading, isMycars }: PropsWithChildren<LayoutProps>): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const rne = new RussianNounsJS.Engine();
+
+  const [searchParams, _setSearchParams] = useSearchParams();
+
+  const city = useAppSelector(getCurrentCity);
+  const isNew = useAppSelector(getIsNew);
+  const palette = useAppSelector(getPalette);
+  const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
+  const settingsLoadingstatus = useAppSelector(getSettingsLoadingStatus);
+
+  useEffect(() => {
+    if (settingsLoadingstatus.isIdle) {
+      dispatch(fetchSettings());
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(palette);
+    if (palette) {
+      console.log(palette.accent);
+      document.body.style.setProperty("--theme-accent", `#${palette.accent}`);
+    }
+  }, [settingsLoadingstatus.isSuccess]);
+
+  if (settingsLoadingstatus.isLoading) {
+    return <LoadingSpinner spinnerType="page" />;
+  }
+
   return (
-    <div className={classes.wrapper} id='layout'>
+    <div
+      className={classes.wrapper}
+      id="layout"
+    >
       <Helmet>
-        <title>{title || 'Купить новый автомобиль из Китая под ключ по цене завода'}</title>
+        <title>
+          {title ||
+            `Купить ${
+              name
+                ? `${name.manufacturer}\u00A0${name.model}`
+                : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
+            } из\u00A0Китая по\u00A0лучшей цене`}
+        </title>
         <meta
-          name='description'
-          content='Заказать новый авто из Китая по выгодной цене. Быстрый онлайн расчёт под ключ. По цене завода и с пожизненной поддержкой запчастями.'
+          name="description"
+          content="Заказать новый авто из Китая по выгодной цене. Быстрый онлайн расчёт под ключ. По цене завода и с пожизненной поддержкой запчастями."
         />
       </Helmet>
 
       <SvgSprite />
 
-      {
-        newHeader
-        ? <NewHeader />
-        : <Header />
-      }
+      <NewHeader isMycars={isMycars} />
 
       <div className={classes.headingWrapper}>
         <h1 className={classes.heading}>
-          {heading.heading}
+          {`Купить ${
+            name ? `${name.manufacturer}\u00A0${name.model}` : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
+          } из\u00A0Китая по\u00A0лучшей цене в\u00A0${rne.decline(
+            { text: CITIES[city], gender: "женский" },
+            "винительный"
+          )}`}
         </h1>
 
-        {
-          heading.subheading &&
-          <p className={classes.subheading}>
-            {heading.subheading}
-          </p>
-        }
+        {heading.subheading && <p className={classes.subheading}>{heading.subheading}</p>}
       </div>
 
       {children}
     </div>
-  )
-}
+  );
+};
