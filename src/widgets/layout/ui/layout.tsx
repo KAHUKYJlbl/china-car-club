@@ -43,9 +43,7 @@ export const Layout = ({ title, children, heading, isMycars }: PropsWithChildren
   }, []);
 
   useEffect(() => {
-    console.log(palette);
     if (palette) {
-      console.log(palette.accent);
       document.body.style.setProperty("--theme-accent", `#${palette.accent}`);
     }
   }, [settingsLoadingstatus.isSuccess]);
