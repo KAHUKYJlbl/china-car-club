@@ -14,18 +14,13 @@ export {
   getCalculationsLoadingStatus,
   getFavorites,
   getFavoritesLoadingStatus,
+  getFavoritesCountLoadingStatus,
   getFavoritesByIdLoadingStatus,
   getPagination,
   getFavoritesById,
   getFavoritesCount,
 } from "./model/user-selectors";
-export {
-  userSlice,
-  setCity,
-  setAutoLocation,
-  login,
-  resetMycars,
-} from "./model/user-slice";
+export { userSlice, setCity, setAutoLocation, login, resetMycars } from "./model/user-slice";
 export { fetchHash } from "./model/api-actions/fetch-hash";
 export { postStatistics } from "./model/api-actions/post-statistics";
 export { postRefresh } from "./model/api-actions/post-refresh";
@@ -38,9 +33,4 @@ export { postFavorite } from "./model/api-actions/post-favorite";
 export { deleteFavorite } from "./model/api-actions/delete-favorite";
 export { Login } from "./ui/login";
 export { HeaderUser } from "./ui/header-user";
-export type {
-  SmsFormType,
-  ConfirmType,
-  LocationType,
-  StatisticsType,
-} from "./lib/types";
+export type { SmsFormType, ConfirmType, LocationType, StatisticsType } from "./lib/types";

@@ -11,4 +11,5 @@ export type SettingsApiType = {
   logoSvg: LogoType;
   phone: string;
   colorPallet: PaletteType;
+  name: string;
 };

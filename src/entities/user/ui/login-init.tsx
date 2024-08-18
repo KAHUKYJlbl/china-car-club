@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+import { getDealerName } from "../../settings";
 
 import { getUser, getUserLoadingStatus } from "../model/user-selectors";
 import { LoginModeType } from "../lib/types";
 import classes from "./login-init.module.sass";
-
-// TEMP
-import { getDealerLogin } from "../model/lib/get-dealer";
 
 type LoginInitProps = {
   setMode: (mode: LoginModeType) => void;
@@ -18,6 +16,7 @@ type LoginInitProps = {
 export const LoginInit = ({ setMode }: LoginInitProps) => {
   const user = useAppSelector(getUser);
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
+  const dealerName = useAppSelector(getDealerName);
 
   if (userLoadingStatus.isLoading || !user) {
     return <LoadingSpinner spinnerType="widget" />;
@@ -27,7 +26,7 @@ export const LoginInit = ({ setMode }: LoginInitProps) => {
     <>
       <div className={classes.wrapper}>
         <div>
-          <p className={classes.header}>{`Вход в ${getDealerLogin()}`}</p>
+          <p className={classes.header}>{`Вход в ${dealerName}`}</p>
 
           <p>
             Чтобы мгновенно считать стоимость доставки и&nbsp;растаможки автомобилей из&nbsp;Китая, добавлять

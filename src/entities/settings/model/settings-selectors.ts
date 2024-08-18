@@ -7,6 +7,8 @@ import { LogoType, PaletteType } from "../lib/types";
 
 export const getLogo = (state: State): LogoType => state[NameSpace.Settings].logo;
 
+export const getDealerName = (state: State): string => state[NameSpace.Settings].name;
+
 export const getPhone = (state: State): string => state[NameSpace.Settings].phone;
 
 export const getPalette = (state: State): PaletteType => state[NameSpace.Settings].palette;

@@ -11,6 +11,7 @@ type InitialState = {
   phone: string;
   palette: PaletteType;
   isNew: boolean;
+  name: string;
   settingsLoadingStatus: FetchStatus;
 };
 
@@ -24,6 +25,7 @@ const initialState: InitialState = {
     accent: "",
   },
   isNew: true,
+  name: "",
   settingsLoadingStatus: FetchStatus.Idle,
 };
 
@@ -42,6 +44,7 @@ export const settingsSlice = createSlice({
     builder
       .addCase(fetchSettings.fulfilled, (state, action) => {
         state.logo = action.payload.logoSvg;
+        state.name = action.payload.name;
         state.phone = action.payload.phone;
         state.palette = action.payload.colorPallet;
         state.settingsLoadingStatus = FetchStatus.Success;

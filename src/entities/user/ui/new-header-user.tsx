@@ -15,7 +15,7 @@ import {
   getAuthStatus,
   getFavoritesByIdLoadingStatus,
   getFavoritesCount,
-  getFavoritesLoadingStatus,
+  getFavoritesCountLoadingStatus,
   getGeolocation,
   getGeolocationMode,
 } from "../model/user-selectors";
@@ -38,11 +38,11 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const locationMode = useAppSelector(getGeolocationMode);
   const isAuth = useAppSelector(getAuthStatus);
   const favoritesCount = useAppSelector(getFavoritesCount);
-  const favoritesLoadingStatus = useAppSelector(getFavoritesLoadingStatus);
+  const favoritesCountLoadingStatus = useAppSelector(getFavoritesCountLoadingStatus);
   const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
 
   useEffect(() => {
-    if ((favoritesLoadingStatus.isIdle && isAuth) || favoritesByIdLoadingStatus.isSuccess) {
+    if ((favoritesCountLoadingStatus.isIdle && isAuth) || favoritesByIdLoadingStatus.isSuccess) {
       dispatch(fetchFavoritesCount());
     }
   }, [isAuth, favoritesByIdLoadingStatus.isSuccess]);

@@ -2,6 +2,7 @@ import { memo } from "react";
 import cn from "classnames";
 
 import { getAddItemsPrice, getAdds, getCurrentTax, setCurrentTax } from "../../../entities/order";
+import { getDealerName } from "../../../entities/settings";
 import { PriceType } from "../../../entities/model/lib/types";
 import {
   Currencies,
@@ -19,9 +20,6 @@ import { getTaxes } from "../lib/utils/get-taxes";
 import { TaxesTypes } from "../lib/const";
 import classes from "./prices.module.sass";
 
-// TEMP
-import { getDealer } from "../lib/utils/get-dealer";
-
 type PricesProps = {
   prices: PriceType;
   setIsTaxes: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +34,7 @@ export const Prices = memo(({ prices, setIsTaxes }: PricesProps): JSX.Element =>
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+  const dealerName = useAppSelector(getDealerName);
 
   if (currencyLoadingStatus.isLoading || !currency) {
     return <LoadingSpinner spinnerType="widget" />;
@@ -66,7 +65,7 @@ export const Prices = memo(({ prices, setIsTaxes }: PricesProps): JSX.Element =>
         </div>
 
         <div className={classes.row}>
-          <p>{`Комиссия ${getDealer()}`}</p>
+          <p>{`Комиссия ${dealerName}`}</p>
           <p>
             {priceFormat(getCurrencyExchange(prices.commission, Currencies.USD, currency))} {Currencies.USD}
           </p>

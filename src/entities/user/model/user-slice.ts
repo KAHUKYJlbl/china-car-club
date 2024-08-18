@@ -38,8 +38,9 @@ type InitialState = {
   mycarsCalculations: MycarsCalculationType[];
   mycarsCalculationsLoadingStatus: FetchStatus;
   mycarsFavorites: MycarsFavoriteType[];
-  mycarsFavoritesCount: number;
   mycarsFavoritesLoadingStatus: FetchStatus;
+  mycarsFavoritesCount: number;
+  mycarsFavoritesCountLoadingStatus: FetchStatus;
   mycarsPagination: {
     currentPage: number;
     lastPage: number;
@@ -65,8 +66,9 @@ const initialState: InitialState = {
   mycarsCalculations: [],
   mycarsCalculationsLoadingStatus: FetchStatus.Idle,
   mycarsFavorites: [],
-  mycarsFavoritesCount: 0,
   mycarsFavoritesLoadingStatus: FetchStatus.Idle,
+  mycarsFavoritesCount: 0,
+  mycarsFavoritesCountLoadingStatus: FetchStatus.Idle,
   mycarsPagination: {
     currentPage: 1,
     lastPage: 1,
@@ -88,8 +90,7 @@ export const userSlice = createSlice({
       state.userLoadingStatus = initialState.userLoadingStatus;
       state.city = initialState.city;
       state.mycarsFavoritesById = initialState.mycarsFavoritesById;
-      state.mycarsFavoritesByIdLoadingStatus =
-        initialState.mycarsFavoritesByIdLoadingStatus;
+      state.mycarsFavoritesByIdLoadingStatus = initialState.mycarsFavoritesByIdLoadingStatus;
     },
     setGeolocation: (state, action: PayloadAction<LocationType>) => {
       state.geolocation = action.payload;
@@ -177,9 +178,7 @@ export const userSlice = createSlice({
         state.mycarsOrdersLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchCalculations.fulfilled, (state, action) => {
-        state.mycarsCalculations = state.mycarsCalculations.concat(
-          action.payload.data
-        );
+        state.mycarsCalculations = state.mycarsCalculations.concat(action.payload.data);
         state.mycarsPagination = action.payload.meta;
         state.mycarsCalculationsLoadingStatus = FetchStatus.Success;
       })
@@ -190,15 +189,12 @@ export const userSlice = createSlice({
         state.mycarsCalculationsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
-        state.mycarsFavorites = state.mycarsFavorites.concat(
-          action.payload.data
-        );
+        state.mycarsFavorites = state.mycarsFavorites.concat(action.payload.data);
         state.mycarsFavoritesCount = action.payload.meta.total;
         state.mycarsFavoritesById = state.mycarsFavoritesById.concat(
           action.payload.data.map((favorite) => ({
             id: favorite.id,
-            favorableId:
-              favorite.cardData.specification.id || favorite.cardData.series.id,
+            favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
           }))
         );
         state.mycarsPagination = action.payload.meta;
@@ -211,7 +207,7 @@ export const userSlice = createSlice({
         state.mycarsFavoritesLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchFavoritesCount.fulfilled, (state, action) => {
-        state.mycarsFavoritesCount = action.payload;
+        state.mycarsFavoritesCount = action.payload.count;
       })
       .addCase(fetchFavoritesCount.pending, (state) => {
         state.mycarsFavoritesLoadingStatus = FetchStatus.Pending;
@@ -220,8 +216,7 @@ export const userSlice = createSlice({
         state.mycarsFavoritesLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchFavoritesById.fulfilled, (state, action) => {
-        (state.mycarsFavoritesById = action.payload),
-          (state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success);
+        (state.mycarsFavoritesById = action.payload), (state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success);
       })
       .addCase(fetchFavoritesById.pending, (state) => {
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Pending;
@@ -241,9 +236,7 @@ export const userSlice = createSlice({
         const update = state.mycarsFavorites.find(
           (favorite) =>
             action.payload.favorableId ===
-            (action.payload.typeId === 1
-              ? favorite.cardData.specification.id
-              : favorite.cardData.series.id)
+            (action.payload.typeId === 1 ? favorite.cardData.specification.id : favorite.cardData.series.id)
         );
         if (update) {
           state.mycarsFavorites = [...state.mycarsFavorites]
@@ -263,9 +256,7 @@ export const userSlice = createSlice({
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Failed;
       })
       .addCase(deleteFavorite.fulfilled, (state, action) => {
-        (state.mycarsFavoritesById = state.mycarsFavoritesById.filter(
-          (element) => element.id !== action.payload
-        )),
+        (state.mycarsFavoritesById = state.mycarsFavoritesById.filter((element) => element.id !== action.payload)),
           (state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success);
       })
       .addCase(deleteFavorite.pending, (state) => {
@@ -277,11 +268,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const {
-  logout,
-  setGeolocation,
-  setCity,
-  setAutoLocation,
-  login,
-  resetMycars,
-} = userSlice.actions;
+export const { logout, setGeolocation, setCity, setAutoLocation, login, resetMycars } = userSlice.actions;
