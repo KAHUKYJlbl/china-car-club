@@ -20,7 +20,14 @@ export {
   getFavoritesById,
   getFavoritesCount,
 } from "./model/user-selectors";
-export { userSlice, setCity, setAutoLocation, login, resetMycars } from "./model/user-slice";
+export {
+  userSlice,
+  setCity,
+  setAutoLocation,
+  login,
+  resetMycars,
+  resetMycarsFavoritesCountLoadingStatus,
+} from "./model/user-slice";
 export { fetchHash } from "./model/api-actions/fetch-hash";
 export { postStatistics } from "./model/api-actions/post-statistics";
 export { postRefresh } from "./model/api-actions/post-refresh";

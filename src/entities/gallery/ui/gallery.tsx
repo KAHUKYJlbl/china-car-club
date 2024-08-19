@@ -15,6 +15,7 @@ import {
   getFavoritesById,
   Login,
   postFavorite,
+  resetMycarsFavoritesCountLoadingStatus,
 } from "../../user";
 
 import { getPromoGallery, getPromoGalleryLoadingStatus } from "../model/gallery-selectors";
@@ -167,11 +168,13 @@ export const Gallery = memo(
 
     const handleFavorite = (id: number, auth: boolean = isAuth) => {
       if (useFavoriteList(id)) {
+        dispatch(resetMycarsFavoritesCountLoadingStatus());
         dispatch(deleteFavorite(useFavoriteList(id) as number));
         return;
       }
 
       if (auth) {
+        dispatch(resetMycarsFavoritesCountLoadingStatus());
         dispatch(
           postFavorite({
             typeId: 1,

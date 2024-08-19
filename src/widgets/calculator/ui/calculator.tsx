@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { getPromoGalleryLoadingStatus, fetchPromo } from "../../../entities/gallery";
@@ -13,21 +13,22 @@ import {
   setSpecsIdle,
 } from "../../../entities/specification";
 import { Currency, fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
-import { fetchManufacturers, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
+import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { setIdle } from "../../../entities/model";
 import { ChooseModel } from "../../../features/choose-model";
 import { ChooseDelivery } from "../../../features/choose-delivery";
 import { Filter, FilterId } from "../../../features/filter";
 import { ChooseSpecification } from "../../../features/choose-specification/ui/choose-specification";
 
-import useFilters from "../lib/hooks/use-filters";
 import classes from "./calculator.module.sass";
+import { useDebounce } from "use-debounce";
 
 export const Calculator = (): JSX.Element => {
   const [_searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
+  const filtersLoadingStatus = useAppSelector(getFiltersLoadingStatus);
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const galleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
 
@@ -36,10 +37,15 @@ export const Calculator = (): JSX.Element => {
   const [currentModel, setCurrentModel] = useState<number | null>(null);
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(null);
   const [promoMode, setPromoMode] = useState(false);
+  const [filtersToFetch] = useDebounce(activeFilters, 650);
 
   const imgList = useAppSelector(getDefaultImages);
 
-  useFilters(activeFilters);
+  useEffect(() => {
+    if (filtersLoadingStatus.isIdle && manufacturersLoadingStatus.isSuccess) {
+      dispatch(fetchFiltered(filtersToFetch));
+    }
+  }, [filtersToFetch]);
 
   useEffect(() => {
     setSearchParams({
@@ -53,12 +59,6 @@ export const Calculator = (): JSX.Element => {
     setCurrentSpecification(null);
     dispatch(setIdle());
     dispatch(setSpecsIdle());
-  }, []);
-
-  useEffect(() => {
-    if (manufacturersLoadingStatus.isIdle) {
-      dispatch(fetchManufacturers());
-    }
   }, []);
 
   useEffect(() => {
@@ -78,8 +78,6 @@ export const Calculator = (): JSX.Element => {
       dispatch(fetchSpecificationsImage(currentSpecification));
     }
   }, [currentSpecification]);
-
-  const handleFiltersChange = useCallback(setActiveFilters, []);
 
   const handlePromo = (promoManufacturer: number, promoModel: number, promoSpecification: number) => {
     setPromoMode(true);
@@ -109,7 +107,7 @@ export const Calculator = (): JSX.Element => {
       <div className={classes.filter}>
         <Filter
           activeFilters={activeFilters}
-          setActiveFilters={handleFiltersChange}
+          setActiveFilters={setActiveFilters}
         />
       </div>
 

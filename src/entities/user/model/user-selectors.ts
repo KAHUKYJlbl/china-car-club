@@ -73,7 +73,7 @@ export const getFavoritesLoadingStatus = createSelector(
 );
 
 export const getFavoritesCountLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.User].mycarsFavoritesLoadingStatus,
+  (state: State): FetchStatus => state[NameSpace.User].mycarsFavoritesCountLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,

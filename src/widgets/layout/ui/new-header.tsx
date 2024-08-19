@@ -34,7 +34,7 @@ export const NewHeader = ({ isMycars = false }: NewHeaderProps) => {
     if (manufacturersLoadingStatus.isIdle) {
       dispatch(fetchManufacturers());
     }
-  }, [manufacturersLoadingStatus.isIdle]);
+  }, []);
 
   const setCityHandler = (id: number) => {
     dispatch(setCity(id));

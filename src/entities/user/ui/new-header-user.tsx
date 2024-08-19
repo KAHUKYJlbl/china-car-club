@@ -42,10 +42,10 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
 
   useEffect(() => {
-    if ((favoritesCountLoadingStatus.isIdle && isAuth) || favoritesByIdLoadingStatus.isSuccess) {
+    if (favoritesCountLoadingStatus.isIdle && favoritesByIdLoadingStatus.isSuccess) {
       dispatch(fetchFavoritesCount());
     }
-  }, [isAuth, favoritesByIdLoadingStatus.isSuccess]);
+  }, [favoritesByIdLoadingStatus.isSuccess, favoritesCountLoadingStatus.isIdle]);
 
   useEffect(() => {
     if (cookies[AUTH_TOKEN_KEY_NAME]) {

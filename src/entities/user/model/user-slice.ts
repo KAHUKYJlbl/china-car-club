@@ -119,6 +119,9 @@ export const userSlice = createSlice({
         lastPage: 1,
       };
     },
+    resetMycarsFavoritesCountLoadingStatus: (state) => {
+      state.mycarsFavoritesCountLoadingStatus = FetchStatus.Idle;
+    },
   },
   extraReducers(builder) {
     builder
@@ -208,15 +211,17 @@ export const userSlice = createSlice({
       })
       .addCase(fetchFavoritesCount.fulfilled, (state, action) => {
         state.mycarsFavoritesCount = action.payload.count;
+        state.mycarsFavoritesCountLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchFavoritesCount.pending, (state) => {
-        state.mycarsFavoritesLoadingStatus = FetchStatus.Pending;
+        state.mycarsFavoritesCountLoadingStatus = FetchStatus.Pending;
       })
       .addCase(fetchFavoritesCount.rejected, (state) => {
-        state.mycarsFavoritesLoadingStatus = FetchStatus.Failed;
+        state.mycarsFavoritesCountLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchFavoritesById.fulfilled, (state, action) => {
-        (state.mycarsFavoritesById = action.payload), (state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success);
+        state.mycarsFavoritesById = action.payload;
+        state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchFavoritesById.pending, (state) => {
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Pending;
@@ -256,8 +261,8 @@ export const userSlice = createSlice({
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Failed;
       })
       .addCase(deleteFavorite.fulfilled, (state, action) => {
-        (state.mycarsFavoritesById = state.mycarsFavoritesById.filter((element) => element.id !== action.payload)),
-          (state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success);
+        state.mycarsFavoritesById = state.mycarsFavoritesById.filter((element) => element.id !== action.payload);
+        state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Success;
       })
       .addCase(deleteFavorite.pending, (state) => {
         state.mycarsFavoritesByIdLoadingStatus = FetchStatus.Pending;
@@ -268,4 +273,12 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, setGeolocation, setCity, setAutoLocation, login, resetMycars } = userSlice.actions;
+export const {
+  logout,
+  setGeolocation,
+  setCity,
+  setAutoLocation,
+  login,
+  resetMycars,
+  resetMycarsFavoritesCountLoadingStatus,
+} = userSlice.actions;

@@ -8,6 +8,7 @@ import priceFormat from "../../../shared/lib/utils/price-format";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
+import { resetMycarsFavoritesCountLoadingStatus } from "../model/user-slice";
 import { postFavorite } from "../model/api-actions/post-favorite";
 import { deleteFavorite } from "../model/api-actions/delete-favorite";
 import { getFavoritesById } from "../model/user-selectors";
@@ -36,10 +37,12 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
 
   const handleFavorite = () => {
     if (useFavoriteList()) {
+      dispatch(resetMycarsFavoritesCountLoadingStatus());
       dispatch(deleteFavorite(favorite.id));
       return;
     }
 
+    dispatch(resetMycarsFavoritesCountLoadingStatus());
     dispatch(
       postFavorite({
         typeId: favorite.type,

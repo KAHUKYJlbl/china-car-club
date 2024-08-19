@@ -24,11 +24,7 @@ import {
   getCurrencyLoadingStatus,
   getCurrentCurrency,
 } from "../../../entities/currency";
-import {
-  fetchManufacturers,
-  getManufacturerByModel,
-  getManufacturersLoadingStatus,
-} from "../../../entities/manufacturer";
+import { getManufacturerByModel, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax } from "../../../entities/order/index";
 import { setCurrentColor } from "../../../entities/order/model/order-slice";
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from "../../../entities/model";
@@ -116,12 +112,6 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       dispatch(fetchSpecificationAddProducts(currentSpecification));
     }
   }, [currentSpecification]);
-
-  useEffect(() => {
-    if (manufacturersLoadingStatus.isIdle) {
-      dispatch(fetchManufacturers());
-    }
-  }, []);
 
   useEffect(() => {
     if (currencyLoadingStatus.isIdle) {
