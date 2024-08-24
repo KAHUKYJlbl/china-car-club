@@ -1,8 +1,4 @@
-import axios, {
-  AxiosInstance,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import axiosRetry from "axios-retry";
 import { camelizeKeys } from "humps";
 import { getToken } from "./token";
@@ -24,10 +20,7 @@ export const createAPI = (): AxiosInstance => {
   });
 
   api.interceptors.response.use((response: AxiosResponse) => {
-    if (
-      response.data &&
-      response.headers["content-type"] === "application/json"
-    ) {
+    if (response.data && response.headers["content-type"] === "application/json") {
       response.data = camelizeKeys(response.data);
     }
 

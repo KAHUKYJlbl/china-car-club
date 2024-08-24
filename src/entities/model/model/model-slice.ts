@@ -1,23 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { NameSpace } from '../../../app/provider/store';
-import { FetchStatus } from '../../../shared/api/fetch-status';
+import { NameSpace } from "../../../app/provider/store";
+import { FetchStatus } from "../../../shared/api/fetch-status";
 
-import { ModelType, ParamsType } from '../lib/types';
-import { fetchModel } from './api-actions/fetch-model';
-import { FILTERS } from '../../../app/settings/filters';
+import { ModelType, ParamsType } from "../lib/types";
+import { fetchModel } from "./api-actions/fetch-model";
+import { FILTERS } from "../../../app/settings/filters";
 
 type InitialState = {
   model: ModelType | null;
   shorts: ParamsType[];
   modelLoadingStatus: FetchStatus;
-}
+};
 
 const initialState: InitialState = {
   model: null,
   shorts: [],
   modelLoadingStatus: FetchStatus.Idle,
-}
+};
 
 export const modelSlice = createSlice({
   name: NameSpace.Model,
@@ -41,20 +41,28 @@ export const modelSlice = createSlice({
         state.shorts = pers.specifications.map((specification) => ({
           id: specification.id,
           params: {
-            engineType: FILTERS.engine!.elements.find((element) =>
-              element.elementId === specification.parameters?.engineType.id
-            )?.name || '',
-            bodyType: FILTERS.body!.elements.find((element) =>
-              element.elementId === specification.parameters?.bodyType.id
-            )?.name || '',
-            driveType: `${FILTERS.drive!.elements.find((element) =>
-              element.elementId === specification.parameters?.driveType.id
-            )?.name} привод` || '',
-            transmissionType: `${FILTERS.transmission!.elements.find((element) =>
-              element.elementId === specification.parameters?.transmissionType.id
-            )?.name} коробка передач` || '',
+            engineType:
+              FILTERS.engine!.elements.find((element) => element.elementId === specification.parameters?.engineType.id)
+                ?.name || "",
+            bodyType:
+              FILTERS.body!.elements.find((element) => element.elementId === specification.parameters?.bodyType.id)
+                ?.name || "",
+            driveType: specification.parameters?.driveType.id
+              ? `${
+                  FILTERS.drive!.elements.find(
+                    (element) => element.elementId === specification.parameters?.driveType.id
+                  )?.name
+                } привод`
+              : "",
+            transmissionType: specification.parameters?.transmissionType.id
+              ? `${
+                  FILTERS.transmission!.elements.find(
+                    (element) => element.elementId === specification.parameters?.transmissionType.id
+                  )?.name
+                } коробка передач`
+              : "",
           },
-        }))
+        }));
 
         state.model = {
           manufacturerId: pers.manufacturer.id,
@@ -76,20 +84,20 @@ export const modelSlice = createSlice({
             powerReserve: specification.parameters?.powerReserve,
             electricPowerReserve: specification.parameters?.electricPowerReserve,
             engineCount: specification.parameters?.engineCount,
-            seats: specification.parameters?.seats.filter((seat) => seat !== '0').join(', '),
+            seats: specification.parameters?.seats.filter((seat) => seat !== "0").join(", "),
             lengthWidthHeight: specification.parameters?.lengthWidthHeight,
             groundClearance: specification.parameters?.groundClearance,
-            frontWheel: specification.parameters?.wheelSize.front.includes('●')
+            frontWheel: specification.parameters?.wheelSize.front.includes("●")
               ? specification.parameters?.wheelSize.front.slice(1, 11)
               : specification.parameters?.wheelSize.front.slice(0, 10),
-            rearWheel: specification.parameters?.wheelSize.front.includes('●')
+            rearWheel: specification.parameters?.wheelSize.front.includes("●")
               ? specification.parameters?.wheelSize.front.slice(1, 11)
               : specification.parameters?.wheelSize.front.slice(0, 10),
             colors: specification.parameters?.colors,
             curbWeight: specification.parameters?.curbWeight,
             engineCapacity: specification.parameters?.engineCapacity
-            ? specification.parameters?.engineCapacity * 1000
-            : null,
+              ? specification.parameters?.engineCapacity * 1000
+              : null,
             price: {
               inChina: specification.price.inChina,
               priceInCityOfReceipt: specification.price.priceInCityOfReceipt,
@@ -106,7 +114,7 @@ export const modelSlice = createSlice({
             },
             acceleration: specification.parameters?.acceleration,
             totalFuelConsumption: specification.parameters?.totalFuelConsumption,
-          }))
+          })),
         };
         state.modelLoadingStatus = FetchStatus.Success;
       })
@@ -115,8 +123,8 @@ export const modelSlice = createSlice({
       })
       .addCase(fetchModel.rejected, (state) => {
         state.modelLoadingStatus = FetchStatus.Failed;
-      })
-  }
+      });
+  },
 });
 
 export const { setIdle, setPending } = modelSlice.actions;

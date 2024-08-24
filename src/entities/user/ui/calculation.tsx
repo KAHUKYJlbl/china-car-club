@@ -53,25 +53,29 @@ export const Calculation = memo(({ calculation, currency }: CalculationProps) =>
         <p className={classes.properties}>
           {[
             FILTERS.engine!.elements.find(
-              (element) => element.elementId === calculation.specification.parameters.engineTypeId
+              (element) => element.elementId === calculation.specification.parameters?.engineTypeId
             )?.name || null,
             FILTERS.body!.elements.find(
               (element) => element.elementId === calculation.specification.parameters?.bodyTypeId
             )?.name || null,
-            `${
-              FILTERS.drive!.elements.find(
-                (element) => element.elementId === calculation.specification.parameters?.driveTypeId
-              )?.name
-            } привод` || null,
-            `${
-              FILTERS.transmission!.elements.find(
-                (element) => element.elementId === calculation.specification.parameters?.transmissionTypeId
-              )?.name
-            } коробка передач` || null,
+            calculation.specification.parameters?.driveTypeId
+              ? `${
+                  FILTERS.drive!.elements.find(
+                    (element) => element.elementId === calculation.specification.parameters?.driveTypeId
+                  )?.name
+                } привод`
+              : null,
+            calculation.specification.parameters?.transmissionTypeId
+              ? `${
+                  FILTERS.transmission!.elements.find(
+                    (element) => element.elementId === calculation.specification.parameters?.transmissionTypeId
+                  )?.name
+                } коробка передач`
+              : null,
             calculation.specification.parameters.powerReserve &&
               `Запас\u00A0хода ${calculation.specification.parameters.powerReserve}\u00A0км`,
           ]
-            .filter((value) => value !== null)
+            .filter((value) => !!value)
             .join("\u00A0•\u00A0")}
         </p>
 

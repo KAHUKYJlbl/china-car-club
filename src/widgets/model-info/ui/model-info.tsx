@@ -95,7 +95,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   }, [specificationImgLoadingStatus.isSuccess]);
 
   useEffect(() => {
-    if (searchParams.get("model")) {
+    if (searchParams.get("model") && specificationsLoadingStatus.isIdle) {
       dispatch(fetchModel(searchParams.get("model")!));
       dispatch(
         fetchSpecificationsInfo({
