@@ -13,6 +13,7 @@ import {
   fetchHash,
   getAuthStatus,
   getFavoritesById,
+  getFavoritesByIdLoadingStatus,
   Login,
   postFavorite,
   resetMycarsFavoritesCountLoadingStatus,
@@ -53,6 +54,7 @@ export const Gallery = memo(
     const promoGallery = useAppSelector(getPromoGallery);
     const promoGalleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
     const favoritesList = useAppSelector(getFavoritesById);
+    const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
 
     const handlers = useSwipeable({
       onSwipedLeft: handleNext,
@@ -91,7 +93,7 @@ export const Gallery = memo(
     }, [specificationId, galleryList, promoGallery.length]);
 
     useEffect(() => {
-      if (gallery.length > 0 && isAuth) {
+      if (gallery.length > 0 && isAuth && !favoritesByIdLoadingStatus.isLoading) {
         dispatch(
           fetchFavoritesById({
             typeId: 1,

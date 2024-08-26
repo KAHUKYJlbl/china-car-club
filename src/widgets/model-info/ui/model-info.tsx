@@ -14,6 +14,7 @@ import {
   getImagesByColor,
   getInitSlide,
   getIntColors,
+  getSpecificationAddProductsLoadingStatus,
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
@@ -68,6 +69,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const options = useAppSelector(getAdds);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currentColor = useAppSelector(getCurrentColor);
+  const specificationAddProductsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
 
   // popups
   const [isTechs, setIsTechs] = useState(false);
@@ -95,7 +97,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   }, [specificationImgLoadingStatus.isSuccess]);
 
   useEffect(() => {
-    if (searchParams.get("model") && specificationsLoadingStatus.isIdle) {
+    if (searchParams.get("model") && !modelLoadingStatus.isLoading) {
       dispatch(fetchModel(searchParams.get("model")!));
       dispatch(
         fetchSpecificationsInfo({
@@ -107,7 +109,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (currentSpecification) {
+    if (currentSpecification && !specificationAddProductsLoadingStatus.isLoading) {
       dispatch(fetchSpecificationsImage(currentSpecification));
       dispatch(fetchSpecificationAddProducts(currentSpecification));
     }
