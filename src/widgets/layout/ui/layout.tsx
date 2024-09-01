@@ -79,7 +79,9 @@ export const Layout = ({ title, children, isMycars }: PropsWithChildren<LayoutPr
       <div className={classes.headingWrapper}>
         <h1 className={classes.heading}>
           {`Купить ${
-            name ? `${name.manufacturer}\u00A0${name.model}` : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
+            name
+              ? `${name.manufacturer}\u00A0${name.model}${isNew ? "" : " с пробегом"}`
+              : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
           } из\u00A0Китая по\u00A0лучшей цене в\u00A0${rne.decline(
             { text: CITIES[city], gender: "женский" },
             "винительный"
