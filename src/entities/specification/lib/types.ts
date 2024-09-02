@@ -1,4 +1,4 @@
-import { ManufacturersType } from '../../manufacturer';
+import { ManufacturersType } from "../../manufacturer";
 
 export type SpecificationType = {
   id: number;
@@ -17,30 +17,30 @@ export type SpecificationType = {
     specificationId: number;
     dealerPrice: number;
     factoryPrice: number;
-  }
+  };
 };
 
 export type ImgUrlType = {
-  original: string,
-  big: string,
-}
+  original: string;
+  big: string;
+};
 
 export type ColorType = {
   color: {
-    id: number,
+    id: number;
     name: {
-      ru?: string,
-      ch: string,
-    },
-    hexList: string[],
-  },
-  urls: ImgUrlType[],
-}
+      ru?: string;
+      ch: string;
+    };
+    hexList: string[];
+  };
+  urls: ImgUrlType[];
+};
 
 export type SpecificationImageType = {
-  external: ColorType[],
-  interior: ColorType[],
-  official: ColorType[],
+  external: ColorType[];
+  interior: ColorType[];
+  official: ColorType[];
 };
 
 export type ManufacturersWithSpecificationsType = ManufacturersType & {
@@ -54,7 +54,7 @@ export type AddItemType = {
   description: string;
   price: number;
   tags: string[];
-}
+};
 
 export type SpecificationAddProductsApiType = {
   groups: {
@@ -67,18 +67,14 @@ export type SpecificationAddProductsApiType = {
 
 export type SpecificationAddProductsType = SpecificationAddProductsApiType & {
   specId: number;
-}
+};
 
 export type PriceHistoryApiType = {
-  data: {
-    dealerPrice: number;
-    factoryPrice: number;
-    date: string;
-}[];
-}
+  data: PriceHistoryType[];
+};
 
 export type PriceHistoryType = {
   dealerPrice: number;
   factoryPrice: number;
   date: string;
-}
+};

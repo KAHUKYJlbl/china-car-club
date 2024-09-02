@@ -8,6 +8,7 @@ import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
 import { CabinetButton } from "../../../shared/ui/header-button";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { getIsNew } from "../../settings";
 
 import { Login } from "./login";
 import { useGeolocation } from "../lib/hooks/use-geolocation";
@@ -36,16 +37,17 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const [isLogin, setIsLogin] = useState(false);
 
   const locationMode = useAppSelector(getGeolocationMode);
+  const isNew = useAppSelector(getIsNew);
   const isAuth = useAppSelector(getAuthStatus);
   const favoritesCount = useAppSelector(getFavoritesCount);
   const favoritesCountLoadingStatus = useAppSelector(getFavoritesCountLoadingStatus);
   const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
 
   useEffect(() => {
-    if (favoritesCountLoadingStatus.isIdle) {
+    if (!favoritesCountLoadingStatus.isLoading && isAuth) {
       dispatch(fetchFavoritesCount());
     }
-  }, []);
+  }, [isAuth]);
 
   useEffect(() => {
     if (favoritesCountLoadingStatus.isIdle && favoritesByIdLoadingStatus.isSuccess) {
@@ -83,14 +85,14 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
           <CabinetButton
             label="мои автомобили"
             icon="cabinet-mycars"
-            callback={() => navigate([AppRoute.MyCars, AppRoute.MyCarsOrders].join(""))}
+            callback={() => navigate([isNew ? "" : "/used", AppRoute.MyCars, AppRoute.MyCarsOrders].join(""))}
           />
 
           <CabinetButton
             label="избранное"
             icon="cabinet-favorite"
             labelCount={favoritesCount}
-            callback={() => navigate([AppRoute.MyCars, AppRoute.MyCarsFavorites].join(""))}
+            callback={() => navigate([isNew ? "" : "/used", AppRoute.MyCars, AppRoute.MyCarsFavorites].join(""))}
           />
         </>
       )}

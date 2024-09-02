@@ -7,4 +7,5 @@ export enum NameSpace {
   Gallery = "Gallery",
   Order = "Order",
   Settings = "Settings",
+  Used = "Used",
 }

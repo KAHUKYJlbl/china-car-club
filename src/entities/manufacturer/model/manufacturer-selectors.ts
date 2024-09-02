@@ -10,13 +10,13 @@ export const getFullList = (state: State) => state[NameSpace.Manufacturer].fullL
 export const getCarsCount = createSelector(getManufacturers, (manufacturers) => ({
   manufacturersCount: manufacturers?.manufacturersCount || 100,
   seriesCount: manufacturers?.seriesCount || 1000,
-  specificationsCount: manufacturers?.specificationsCount || 10000,
+  specificationsCount: manufacturers?.specificationsCount || 9000,
 }));
 
 export const getFullListCount = createSelector(getFullList, (manufacturers) => ({
   manufacturersCount: manufacturers?.manufacturersCount || 100,
   seriesCount: manufacturers?.seriesCount || 1000,
-  specificationsCount: manufacturers?.specificationsCount || 10000,
+  specificationsCount: manufacturers?.specificationsCount || 9000,
 }));
 
 export const getManufacturersLoadingStatus = createSelector(

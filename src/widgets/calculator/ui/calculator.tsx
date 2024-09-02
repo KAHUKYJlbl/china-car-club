@@ -12,7 +12,7 @@ import {
   getSpecificationImgLoadingStatus,
   setSpecsIdle,
 } from "../../../entities/specification";
-import { Currency, fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
+import { Currency } from "../../../entities/currency";
 import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { setIdle } from "../../../entities/model";
 import { ChooseModel } from "../../../features/choose-model";
@@ -29,7 +29,6 @@ export const Calculator = (): JSX.Element => {
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const filtersLoadingStatus = useAppSelector(getFiltersLoadingStatus);
-  const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const galleryLoadingStatus = useAppSelector(getPromoGalleryLoadingStatus);
 
   const [activeFilters, setActiveFilters] = useState<Partial<Record<FilterId, number[]>>>({});
@@ -59,12 +58,6 @@ export const Calculator = (): JSX.Element => {
     setCurrentSpecification(null);
     dispatch(setIdle());
     dispatch(setSpecsIdle());
-  }, []);
-
-  useEffect(() => {
-    if (currencyLoadingStatus.isIdle) {
-      dispatch(fetchCurrency());
-    }
   }, []);
 
   useEffect(() => {
@@ -106,6 +99,7 @@ export const Calculator = (): JSX.Element => {
 
       <div className={classes.filter}>
         <Filter
+          isNewFilters
           activeFilters={activeFilters}
           setActiveFilters={setActiveFilters}
         />

@@ -10,11 +10,12 @@ import { FilterId } from "../lib/types";
 import classes from "./filter.module.sass";
 
 type FolterProps = {
+  isNewFilters?: boolean;
   activeFilters: Partial<Record<FilterId, number[]>>;
   setActiveFilters: React.Dispatch<React.SetStateAction<Partial<Record<FilterId, number[]>>>>;
 };
 
-export const Filter = memo(({ activeFilters, setActiveFilters }: FolterProps): JSX.Element => {
+export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = false }: FolterProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [currentFilter, setCurrentFilter] = useState(Object.keys(FILTERS)[0] as FilterId);
   const isActiveFilters = useActiveFilters(activeFilters);
@@ -94,25 +95,30 @@ export const Filter = memo(({ activeFilters, setActiveFilters }: FolterProps): J
       </div>
 
       <div className={classes.row}>
-        {Object.keys(FILTERS).map((filter) => (
-          <button
-            aria-label={FILTERS[filter as FilterId]?.name}
-            key={filter}
-            className={cn(classes.filterButton, {
-              [classes.active]: filter === currentFilter,
-            })}
-            onClick={() => setCurrentFilter(filter as FilterId)}
-          >
-            {FILTERS[filter as FilterId]?.name}
+        {Object.entries(FILTERS)
+          .filter((filter) => filter[1].isNew || !isNewFilters)
+          .map((filter) => (
+            <button
+              aria-label={FILTERS[filter[0] as FilterId]?.name}
+              key={filter[0]}
+              className={cn(classes.filterButton, {
+                [classes.active]: filter[0] === currentFilter,
+              })}
+              onClick={() => setCurrentFilter(filter[0] as FilterId)}
+            >
+              {FILTERS[filter[0] as FilterId]?.name}
 
-            {((activeFilters[filter as FilterId] !== undefined && activeFilters[filter as FilterId]?.length !== 0) ||
-              (filter === "other" &&
-                FILTERS.other?.elements.some(
-                  (element) =>
-                    element.filterId && activeFilters[element.filterId] && activeFilters[element.filterId]?.length !== 0
-                ))) && <div className={classes.activeFilter} />}
-          </button>
-        ))}
+              {((activeFilters[filter[0] as FilterId] !== undefined &&
+                activeFilters[filter[0] as FilterId]?.length !== 0) ||
+                (filter[0] === "other" &&
+                  FILTERS.other?.elements.some(
+                    (element) =>
+                      element.filterId &&
+                      activeFilters[element.filterId] &&
+                      activeFilters[element.filterId]?.length !== 0
+                  ))) && <div className={classes.activeFilter} />}
+            </button>
+          ))}
       </div>
 
       <div className={classes.row}>

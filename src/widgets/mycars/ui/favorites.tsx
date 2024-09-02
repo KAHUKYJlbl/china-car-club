@@ -9,7 +9,7 @@ import {
   getPagination,
   resetMycars,
 } from "../../../entities/user";
-import { fetchCurrency, getCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
+import { getCurrency } from "../../../entities/currency";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
@@ -27,18 +27,11 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
   const favoritesLoadingStatus = useAppSelector(getFavoritesLoadingStatus);
   const pagination = useAppSelector(getPagination);
   const currency = useAppSelector(getCurrency);
-  const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
   useEffect(() => {
     if (!favoritesLoadingStatus.isLoading) {
       dispatch(resetMycars());
       dispatch(fetchFavorites());
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currencyLoadingStatus.isIdle) {
-      dispatch(fetchCurrency());
     }
   }, []);
 

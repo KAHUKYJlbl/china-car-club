@@ -1,60 +1,62 @@
 import { memo, useEffect } from "react";
 import plural from "plural-ru";
 
+import { getManufacturersLoadingStatus, getSpecsLoadingStatus } from "../../../entities/manufacturer";
 import {
-  fetchManufacturersWithSpectsCount,
-  getCarsCount,
-  getManuacturersList,
-  getManufacturersLoadingStatus,
-  getModelsList,
-  getSpecsLoadingStatus,
-} from "../../../entities/manufacturer";
-import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+  fetchUsedSeries,
+  getUsedCount,
+  getUsedManuacturersList,
+  getUsedSeriesList,
+  getUsedSpecificationsList,
+  getUsedSpecificationsLoadingStatus,
+} from "../../../entities/used";
 import { Dropdown } from "../../../shared/ui/dropdown";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
 import { FilterId } from "../../filter/lib/types";
-import classes from "./choose-model.module.sass";
+import classes from "./choose-used-model.module.sass";
+import { fetchUsedSpecifications } from "../../../entities/used/model/api-actions/fetch-used-specifications";
 
-type ChooseModelProps = {
-  isPromo: boolean;
+type ChooseUsedModelProps = {
   currentManufacturer: number | null;
   setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+  currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial<Record<FilterId, number[]>>;
 };
 
-export const ChooseModel = memo(
+export const ChooseUsedModel = memo(
   ({
-    isPromo,
     currentManufacturer,
     setCurrentManufacturer,
     currentModel,
     setCurrentModel,
+    currentSpecification,
     setCurrentSpecification,
     activeFilters,
-  }: ChooseModelProps): JSX.Element => {
+  }: ChooseUsedModelProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
-    const carsCount = useAppSelector(getCarsCount);
+    const carsCount = useAppSelector(getUsedCount);
     const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
     const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
-    const manufacturersList = useAppSelector(getManuacturersList);
-    const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
+    const manufacturersList = useAppSelector(getUsedManuacturersList);
+    const modelsList = useAppSelector(getUsedSeriesList);
+    const specifications = useAppSelector(getUsedSpecificationsList);
+    const specificationsLoadingStatus = useAppSelector(getUsedSpecificationsLoadingStatus);
 
     useEffect(() => {
-      if (!isPromo) {
-        setCurrentModel(null);
-        setCurrentSpecification(null);
-      }
+      setCurrentModel(null);
+      setCurrentSpecification(null);
 
       if (currentManufacturer) {
         dispatch(
-          fetchManufacturersWithSpectsCount({
-            manufacturerId: currentManufacturer,
+          fetchUsedSeries({
+            manufacturerId: [currentManufacturer],
             filters: activeFilters,
           })
         );
@@ -62,9 +64,20 @@ export const ChooseModel = memo(
     }, [currentManufacturer]);
 
     useEffect(() => {
-      if (!isPromo) {
-        setCurrentManufacturer(null);
+      setCurrentSpecification(null);
+
+      if (currentModel && currentManufacturer) {
+        dispatch(
+          fetchUsedSpecifications({
+            seriesId: [currentManufacturer],
+            filters: activeFilters,
+          })
+        );
       }
+    }, [currentModel]);
+
+    useEffect(() => {
+      setCurrentManufacturer(null);
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.specificationsCount]);
 
     if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
@@ -79,7 +92,7 @@ export const ChooseModel = memo(
             &#32;•&#32;
             {plural(carsCount.seriesCount, "%d модель", "%d модели", "%d моделей")}
             &#32;•&#32;
-            {plural(carsCount.specificationsCount, "%d комплектация", "%d комплектации", "%d комплектаций")}
+            {plural(carsCount.adsCount, "%d предложение", "%d предложения", "%d предложений")}
           </p>
         </div>
 
@@ -101,6 +114,14 @@ export const ChooseModel = memo(
             placeholder={"Модель"}
             list={modelsList}
             disabled={specsLoadingStatus.isLoading}
+          />
+
+          <Dropdown
+            currentElement={currentSpecification}
+            setCurrent={setCurrentSpecification}
+            placeholder={"Комплектация"}
+            list={specifications}
+            disabled={specificationsLoadingStatus.isLoading}
           />
         </div>
       </div>
