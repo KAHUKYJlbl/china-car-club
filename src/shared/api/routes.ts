@@ -25,4 +25,5 @@ export enum APIRoute {
   UsedCatalog = "/ads/manufacturers",
   UsedSeries = "/ads/series",
   UsedSpecifications = "/ads/specifications",
+  UsedAds = "/ads",
 }

@@ -44,10 +44,10 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
 
   useEffect(() => {
-    if (favoritesCountLoadingStatus.isIdle) {
+    if (!favoritesCountLoadingStatus.isLoading && isAuth) {
       dispatch(fetchFavoritesCount());
     }
-  }, []);
+  }, [isAuth]);
 
   useEffect(() => {
     if (favoritesCountLoadingStatus.isIdle && favoritesByIdLoadingStatus.isSuccess) {

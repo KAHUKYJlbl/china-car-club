@@ -14,6 +14,7 @@ import { fetchSettings, getIsNew, getPalette, getSettingsLoadingStatus } from ".
 import { NewHeader } from "./new-header";
 import classes from "./layout.module.sass";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+import { fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
 
 type LayoutProps = {
   title?: string;
@@ -35,10 +36,17 @@ export const Layout = ({ title, children, isMycars }: PropsWithChildren<LayoutPr
   const palette = useAppSelector(getPalette);
   const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
   const settingsLoadingstatus = useAppSelector(getSettingsLoadingStatus);
+  const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
   useEffect(() => {
     if (settingsLoadingstatus.isIdle) {
       dispatch(fetchSettings());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currencyLoadingStatus.isIdle) {
+      dispatch(fetchCurrency());
     }
   }, []);
 

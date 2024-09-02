@@ -3,10 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { NameSpace } from "../../../app/provider/store";
 import { FetchStatus } from "../../../shared/api/fetch-status";
 
-import { UsedCountType, UsedManufacturerDataType, UsedSeriesDataType, UsedSpecificationDataType } from "../lib/types";
-import { fetchUsedSeries } from "./api-actions/fetch-used-series";
+import {
+  PaginationType,
+  UsedAdsType,
+  UsedCountType,
+  UsedManufacturerDataType,
+  UsedSeriesDataType,
+  UsedSpecificationDataType,
+} from "../lib/types";
 import { fetchUsedManufacturers } from "./api-actions/fetch-used-manufacturers";
 import { fetchUsedSpecifications } from "./api-actions/fetch-used-specifications";
+import { fetchUsedSeries } from "./api-actions/fetch-used-series";
+import { fetchUsedAds } from "./api-actions/fetch-used-ads";
 
 type InitialState = {
   manufacturers: UsedManufacturerDataType[];
@@ -16,6 +24,9 @@ type InitialState = {
   specifications: UsedSpecificationDataType[];
   specificationsLoadingStatus: FetchStatus;
   count: UsedCountType;
+  adsList: UsedAdsType[];
+  adsPagination: PaginationType;
+  adsLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -31,6 +42,12 @@ const initialState: InitialState = {
     specificationsCount: 0,
     adsCount: 0,
   },
+  adsList: [],
+  adsPagination: {
+    currentPage: 0,
+    lastPage: 0,
+  },
+  adsLoadingStatus: FetchStatus.Idle,
 };
 
 export const usedSlice = createSlice({
@@ -74,6 +91,17 @@ export const usedSlice = createSlice({
       })
       .addCase(fetchUsedSpecifications.rejected, (state) => {
         state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchUsedAds.fulfilled, (state, action) => {
+        state.adsList = action.payload.data;
+        state.adsPagination = action.payload.meta;
+        state.adsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchUsedAds.pending, (state) => {
+        state.adsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchUsedAds.rejected, (state) => {
+        state.adsLoadingStatus = FetchStatus.Failed;
       });
   },
 });

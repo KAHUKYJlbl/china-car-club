@@ -36,6 +36,10 @@ export const getUsedSpecificationsList = createSelector(getUsedSpecifications, (
 
 export const getUsedCount = (state: State) => state[NameSpace.Used].count;
 
+export const getUsedAdsList = (state: State) => state[NameSpace.Used].adsList;
+
+export const getUsedAdsPagination = (state: State) => state[NameSpace.Used].adsPagination;
+
 export const getUsedManufacturersLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Used].manufacturersLoadingStatus,
   (status) => ({
@@ -58,6 +62,16 @@ export const getUsedSeriesLoadingStatus = createSelector(
 
 export const getUsedSpecificationsLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Used].specificationsLoadingStatus,
+  (status) => ({
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+
+export const getUsedAdsLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Used].adsLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,
