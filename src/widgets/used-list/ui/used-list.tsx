@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 
-import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
+import { fetchUsedManufacturers } from "../../../entities/used";
 import { Filter, FilterId } from "../../../features/filter";
 import { ChooseUsedModel } from "../../../features/choose-used-model";
-import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
 import classes from "./used-list.module.sass";
@@ -13,20 +13,25 @@ type UsedListProps = {};
 
 export const UsedList = ({}: UsedListProps) => {
   const dispatch = useAppDispatch();
+  const [_searchParams, setSearchParams] = useSearchParams();
+
   const [activeFilters, setActiveFilters] = useState<Partial<Record<FilterId, number[]>>>({});
   const [currentManufacturer, setCurrentManufacturer] = useState<number | null>(null);
   const [currentModel, setCurrentModel] = useState<number | null>(null);
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(null);
   const [filtersToFetch] = useDebounce(activeFilters, 650);
 
-  const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
-  const filtersLoadingStatus = useAppSelector(getFiltersLoadingStatus);
+  useEffect(() => {
+    dispatch(fetchUsedManufacturers(filtersToFetch));
+  }, [filtersToFetch]);
 
   useEffect(() => {
-    if (filtersLoadingStatus.isIdle && manufacturersLoadingStatus.isSuccess) {
-      dispatch(fetchFiltered(filtersToFetch));
-    }
-  }, [filtersToFetch]);
+    setSearchParams({
+      manufacturer: currentManufacturer?.toString() || "",
+      model: currentModel?.toString() || "",
+      specification: currentSpecification?.toString() || "",
+    });
+  }, [currentManufacturer, currentModel, currentSpecification]);
 
   return (
     <div className={classes.wrapper}>

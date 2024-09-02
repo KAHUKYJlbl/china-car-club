@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import { userSlice } from "../../../../entities/user";
+import { usedSlice } from "../../../../entities/used";
 import { modelSlice } from "../../../../entities/model";
 import { orderSlice } from "../../../../entities/order";
 import { gallerySlice } from "../../../../entities/gallery";
@@ -20,4 +21,5 @@ export const rootReducer = combineReducers({
   [NameSpace.Gallery]: gallerySlice.reducer,
   [NameSpace.Order]: orderSlice.reducer,
   [NameSpace.Settings]: settingsSlice.reducer,
+  [NameSpace.Used]: usedSlice.reducer,
 });
