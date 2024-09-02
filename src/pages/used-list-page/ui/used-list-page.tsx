@@ -1,11 +1,10 @@
-import { Calculator } from "../../../widgets/calculator";
 import { Layout } from "../../../widgets/layout";
+import { UsedList } from "../../../widgets/used-list";
 
 const UsedListPage = () => {
   return (
     <Layout heading={{ heading: "", subheading: "" }}>
-      {/* <UsedList /> */}
-      <Calculator />
+      <UsedList />
     </Layout>
   );
 };

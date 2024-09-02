@@ -1,0 +1,41 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: grid
+  grid-template-rows: min-content min-content min-content
+  grid-template-columns: 310px minmax(598px, 886px)
+  gap: 4px
+
+  margin-top: 20px
+
+  @media screen and (max-width: 960px)
+    display: flex
+    flex-direction: column
+
+  .model
+    grid-area: 1 / 1 / 3 / 2
+
+    border-radius: 16px
+    background-color: $primary
+
+  .filter
+    grid-area: 1 / 2 / 2 / 3
+
+    border-radius: 16px
+    background-color: $primary
+
+  .sort
+    display: flex
+    justify-content: center
+    align-items: center
+    gap: 4px
+    grid-area: 2 / 2 / 3 / 3
+
+    height: 40px
+    border-radius: 16px
+    background-color: $primary
+
+    cursor: pointer
+
+  .grey
+    color: $text-light

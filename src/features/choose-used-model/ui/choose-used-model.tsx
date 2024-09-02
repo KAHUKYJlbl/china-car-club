@@ -9,34 +9,40 @@ import {
   getModelsList,
   getSpecsLoadingStatus,
 } from "../../../entities/manufacturer";
+import {
+  fetchSpecifications,
+  getCheapestSpecification,
+  getSpecifications,
+  getSpecificationsLoadingStatus,
+} from "../../../entities/specification";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
-import { Dropdown } from "../../../shared/ui/dropdown";
+import { Dropdown, DropdownBlocks } from "../../../shared/ui/dropdown";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
 import { FilterId } from "../../filter/lib/types";
-import classes from "./choose-model.module.sass";
+import classes from "./choose-used-model.module.sass";
 
-type ChooseModelProps = {
-  isPromo: boolean;
+type ChooseUsedModelProps = {
   currentManufacturer: number | null;
   setCurrentManufacturer: React.Dispatch<React.SetStateAction<number | null>>;
   currentModel: number | null;
   setCurrentModel: React.Dispatch<React.SetStateAction<number | null>>;
+  currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial<Record<FilterId, number[]>>;
 };
 
-export const ChooseModel = memo(
+export const ChooseUsedModel = memo(
   ({
-    isPromo,
     currentManufacturer,
     setCurrentManufacturer,
     currentModel,
     setCurrentModel,
+    currentSpecification,
     setCurrentSpecification,
     activeFilters,
-  }: ChooseModelProps): JSX.Element => {
+  }: ChooseUsedModelProps): JSX.Element => {
     const dispatch = useAppDispatch();
 
     const carsCount = useAppSelector(getCarsCount);
@@ -44,12 +50,13 @@ export const ChooseModel = memo(
     const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
     const manufacturersList = useAppSelector(getManuacturersList);
     const modelsList = useAppSelector((state) => getModelsList(state, currentManufacturer));
+    const specifications = useAppSelector(getSpecifications);
+    const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
+    const cheapest = useAppSelector(getCheapestSpecification);
 
     useEffect(() => {
-      if (!isPromo) {
-        setCurrentModel(null);
-        setCurrentSpecification(null);
-      }
+      setCurrentModel(null);
+      setCurrentSpecification(null);
 
       if (currentManufacturer) {
         dispatch(
@@ -62,9 +69,25 @@ export const ChooseModel = memo(
     }, [currentManufacturer]);
 
     useEffect(() => {
-      if (!isPromo) {
-        setCurrentManufacturer(null);
+      if (currentModel && currentManufacturer) {
+        dispatch(
+          fetchSpecifications({
+            manufacturerId: currentManufacturer,
+            modelId: currentModel,
+            filters: activeFilters,
+          })
+        );
       }
+    }, [currentModel]);
+
+    useEffect(() => {
+      if (specifications && specifications.length !== 0) {
+        setCurrentSpecification(cheapest?.id);
+      }
+    }, [cheapest?.id]);
+
+    useEffect(() => {
+      setCurrentManufacturer(null);
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.specificationsCount]);
 
     if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
@@ -101,6 +124,14 @@ export const ChooseModel = memo(
             placeholder={"Модель"}
             list={modelsList}
             disabled={specsLoadingStatus.isLoading}
+          />
+
+          <DropdownBlocks
+            currentElement={currentSpecification}
+            setCurrent={setCurrentSpecification}
+            placeholder="Комплектация"
+            list={specifications}
+            disabled={specificationsLoadingStatus.isLoading}
           />
         </div>
       </div>

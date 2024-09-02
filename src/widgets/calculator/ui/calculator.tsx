@@ -106,6 +106,7 @@ export const Calculator = (): JSX.Element => {
 
       <div className={classes.filter}>
         <Filter
+          isNewFilters
           activeFilters={activeFilters}
           setActiveFilters={setActiveFilters}
         />
