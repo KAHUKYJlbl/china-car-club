@@ -22,8 +22,8 @@ export enum APIRoute {
   GetFavoritesById = "/client/car/favorites/by-favorable-ids",
   Currency = "/exchange-rates",
   GetSettings = "/site/settings",
-  UsedCatalog = "/ads/manufacturers",
-  UsedSeries = "/ads/series",
-  UsedSpecifications = "/ads/specifications",
-  UsedAds = "/ads",
+  UsedCatalog = "/used/manufacturers",
+  UsedSeries = "/used/series",
+  UsedSpecifications = "/used/specifications",
+  UsedAds = "/used",
 }

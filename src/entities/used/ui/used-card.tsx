@@ -84,7 +84,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
         </p>
 
         <p className={classes.price}>
-          <span className={classes.grey}>Мин. цена в китае</span>
+          <span className={classes.grey}>Цена в китае</span>
           <span className={classes.bold}>
             {priceFormat(
               getCurrencyExchange(ads.priceListWithLogisticsByCurrentDay[0].price, Currencies.RUB, currency)
