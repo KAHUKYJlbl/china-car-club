@@ -65,18 +65,6 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         elementId: 3,
         name: "3-5 лет",
       },
-      {
-        elementId: 4,
-        name: "5-8 лет",
-      },
-      {
-        elementId: 5,
-        name: "8-10 лет",
-      },
-      {
-        elementId: 6,
-        name: "более 10 лет",
-      },
     ],
   },
   engine: {

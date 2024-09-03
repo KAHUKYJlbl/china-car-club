@@ -10,7 +10,7 @@ import { getFiltersQuery } from "../../lib/get-filters-query";
 
 export const fetchUsedSpecifications = createAsyncThunk<
   UsedSpecificationDataType[],
-  { seriesId: number[]; filters: Partial<Record<FilterId, number[]>> },
+  { seriesIds: number[]; filters: Partial<Record<FilterId, number[]>> },
   {
     dispatch: AppDispatch;
     state: State;
@@ -20,7 +20,7 @@ export const fetchUsedSpecifications = createAsyncThunk<
   try {
     const { data } = await axios.post<UsedSpecificationDataType[]>(
       [APIRoute.UsedSpecifications, "?", getFiltersQuery(reqData.filters)].join(""),
-      { seriesIds: reqData.seriesId }
+      { seriesIds: reqData.seriesIds }
     );
 
     return data;

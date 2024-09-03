@@ -12,7 +12,7 @@ export const fetchUsedAds = createAsyncThunk<
   UsedAdsDataType,
   {
     manufacturerIds: number[];
-    seriesId: number[];
+    seriesIds: number[];
     specificationIds: number[];
     filters: Partial<Record<FilterId, number[]>>;
   },
@@ -27,7 +27,7 @@ export const fetchUsedAds = createAsyncThunk<
       [APIRoute.UsedAds, "?", getFiltersQuery(reqData.filters)].join(""),
       {
         manufacturerIds: reqData.manufacturerIds,
-        seriesId: reqData.seriesId,
+        seriesIds: reqData.seriesIds,
         specificationIds: reqData.specificationIds,
       }
     );

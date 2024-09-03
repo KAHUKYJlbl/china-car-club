@@ -42,7 +42,7 @@ export const UsedList = ({}: UsedListProps) => {
     dispatch(
       fetchUsedAds({
         manufacturerIds: currentManufacturer ? [currentManufacturer] : [],
-        seriesId: currentModel ? [currentModel] : [],
+        seriesIds: currentModel ? [currentModel] : [],
         specificationIds: currentSpecification ? [currentSpecification] : [],
         filters: filtersToFetch,
       })

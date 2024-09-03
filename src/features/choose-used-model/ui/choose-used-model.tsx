@@ -69,7 +69,7 @@ export const ChooseUsedModel = memo(
       if (currentModel && currentManufacturer) {
         dispatch(
           fetchUsedSpecifications({
-            seriesId: [currentManufacturer],
+            seriesIds: [currentModel],
             filters: activeFilters,
           })
         );
