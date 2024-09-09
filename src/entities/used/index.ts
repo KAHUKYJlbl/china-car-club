@@ -1,4 +1,4 @@
-export { usedSlice } from "./model/used-slice";
+export { usedSlice, dropLists } from "./model/used-slice";
 export { fetchUsedManufacturers } from "./model/api-actions/fetch-used-manufacturers";
 export { fetchUsedSeries } from "./model/api-actions/fetch-used-series";
 export { fetchUsedAds } from "./model/api-actions/fetch-used-ads";

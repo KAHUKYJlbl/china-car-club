@@ -1,17 +1,18 @@
 import { memo, useEffect } from "react";
 import plural from "plural-ru";
 
-import { getManufacturersLoadingStatus, getSpecsLoadingStatus } from "../../../entities/manufacturer";
 import {
   fetchUsedSeries,
   getUsedCount,
   getUsedManuacturersList,
+  getUsedManufacturersLoadingStatus,
   getUsedSeriesList,
+  getUsedSeriesLoadingStatus,
   getUsedSpecificationsList,
   getUsedSpecificationsLoadingStatus,
 } from "../../../entities/used";
 import { Dropdown } from "../../../shared/ui/dropdown";
-import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+// import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
@@ -42,8 +43,8 @@ export const ChooseUsedModel = memo(
     const dispatch = useAppDispatch();
 
     const carsCount = useAppSelector(getUsedCount);
-    const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
-    const specsLoadingStatus = useAppSelector(getSpecsLoadingStatus);
+    const manufacturersLoadingStatus = useAppSelector(getUsedManufacturersLoadingStatus);
+    const seriesLoadingStatus = useAppSelector(getUsedSeriesLoadingStatus);
     const manufacturersList = useAppSelector(getUsedManuacturersList);
     const modelsList = useAppSelector(getUsedSeriesList);
     const specifications = useAppSelector(getUsedSpecificationsList);
@@ -80,9 +81,9 @@ export const ChooseUsedModel = memo(
       setCurrentManufacturer(null);
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.specificationsCount]);
 
-    if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
-      return <LoadingSpinner spinnerType="widget" />;
-    }
+    // if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
+    //   return <LoadingSpinner spinnerType="widget" />;
+    // }
 
     return (
       <div className={classes.wrapper}>
@@ -106,6 +107,7 @@ export const ChooseUsedModel = memo(
               basicListHeader: "Все марки",
               extraListHeader: "Популярные",
             }}
+            disabled={manufacturersLoadingStatus.isLoading}
           />
 
           <Dropdown
@@ -113,7 +115,7 @@ export const ChooseUsedModel = memo(
             setCurrent={setCurrentModel}
             placeholder={"Модель"}
             list={modelsList}
-            disabled={specsLoadingStatus.isLoading}
+            disabled={seriesLoadingStatus.isLoading}
           />
 
           <Dropdown

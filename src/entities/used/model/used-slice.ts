@@ -53,7 +53,13 @@ const initialState: InitialState = {
 export const usedSlice = createSlice({
   name: NameSpace.Used,
   initialState,
-  reducers: {},
+  reducers: {
+    dropLists: (state) => {
+      state.manufacturers = [];
+      state.series = [];
+      state.specifications = [];
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchUsedManufacturers.fulfilled, (state, action) => {
@@ -105,3 +111,5 @@ export const usedSlice = createSlice({
       });
   },
 });
+
+export const { dropLists } = usedSlice.actions;

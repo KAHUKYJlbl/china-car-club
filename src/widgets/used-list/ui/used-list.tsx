@@ -4,6 +4,7 @@ import { useDebounce } from "use-debounce";
 import dayjs from "dayjs";
 
 import {
+  dropLists,
   fetchUsedAds,
   fetchUsedManufacturers,
   getUsedAdsList,
@@ -35,6 +36,12 @@ export const UsedList = ({}: UsedListProps) => {
   const currency = useAppSelector(getCurrency);
 
   useEffect(() => {
+    setCurrentManufacturer(null);
+    setCurrentModel(null);
+    setCurrentSpecification(null);
+
+    dispatch(dropLists());
+
     dispatch(fetchUsedManufacturers(filtersToFetch));
   }, [filtersToFetch]);
 
@@ -57,7 +64,7 @@ export const UsedList = ({}: UsedListProps) => {
     });
   }, [currentManufacturer, currentModel, currentSpecification]);
 
-  if (!currency || manufacturersLoadingStatus.isIdle || manufacturersLoadingStatus.isLoading) {
+  if (!currency || manufacturersLoadingStatus.isIdle) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -97,22 +104,28 @@ export const UsedList = ({}: UsedListProps) => {
         />
       </div>
 
-      <ul className={classes.list}>
-        {adsList
-          .toSorted(
-            (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
-            // currentSort === "increase"
-            //   ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
-            //   : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
-          )
-          .map((ads) => (
-            <UsedCard
-              ads={ads}
-              currency={currency}
-              key={ads.id}
-            />
-          ))}
-      </ul>
+      {manufacturersLoadingStatus.isLoading ? (
+        <div className={classes.loadingWrapper}>
+          <LoadingSpinner spinnerType="page" />
+        </div>
+      ) : (
+        <ul className={classes.list}>
+          {adsList
+            .toSorted(
+              (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+              // currentSort === "increase"
+              //   ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
+              //   : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+            )
+            .map((ads) => (
+              <UsedCard
+                ads={ads}
+                currency={currency}
+                key={ads.id}
+              />
+            ))}
+        </ul>
+      )}
     </div>
   );
 };
