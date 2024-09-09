@@ -1,0 +1,25 @@
+@use '../../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  justify-content: center
+  align-items: center
+
+  height: 40px
+  min-width: 40px
+  padding: 0 8px
+
+  border: 2px solid $border
+  border-radius: 12px
+
+  cursor: pointer
+  user-select: none
+
+.current
+  border-color: $accent
+  cursor: default
+
+.disabled
+  border-color: $primary
+  opacity: 0.8
+  cursor: default

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { NameSpace } from "../../../app/provider/store";
 import { FetchStatus } from "../../../shared/api/fetch-status";
@@ -44,8 +44,8 @@ const initialState: InitialState = {
   },
   adsList: [],
   adsPagination: {
-    currentPage: 0,
-    lastPage: 0,
+    currentPage: 1,
+    lastPage: 1,
   },
   adsLoadingStatus: FetchStatus.Idle,
 };
@@ -53,7 +53,16 @@ const initialState: InitialState = {
 export const usedSlice = createSlice({
   name: NameSpace.Used,
   initialState,
-  reducers: {},
+  reducers: {
+    dropLists: (state) => {
+      state.manufacturers = [];
+      state.series = [];
+      state.specifications = [];
+    },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.adsPagination = { ...state.adsPagination, currentPage: action.payload };
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchUsedManufacturers.fulfilled, (state, action) => {
@@ -94,7 +103,14 @@ export const usedSlice = createSlice({
       })
       .addCase(fetchUsedAds.fulfilled, (state, action) => {
         state.adsList = action.payload.data;
-        state.adsPagination = action.payload.meta;
+        if (action.payload.meta.lastPage < action.payload.meta.currentPage) {
+          state.adsPagination = {
+            currentPage: action.payload.meta.lastPage,
+            lastPage: action.payload.meta.lastPage,
+          };
+        } else {
+          state.adsPagination = action.payload.meta;
+        }
         state.adsLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchUsedAds.pending, (state) => {
@@ -105,3 +121,5 @@ export const usedSlice = createSlice({
       });
   },
 });
+
+export const { dropLists, setCurrentPage } = usedSlice.actions;

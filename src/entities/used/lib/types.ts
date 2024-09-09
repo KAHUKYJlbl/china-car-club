@@ -13,11 +13,6 @@ type DataType = {
   };
 };
 
-type PriceType = {
-  typeId: number;
-  price: number;
-};
-
 export type PaginationType = {
   currentPage: number;
   lastPage: number;
@@ -45,8 +40,9 @@ export type UsedSpecificationDataType = DataType & {
 export type UsedAdsType = {
   id: number;
   createdAt: string;
-  priceListWithLogisticsByCurrentDay: PriceType[];
-  age: string;
+  price: number;
+  ageDate: string;
+  ownersCount: number;
   mileage: number;
   specification: DataType & {
     calcVisible: false;
