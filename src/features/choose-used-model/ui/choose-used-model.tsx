@@ -10,9 +10,9 @@ import {
   getUsedSeriesLoadingStatus,
   getUsedSpecificationsList,
   getUsedSpecificationsLoadingStatus,
+  setCurrentPage,
 } from "../../../entities/used";
 import { Dropdown } from "../../../shared/ui/dropdown";
-// import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
@@ -53,6 +53,7 @@ export const ChooseUsedModel = memo(
     useEffect(() => {
       setCurrentModel(null);
       setCurrentSpecification(null);
+      dispatch(setCurrentPage(1));
 
       if (currentManufacturer) {
         dispatch(
@@ -80,10 +81,6 @@ export const ChooseUsedModel = memo(
     useEffect(() => {
       setCurrentManufacturer(null);
     }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.specificationsCount]);
-
-    // if (manufacturersLoadingStatus.isLoading || !manufacturersList) {
-    //   return <LoadingSpinner spinnerType="widget" />;
-    // }
 
     return (
       <div className={classes.wrapper}>

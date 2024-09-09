@@ -37,9 +37,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
         <img
           src={
             ads.specification.id
-              ? `${process.env.STATIC_URL || `${window.location.origin}/storage`}/specification/${
-                  ads.specification.id
-                }.jpg`
+              ? `${process.env.STATIC_URL || `${window.location.origin}/storage`}/specification_ad/${ads.id}/1.jpg`
               : "./images/noimage.jpg"
           }
         />
