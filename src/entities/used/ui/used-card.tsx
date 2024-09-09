@@ -2,6 +2,7 @@ import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import plural from "plural-ru";
 
 import { Currencies, getCurrencyExchange } from "../../currency";
 import { FILTERS } from "../../../app/settings/filters";
@@ -53,9 +54,19 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
           {ads.specification && (
             <>
               <span>{ads.specification.name.ru || ads.specification.name.ch}</span>
-              <span className={classes.grey}>{ads.specification.year} поколение • 2024 выпуск</span>
+              <span className={classes.grey}>
+                {ads.specification.year} поколение •{" "}
+                {ads.ownersCount
+                  ? plural(ads.ownersCount, "%d владелец", "%d владельца", "%d владельцев")
+                  : "На учет не вставал"}
+              </span>
               <span>
-                Пробег {ads.mileage} км • Возраст {ads.age}
+                Пробег {ads.mileage} км • Возраст{" "}
+                {`${
+                  dayjs().diff(dayjs(ads.ageDate), "years") === 0
+                    ? ""
+                    : plural(dayjs().diff(dayjs(ads.ageDate), "years"), "%d год", "%d года", "%d лет")
+                } ${(dayjs().diff(dayjs(ads.ageDate), "M") % 12) + 1} мес.`}
               </span>
             </>
           )}
@@ -86,10 +97,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
         <p className={classes.price}>
           <span className={classes.grey}>Цена в китае</span>
           <span className={classes.bold}>
-            {priceFormat(
-              getCurrencyExchange(ads.priceListWithLogisticsByCurrentDay[0].price, Currencies.RUB, currency)
-            )}{" "}
-            ₽
+            {priceFormat(getCurrencyExchange(ads.price, Currencies.RUB, currency))} ₽
           </span>
         </p>
       </div>
