@@ -1,4 +1,5 @@
 export { usedSlice, dropLists, setCurrentPage } from "./model/used-slice";
+export { fetchUsedSpecifications } from "./model/api-actions/fetch-used-specifications";
 export { fetchUsedManufacturers } from "./model/api-actions/fetch-used-manufacturers";
 export { fetchUsedSeries } from "./model/api-actions/fetch-used-series";
 export { fetchUsedAds } from "./model/api-actions/fetch-used-ads";

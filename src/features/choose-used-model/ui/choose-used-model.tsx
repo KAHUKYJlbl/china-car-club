@@ -3,6 +3,7 @@ import plural from "plural-ru";
 
 import {
   fetchUsedSeries,
+  fetchUsedSpecifications,
   getUsedCount,
   getUsedManuacturersList,
   getUsedManufacturersLoadingStatus,
@@ -18,7 +19,6 @@ import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
 import { FilterId } from "../../filter/lib/types";
 import classes from "./choose-used-model.module.sass";
-import { fetchUsedSpecifications } from "../../../entities/used/model/api-actions/fetch-used-specifications";
 
 type ChooseUsedModelProps = {
   currentManufacturer: number | null;
@@ -77,10 +77,6 @@ export const ChooseUsedModel = memo(
         );
       }
     }, [currentModel]);
-
-    useEffect(() => {
-      setCurrentManufacturer(null);
-    }, [carsCount.manufacturersCount, carsCount.seriesCount, carsCount.specificationsCount]);
 
     return (
       <div className={classes.wrapper}>
