@@ -44,6 +44,7 @@ export type UsedAdsType = {
   ageDate: string;
   ownersCount: number;
   mileage: number;
+  color: string;
   specification: DataType & {
     calcVisible: false;
     year: number;

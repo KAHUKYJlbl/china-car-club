@@ -19,13 +19,16 @@ import {
   UsedCard,
 } from "../../../entities/used";
 import { getCurrency } from "../../../entities/currency";
+// import { UsedSort } from "../../../features/sort";
 import { Filter, FilterId } from "../../../features/filter";
 import { ChooseUsedModel } from "../../../features/choose-used-model";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { Pagination } from "../../../shared/ui/pagination";
+import { Modal } from "../../../shared/ui/modal";
 
+// import { USED_SORT } from "../lib/const";
 import classes from "./used-list.module.sass";
 
 type UsedListProps = {};
@@ -38,6 +41,8 @@ export const UsedList = ({}: UsedListProps) => {
   const [currentManufacturer, setCurrentManufacturer] = useState<number | null>(null);
   const [currentModel, setCurrentModel] = useState<number | null>(null);
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(null);
+  // const [currentSort, setCurrentSort] = useState(0);
+  const [isSort, setIsSort] = useState(false);
   const [filtersToFetch] = useDebounce(activeFilters, 650);
   const manufacturersLoadingStatus = useAppSelector(getUsedManufacturersLoadingStatus);
   const seriesLoadingStatus = useAppSelector(getUsedSeriesLoadingStatus);
@@ -77,7 +82,13 @@ export const UsedList = ({}: UsedListProps) => {
   }, [filtersToFetch]);
 
   useEffect(() => {
-    if (!adsLoadingStatus.isLoading && manufacturersLoadingStatus.isSuccess) {
+    if (
+      (!adsLoadingStatus.isLoading &&
+        !specificationsLoadingStatus.isLoading &&
+        !seriesLoadingStatus.isLoading &&
+        manufacturersLoadingStatus.isSuccess) ||
+      manufacturersLoadingStatus.isIdle
+    ) {
       dispatch(
         fetchUsedAds({
           manufacturerIds: currentManufacturer ? [currentManufacturer] : [],
@@ -177,6 +188,19 @@ export const UsedList = ({}: UsedListProps) => {
             </>
           )}
         </div>
+      )}
+
+      {isSort && (
+        <Modal
+          onClose={() => setIsSort(false)}
+          button
+        >
+          {/* <UsedSort
+            currentSort={currentSort}
+            setCurrentSort={setCurrentSort}
+            sortItems={USED_SORT}
+          /> */}
+        </Modal>
       )}
     </div>
   );
