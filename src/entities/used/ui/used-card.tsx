@@ -8,6 +8,7 @@ import { Currencies, getCurrencyExchange } from "../../currency";
 import { FILTERS } from "../../../app/settings/filters";
 import { AppRoute } from "../../../app/provider/router";
 import priceFormat from "../../../shared/lib/utils/price-format";
+import capitalize from "../../../shared/lib/utils/capitalize";
 
 import { UsedAdsType } from "../lib/types";
 import classes from "./used-card.module.sass";
@@ -31,7 +32,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
         <p className={classes.header}>
           <span>Объявление</span>
 
-          <span className={classes.grey}>{dayjs(ads.createdAt).locale("ru").fromNow()}</span>
+          <span className={classes.grey}>{capitalize(dayjs(ads.createdAt).locale("ru").fromNow())}</span>
         </p>
 
         <img
@@ -64,7 +65,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
                   dayjs().diff(dayjs(ads.ageDate), "years") === 0
                     ? ""
                     : plural(dayjs().diff(dayjs(ads.ageDate), "years"), "%d год", "%d года", "%d лет")
-                } ${(dayjs().diff(dayjs(ads.ageDate), "M") % 12) + 1} мес.`}
+                } ${(dayjs().diff(dayjs(ads.ageDate), "M") % 12) + 1} мес`}
               </span>
             </>
           )}
@@ -87,6 +88,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
             } коробка передач` || null,
             ads.specification.parameters.powerReserve &&
               `Запас\u00A0хода ${ads.specification.parameters.powerReserve}\u00A0км`,
+            ads.color && `${ads.color}\u00A0кузов`,
           ]
             .filter((value) => value !== null)
             .join("\u00A0•\u00A0")}
