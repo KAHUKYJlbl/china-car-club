@@ -16,6 +16,7 @@ export const fetchUsedAds = createAsyncThunk<
     specificationIds: number[];
     filters: Partial<Record<FilterId, number[]>>;
     currentPage: number;
+    sort: string;
   },
   {
     dispatch: AppDispatch;
@@ -25,7 +26,15 @@ export const fetchUsedAds = createAsyncThunk<
 >("Manufacturer/fetchUsedAds", async (reqData, { extra: axios }) => {
   try {
     const { data } = await axios.post<UsedAdsDataType>(
-      [APIRoute.UsedAds, "?", `page=${reqData.currentPage}`, "&", getFiltersQuery(reqData.filters)].join(""),
+      [
+        APIRoute.UsedAds,
+        "?",
+        `page=${reqData.currentPage}`,
+        "&",
+        `orderBy=${reqData.sort}`,
+        "&",
+        getFiltersQuery(reqData.filters),
+      ].join(""),
       {
         manufacturerIds: reqData.manufacturerIds,
         seriesIds: reqData.seriesIds,

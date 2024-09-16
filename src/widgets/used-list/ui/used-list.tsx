@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "use-debounce";
-import dayjs from "dayjs";
 
 import {
   dropLists,
@@ -19,7 +18,7 @@ import {
   UsedCard,
 } from "../../../entities/used";
 import { getCurrency } from "../../../entities/currency";
-// import { UsedSort } from "../../../features/sort";
+import { UsedSort } from "../../../features/sort";
 import { Filter, FilterId } from "../../../features/filter";
 import { ChooseUsedModel } from "../../../features/choose-used-model";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -28,7 +27,7 @@ import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { Pagination } from "../../../shared/ui/pagination";
 import { Modal } from "../../../shared/ui/modal";
 
-// import { USED_SORT } from "../lib/const";
+import { USED_SORT } from "../lib/const";
 import classes from "./used-list.module.sass";
 
 type UsedListProps = {};
@@ -41,7 +40,7 @@ export const UsedList = ({}: UsedListProps) => {
   const [currentManufacturer, setCurrentManufacturer] = useState<number | null>(null);
   const [currentModel, setCurrentModel] = useState<number | null>(null);
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(null);
-  // const [currentSort, setCurrentSort] = useState(0);
+  const [currentSort, setCurrentSort] = useState(USED_SORT[0].id);
   const [isSort, setIsSort] = useState(false);
   const [filtersToFetch] = useDebounce(activeFilters, 650);
   const manufacturersLoadingStatus = useAppSelector(getUsedManufacturersLoadingStatus);
@@ -83,11 +82,11 @@ export const UsedList = ({}: UsedListProps) => {
 
   useEffect(() => {
     if (
+      manufacturersLoadingStatus.isIdle ||
       (!adsLoadingStatus.isLoading &&
         !specificationsLoadingStatus.isLoading &&
         !seriesLoadingStatus.isLoading &&
-        manufacturersLoadingStatus.isSuccess) ||
-      manufacturersLoadingStatus.isIdle
+        manufacturersLoadingStatus.isSuccess)
     ) {
       dispatch(
         fetchUsedAds({
@@ -96,6 +95,7 @@ export const UsedList = ({}: UsedListProps) => {
           specificationIds: currentSpecification ? [currentSpecification] : [],
           filters: filtersToFetch,
           currentPage: pagination.currentPage,
+          sort: currentSort,
         })
       );
     }
@@ -103,9 +103,29 @@ export const UsedList = ({}: UsedListProps) => {
     seriesLoadingStatus.isSuccess,
     specificationsLoadingStatus.isSuccess,
     currentSpecification,
-    filtersToFetch,
     pagination.currentPage,
   ]);
+
+  useEffect(() => {
+    if (
+      manufacturersLoadingStatus.isIdle ||
+      (!adsLoadingStatus.isLoading &&
+        !specificationsLoadingStatus.isLoading &&
+        !seriesLoadingStatus.isLoading &&
+        manufacturersLoadingStatus.isSuccess)
+    ) {
+      dispatch(
+        fetchUsedAds({
+          manufacturerIds: currentManufacturer ? [currentManufacturer] : [],
+          seriesIds: currentModel ? [currentModel] : [],
+          specificationIds: currentSpecification ? [currentSpecification] : [],
+          filters: filtersToFetch,
+          currentPage: 1,
+          sort: currentSort,
+        })
+      );
+    }
+  }, [filtersToFetch, currentSort]);
 
   useEffect(() => {
     setSearchParams({
@@ -128,7 +148,10 @@ export const UsedList = ({}: UsedListProps) => {
         />
       </div>
 
-      <div className={classes.sort}>
+      <div
+        className={classes.sort}
+        onClick={() => setIsSort(true)}
+      >
         <svg
           className={classes.grey}
           width={12}
@@ -140,7 +163,7 @@ export const UsedList = ({}: UsedListProps) => {
 
         <p className={classes.grey}>Сортировка:</p>
 
-        <p>Сначала новые объявления</p>
+        <p>{USED_SORT.find((sort) => sort.id === currentSort)?.name}</p>
       </div>
 
       <div className={classes.model}>
@@ -164,20 +187,13 @@ export const UsedList = ({}: UsedListProps) => {
           ) : (
             <>
               <ul className={classes.list}>
-                {adsList
-                  .toSorted(
-                    (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
-                    // currentSort === "increase"
-                    //   ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
-                    //   : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
-                  )
-                  .map((ads) => (
-                    <UsedCard
-                      ads={ads}
-                      currency={currency}
-                      key={ads.id}
-                    />
-                  ))}
+                {adsList.map((ads) => (
+                  <UsedCard
+                    ads={ads}
+                    currency={currency}
+                    key={ads.id}
+                  />
+                ))}
               </ul>
 
               <Pagination
@@ -191,15 +207,13 @@ export const UsedList = ({}: UsedListProps) => {
       )}
 
       {isSort && (
-        <Modal
-          onClose={() => setIsSort(false)}
-          button
-        >
-          {/* <UsedSort
+        <Modal onClose={() => setIsSort(false)}>
+          <UsedSort
             currentSort={currentSort}
             setCurrentSort={setCurrentSort}
             sortItems={USED_SORT}
-          /> */}
+            onSubmit={() => setIsSort(false)}
+          />
         </Modal>
       )}
     </div>
