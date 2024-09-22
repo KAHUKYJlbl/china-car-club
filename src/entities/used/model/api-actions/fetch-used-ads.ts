@@ -23,7 +23,7 @@ export const fetchUsedAds = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->("Manufacturer/fetchUsedAds", async (reqData, { extra: axios }) => {
+>("Used/fetchUsedAds", async (reqData, { extra: axios }) => {
   try {
     const { data } = await axios.post<UsedAdsDataType>(
       [

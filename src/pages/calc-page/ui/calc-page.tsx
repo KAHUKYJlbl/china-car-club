@@ -9,6 +9,8 @@ const CalcPage = (): JSX.Element => {
         heading: MAIN_HEADING,
         subheading: MAIN_SUBHEADING,
       }}
+      isCitySwitch
+      isUsedSwitch
     >
       <Calculator />
     </Layout>

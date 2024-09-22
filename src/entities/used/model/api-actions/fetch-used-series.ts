@@ -16,7 +16,7 @@ export const fetchUsedSeries = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->("Manufacturer/fetchUsedSeries", async (reqData, { extra: axios }) => {
+>("Used/fetchUsedSeries", async (reqData, { extra: axios }) => {
   try {
     const { data } = await axios.post<UsedSeriesDataType[]>(
       [APIRoute.UsedSeries, "?", getFiltersQuery(reqData.filters)].join(""),

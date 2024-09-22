@@ -1,0 +1,72 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+  padding: 12px
+
+  button
+    align-self: flex-start
+
+    min-width: 90px
+    width: 90px
+    height: 24px
+    padding: 4px 16px
+    border-radius: 10px
+    cursor: pointer
+
+    background-color: $secondary
+
+    font-size: 12px
+    line-height: 15px
+
+  button:hover
+    opacity: 0.8
+
+  .top
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    .header
+      height: 40px
+      overflow: hidden
+      padding: 0 6px
+
+      font-size: 14px
+      line-height: 18px
+      text-overflow: clip
+
+    a
+      display: flex
+      justify-content: center
+      align-items: center
+
+      height: 40px
+      width: 80px
+
+      border-radius: 12px
+      background-color: $secondary
+
+      font-size: 12px
+      line-height: 16px
+
+    a:hover
+      opacity: 0.8
+
+  .bottom
+    display: flex
+    flex-direction: column
+    gap: 2px
+
+    padding: 0 6px
+
+    font-size: 12px
+    line-height: 15px
+    font-weight: 700
+
+    .label
+      font-weight: 400
+      color: $text-secondary

@@ -2,7 +2,7 @@ import { memo } from "react";
 import cn from "classnames";
 
 import { getAddItemsPrice, getAdds, getCurrentTax, setCurrentTax } from "../../../entities/order";
-import { getDealerName } from "../../../entities/settings";
+import { getDealerName, getIsNew } from "../../../entities/settings";
 import { PriceType } from "../../../entities/model/lib/types";
 import {
   Currencies,
@@ -29,6 +29,7 @@ export const Prices = memo(({ prices, setIsTaxes }: PricesProps): JSX.Element =>
   const dispatch = useAppDispatch();
 
   const currentTax = useAppSelector(getCurrentTax);
+  const isNew = useAppSelector(getIsNew);
   const adds = useAppSelector(getAdds);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currency = useAppSelector(getCurrency);
@@ -50,12 +51,14 @@ export const Prices = memo(({ prices, setIsTaxes }: PricesProps): JSX.Element =>
           </p>
         </div>
 
-        <div className={classes.row}>
-          <p>Налог на автомобиль в Китае</p>
-          <p>
-            {priceFormat(getCurrencyExchange(prices.tax, currentCurrency, currency))} {currentCurrency}
-          </p>
-        </div>
+        {isNew && (
+          <div className={classes.row}>
+            <p>Налог на автомобиль в Китае</p>
+            <p>
+              {priceFormat(getCurrencyExchange(prices.tax, currentCurrency, currency))} {currentCurrency}
+            </p>
+          </div>
+        )}
 
         <div className={cn(classes.row, classes.bold)}>
           <p>Цена на границе Китая</p>

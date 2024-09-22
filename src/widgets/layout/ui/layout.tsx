@@ -18,14 +18,20 @@ import { fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/curre
 
 type LayoutProps = {
   title?: string;
-  isMycars?: boolean;
+  isUsedSwitch?: boolean;
+  isCitySwitch?: boolean;
   heading: {
     heading: string;
     subheading: string | null;
   };
 };
 
-export const Layout = ({ title, children, isMycars }: PropsWithChildren<LayoutProps>): JSX.Element => {
+export const Layout = ({
+  title,
+  children,
+  isUsedSwitch,
+  isCitySwitch,
+}: PropsWithChildren<LayoutProps>): JSX.Element => {
   const dispatch = useAppDispatch();
   const rne = new RussianNounsJS.Engine();
 
@@ -82,7 +88,10 @@ export const Layout = ({ title, children, isMycars }: PropsWithChildren<LayoutPr
 
       <SvgSprite />
 
-      <NewHeader isMycars={isMycars} />
+      <NewHeader
+        isUsedSwitch={isUsedSwitch}
+        isCitySwitch={isCitySwitch}
+      />
 
       <div className={classes.headingWrapper}>
         <h1 className={classes.heading}>

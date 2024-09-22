@@ -1,10 +1,11 @@
 export enum AppRoute {
+  NotFound = "/not-found",
   Main = "/",
   Used = "/used",
   Model = "/model",
   MyCars = "/mycars",
-  MyCarsFavorites = "/favorites",
-  MyCarsOrders = "/orders",
-  MyCarsCalculations = "/calculations",
-  NotFound = "/not-found",
+  UsedModel = "model",
+  Favorites = "favorites",
+  Orders = "orders",
+  Calculations = "calculations",
 }

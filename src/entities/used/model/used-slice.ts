@@ -5,6 +5,7 @@ import { FetchStatus } from "../../../shared/api/fetch-status";
 
 import {
   PaginationType,
+  UsedAdsStoreType,
   UsedAdsType,
   UsedCountType,
   UsedManufacturerDataType,
@@ -15,6 +16,8 @@ import { fetchUsedManufacturers } from "./api-actions/fetch-used-manufacturers";
 import { fetchUsedSpecifications } from "./api-actions/fetch-used-specifications";
 import { fetchUsedSeries } from "./api-actions/fetch-used-series";
 import { fetchUsedAds } from "./api-actions/fetch-used-ads";
+import { fetchAdById } from "./api-actions/fetch-ad-by-id";
+import { PRICE_TYPE_ID } from "../../../shared/lib/const";
 
 type InitialState = {
   manufacturers: UsedManufacturerDataType[];
@@ -27,6 +30,8 @@ type InitialState = {
   adsList: UsedAdsType[];
   adsPagination: PaginationType;
   adsLoadingStatus: FetchStatus;
+  currentAd: UsedAdsStoreType | null;
+  currentAdLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -48,6 +53,8 @@ const initialState: InitialState = {
     lastPage: 1,
   },
   adsLoadingStatus: FetchStatus.Idle,
+  currentAd: null,
+  currentAdLoadingStatus: FetchStatus.Idle,
 };
 
 export const usedSlice = createSlice({
@@ -100,6 +107,39 @@ export const usedSlice = createSlice({
       })
       .addCase(fetchUsedSpecifications.rejected, (state) => {
         state.specificationsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchAdById.fulfilled, (state, action) => {
+        state.currentAd = {
+          ...action.payload,
+          prices: {
+            inChina: action.payload.adPrice,
+            priceInCityOfReceipt: action.payload.prices[0].details.priceInCityOfReceipt,
+            withLogisticsPers: action.payload.prices.find((prices) => String(prices.typeId) === PRICE_TYPE_ID.Pers)!
+              .details.withLogistics,
+            withLogisticsCorp: action.payload.prices.find((prices) => String(prices.typeId) === PRICE_TYPE_ID.Corp)!
+              .details.withLogistics,
+            withLogisticsResale: action.payload.prices.find((prices) => String(prices.typeId) === PRICE_TYPE_ID.Resale)!
+              .details.withLogistics,
+            tax: action.payload.prices[0].details.tax,
+            eptsSbktsUtil: action.payload.prices[0].details.eptsSbktsUtil,
+            borderPrice: action.payload.prices[0].details.borderPrice,
+            commission: action.payload.prices[0].details.commission,
+            customsClearancePers: action.payload.prices.find((prices) => String(prices.typeId) === PRICE_TYPE_ID.Pers)!
+              .details.customsClearance,
+            customsClearanceCorp: action.payload.prices.find((prices) => String(prices.typeId) === PRICE_TYPE_ID.Corp)!
+              .details.customsClearance,
+            customsClearanceResale: action.payload.prices.find(
+              (prices) => String(prices.typeId) === PRICE_TYPE_ID.Resale
+            )!.details.customsClearance,
+          },
+        };
+        state.currentAdLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchAdById.pending, (state) => {
+        state.currentAdLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchAdById.rejected, (state) => {
+        state.currentAdLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchUsedAds.fulfilled, (state, action) => {
         state.adsList = action.payload.data;

@@ -97,7 +97,7 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
         <p className={classes.price}>
           <span className={classes.grey}>Цена в китае</span>
           <span className={classes.bold}>
-            {priceFormat(getCurrencyExchange(ads.price, Currencies.RUB, currency))} ₽
+            {priceFormat(getCurrencyExchange(ads.adPrice, Currencies.RUB, currency))} ₽
           </span>
         </p>
       </div>
@@ -105,7 +105,11 @@ export const UsedCard = memo(({ ads, currency }: FavoriteProps) => {
       <div className={classes.buttons}>
         <button
           aria-label="рассчитать цену"
-          onClick={() => navigate(`${AppRoute.Model}?model=${ads.series.id}&spec=${ads.specification.id}`)}
+          onClick={() =>
+            navigate(
+              `${AppRoute.Used}${AppRoute.Model}?model=${ads.series.id}&spec=${ads.specification.id}&ad=${ads.id}`
+            )
+          }
         >
           Рассчитать цену
         </button>

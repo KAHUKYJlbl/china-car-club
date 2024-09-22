@@ -22,76 +22,79 @@ type OrderButtonsProps = {
     customsPrice: number;
   };
   epts: boolean;
+  used?: boolean;
 };
 
-export const OrderButtons = memo(({ specificationId, epts, prices, onOrder }: OrderButtonsProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const currentTax = useAppSelector(getCurrentTax);
-  const geolocation = useAppSelector(getGeolocation);
-  const city = useAppSelector(getCurrentCity);
-  const addItems = useAppSelector(getAddItems);
-  const currentCurrency = Object.values(Currencies).indexOf(useAppSelector(getCurrentCurrency)) + 1;
+export const OrderButtons = memo(
+  ({ specificationId, epts, prices, onOrder, used = false }: OrderButtonsProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+    const currentTax = useAppSelector(getCurrentTax);
+    const geolocation = useAppSelector(getGeolocation);
+    const city = useAppSelector(getCurrentCity);
+    const addItems = useAppSelector(getAddItems);
+    const currentCurrency = Object.values(Currencies).indexOf(useAppSelector(getCurrentCurrency)) + 1;
 
-  if (!specificationId) {
-    return <LoadingSpinner spinnerType="widget" />;
-  }
+    if (!specificationId) {
+      return <LoadingSpinner spinnerType="widget" />;
+    }
 
-  const orderHandler = () => {
-    dispatch(
-      postOrder({
-        specificationId: specificationId,
-        customerLocation: geolocation,
-        customerDelivery: {
-          countryId: null,
-          cityId: city,
-        },
-        addItems: addItems,
-        prices: {
-          totalPrice: {
-            currencyQuantity: prices.totalPrice,
-            currencyId: currentCurrency,
+    const orderHandler = () => {
+      dispatch(
+        postOrder({
+          specificationId: specificationId,
+          customerLocation: geolocation,
+          customerDelivery: {
+            countryId: null,
+            cityId: city,
           },
-          availabilityOfEpts: epts,
-          priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
-          minPrice: {
-            currencyQuantity: prices.minPrice,
-            currencyId: currentCurrency,
+          addItems: addItems,
+          prices: {
+            totalPrice: {
+              currencyQuantity: prices.totalPrice,
+              currencyId: currentCurrency,
+            },
+            availabilityOfEpts: epts,
+            priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
+            minPrice: {
+              currencyQuantity: prices.minPrice,
+              currencyId: currentCurrency,
+            },
+            tax: {
+              currencyQuantity: prices.tax,
+              currencyId: currentCurrency,
+            },
+            comission: {
+              currencyQuantity: prices.comission,
+              currencyId: 2,
+            },
+            borderPrice: {
+              currencyQuantity: prices.borderPrice,
+              currencyId: currentCurrency,
+            },
+            customsPrice: {
+              currencyQuantity: prices.customsPrice,
+              currencyId: 1,
+            },
           },
-          tax: {
-            currencyQuantity: prices.tax,
-            currencyId: currentCurrency,
-          },
-          comission: {
-            currencyQuantity: prices.comission,
-            currencyId: 2,
-          },
-          borderPrice: {
-            currencyQuantity: prices.borderPrice,
-            currencyId: currentCurrency,
-          },
-          customsPrice: {
-            currencyQuantity: prices.customsPrice,
-            currencyId: 1,
-          },
-        },
-      })
-    );
+        })
+      );
 
-    onOrder();
-  };
+      onOrder();
+    };
 
-  return (
-    <div className={classes.wrapper}>
-      <div className={classes.mainButtons}>
-        <button
-          aria-label="заказать машину"
-          onClick={orderHandler}
-        >
-          Хочу все спеццены
-        </button>
+    return (
+      <div className={classes.wrapper}>
+        <div className={classes.mainButtons}>
+          <button
+            aria-label="заказать машину"
+            onClick={orderHandler}
+          >
+            {used ? "Хочу цену дешевле" : "Хочу все спеццены"}
+          </button>
+        </div>
+
+        <p className={classes.info}>Проверим и покажем все спеццены. Выберите лучшее предложение.</p>
       </div>
-
-      <p className={classes.info}>Проверим и покажем все спеццены. Выберите лучшее предложение.</p>
-    </div>
-  );
-});
+    );
+  }
+);
