@@ -33,19 +33,14 @@ export const HeaderUser = memo(({}: headerUserProps) => {
   const locationMode = useAppSelector(getGeolocationMode);
   const favoritesCount = useAppSelector(getFavoritesCount);
   const favoritesLoadingStatus = useAppSelector(getFavoritesLoadingStatus);
-  const favoritesByIdLoadingStatus = useAppSelector(
-    getFavoritesByIdLoadingStatus
-  );
+  const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
   const isAuth = useAppSelector(getAuthStatus);
   const [cookies] = useCookies([AUTH_TOKEN_KEY_NAME]);
   const [isLogin, setIsLogin] = useState(false);
   const location = useGeolocation(storedLocation);
 
   useEffect(() => {
-    if (
-      (favoritesLoadingStatus.isIdle && isAuth) ||
-      favoritesByIdLoadingStatus.isSuccess
-    ) {
+    if ((favoritesLoadingStatus.isIdle && isAuth) || favoritesByIdLoadingStatus.isSuccess) {
       dispatch(fetchFavoritesCount());
     }
   }, [isAuth, favoritesByIdLoadingStatus.isSuccess]);
@@ -83,9 +78,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
               icon="mycars"
               text="Мои&nbsp;автомобили"
               type="light"
-              onClick={() =>
-                navigate([AppRoute.MyCars, AppRoute.MyCarsOrders].join(""))
-              }
+              onClick={() => navigate(`${AppRoute.MyCars}/${AppRoute.Orders}`)}
             />
 
             <HeaderButton
@@ -94,9 +87,7 @@ export const HeaderUser = memo(({}: headerUserProps) => {
               text="Избранное"
               type="light"
               labelCount={favoritesCount}
-              onClick={() =>
-                navigate([AppRoute.MyCars, AppRoute.MyCarsFavorites].join(""))
-              }
+              onClick={() => navigate(`${AppRoute.MyCars}/${AppRoute.Favorites}`)}
             />
           </>
         )}
@@ -111,7 +102,10 @@ export const HeaderUser = memo(({}: headerUserProps) => {
       </div>
 
       {isLogin && (
-        <Login onClose={() => setIsLogin(false)} onLogin={() => null} />
+        <Login
+          onClose={() => setIsLogin(false)}
+          onLogin={() => null}
+        />
       )}
     </>
   );
