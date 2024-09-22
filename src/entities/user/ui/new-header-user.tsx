@@ -85,14 +85,14 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
           <CabinetButton
             label="мои автомобили"
             icon="cabinet-mycars"
-            callback={() => navigate([isNew ? "" : "/used", AppRoute.MyCars, AppRoute.MyCarsOrders].join(""))}
+            callback={() => navigate([isNew ? "" : AppRoute.Used, AppRoute.MyCars, "/", AppRoute.Orders].join(""))}
           />
 
           <CabinetButton
             label="избранное"
             icon="cabinet-favorite"
             labelCount={favoritesCount}
-            callback={() => navigate([isNew ? "" : "/used", AppRoute.MyCars, AppRoute.MyCarsFavorites].join(""))}
+            callback={() => navigate([isNew ? "" : AppRoute.Used, AppRoute.MyCars, "/", AppRoute.Favorites].join(""))}
           />
         </>
       )}

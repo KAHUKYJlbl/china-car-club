@@ -1,24 +1,24 @@
-import { SortItemType } from "../../../features/sort/lib/types";
+import { SORT_DIRECTION, SORT_TYPE, SortItemType } from "../../../features/sort";
 
 export const USED_SORT: SortItemType[] = [
   {
+    name: "Сначала свежие предложнния",
+    id: `${SORT_DIRECTION.Ascend}_${SORT_TYPE.Date}`,
+  },
+  {
     name: "По возрастанию цены",
-    id: "2_1",
+    id: `${SORT_DIRECTION.Descend}_${SORT_TYPE.Price}`,
   },
   {
     name: "По убыванию цены",
-    id: "1_1",
+    id: `${SORT_DIRECTION.Ascend}_${SORT_TYPE.Price}`,
   },
   {
     name: "Сначала мин. пробег",
-    id: "2_2",
+    id: `${SORT_DIRECTION.Descend}_${SORT_TYPE.Mileage}`,
   },
   {
     name: "Сначала мин. возраст авто",
-    id: "2_3",
-  },
-  {
-    name: "Сначала свежие предложнния",
-    id: "2_4",
+    id: `${SORT_DIRECTION.Ascend}_${SORT_TYPE.Age}`,
   },
 ];

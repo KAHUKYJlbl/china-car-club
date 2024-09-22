@@ -18,10 +18,20 @@ export const AppRouter = createBrowserRouter(
         element={<CalcPage />}
       />
 
-      <Route
-        path={AppRoute.Used}
-        element={<UsedListPage />}
-      />
+      <Route path={AppRoute.Used}>
+        <Route
+          index
+          element={<UsedListPage />}
+        />
+        <Route
+          path={AppRoute.UsedModel}
+          element={
+            <PrivateRoute>
+              <ModelPage />
+            </PrivateRoute>
+          }
+        />
+      </Route>
 
       <Route
         path={AppRoute.Model}
@@ -41,15 +51,15 @@ export const AppRouter = createBrowserRouter(
         }
       >
         <Route
-          path="orders"
+          path={AppRoute.Orders}
           element={<Mycars folder="orders" />}
         />
         <Route
-          path="favorites"
+          path={AppRoute.Favorites}
           element={<Mycars folder="favorites" />}
         />
         <Route
-          path="calculations"
+          path={AppRoute.Calculations}
           element={<Mycars folder="calculations" />}
         />
       </Route>

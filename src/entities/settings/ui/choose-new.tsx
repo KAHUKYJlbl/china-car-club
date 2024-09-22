@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
@@ -8,7 +9,6 @@ import { getIsNew } from "../model/settings-selectors";
 import { setNew, setUsed } from "../model/settings-slice";
 
 import classes from "./choose-new.module.sass";
-import { useEffect } from "react";
 
 type ChooseNewProps = {};
 

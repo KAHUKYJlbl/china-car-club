@@ -452,12 +452,12 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
         {isDone && (
           <Modal
             onClose={() => {
-              navigate(`${AppRoute.MyCars}${AppRoute.MyCarsOrders}`);
+              navigate(`${AppRoute.MyCars}/${AppRoute.Orders}`);
             }}
           >
             <Done
               onDone={() => {
-                navigate(`${AppRoute.MyCars}${AppRoute.MyCarsOrders}`);
+                navigate(`${AppRoute.MyCars}/${AppRoute.Orders}`);
               }}
             />
           </Modal>

@@ -16,10 +16,11 @@ import classes from "./new-header.module.sass";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 
 type NewHeaderProps = {
-  isMycars?: boolean;
+  isUsedSwitch?: boolean;
+  isCitySwitch?: boolean;
 };
 
-export const NewHeader = ({ isMycars = false }: NewHeaderProps) => {
+export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHeaderProps) => {
   const dispatch = useAppDispatch();
   const isDesktop = useMediaQuery({ query: "(min-width: 961px)" });
 
@@ -81,17 +82,15 @@ export const NewHeader = ({ isMycars = false }: NewHeaderProps) => {
             ></img>
           </Link>
 
-          {isDesktop && !isMycars && (
-            <>
-              <ChooseNew />
+          {isDesktop && isUsedSwitch && <ChooseNew />}
 
-              <DropdownHeader
-                currentElement={city}
-                setCurrent={setCityHandler}
-                list={DROPDOWN_CITIES}
-                placeholder="Город доставки авто"
-              />
-            </>
+          {isDesktop && isCitySwitch && (
+            <DropdownHeader
+              currentElement={city}
+              setCurrent={setCityHandler}
+              list={DROPDOWN_CITIES}
+              placeholder="Город доставки авто"
+            />
           )}
         </div>
 

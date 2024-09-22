@@ -2,17 +2,20 @@ import { memo } from "react";
 
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { getShorts } from "../../../entities/model";
+import { getUsedShorts } from "../../../entities/used";
 
 import classes from "./info-bar.module.sass";
 
 type InfoBarProps = {
-  currentSpecification: number | null;
+  currentSpecification?: number | null;
   setIsTechs: React.Dispatch<React.SetStateAction<boolean>>;
   setIsPriceHistory: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const InfoBar = memo(({ currentSpecification, setIsTechs, setIsPriceHistory }: InfoBarProps): JSX.Element => {
-  const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
+  const shorts = currentSpecification
+    ? useAppSelector((state) => getShorts(state, currentSpecification))
+    : useAppSelector(getUsedShorts);
 
   if (!shorts) {
     return <div>Loading ...</div>;

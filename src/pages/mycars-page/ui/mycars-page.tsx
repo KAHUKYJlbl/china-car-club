@@ -9,7 +9,6 @@ const MycarsPage = (): JSX.Element => (
       heading: MYCARS_HEADING,
       subheading: null,
     }}
-    isMycars
   >
     <Outlet />
   </Layout>

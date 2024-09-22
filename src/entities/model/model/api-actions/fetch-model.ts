@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from "axios";
 
 import { AppDispatch, State } from "../../../../app/provider/store";
+import { PRICE_TYPE_ID } from "../../../../shared/lib/const";
 import { APIRoute } from "../../../../shared/api/routes";
 
 import { ModelApiType } from "../../lib/types";
@@ -22,15 +23,15 @@ export const fetchModel = createAsyncThunk<
 >("Model/fetchModel", async (modelId, { extra: axios }) => {
   try {
     const pers = await axios.get<ModelApiType>(
-      [generatePath(APIRoute.Model, { id: modelId }), "?priceTypeId=2"].join("")
+      [generatePath(APIRoute.Model, { id: modelId }), `?priceTypeId=${PRICE_TYPE_ID.Pers}`].join("")
     );
 
     const corp = await axios.get<ModelApiType>(
-      [generatePath(APIRoute.Model, { id: modelId }), "?priceTypeId=3"].join("")
+      [generatePath(APIRoute.Model, { id: modelId }), `?priceTypeId=${PRICE_TYPE_ID.Corp}`].join("")
     );
 
     const resale = await axios.get<ModelApiType>(
-      [generatePath(APIRoute.Model, { id: modelId }), "?priceTypeId=6"].join("")
+      [generatePath(APIRoute.Model, { id: modelId }), `?priceTypeId=${PRICE_TYPE_ID.Resale}`].join("")
     );
 
     return {

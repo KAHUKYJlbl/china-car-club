@@ -13,6 +13,11 @@ type DataType = {
   };
 };
 
+type ParametrType = {
+  id: number;
+  name: string;
+};
+
 export type PaginationType = {
   currentPage: number;
   lastPage: number;
@@ -40,7 +45,7 @@ export type UsedSpecificationDataType = DataType & {
 export type UsedAdsType = {
   id: number;
   createdAt: string;
-  price: number;
+  adPrice: number;
   ageDate: string;
   ownersCount: number;
   mileage: number;
@@ -63,4 +68,89 @@ export type UsedAdsType = {
 export type UsedAdsDataType = {
   data: UsedAdsType[];
   meta: PaginationType;
+};
+
+export type AdCustomsType = {
+  final: number;
+  fee: number;
+  duty: number;
+  recyclingFee: number;
+  exciseTax: number;
+  nds: number;
+  parkingTowTruck: number;
+  customsBrokerServices: number;
+};
+
+export type AdPriceType = {
+  inChina: number;
+  priceInCityOfReceipt: number;
+  withLogisticsPers: number;
+  withLogisticsCorp: number;
+  withLogisticsResale: number;
+  tax: number;
+  eptsSbktsUtil: number;
+  borderPrice: number;
+  commission: number;
+  customsClearancePers: AdCustomsType;
+  customsClearanceCorp: AdCustomsType;
+  customsClearanceResale: AdCustomsType;
+};
+
+export type UsedAdsStoreType = {
+  id: number;
+  createdAt: string;
+  adPrice: number;
+  ageDate: string;
+  ownersCount: number;
+  mileage: number;
+  color: string;
+  specification: DataType & {
+    calcVisible: false;
+    year: number;
+    parameters: {
+      bodyType: ParametrType;
+      engineType: ParametrType;
+      transmissionType: ParametrType;
+      driveType: ParametrType;
+      powerReserve: null;
+    };
+  };
+  series: DataType;
+  manufacturer: DataType;
+  prices: AdPriceType;
+};
+
+export type UsedAdsApiType = {
+  id: number;
+  createdAt: string;
+  adPrice: number;
+  ageDate: string;
+  ownersCount: number;
+  mileage: number;
+  color: string;
+  specification: DataType & {
+    calcVisible: false;
+    year: number;
+    parameters: {
+      bodyType: ParametrType;
+      engineType: ParametrType;
+      transmissionType: ParametrType;
+      driveType: ParametrType;
+      powerReserve: null;
+    };
+  };
+  series: DataType;
+  manufacturer: DataType;
+  prices: {
+    typeId: number;
+    details: {
+      withLogistics: number;
+      tax: number;
+      eptsSbktsUtil: number;
+      borderPrice: number;
+      commission: number;
+      priceInCityOfReceipt: number;
+      customsClearance: AdCustomsType;
+    };
+  }[];
 };
