@@ -5,7 +5,6 @@ import { AppRoute } from "../../../app/provider/router";
 import { getTotal } from "../../../features/choose-options/lib/utils/get-total";
 import { getPrices } from "../../../features/choose-options/lib/utils/get-prices";
 import { ChooseOptions } from "../../../features/choose-options/ui/choose-options";
-import { SpecificationInfo } from "../../../features/choose-specification/ui/specification-info";
 import {
   fetchSpecificationAddProducts,
   getImagesByColor,
@@ -35,9 +34,9 @@ import { OrderButtons } from "./order-buttons";
 import { Questions } from "./questions";
 import { InfoBar } from "./info-bar";
 import { Prices } from "./prices";
-import { Techs } from "./techs";
-import { Taxes } from "./taxes";
-import { Adds } from "./adds";
+// import { Techs } from "./techs";
+// import { Taxes } from "./taxes";
+// import { Adds } from "./adds";
 import classes from "./model-info.module.sass";
 
 type ModelInfoProps = {
@@ -63,9 +62,9 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
   const specificationAddProductsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
 
   // popups
-  const [isTechs, setIsTechs] = useState(false);
-  const [isAddProducts, setIsAddProducts] = useState(false);
-  const [isTaxes, setIsTaxes] = useState(false);
+  const [_isTechs, setIsTechs] = useState(false);
+  const [_isAddProducts, setIsAddProducts] = useState(false);
+  const [_isTaxes, setIsTaxes] = useState(false);
   const [isPriceHistory, setIsPriceHistory] = useState(false);
   const [isQuestions, setIsQuestions] = useState(false);
 
