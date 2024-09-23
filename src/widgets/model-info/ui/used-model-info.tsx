@@ -34,9 +34,9 @@ import { OrderButtons } from "./order-buttons";
 import { Questions } from "./questions";
 import { InfoBar } from "./info-bar";
 import { Prices } from "./prices";
-// import { Techs } from "./techs";
-// import { Taxes } from "./taxes";
-// import { Adds } from "./adds";
+import { Techs } from "./techs";
+import { Taxes } from "./taxes";
+import { Adds } from "./adds";
 import classes from "./model-info.module.sass";
 
 type ModelInfoProps = {
@@ -50,8 +50,6 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const adInfo = useAppSelector(getCurrentAd);
   const adLoadingStatus = useAppSelector(getCurrentAdLoadingStatus);
-  // const extColors = useAppSelector(getExtColors);
-  // const intColors = useAppSelector(getIntColors);
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, Number(searchParams.get("model"))));
@@ -62,9 +60,9 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
   const specificationAddProductsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
 
   // popups
-  const [_isTechs, setIsTechs] = useState(false);
-  const [_isAddProducts, setIsAddProducts] = useState(false);
-  const [_isTaxes, setIsTaxes] = useState(false);
+  const [isTechs, setIsTechs] = useState(false);
+  const [isAddProducts, setIsAddProducts] = useState(false);
+  const [isTaxes, setIsTaxes] = useState(false);
   const [isPriceHistory, setIsPriceHistory] = useState(false);
   const [isQuestions, setIsQuestions] = useState(false);
 
@@ -93,14 +91,7 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
     }
   }, []);
 
-  if (
-    adLoadingStatus.isLoading ||
-    // specificationsLoadingStatus.isLoading ||
-    // manufacturersLoadingStatus.isLoading ||
-    // modelLoadingStatus.isLoading ||
-    !adInfo ||
-    !currency
-  ) {
+  if (adLoadingStatus.isLoading || !adInfo || !currency) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -193,28 +184,84 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
         />
       </div>
 
-      {/* {isTechs && (
+      {isTechs && (
         <Modal
           onClose={() => setIsTechs(false)}
           button
         >
           <Techs
-            currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
-            techs={adInfo}
+            techs={{
+              id: adInfo.specification.id,
+              stateId: 1,
+              name: adInfo.specification.name.ru || adInfo.specification.name.ch,
+              year: adInfo.specification.year,
+              engineType: adInfo.specification.parameters.engineType.id,
+              bodyType: adInfo.specification.parameters.bodyType.name,
+              driveType: adInfo.specification.parameters.driveType.name,
+              transmissionType: adInfo.specification.parameters.transmissionType.name,
+              power: adInfo.specification.parameters.power,
+              torque: adInfo.specification.parameters.torque,
+              batteryCapacity: adInfo.specification.parameters.batteryCapacity,
+              powerReserve: adInfo.specification.parameters.powerReserve,
+              electricPowerReserve: adInfo.specification.parameters.electricPowerReserve,
+              engineCount: Number(adInfo.specification.parameters.engineCount),
+              seats: adInfo.specification.parameters.seats[0].toString(),
+              lengthWidthHeight: adInfo.specification.parameters.lengthWidthHeight,
+              groundClearance: adInfo.specification.parameters.groundClearance,
+              curbWeight: adInfo.specification.parameters.curbWeight,
+              acceleration: adInfo.specification.parameters.acceleration,
+              engineCapacity: adInfo.specification.parameters.engineCapacity,
+              totalFuelConsumption: adInfo.specification.parameters.totalFuelConsumption,
+              frontWheel: adInfo.specification.parameters.wheelSize.front,
+              rearWheel: adInfo.specification.parameters.wheelSize.rear,
+              colors: {
+                external: [],
+                interior: [],
+              },
+              price: adInfo.prices,
+            }}
           />
         </Modal>
-      )} */}
+      )}
 
-      {/* {isAddProducts && (
+      {isAddProducts && (
         <Modal
           onClose={() => setIsAddProducts(false)}
           button
         >
           <Adds
-            currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
-            techs={specificationParams}
+            techs={{
+              id: adInfo.specification.id,
+              stateId: 1,
+              name: adInfo.specification.name.ru || adInfo.specification.name.ch,
+              year: adInfo.specification.year,
+              engineType: adInfo.specification.parameters.engineType.id,
+              bodyType: adInfo.specification.parameters.bodyType.name,
+              driveType: adInfo.specification.parameters.driveType.name,
+              transmissionType: adInfo.specification.parameters.transmissionType.name,
+              power: adInfo.specification.parameters.power,
+              torque: adInfo.specification.parameters.torque,
+              batteryCapacity: adInfo.specification.parameters.batteryCapacity,
+              powerReserve: adInfo.specification.parameters.powerReserve,
+              electricPowerReserve: adInfo.specification.parameters.electricPowerReserve,
+              engineCount: Number(adInfo.specification.parameters.engineCount),
+              seats: adInfo.specification.parameters.seats[0].toString(),
+              lengthWidthHeight: adInfo.specification.parameters.lengthWidthHeight,
+              groundClearance: adInfo.specification.parameters.groundClearance,
+              curbWeight: adInfo.specification.parameters.curbWeight,
+              acceleration: adInfo.specification.parameters.acceleration,
+              engineCapacity: adInfo.specification.parameters.engineCapacity,
+              totalFuelConsumption: adInfo.specification.parameters.totalFuelConsumption,
+              frontWheel: adInfo.specification.parameters.wheelSize.front,
+              rearWheel: adInfo.specification.parameters.wheelSize.rear,
+              colors: {
+                external: [],
+                interior: [],
+              },
+              price: adInfo.prices,
+            }}
           />
         </Modal>
       )}
@@ -225,12 +272,40 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
           button
         >
           <Taxes
-            currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
-            techs={specificationParams}
+            techs={{
+              id: adInfo.specification.id,
+              stateId: 1,
+              name: adInfo.specification.name.ru || adInfo.specification.name.ch,
+              year: adInfo.specification.year,
+              engineType: adInfo.specification.parameters.engineType.id,
+              bodyType: adInfo.specification.parameters.bodyType.name,
+              driveType: adInfo.specification.parameters.driveType.name,
+              transmissionType: adInfo.specification.parameters.transmissionType.name,
+              power: adInfo.specification.parameters.power,
+              torque: adInfo.specification.parameters.torque,
+              batteryCapacity: adInfo.specification.parameters.batteryCapacity,
+              powerReserve: adInfo.specification.parameters.powerReserve,
+              electricPowerReserve: adInfo.specification.parameters.electricPowerReserve,
+              engineCount: Number(adInfo.specification.parameters.engineCount),
+              seats: adInfo.specification.parameters.seats[0].toString(),
+              lengthWidthHeight: adInfo.specification.parameters.lengthWidthHeight,
+              groundClearance: adInfo.specification.parameters.groundClearance,
+              curbWeight: adInfo.specification.parameters.curbWeight,
+              acceleration: adInfo.specification.parameters.acceleration,
+              engineCapacity: adInfo.specification.parameters.engineCapacity,
+              totalFuelConsumption: adInfo.specification.parameters.totalFuelConsumption,
+              frontWheel: adInfo.specification.parameters.wheelSize.front,
+              rearWheel: adInfo.specification.parameters.wheelSize.rear,
+              colors: {
+                external: [],
+                interior: [],
+              },
+              price: adInfo.prices,
+            }}
           />
         </Modal>
-      )} */}
+      )}
 
       {isPriceHistory && (
         <Modal

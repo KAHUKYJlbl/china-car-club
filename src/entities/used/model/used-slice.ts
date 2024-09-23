@@ -8,6 +8,7 @@ import {
   UsedAdsStoreType,
   UsedAdsType,
   UsedCountType,
+  UsedImgType,
   UsedManufacturerDataType,
   UsedSeriesDataType,
   UsedSpecificationDataType,
@@ -32,6 +33,8 @@ type InitialState = {
   adsLoadingStatus: FetchStatus;
   currentAd: UsedAdsStoreType | null;
   currentAdLoadingStatus: FetchStatus;
+  currentAdImages: UsedImgType[];
+  currentAdImagesLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -55,6 +58,8 @@ const initialState: InitialState = {
   adsLoadingStatus: FetchStatus.Idle,
   currentAd: null,
   currentAdLoadingStatus: FetchStatus.Idle,
+  currentAdImages: [],
+  currentAdImagesLoadingStatus: FetchStatus.Idle,
 };
 
 export const usedSlice = createSlice({

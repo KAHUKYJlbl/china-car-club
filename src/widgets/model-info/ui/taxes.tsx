@@ -7,18 +7,19 @@ import { Currencies, getCurrency, getCurrencyExchange } from "../../../entities/
 import { getCurrentTax, setCurrentTax } from "../../../entities/order";
 import { getShorts, SpecsType } from "../../../entities/model";
 import { getName } from "../../../entities/manufacturer";
+import { getUsedShorts } from "../../../entities/used";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { DropdownBlocks } from "../../../shared/ui/dropdown";
 import priceFormat from "../../../shared/lib/utils/price-format";
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
 import { TaxesTypes } from "../lib/const";
 import { getTaxes } from "../lib/utils/get-taxes";
 import classes from "./taxes.module.sass";
-import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
 type TaxesProps = {
-  currentSpecification: number | null;
+  currentSpecification?: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   techs: SpecsType;
 };
@@ -28,7 +29,9 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
   const [searchParams, _setSearchParams] = useSearchParams();
 
   const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
-  const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
+  const shorts = currentSpecification
+    ? useAppSelector((state) => getShorts(state, currentSpecification))
+    : useAppSelector(getUsedShorts);
   const currency = useAppSelector(getCurrency);
   const currentTax = useAppSelector(getCurrentTax);
   const specifications = useAppSelector(getSpecifications);
@@ -57,14 +60,16 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
             <br />
           </p>
 
-          <DropdownBlocks
-            currentElement={currentSpecification}
-            setCurrent={setCurrentSpecification}
-            placeholder="Комплектация"
-            list={specifications}
-            disabled={specificationsLoadingStatus.isLoading}
-            isPrices
-          />
+          {currentSpecification && (
+            <DropdownBlocks
+              currentElement={currentSpecification}
+              setCurrent={setCurrentSpecification}
+              placeholder="Комплектация"
+              list={specifications}
+              disabled={specificationsLoadingStatus.isLoading}
+              isPrices
+            />
+          )}
 
           <div>
             <div className={cn(classes.row, classes.grey)}>
