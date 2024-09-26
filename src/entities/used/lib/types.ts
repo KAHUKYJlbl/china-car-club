@@ -5,6 +5,24 @@ export type UsedCountType = {
   adsCount: number;
 };
 
+export type UsedImgType = {
+  original: string;
+  big: string;
+};
+
+export type UsedImgApiType = {
+  external: [];
+  interior: [];
+  official: {
+    color: {
+      id: null;
+      name: string;
+      hex_list: [];
+    };
+    urls: UsedImgType[];
+  }[];
+};
+
 type DataType = {
   id: number;
   name: {
@@ -113,6 +131,22 @@ export type UsedAdsStoreType = {
       transmissionType: ParametrType;
       driveType: ParametrType;
       powerReserve: null;
+      power: number;
+      torque: number;
+      batteryCapacity: number;
+      electricPowerReserve: number;
+      engineCount: string;
+      seats: number[];
+      lengthWidthHeight: string;
+      groundClearance: number;
+      curbWeight: number;
+      acceleration: number;
+      engineCapacity: number;
+      totalFuelConsumption: number;
+      wheelSize: {
+        front: string;
+        rear: string;
+      };
     };
   };
   series: DataType;
@@ -137,6 +171,22 @@ export type UsedAdsApiType = {
       transmissionType: ParametrType;
       driveType: ParametrType;
       powerReserve: null;
+      power: number;
+      torque: number;
+      batteryCapacity: number;
+      electricPowerReserve: number;
+      engineCount: string;
+      seats: number[];
+      lengthWidthHeight: string;
+      groundClearance: number;
+      curbWeight: number;
+      acceleration: number;
+      engineCapacity: number;
+      totalFuelConsumption: number;
+      wheelSize: {
+        front: string;
+        rear: string;
+      };
     };
   };
   series: DataType;

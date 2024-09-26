@@ -43,6 +43,7 @@ export const UsedList = ({}: UsedListProps) => {
   const [currentSort, setCurrentSort] = useState(USED_SORT[0].id);
   const [isSort, setIsSort] = useState(false);
   const [filtersToFetch] = useDebounce(activeFilters, 650);
+
   const manufacturersLoadingStatus = useAppSelector(getUsedManufacturersLoadingStatus);
   const seriesLoadingStatus = useAppSelector(getUsedSeriesLoadingStatus);
   const specificationsLoadingStatus = useAppSelector(getUsedSpecificationsLoadingStatus);

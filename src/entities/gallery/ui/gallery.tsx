@@ -97,7 +97,7 @@ export const Gallery = memo(
         dispatch(
           fetchFavoritesById({
             typeId: 1,
-            favorableIds: gallery.map((element) => element.specificationId),
+            favorableIds: Array.from(new Set(gallery.map((element) => element.specificationId))),
           })
         );
       }

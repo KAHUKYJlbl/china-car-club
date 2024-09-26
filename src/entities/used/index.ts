@@ -4,6 +4,7 @@ export { fetchUsedManufacturers } from "./model/api-actions/fetch-used-manufactu
 export { fetchUsedSeries } from "./model/api-actions/fetch-used-series";
 export { fetchUsedAds } from "./model/api-actions/fetch-used-ads";
 export { fetchAdById } from "./model/api-actions/fetch-ad-by-id";
+export { fetchAdImages } from "./model/api-actions/fetch-ad-images";
 export { UsedCard } from "./ui/used-card";
 export {
   getUsedManufacturers,
@@ -21,5 +22,7 @@ export {
   getUsedAdsPagination,
   getCurrentAd,
   getCurrentAdLoadingStatus,
+  getAdImages,
+  getAdImagesLoadingStatus,
   getUsedShorts,
 } from "./model/used-selectors";

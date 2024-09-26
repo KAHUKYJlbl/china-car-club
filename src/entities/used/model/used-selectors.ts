@@ -43,31 +43,31 @@ export const getUsedAdsPagination = (state: State) => state[NameSpace.Used].adsP
 
 export const getCurrentAd = (state: State) => state[NameSpace.Used].currentAd;
 
-export const getUsedShorts = (state: State) => {
+export const getAdImages = (state: State) => state[NameSpace.Used].currentAdImages;
+
+export const getUsedShorts = createSelector(getCurrentAd, (currentAd) => {
   return {
     engineType:
       FILTERS.engine!.elements.find(
-        (element) => element.elementId === state[NameSpace.Used].currentAd?.specification.parameters.engineType.id
+        (element) => element.elementId === currentAd?.specification.parameters.engineType.id
       )?.name || "",
     bodyType:
-      FILTERS.body!.elements.find(
-        (element) => element.elementId === state[NameSpace.Used].currentAd?.specification.parameters.bodyType.id
-      )?.name || "",
+      FILTERS.body!.elements.find((element) => element.elementId === currentAd?.specification.parameters.bodyType.id)
+        ?.name || "",
     driveType:
       `${
         FILTERS.drive!.elements.find(
-          (element) => element.elementId === state[NameSpace.Used].currentAd?.specification.parameters.driveType.id
+          (element) => element.elementId === currentAd?.specification.parameters.driveType.id
         )?.name
       } привод` || "",
     transmissionType:
       `${
         FILTERS.transmission!.elements.find(
-          (element) =>
-            element.elementId === state[NameSpace.Used].currentAd?.specification.parameters.transmissionType.id
+          (element) => element.elementId === currentAd?.specification.parameters.transmissionType.id
         )?.name
       } коробка передач` || "",
   };
-};
+});
 
 export const getUsedManufacturersLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Used].manufacturersLoadingStatus,
@@ -111,6 +111,16 @@ export const getUsedAdsLoadingStatus = createSelector(
 
 export const getCurrentAdLoadingStatus = createSelector(
   (state: State): FetchStatus => state[NameSpace.Used].currentAdLoadingStatus,
+  (status) => ({
+    isIdle: status === FetchStatus.Idle,
+    isLoading: status === FetchStatus.Pending,
+    isSuccess: status === FetchStatus.Success,
+    isFailed: status === FetchStatus.Failed,
+  })
+);
+
+export const getAdImagesLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Used].currentAdImagesLoadingStatus,
   (status) => ({
     isIdle: status === FetchStatus.Idle,
     isLoading: status === FetchStatus.Pending,

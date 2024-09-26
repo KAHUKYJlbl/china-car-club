@@ -42,6 +42,7 @@ export type ParametersType = {
 
 export type StatisticsType = {
   specificationId: number;
+  specificationAdId?: number;
   customerLocation: LocationType;
   customerDelivery: {
     countryId: number | null;

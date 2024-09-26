@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 import cn from "classnames";
 
+import { AppRoute } from "../../../app/provider/router";
 import { DROPDOWN_CITIES } from "../../../app/settings/cities";
 import { getPrices, getTotal } from "../../../features/choose-options";
 import { getName } from "../../../entities/manufacturer";
@@ -25,6 +26,7 @@ import {
   getSpecificationAddProducts,
   getSpecifications,
 } from "../../../entities/specification";
+import { getCurrentAd } from "../../../entities/used";
 import { Modal } from "../../../shared/ui/modal";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
@@ -39,7 +41,6 @@ import { Supplier } from "./supplier";
 import { OrderFormType } from "../lib/types";
 import { TAX_NAMES, TAX_SUBNAMES } from "../lib/const";
 import classes from "./order-confirmation.module.sass";
-import { AppRoute } from "../../../app/provider/router";
 
 type OrderConfirmationProps = {
   cancelConfirmation: () => void;
@@ -92,6 +93,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
     getSpecificationParams(state, Number(searchParams.get("spec")))
   );
   const order = useAppSelector(getCurrentOrder);
+  const adInfo = useAppSelector(getCurrentAd);
 
   // popups
   const [isSupplier, setIsSupplier] = useState(false);
@@ -114,7 +116,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
     );
   };
 
-  if (!name || !order || !adds || !currency || !specificationParams || currencyLoadingStatus.isLoading) {
+  if (!name || !order || !adds || !currency || currencyLoadingStatus.isLoading) {
     return (
       <div className={classes.wrapper}>
         <LoadingSpinner spinnerType="widget" />
@@ -206,10 +208,10 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               <b>
                 {`${priceFormat(
                   getTotal({
-                    totalPrice: getPrices(currentTax, specificationParams.price),
+                    totalPrice: getPrices(currentTax, specificationParams?.price || adInfo!.prices),
                     options,
                     optionsPrices: {
-                      epts: specificationParams.price.eptsSbktsUtil,
+                      epts: specificationParams?.price.eptsSbktsUtil || adInfo!.prices.eptsSbktsUtil,
                       guarantee: 0,
                       options: addItemsPrice,
                     },
@@ -379,29 +381,31 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               )}
             </button>
 
-            <button
-              aria-label="предпочтительные цвета машины"
-              type="button"
-              className={cn(
-                classes.conditionButton,
-                methods.watch("colors.external").some((color) => color.value) && classes.filled,
-                methods.watch("colors.interior").some((color) => color.value) && classes.filled
-              )}
-              onClick={() => setIsColors(true)}
-              disabled={!extColors || extColors.length === 0}
-            >
-              Предпочтительные цвета машины
-              {(methods.watch("colors.external").some((color) => color.value) ||
-                methods.watch("colors.interior").some((color) => color.value)) && (
-                <svg
-                  width="16"
-                  height="16"
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#v" />
-                </svg>
-              )}
-            </button>
+            {!window.location.pathname.includes("used") && (
+              <button
+                aria-label="предпочтительные цвета машины"
+                type="button"
+                className={cn(
+                  classes.conditionButton,
+                  methods.watch("colors.external").some((color) => color.value) && classes.filled,
+                  methods.watch("colors.interior").some((color) => color.value) && classes.filled
+                )}
+                onClick={() => setIsColors(true)}
+                disabled={!extColors || extColors.length === 0}
+              >
+                Предпочтительные цвета машины
+                {(methods.watch("colors.external").some((color) => color.value) ||
+                  methods.watch("colors.interior").some((color) => color.value)) && (
+                  <svg
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+                  >
+                    <use xlinkHref="#v" />
+                  </svg>
+                )}
+              </button>
+            )}
           </div>
 
           <div className={classes.block}>

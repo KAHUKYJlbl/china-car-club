@@ -6,6 +6,7 @@ export type OrderResponseType = {
 
 export type OrderType = {
   specificationId: number;
+  specificationAdId?: number;
   customerLocation: LocationType;
   customerDelivery: {
     countryId: number | null;
