@@ -19,10 +19,7 @@ export type UsedImgApiType = {
       name: string;
       hex_list: [];
     };
-    urls: {
-      original: string;
-      big: string;
-    }[];
+    urls: UsedImgType[];
   }[];
 };
 

@@ -15,8 +15,8 @@ import {
 } from "../../../entities/user";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { useUtm } from "../../../shared/lib/hooks/use-utm";
 
-import { useUtm } from "../lib/hooks/use-utm";
 import classes from "./choose-delivery.module.sass";
 
 type ChooseDeliveryProps = {

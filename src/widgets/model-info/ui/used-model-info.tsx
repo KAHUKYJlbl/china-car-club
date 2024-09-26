@@ -7,8 +7,6 @@ import { getPrices } from "../../../features/choose-options/lib/utils/get-prices
 import { ChooseOptions } from "../../../features/choose-options/ui/choose-options";
 import {
   fetchSpecificationAddProducts,
-  getImagesByColor,
-  getInitSlide,
   getSpecificationAddProductsLoadingStatus,
 } from "../../../entities/specification";
 import {
@@ -20,8 +18,15 @@ import {
 } from "../../../entities/currency";
 import { Gallery } from "../../../entities/gallery/ui/gallery";
 import { getManufacturerByModel } from "../../../entities/manufacturer";
-import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax } from "../../../entities/order/index";
-import { fetchAdById, getCurrentAd, getCurrentAdLoadingStatus } from "../../../entities/used";
+import { getAddItemsPrice, getAdds, getCurrentTax } from "../../../entities/order/index";
+import {
+  fetchAdById,
+  fetchAdImages,
+  getAdImages,
+  getAdImagesLoadingStatus,
+  getCurrentAd,
+  getCurrentAdLoadingStatus,
+} from "../../../entities/used";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
@@ -50,13 +55,14 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const adInfo = useAppSelector(getCurrentAd);
   const adLoadingStatus = useAppSelector(getCurrentAdLoadingStatus);
+  const adImages = useAppSelector(getAdImages);
+  const adImagesLoadingStatus = useAppSelector(getAdImagesLoadingStatus);
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, Number(searchParams.get("model"))));
   const currentTax = useAppSelector(getCurrentTax);
   const options = useAppSelector(getAdds);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
-  const currentColor = useAppSelector(getCurrentColor);
   const specificationAddProductsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
 
   // popups
@@ -68,13 +74,9 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
 
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(Number(searchParams.get("spec")));
 
-  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
-  const initSlide = useAppSelector((state) => getInitSlide(state, currentColor));
-
   useEffect(() => {
     if (searchParams.get("ad") && !adLoadingStatus.isLoading) {
-      // Ad Image
-      // dispatch(fetchSpecificationsImage(currentSpecification));
+      dispatch(fetchAdImages(searchParams.get("ad")!));
       dispatch(fetchAdById(searchParams.get("ad")!));
     }
   }, []);
@@ -91,7 +93,7 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
     }
   }, []);
 
-  if (adLoadingStatus.isLoading || !adInfo || !currency) {
+  if (adLoadingStatus.isLoading || adImagesLoadingStatus.isLoading || !adInfo || !currency) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -103,11 +105,11 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
         <Gallery
-          galleryList={imgList}
+          galleryList={adImages}
           specificationId={currentSpecification}
           modelId={Number(searchParams.get("model"))}
           manufacturerId={manufacturerId}
-          initSlide={initSlide}
+          initSlide={0}
         />
       </div>
 
@@ -154,7 +156,7 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
 
       <div className={classes.buttons}>
         <OrderButtons
-          used
+          adId={adInfo.id}
           specificationId={currentSpecification}
           epts={options.epts}
           onOrder={() => setIsQuestions(true)}

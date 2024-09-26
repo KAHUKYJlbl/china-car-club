@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { NameSpace } from "../../../app/provider/store";
 import { FetchStatus } from "../../../shared/api/fetch-status";
+import { PRICE_TYPE_ID } from "../../../shared/lib/const";
 
 import {
   PaginationType,
@@ -18,7 +19,7 @@ import { fetchUsedSpecifications } from "./api-actions/fetch-used-specifications
 import { fetchUsedSeries } from "./api-actions/fetch-used-series";
 import { fetchUsedAds } from "./api-actions/fetch-used-ads";
 import { fetchAdById } from "./api-actions/fetch-ad-by-id";
-import { PRICE_TYPE_ID } from "../../../shared/lib/const";
+import { fetchAdImages } from "./api-actions/fetch-ad-images";
 
 type InitialState = {
   manufacturers: UsedManufacturerDataType[];
@@ -145,6 +146,16 @@ export const usedSlice = createSlice({
       })
       .addCase(fetchAdById.rejected, (state) => {
         state.currentAdLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchAdImages.fulfilled, (state, action) => {
+        state.currentAdImages = action.payload;
+        state.currentAdImagesLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchAdImages.pending, (state) => {
+        state.currentAdImagesLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchAdImages.rejected, (state) => {
+        state.currentAdImagesLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchUsedAds.fulfilled, (state, action) => {
         state.adsList = action.payload.data;
