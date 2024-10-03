@@ -5,13 +5,15 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import plural from "plural-ru";
 
 import {
+  deleteFavorite,
   fetchHash,
   getAuthStatus,
   getCurrentCity,
   getGeolocation,
   Login,
+  postFavorite,
   postRefresh,
-  postStatistics,
+  resetMycarsFavoritesCountLoadingStatus,
 } from "../../user";
 import { Currencies, getCurrencyExchange } from "../../currency";
 import { FILTERS } from "../../../app/settings/filters";
@@ -22,6 +24,7 @@ import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useUtm } from "../../../shared/lib/hooks/use-utm";
 
+import { postUsedStatistics } from "../model/api-actions/post-used-statistics";
 import { UsedAdsType } from "../lib/types";
 import classes from "./used-card.module.sass";
 
@@ -33,22 +36,57 @@ type UsedCardProps = {
     cny: number;
     usd: number;
   };
+  isFavorite: number | undefined;
 };
 
-export const UsedCard = memo(({ ads, currency }: UsedCardProps) => {
+export const UsedCard = memo(({ ads, currency, isFavorite }: UsedCardProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const utm = useUtm();
 
   const [isLogin, setIsLogin] = useState(false);
+  const [isFavoriteLogin, setIsFavoriteLogin] = useState(false);
 
   const isAuth = useAppSelector(getAuthStatus);
   const city = useAppSelector(getCurrentCity);
   const geolocation = useAppSelector(getGeolocation);
 
-  const loginHandler = () => {
+  const onLogin = () => {
+    if (isFavoriteLogin) {
+      favoriteHandler();
+    } else {
+      statisticsHandler();
+    }
+    setIsLogin(false);
+  };
+
+  const favoriteHandler = () => {
+    if (isFavorite) {
+      dispatch(resetMycarsFavoritesCountLoadingStatus());
+      dispatch(deleteFavorite(isFavorite));
+      return;
+    }
+
+    if (isAuth || isFavoriteLogin) {
+      dispatch(resetMycarsFavoritesCountLoadingStatus());
+      dispatch(
+        postFavorite({
+          typeId: 3,
+          favorableId: ads.id,
+        })
+      );
+      setIsFavoriteLogin(false);
+      return;
+    }
+
+    setIsFavoriteLogin(true);
+    dispatch(fetchHash());
+    setIsLogin(true);
+  };
+
+  const statisticsHandler = () => {
     dispatch(
-      postStatistics({
+      postUsedStatistics({
         specificationId: ads.specification.id,
         specificationAdId: ads.id,
         customerLocation: geolocation,
@@ -67,7 +105,7 @@ export const UsedCard = memo(({ ads, currency }: UsedCardProps) => {
 
   const calculateHandler = () => {
     if (isAuth) {
-      loginHandler();
+      statisticsHandler();
     } else {
       dispatch(fetchHash());
       setIsLogin(true);
@@ -162,17 +200,16 @@ export const UsedCard = memo(({ ads, currency }: UsedCardProps) => {
           </button>
 
           <button
-            // aria-label={useFavoriteList() ? "удалить из избранного" : "добавить в избранное"}
+            aria-label={!!isFavorite ? "удалить из избранного" : "добавить в избранное"}
             className={classes.favorite}
-            // onClick={handleFavorite}
+            onClick={favoriteHandler}
           >
             <svg
               width="16"
               height="16"
               aria-hidden="true"
             >
-              <use xlinkHref={"#favorite-add"} />
-              {/* <use xlinkHref={`#${useFavoriteList() ? "favorite-remove" : "favorite-add"}`} /> */}
+              <use xlinkHref={!!isFavorite ? "#favorite-remove" : "#favorite-add"} />
             </svg>
           </button>
         </div>
@@ -181,7 +218,7 @@ export const UsedCard = memo(({ ads, currency }: UsedCardProps) => {
       {isLogin && (
         <Login
           onClose={() => setIsLogin(false)}
-          onLogin={() => loginHandler()}
+          onLogin={onLogin}
         />
       )}
     </>

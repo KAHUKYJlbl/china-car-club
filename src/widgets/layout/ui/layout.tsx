@@ -6,27 +6,34 @@ import RussianNounsJS from "russian-nouns-js";
 import { CITIES } from "../../../app/settings/cities";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { SvgSprite } from "../../../shared/ui/svg-sprite";
 import { getName } from "../../../entities/manufacturer";
 import { getCurrentCity } from "../../../entities/user";
-import { fetchSettings, getIsNew, getPalette, getSettingsLoadingStatus } from "../../../entities/settings";
+import { fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
+import {
+  fetchSettings,
+  getIsNew,
+  getPalette,
+  getSettingsLoadingStatus,
+  setCurrentSiteMode,
+} from "../../../entities/settings";
 
 import { NewHeader } from "./new-header";
 import classes from "./layout.module.sass";
-import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
-import { fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
 
 type LayoutProps = {
   title?: string;
   isUsedSwitch?: boolean;
   isCitySwitch?: boolean;
-  heading: {
+  heading?: {
     heading: string;
     subheading: string | null;
   };
 };
 
 export const Layout = ({
+  heading,
   title,
   children,
   isUsedSwitch,
@@ -43,6 +50,14 @@ export const Layout = ({
   const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
   const settingsLoadingstatus = useAppSelector(getSettingsLoadingStatus);
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+
+  useEffect(() => {
+    if (window.location.pathname.includes("used")) {
+      dispatch(setCurrentSiteMode(2));
+    } else {
+      dispatch(setCurrentSiteMode(1));
+    }
+  }, []);
 
   useEffect(() => {
     if (settingsLoadingstatus.isIdle) {
@@ -95,14 +110,15 @@ export const Layout = ({
 
       <div className={classes.headingWrapper}>
         <h1 className={classes.heading}>
-          {`Купить ${
-            name
-              ? `${name.manufacturer}\u00A0${name.model}${isNew ? "" : " с пробегом"}`
-              : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
-          } из\u00A0Китая по\u00A0лучшей цене в\u00A0${rne.decline(
-            { text: CITIES[city], gender: "женский" },
-            "винительный"
-          )}`}
+          {heading?.heading ||
+            `Купить ${
+              name
+                ? `${name.manufacturer}\u00A0${name.model}${isNew ? "" : " с пробегом"}`
+                : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
+            } из\u00A0Китая по\u00A0лучшей цене в\u00A0${rne.decline(
+              { text: CITIES[city], gender: "женский" },
+              "винительный"
+            )}`}
         </h1>
 
         {/* {heading.subheading && <p className={classes.subheading}>{heading.subheading}</p>} */}

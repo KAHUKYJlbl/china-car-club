@@ -10,7 +10,7 @@ export {
   setCurrentColor,
   resetOrder,
   setQuestions,
-} from './model/order-slice';
+} from "./model/order-slice";
 export {
   getCurrentTax,
   getAdds,
@@ -23,8 +23,10 @@ export {
   getQuestions,
   getOffers,
   getOffersLoadingStatus,
-} from './model/order-selectors';
-export { postOrder } from './model/api-actions/post-order';
-export { postAnswers } from './model/api-actions/post-answers';
-export { fetchOffers } from './model/api-actions/fetch-offers';
-export { Offers } from './ui/offers';
+} from "./model/order-selectors";
+export { postUsedOrder } from "./model/api-actions/post-used-order";
+export { postUsedAnswers } from "./model/api-actions/post-used-answers";
+export { postOrder } from "./model/api-actions/post-order";
+export { postAnswers } from "./model/api-actions/post-answers";
+export { fetchOffers } from "./model/api-actions/fetch-offers";
+export { Offers } from "./ui/offers";

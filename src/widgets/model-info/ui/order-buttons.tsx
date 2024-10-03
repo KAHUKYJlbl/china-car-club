@@ -1,14 +1,15 @@
 import { memo } from "react";
 
-import { getAddItems, getCurrentTax, postOrder } from "../../../entities/order";
+import { getAddItems, getCurrentTax, postOrder, postUsedOrder } from "../../../entities/order";
 import { Currencies, getCurrentCurrency } from "../../../entities/currency";
 import { getCurrentCity, getGeolocation } from "../../../entities/user";
+import { getIsNew } from "../../../entities/settings";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
-
-import classes from "./order-buttons.module.sass";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+
 import { TaxesTypes } from "../lib/const";
+import classes from "./order-buttons.module.sass";
 
 type OrderButtonsProps = {
   onOrder: () => void;
@@ -31,6 +32,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
   const geolocation = useAppSelector(getGeolocation);
   const city = useAppSelector(getCurrentCity);
   const addItems = useAppSelector(getAddItems);
+  const isNew = useAppSelector(getIsNew);
   const currentCurrency = Object.values(Currencies).indexOf(useAppSelector(getCurrentCurrency)) + 1;
 
   if (!specificationId) {
@@ -38,46 +40,89 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
   }
 
   const orderHandler = () => {
-    dispatch(
-      postOrder({
-        specificationId: specificationId,
-        specificationAdId: adId,
-        customerLocation: geolocation,
-        customerDelivery: {
-          countryId: null,
-          cityId: city,
-        },
-        addItems: addItems,
-        prices: {
-          totalPrice: {
-            currencyQuantity: prices.totalPrice,
-            currencyId: currentCurrency,
+    if (isNew) {
+      dispatch(
+        postOrder({
+          specificationId: specificationId,
+          specificationAdId: adId,
+          customerLocation: geolocation,
+          customerDelivery: {
+            countryId: null,
+            cityId: city,
           },
-          availabilityOfEpts: epts,
-          priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
-          minPrice: {
-            currencyQuantity: prices.minPrice,
-            currencyId: currentCurrency,
+          addItems: addItems,
+          prices: {
+            totalPrice: {
+              currencyQuantity: prices.totalPrice,
+              currencyId: currentCurrency,
+            },
+            availabilityOfEpts: epts,
+            priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
+            minPrice: {
+              currencyQuantity: prices.minPrice,
+              currencyId: currentCurrency,
+            },
+            tax: {
+              currencyQuantity: prices.tax,
+              currencyId: currentCurrency,
+            },
+            comission: {
+              currencyQuantity: prices.comission,
+              currencyId: 2,
+            },
+            borderPrice: {
+              currencyQuantity: prices.borderPrice,
+              currencyId: currentCurrency,
+            },
+            customsPrice: {
+              currencyQuantity: prices.customsPrice,
+              currencyId: 1,
+            },
           },
-          tax: {
-            currencyQuantity: prices.tax,
-            currencyId: currentCurrency,
+        })
+      );
+    } else {
+      dispatch(
+        postUsedOrder({
+          specificationId: specificationId,
+          specificationAdId: adId,
+          customerLocation: geolocation,
+          customerDelivery: {
+            countryId: null,
+            cityId: city,
           },
-          comission: {
-            currencyQuantity: prices.comission,
-            currencyId: 2,
+          addItems: addItems,
+          prices: {
+            totalPrice: {
+              currencyQuantity: prices.totalPrice,
+              currencyId: currentCurrency,
+            },
+            availabilityOfEpts: epts,
+            priceTypeId: currentTax === TaxesTypes.PERS || currentTax === TaxesTypes.SELL ? 2 : 3,
+            minPrice: {
+              currencyQuantity: prices.minPrice,
+              currencyId: currentCurrency,
+            },
+            tax: {
+              currencyQuantity: prices.tax,
+              currencyId: currentCurrency,
+            },
+            comission: {
+              currencyQuantity: prices.comission,
+              currencyId: 2,
+            },
+            borderPrice: {
+              currencyQuantity: prices.borderPrice,
+              currencyId: currentCurrency,
+            },
+            customsPrice: {
+              currencyQuantity: prices.customsPrice,
+              currencyId: 1,
+            },
           },
-          borderPrice: {
-            currencyQuantity: prices.borderPrice,
-            currencyId: currentCurrency,
-          },
-          customsPrice: {
-            currencyQuantity: prices.customsPrice,
-            currencyId: 1,
-          },
-        },
-      })
-    );
+        })
+      );
+    }
 
     onOrder();
   };

@@ -8,7 +8,7 @@ import { gallerySlice } from "../../../../entities/gallery";
 import { currencySlice } from "../../../../entities/currency";
 import { manufacturerSlice } from "../../../../entities/manufacturer";
 import { specificationSlice } from "../../../../entities/specification";
-import { settingsSlice } from "../../../../entities/settings/model/settings-slice";
+import { settingsSlice } from "../../../../entities/settings";
 
 import { NameSpace } from "../lib/name-space";
 

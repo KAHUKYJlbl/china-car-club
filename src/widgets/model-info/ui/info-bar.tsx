@@ -38,13 +38,15 @@ export const InfoBar = memo(({ currentSpecification, setIsTechs, setIsPriceHisto
           Характеристики
         </button>
 
-        <button
-          aria-label="история цены"
-          className={classes.button}
-          onClick={() => setIsPriceHistory((current) => !current)}
-        >
-          История цены
-        </button>
+        {!window.location.pathname.includes("used") && (
+          <button
+            aria-label="история цены"
+            className={classes.button}
+            onClick={() => setIsPriceHistory((current) => !current)}
+          >
+            История цены
+          </button>
+        )}
 
         <button
           aria-label="следить за скидками"

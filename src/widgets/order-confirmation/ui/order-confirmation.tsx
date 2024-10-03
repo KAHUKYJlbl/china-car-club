@@ -17,6 +17,7 @@ import {
   getCurrentTax,
   getQuestions,
   postAnswers,
+  postUsedAnswers,
 } from "../../../entities/order";
 import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import {
@@ -26,6 +27,7 @@ import {
   getSpecificationAddProducts,
   getSpecifications,
 } from "../../../entities/specification";
+import { getIsNew } from "../../../entities/settings";
 import { getCurrentAd } from "../../../entities/used";
 import { Modal } from "../../../shared/ui/modal";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
@@ -94,6 +96,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   );
   const order = useAppSelector(getCurrentOrder);
   const adInfo = useAppSelector(getCurrentAd);
+  const isNew = useAppSelector(getIsNew);
 
   // popups
   const [isSupplier, setIsSupplier] = useState(false);
@@ -137,31 +140,59 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
       return;
     }
 
-    dispatch(
-      postAnswers({
-        statisticsEventId: order,
-        data: {
-          firstName: data.firstName,
-          comment: data.comment,
-          recommendOtherModels: data.recommendOtherModels,
-          withoutCalling: data.withoutCalling,
-          carSupplier: [+data.carSupplier!],
-          paymentType: Object.entries(data.paymentType)
-            .filter((payment) => payment[1])
-            .map((payment) => +payment[0]),
-          preferredDeliveryTime: {
-            maxDays: Number(data.preferredDeliveryTime.maxDays),
-            highPricedOption: data.preferredDeliveryTime.highPricedOption,
+    if (isNew) {
+      dispatch(
+        postAnswers({
+          statisticsEventId: order,
+          data: {
+            firstName: data.firstName,
+            comment: data.comment,
+            recommendOtherModels: data.recommendOtherModels,
+            withoutCalling: data.withoutCalling,
+            carSupplier: [+data.carSupplier!],
+            paymentType: Object.entries(data.paymentType)
+              .filter((payment) => payment[1])
+              .map((payment) => +payment[0]),
+            preferredDeliveryTime: {
+              maxDays: Number(data.preferredDeliveryTime.maxDays),
+              highPricedOption: data.preferredDeliveryTime.highPricedOption,
+            },
+            colors: {
+              external: data.colors.external.filter((color) => color.value).map((color) => color.id),
+              interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
+            },
           },
-          colors: {
-            external: data.colors.external.filter((color) => color.value).map((color) => color.id),
-            interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
+        })
+      ).then(() => {
+        setIsDone(true);
+      });
+    } else {
+      dispatch(
+        postUsedAnswers({
+          statisticsEventId: order,
+          data: {
+            firstName: data.firstName,
+            comment: data.comment,
+            recommendOtherModels: data.recommendOtherModels,
+            withoutCalling: data.withoutCalling,
+            carSupplier: [+data.carSupplier!],
+            paymentType: Object.entries(data.paymentType)
+              .filter((payment) => payment[1])
+              .map((payment) => +payment[0]),
+            preferredDeliveryTime: {
+              maxDays: Number(data.preferredDeliveryTime.maxDays),
+              highPricedOption: data.preferredDeliveryTime.highPricedOption,
+            },
+            colors: {
+              external: data.colors.external.filter((color) => color.value).map((color) => color.id),
+              interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
+            },
           },
-        },
-      })
-    ).then(() => {
-      setIsDone(true);
-    });
+        })
+      ).then(() => {
+        setIsDone(true);
+      });
+    }
   };
 
   const errorHandler: SubmitErrorHandler<OrderFormType> = () => {

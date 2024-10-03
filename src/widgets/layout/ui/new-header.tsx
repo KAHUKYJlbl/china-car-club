@@ -7,7 +7,7 @@ import { DROPDOWN_CITIES } from "../../../app/settings/cities";
 import { AppRoute } from "../../../app/provider/router";
 import { fetchManufacturers, getFullListCount, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { getCurrentCity, NewHeaderUser, setCity } from "../../../entities/user";
-import { ChooseNew, getLogo, getPhone, getSettingsLoadingStatus } from "../../../entities/settings";
+import { ChooseSiteMode, getIsNew, getLogo, getPhone, getSettingsLoadingStatus } from "../../../entities/settings";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { DropdownHeader } from "../../../shared/ui/dropdown";
@@ -30,6 +30,7 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
   const logo = useAppSelector(getLogo);
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const settingsLoadingstatus = useAppSelector(getSettingsLoadingStatus);
+  const isNew = useAppSelector(getIsNew);
 
   useEffect(() => {
     if (manufacturersLoadingStatus.isIdle) {
@@ -72,7 +73,7 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
         <div className={classes.logo}>
           <Link
             aria-label="на главную"
-            to={AppRoute.Main}
+            to={isNew ? AppRoute.Main : AppRoute.Used}
           >
             <img
               src={`${process.env.STATIC_URL || `${window.location.origin}/storage`}${logo.storageUrl}`}
@@ -82,7 +83,7 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
             ></img>
           </Link>
 
-          {isDesktop && isUsedSwitch && <ChooseNew />}
+          {isDesktop && isUsedSwitch && <ChooseSiteMode />}
 
           {isDesktop && isCitySwitch && (
             <DropdownHeader
