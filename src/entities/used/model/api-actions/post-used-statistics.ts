@@ -3,23 +3,20 @@ import { AxiosInstance } from "axios";
 
 import { AppDispatch, State } from "../../../../app/provider/store";
 import { APIRoute } from "../../../../shared/api/routes";
+import { StatisticsType } from "../../../user";
 
-import { ApiFavoriteType } from "../../lib/types";
-
-export const deleteFavorite = createAsyncThunk<
-  number,
-  number,
+export const postUsedStatistics = createAsyncThunk<
+  void,
+  StatisticsType,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->("User/deleteFavorite", async (id, { extra: axios }) => {
+>("Used/postUsedStatistics", async (statistics, { extra: axios }) => {
   try {
-    await axios.post<ApiFavoriteType>(APIRoute.DeleteFavorite, { id });
-
-    return id;
+    await axios.post(APIRoute.PostUsedStatistics, statistics);
   } catch (err) {
-    throw Error("Unable to delete Favorite");
+    throw Error("Unable to post used statistics");
   }
 });

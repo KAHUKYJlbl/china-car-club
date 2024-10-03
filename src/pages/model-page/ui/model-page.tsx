@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { MAIN_HEADING, MAIN_SUBHEADING } from "../../../app/settings/headings";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { Layout } from "../../../widgets/layout";
 import { ModelInfo, UsedModelInfo } from "../../../widgets/model-info";
@@ -16,13 +15,7 @@ const ModelPage = (): JSX.Element => {
   }, []);
 
   return (
-    <Layout
-      heading={{
-        heading: MAIN_HEADING,
-        subheading: MAIN_SUBHEADING,
-      }}
-      isCitySwitch
-    >
+    <Layout isCitySwitch>
       {confirmationMode ? (
         <OrderConfirmation cancelConfirmation={() => setConfirmationMode(false)} />
       ) : window.location.pathname.includes("used") ? (

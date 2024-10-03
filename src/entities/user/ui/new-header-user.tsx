@@ -8,7 +8,7 @@ import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
 import { CabinetButton } from "../../../shared/ui/header-button";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
-import { getIsNew } from "../../settings";
+import { getCurrentSiteMode, getIsNew } from "../../settings";
 
 import { Login } from "./login";
 import { useGeolocation } from "../lib/hooks/use-geolocation";
@@ -42,16 +42,17 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const favoritesCount = useAppSelector(getFavoritesCount);
   const favoritesCountLoadingStatus = useAppSelector(getFavoritesCountLoadingStatus);
   const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
+  const mode = useAppSelector(getCurrentSiteMode);
 
   useEffect(() => {
     if (!favoritesCountLoadingStatus.isLoading && isAuth) {
-      dispatch(fetchFavoritesCount());
+      dispatch(fetchFavoritesCount(mode));
     }
   }, [isAuth]);
 
   useEffect(() => {
     if (favoritesCountLoadingStatus.isIdle && favoritesByIdLoadingStatus.isSuccess) {
-      dispatch(fetchFavoritesCount());
+      dispatch(fetchFavoritesCount(mode));
     }
   }, [favoritesByIdLoadingStatus.isSuccess]);
 

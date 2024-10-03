@@ -8,15 +8,17 @@ import { ApiFavoriteCountType } from "../../lib/types";
 
 export const fetchFavoritesCount = createAsyncThunk<
   ApiFavoriteCountType,
-  undefined,
+  number,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->("User/fetchFavoritesCount", async (_arg, { extra: axios }) => {
+>("User/fetchFavoritesCount", async (mode, { extra: axios }) => {
   try {
-    const { data } = await axios.get<ApiFavoriteCountType>(APIRoute.GetFavorites, { params: { only_count: 1 } });
+    const { data } = await axios.get<ApiFavoriteCountType>(APIRoute.GetFavorites, {
+      params: { only_count: 1, site_mode_type_id: mode },
+    });
 
     return data;
   } catch (err) {

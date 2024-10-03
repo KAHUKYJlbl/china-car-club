@@ -17,6 +17,12 @@ import {
   setCurrentPage,
   UsedCard,
 } from "../../../entities/used";
+import {
+  fetchFavoritesById,
+  getAuthStatus,
+  getFavoritesById,
+  getFavoritesByIdLoadingStatus,
+} from "../../../entities/user";
 import { getCurrency } from "../../../entities/currency";
 import { UsedSort } from "../../../features/sort";
 import { Filter, FilterId } from "../../../features/filter";
@@ -49,12 +55,27 @@ export const UsedList = ({}: UsedListProps) => {
   const specificationsLoadingStatus = useAppSelector(getUsedSpecificationsLoadingStatus);
   const adsLoadingStatus = useAppSelector(getUsedAdsLoadingStatus);
   const adsList = useAppSelector(getUsedAdsList);
+  const adsListLoadingStatus = useAppSelector(getUsedAdsLoadingStatus);
   const currency = useAppSelector(getCurrency);
   const pagination = useAppSelector(getUsedAdsPagination);
+  const favoritesList = useAppSelector(getFavoritesById);
+  const favoritesByIdLoadingStatus = useAppSelector(getFavoritesByIdLoadingStatus);
+  const isAuth = useAppSelector(getAuthStatus);
 
   const paginationHandler = (page: number) => {
     dispatch(setCurrentPage(page));
   };
+
+  useEffect(() => {
+    if (adsList.length > 0 && isAuth && !favoritesByIdLoadingStatus.isLoading) {
+      dispatch(
+        fetchFavoritesById({
+          typeId: 3,
+          favorableIds: Array.from(new Set(adsList.map((element) => element.id))),
+        })
+      );
+    }
+  }, [adsList, isAuth]);
 
   useEffect(() => {
     dispatch(dropLists());
@@ -136,7 +157,7 @@ export const UsedList = ({}: UsedListProps) => {
     });
   }, [currentManufacturer, currentModel, currentSpecification]);
 
-  if (!currency || manufacturersLoadingStatus.isIdle) {
+  if (!currency || manufacturersLoadingStatus.isIdle || adsListLoadingStatus.isIdle || adsListLoadingStatus.isLoading) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -190,6 +211,7 @@ export const UsedList = ({}: UsedListProps) => {
               <ul className={classes.list}>
                 {adsList.map((ads) => (
                   <UsedCard
+                    isFavorite={favoritesList.find((element) => element.favorableId === ads.id)?.id}
                     ads={ads}
                     currency={currency}
                     key={ads.id}

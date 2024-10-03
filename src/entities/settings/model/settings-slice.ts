@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { NameSpace } from "../../../app/provider/store";
 
-import { LogoType, PaletteType } from "../lib/types";
+import { LogoType, PaletteType, SiteModeType } from "../lib/types";
 import { FetchStatus } from "../../../shared/api/fetch-status";
 import { fetchSettings } from "./api-actions/fetch-settings";
 
@@ -12,6 +12,8 @@ type InitialState = {
   palette: PaletteType;
   isNew: boolean;
   name: string;
+  siteModes: SiteModeType[];
+  currentSiteMode: number;
   settingsLoadingStatus: FetchStatus;
 };
 
@@ -26,6 +28,8 @@ const initialState: InitialState = {
   },
   isNew: true,
   name: "",
+  siteModes: [],
+  currentSiteMode: 1,
   settingsLoadingStatus: FetchStatus.Idle,
 };
 
@@ -39,6 +43,9 @@ export const settingsSlice = createSlice({
     setUsed: (state) => {
       state.isNew = false;
     },
+    setCurrentSiteMode: (state, action: PayloadAction<number>) => {
+      state.currentSiteMode = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -47,6 +54,7 @@ export const settingsSlice = createSlice({
         state.name = action.payload.name;
         state.phone = action.payload.phone;
         state.palette = action.payload.colorPallet;
+        state.siteModes = action.payload.siteModeTypes;
         state.settingsLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchSettings.pending, (state) => {
@@ -58,4 +66,4 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { setNew, setUsed } = settingsSlice.actions;
+export const { setNew, setUsed, setCurrentSiteMode } = settingsSlice.actions;

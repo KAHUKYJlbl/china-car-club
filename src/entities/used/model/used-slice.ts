@@ -117,6 +117,13 @@ export const usedSlice = createSlice({
       .addCase(fetchAdById.fulfilled, (state, action) => {
         state.currentAd = {
           ...action.payload,
+          specification: {
+            ...action.payload.specification,
+            parameters: {
+              ...action.payload.specification.parameters,
+              engineCapacity: action.payload.specification.parameters.engineCapacity * 1000,
+            },
+          },
           prices: {
             inChina: action.payload.adPrice,
             priceInCityOfReceipt: action.payload.prices[0].details.priceInCityOfReceipt,

@@ -162,12 +162,6 @@ export const Gallery = memo(
       setIsLogin(false);
     };
 
-    const handleLogin = (id: number) => {
-      setFavoriteIdToAdd(id);
-      dispatch(fetchHash());
-      setIsLogin(true);
-    };
-
     const handleFavorite = (id: number, auth: boolean = isAuth) => {
       if (useFavoriteList(id)) {
         dispatch(resetMycarsFavoritesCountLoadingStatus());
@@ -186,7 +180,9 @@ export const Gallery = memo(
         return;
       }
 
-      handleLogin(id);
+      setFavoriteIdToAdd(id);
+      dispatch(fetchHash());
+      setIsLogin(true);
     };
 
     return (
@@ -278,7 +274,7 @@ export const Gallery = memo(
                   height="16"
                   aria-hidden="true"
                 >
-                  <use xlinkHref={`#${useFavoriteList(currentImage) ? "favorite-remove" : "favorite-add"}`} />
+                  <use xlinkHref={useFavoriteList(currentImage) ? "#favorite-remove" : "#favorite-add"} />
                 </svg>
               </button>
             </div>

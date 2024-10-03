@@ -8,6 +8,8 @@ import { OfferType, QuestionsType } from "../lib/types";
 import { postOrder } from "./api-actions/post-order";
 import { postAnswers } from "./api-actions/post-answers";
 import { fetchOffers } from "./api-actions/fetch-offers";
+import { postUsedOrder } from "./api-actions/post-used-order";
+import { postUsedAnswers } from "./api-actions/post-used-answers";
 
 type InitialState = {
   currentTax: TaxesTypes;
@@ -117,6 +119,25 @@ export const orderSlice = createSlice({
         state.questionsLoadingStatus = FetchStatus.Pending;
       })
       .addCase(postAnswers.rejected, (state) => {
+        state.questionsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(postUsedOrder.fulfilled, (state, action) => {
+        state.order = action.payload;
+        state.orderLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(postUsedOrder.pending, (state) => {
+        state.orderLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(postUsedOrder.rejected, (state) => {
+        state.orderLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(postUsedAnswers.fulfilled, (state) => {
+        state.questionsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(postUsedAnswers.pending, (state) => {
+        state.questionsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(postUsedAnswers.rejected, (state) => {
         state.questionsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchOffers.fulfilled, (state, action) => {
