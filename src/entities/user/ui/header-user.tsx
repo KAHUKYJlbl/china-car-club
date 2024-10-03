@@ -23,6 +23,7 @@ import {
 import { login, logout, setGeolocation } from "../model/user-slice";
 import { Login } from "./login";
 import classes from "./header-user.module.sass";
+import { getCurrentSiteMode } from "../../settings";
 
 type headerUserProps = {};
 
@@ -38,10 +39,11 @@ export const HeaderUser = memo(({}: headerUserProps) => {
   const [cookies] = useCookies([AUTH_TOKEN_KEY_NAME]);
   const [isLogin, setIsLogin] = useState(false);
   const location = useGeolocation(storedLocation);
+  const mode = useAppSelector(getCurrentSiteMode);
 
   useEffect(() => {
     if ((favoritesLoadingStatus.isIdle && isAuth) || favoritesByIdLoadingStatus.isSuccess) {
-      dispatch(fetchFavoritesCount());
+      dispatch(fetchFavoritesCount(mode));
     }
   }, [isAuth, favoritesByIdLoadingStatus.isSuccess]);
 
