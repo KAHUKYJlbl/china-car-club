@@ -55,7 +55,6 @@ export const UsedList = ({}: UsedListProps) => {
   const specificationsLoadingStatus = useAppSelector(getUsedSpecificationsLoadingStatus);
   const adsLoadingStatus = useAppSelector(getUsedAdsLoadingStatus);
   const adsList = useAppSelector(getUsedAdsList);
-  const adsListLoadingStatus = useAppSelector(getUsedAdsLoadingStatus);
   const currency = useAppSelector(getCurrency);
   const pagination = useAppSelector(getUsedAdsPagination);
   const favoritesList = useAppSelector(getFavoritesById);
@@ -157,7 +156,7 @@ export const UsedList = ({}: UsedListProps) => {
     });
   }, [currentManufacturer, currentModel, currentSpecification]);
 
-  if (!currency || manufacturersLoadingStatus.isIdle || adsListLoadingStatus.isIdle || adsListLoadingStatus.isLoading) {
+  if (!currency || manufacturersLoadingStatus.isIdle) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -204,7 +203,7 @@ export const UsedList = ({}: UsedListProps) => {
         <p className={classes.empty}>Ничего не найдено</p>
       ) : (
         <div className={classes.listWrapper}>
-          {adsLoadingStatus.isLoading ? (
+          {adsLoadingStatus.isLoading || adsLoadingStatus.isIdle ? (
             <LoadingSpinner spinnerType="page" />
           ) : (
             <>
