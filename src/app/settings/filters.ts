@@ -145,14 +145,6 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
         elementId: 2,
         name: "Микроавтобус",
       },
-      {
-        elementId: 3,
-        name: "Микрогрузовик",
-      },
-      {
-        elementId: 8,
-        name: "Фургон",
-      },
     ],
   },
   transmission: {
