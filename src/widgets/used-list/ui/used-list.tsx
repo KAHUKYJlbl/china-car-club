@@ -203,7 +203,7 @@ export const UsedList = ({}: UsedListProps) => {
         <p className={classes.empty}>Ничего не найдено</p>
       ) : (
         <div className={classes.listWrapper}>
-          {adsLoadingStatus.isLoading || adsLoadingStatus.isIdle ? (
+          {adsLoadingStatus.isLoading ? (
             <LoadingSpinner spinnerType="page" />
           ) : (
             <>

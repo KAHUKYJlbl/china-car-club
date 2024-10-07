@@ -16,8 +16,7 @@ import {
   getCurrencyLoadingStatus,
   getCurrentCurrency,
 } from "../../../entities/currency";
-import { Gallery } from "../../../entities/gallery/ui/gallery";
-import { getManufacturerByModel } from "../../../entities/manufacturer";
+import { UsedGallery } from "../../../entities/gallery";
 import { getAddItemsPrice, getAdds, getCurrentTax } from "../../../entities/order/index";
 import {
   fetchAdById,
@@ -59,7 +58,6 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
   const adImagesLoadingStatus = useAppSelector(getAdImagesLoadingStatus);
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
-  const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, Number(searchParams.get("model"))));
   const currentTax = useAppSelector(getCurrentTax);
   const options = useAppSelector(getAdds);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
@@ -104,11 +102,12 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
   return (
     <div className={classes.wrapper}>
       <div className={classes.gallery}>
-        <Gallery
+        <UsedGallery
           galleryList={adImages}
           specificationId={currentSpecification}
           modelId={Number(searchParams.get("model"))}
-          manufacturerId={manufacturerId}
+          manufacturerId={adInfo.manufacturer.id}
+          adsId={Number(searchParams.get("ad")!)}
           initSlide={0}
         />
       </div>
