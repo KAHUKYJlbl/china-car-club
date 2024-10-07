@@ -9,6 +9,7 @@ import { setCurrentSiteMode } from "../model/settings-slice";
 
 import classes from "./choose-site-mode.module.sass";
 import { getBasepath } from "../lib/get-basepath";
+import { SiteModeType } from "../lib/types";
 
 type ChooseSiteModeProps = {};
 
@@ -18,16 +19,20 @@ export const ChooseSiteMode = ({}: ChooseSiteModeProps) => {
   const siteModes = useAppSelector(getSiteModes);
   const currentSiteMode = useAppSelector(getCurrentSiteMode);
 
+  const clickHandler = (mode: SiteModeType) => {
+    if (currentSiteMode !== mode.id) {
+      dispatch(setCurrentSiteMode(mode.id));
+      navigate(getBasepath(mode.id));
+    }
+  };
+
   return (
     <div className={classes.wrapper}>
       {siteModes.map((mode) => (
         <button
           key={mode.id}
           className={cn(mode.id === currentSiteMode && classes.active)}
-          onClick={() => {
-            dispatch(setCurrentSiteMode(mode.id));
-            navigate(getBasepath(mode.id));
-          }}
+          onClick={() => clickHandler(mode)}
         >
           {mode.name}
         </button>
