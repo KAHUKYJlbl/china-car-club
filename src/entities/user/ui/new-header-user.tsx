@@ -8,7 +8,7 @@ import { AUTH_TOKEN_KEY_NAME, clearToken } from "../../../shared/api/token";
 import { CabinetButton } from "../../../shared/ui/header-button";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
-import { getCurrentSiteMode, getIsNew } from "../../settings";
+import { getCurrentSiteMode, SiteModes } from "../../settings";
 
 import { Login } from "./login";
 import { useGeolocation } from "../lib/hooks/use-geolocation";
@@ -37,7 +37,6 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
   const [isLogin, setIsLogin] = useState(false);
 
   const locationMode = useAppSelector(getGeolocationMode);
-  const isNew = useAppSelector(getIsNew);
   const isAuth = useAppSelector(getAuthStatus);
   const favoritesCount = useAppSelector(getFavoritesCount);
   const favoritesCountLoadingStatus = useAppSelector(getFavoritesCountLoadingStatus);
@@ -86,14 +85,18 @@ export const NewHeaderUser = ({}: NewHeaderUserProps) => {
           <CabinetButton
             label="мои автомобили"
             icon="cabinet-mycars"
-            callback={() => navigate([isNew ? "" : AppRoute.Used, AppRoute.MyCars, "/", AppRoute.Orders].join(""))}
+            callback={() =>
+              navigate([mode === SiteModes.New ? "" : AppRoute.Used, AppRoute.MyCars, "/", AppRoute.Orders].join(""))
+            }
           />
 
           <CabinetButton
             label="избранное"
             icon="cabinet-favorite"
             labelCount={favoritesCount}
-            callback={() => navigate([isNew ? "" : AppRoute.Used, AppRoute.MyCars, "/", AppRoute.Favorites].join(""))}
+            callback={() =>
+              navigate([mode === SiteModes.New ? "" : AppRoute.Used, AppRoute.MyCars, "/", AppRoute.Favorites].join(""))
+            }
           />
         </>
       )}

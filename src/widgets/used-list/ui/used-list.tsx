@@ -18,6 +18,7 @@ import {
   UsedCard,
 } from "../../../entities/used";
 import {
+  FavoriteTypes,
   fetchFavoritesById,
   getAuthStatus,
   getFavoritesById,
@@ -69,7 +70,7 @@ export const UsedList = ({}: UsedListProps) => {
     if (adsList.length > 0 && isAuth && !favoritesByIdLoadingStatus.isLoading) {
       dispatch(
         fetchFavoritesById({
-          typeId: 3,
+          typeId: FavoriteTypes.Ad,
           favorableIds: Array.from(new Set(adsList.map((element) => element.id))),
         })
       );

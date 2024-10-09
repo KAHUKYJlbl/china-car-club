@@ -5,6 +5,7 @@ import { NameSpace } from "../../../app/provider/store";
 import { LogoType, PaletteType, SiteModeType } from "../lib/types";
 import { FetchStatus } from "../../../shared/api/fetch-status";
 import { fetchSettings } from "./api-actions/fetch-settings";
+import { SiteModes } from "../lib/const";
 
 type InitialState = {
   logo: LogoType;
@@ -29,7 +30,7 @@ const initialState: InitialState = {
   isNew: true,
   name: "",
   siteModes: [],
-  currentSiteMode: 1,
+  currentSiteMode: SiteModes.New,
   settingsLoadingStatus: FetchStatus.Idle,
 };
 

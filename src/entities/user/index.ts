@@ -1,6 +1,8 @@
+export { FavoriteTypes } from "./lib/const";
 export { Order } from "./ui/order";
 export { Calculation } from "./ui/calculation";
 export { Favorite } from "./ui/favorite";
+export { UsedFavorite } from "./ui/used-favorite";
 export { NewHeaderUser } from "./ui/new-header-user";
 export {
   getUser,
