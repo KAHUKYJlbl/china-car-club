@@ -18,30 +18,6 @@ export const AppRouter = createBrowserRouter(
         element={<CalcPage />}
       />
 
-      <Route path={AppRoute.Used}>
-        <Route
-          index
-          element={<UsedListPage />}
-        />
-        <Route
-          path={AppRoute.UsedModel}
-          element={
-            <PrivateRoute>
-              <ModelPage />
-            </PrivateRoute>
-          }
-        />
-      </Route>
-
-      <Route
-        path={AppRoute.Model}
-        element={
-          <PrivateRoute>
-            <ModelPage />
-          </PrivateRoute>
-        }
-      />
-
       <Route
         path={AppRoute.MyCars}
         element={
@@ -63,6 +39,51 @@ export const AppRouter = createBrowserRouter(
           element={<Mycars folder="calculations" />}
         />
       </Route>
+
+      <Route path={AppRoute.Used}>
+        <Route
+          index
+          element={<UsedListPage />}
+        />
+        <Route
+          path={AppRoute.UsedModel}
+          element={
+            <PrivateRoute>
+              <ModelPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={AppRoute.UsedMyCars}
+          element={
+            <PrivateRoute>
+              <MycarsPage />
+            </PrivateRoute>
+          }
+        >
+          <Route
+            path={AppRoute.Orders}
+            element={<Mycars folder="orders" />}
+          />
+          <Route
+            path={AppRoute.Favorites}
+            element={<Mycars folder="favorites" />}
+          />
+          <Route
+            path={AppRoute.Calculations}
+            element={<Mycars folder="calculations" />}
+          />
+        </Route>
+      </Route>
+
+      <Route
+        path={AppRoute.Model}
+        element={
+          <PrivateRoute>
+            <ModelPage />
+          </PrivateRoute>
+        }
+      />
 
       <Route
         path="*"

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
 import { AppRoute } from "../../../app/provider/router";
+import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
 import { Calculations } from "./calculations";
 import { Orders } from "./orders";
@@ -16,6 +18,7 @@ type MycarsProps = {
 
 export const Mycars = memo(({ folder }: MycarsProps) => {
   const navigate = useNavigate();
+  const mode = useAppSelector(getCurrentSiteMode);
   const isDesktop = useMediaQuery({ query: "(min-width: 721px)" });
 
   const [currentSort, setCurrentSort] = useState<"increase" | "decrease">("decrease");
@@ -27,7 +30,9 @@ export const Mycars = memo(({ folder }: MycarsProps) => {
           <button
             aria-label="заявки"
             className={cn(classes.button, { [classes.buttonActive]: folder === "orders" })}
-            onClick={() => navigate(`${AppRoute.MyCars}/${AppRoute.Orders}`)}
+            onClick={() =>
+              navigate(`${mode === SiteModes.New ? "" : AppRoute.Used}${AppRoute.MyCars}/${AppRoute.Orders}`)
+            }
           >
             Заявки
           </button>
@@ -35,7 +40,9 @@ export const Mycars = memo(({ folder }: MycarsProps) => {
           <button
             aria-label="расчеты"
             className={cn(classes.button, { [classes.buttonActive]: folder === "calculations" })}
-            onClick={() => navigate(`${AppRoute.MyCars}/${AppRoute.Calculations}`)}
+            onClick={() =>
+              navigate(`${mode === SiteModes.New ? "" : AppRoute.Used}${AppRoute.MyCars}/${AppRoute.Calculations}`)
+            }
           >
             Расчеты
           </button>
@@ -43,7 +50,9 @@ export const Mycars = memo(({ folder }: MycarsProps) => {
           <button
             aria-label="избранное"
             className={cn(classes.button, { [classes.buttonActive]: folder === "favorites" })}
-            onClick={() => navigate(`${AppRoute.MyCars}/${AppRoute.Favorites}`)}
+            onClick={() =>
+              navigate(`${mode === SiteModes.New ? "" : AppRoute.Used}${AppRoute.MyCars}/${AppRoute.Favorites}`)
+            }
           >
             Избранное
           </button>

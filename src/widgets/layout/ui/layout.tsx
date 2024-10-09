@@ -13,10 +13,11 @@ import { getCurrentCity } from "../../../entities/user";
 import { fetchCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
 import {
   fetchSettings,
-  getIsNew,
+  getCurrentSiteMode,
   getPalette,
   getSettingsLoadingStatus,
   setCurrentSiteMode,
+  SiteModes,
 } from "../../../entities/settings";
 
 import { NewHeader } from "./new-header";
@@ -45,7 +46,7 @@ export const Layout = ({
   const [searchParams, _setSearchParams] = useSearchParams();
 
   const city = useAppSelector(getCurrentCity);
-  const isNew = useAppSelector(getIsNew);
+  const mode = useAppSelector(getCurrentSiteMode);
   const palette = useAppSelector(getPalette);
   const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
   const settingsLoadingstatus = useAppSelector(getSettingsLoadingStatus);
@@ -53,9 +54,9 @@ export const Layout = ({
 
   useEffect(() => {
     if (window.location.pathname.includes("used")) {
-      dispatch(setCurrentSiteMode(2));
+      dispatch(setCurrentSiteMode(SiteModes.Used));
     } else {
-      dispatch(setCurrentSiteMode(1));
+      dispatch(setCurrentSiteMode(SiteModes.New));
     }
   }, []);
 
@@ -77,7 +78,7 @@ export const Layout = ({
     }
   }, [settingsLoadingstatus.isSuccess]);
 
-  if (settingsLoadingstatus.isLoading) {
+  if (settingsLoadingstatus.isLoading || settingsLoadingstatus.isIdle) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -92,7 +93,7 @@ export const Layout = ({
             `Купить ${
               name
                 ? `${name.manufacturer}\u00A0${name.model}`
-                : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
+                : `${mode === SiteModes.New ? "новый автомобиль" : "автомобиль с пробегом"}`
             } из\u00A0Китая по\u00A0лучшей цене`}
         </title>
         <meta
@@ -113,8 +114,8 @@ export const Layout = ({
           {heading?.heading ||
             `Купить ${
               name
-                ? `${name.manufacturer}\u00A0${name.model}${isNew ? "" : " с пробегом"}`
-                : `${isNew ? "новый автомобиль" : "автомобиль с пробегом"}`
+                ? `${name.manufacturer}\u00A0${name.model}${mode === SiteModes.New ? "" : " с пробегом"}`
+                : `${mode === SiteModes.New ? "новый автомобиль" : "автомобиль с пробегом"}`
             } из\u00A0Китая по\u00A0лучшей цене в\u00A0${rne.decline(
               { text: CITIES[city], gender: "женский" },
               "винительный"

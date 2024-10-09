@@ -1,5 +1,7 @@
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
+import plural from "plural-ru";
+import dayjs from "dayjs";
 
 import { Currencies, getCurrencyExchange } from "../../currency";
 import { FILTERS } from "../../../app/settings/filters";
@@ -16,6 +18,7 @@ import { getFavoriteTypeHeader } from "../lib/get-favorite-type-header";
 import { MycarsFavoriteType } from "../lib/types";
 
 import classes from "./favorite.module.sass";
+import { FavoriteTypes } from "../lib/const";
 
 type FavoriteProps = {
   favorite: MycarsFavoriteType;
@@ -25,14 +28,14 @@ type FavoriteProps = {
   };
 };
 
-export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
+export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const favoritesList = useAppSelector(getFavoritesById);
 
   const useFavoriteList = () => {
     return favoritesList.find(
-      (element) => element.favorableId === (favorite.cardData.specification.id || favorite.cardData.series.id)
+      (element) => element.favorableId === (favorite.cardData.specificationAd?.id || favorite.cardData.series.id)
     )?.id;
   };
 
@@ -46,8 +49,8 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
     dispatch(resetMycarsFavoritesCountLoadingStatus());
     dispatch(
       postFavorite({
-        typeId: favorite.type,
-        favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
+        typeId: FavoriteTypes.Ad,
+        favorableId: favorite.cardData.specificationAd!.id,
       })
     );
   };
@@ -83,7 +86,30 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
           {favorite.cardData.specification && (
             <>
               <span>{favorite.cardData.specification.name.ru || favorite.cardData.specification.name.ch}</span>
-              <span className={classes.grey}>{favorite.cardData.year} поколение • 2024 выпуск</span>
+              <span className={classes.grey}>
+                {`${favorite.cardData.year} поколение • `}
+                {favorite.cardData.specificationAd?.ownersCount
+                  ? plural(
+                      favorite.cardData.specificationAd?.ownersCount,
+                      "%d владелец",
+                      "%d владельца",
+                      "%d владельцев"
+                    )
+                  : "На учет не вставал"}
+              </span>
+              <span>
+                Пробег {favorite.cardData.specificationAd?.mileage} км • Возраст{" "}
+                {`${
+                  dayjs().diff(dayjs(favorite.cardData.specificationAd?.ageDate), "years") === 0
+                    ? ""
+                    : plural(
+                        dayjs().diff(dayjs(favorite.cardData.specificationAd?.ageDate), "years"),
+                        "%d год",
+                        "%d года",
+                        "%d лет"
+                      )
+                } ${(dayjs().diff(dayjs(favorite.cardData.specificationAd?.ageDate), "M") % 12) + 1} мес`}
+              </span>
             </>
           )}
         </p>
@@ -115,12 +141,9 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
         </p>
 
         <p className={classes.price}>
-          <span className={classes.grey}>Мин. цена в китае</span>
+          <span className={classes.grey}>Цена в китае</span>
           <span className={classes.bold}>
             {priceFormat(getCurrencyExchange(favorite.cardData.price.min, Currencies.RUB, currency))} ₽
-            {favorite.cardData.price.max &&
-              ` —
-                ${priceFormat(getCurrencyExchange(favorite.cardData.price.max, Currencies.RUB, currency))} ₽`}
           </span>
         </p>
       </div>

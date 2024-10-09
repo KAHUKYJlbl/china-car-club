@@ -6,6 +6,7 @@ import plural from "plural-ru";
 
 import {
   deleteFavorite,
+  FavoriteTypes,
   fetchHash,
   getAuthStatus,
   getCurrentCity,
@@ -71,7 +72,7 @@ export const UsedCard = memo(({ ads, currency, isFavorite }: UsedCardProps) => {
       dispatch(resetMycarsFavoritesCountLoadingStatus());
       dispatch(
         postFavorite({
-          typeId: 3,
+          typeId: FavoriteTypes.Ad,
           favorableId: ads.id,
         })
       );
@@ -141,7 +142,7 @@ export const UsedCard = memo(({ ads, currency, isFavorite }: UsedCardProps) => {
               <>
                 <span>{ads.specification.name.ru || ads.specification.name.ch}</span>
                 <span className={classes.grey}>
-                  {ads.specification.year} поколение •{" "}
+                  {`${ads.specification.year} поколение • `}
                   {ads.ownersCount
                     ? plural(ads.ownersCount, "%d владелец", "%d владельца", "%d владельцев")
                     : "На учет не вставал"}

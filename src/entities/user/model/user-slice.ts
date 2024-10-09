@@ -197,7 +197,9 @@ export const userSlice = createSlice({
         state.mycarsFavoritesById = state.mycarsFavoritesById.concat(
           action.payload.data.map((favorite) => ({
             id: favorite.id,
-            favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
+            favorableId: favorite.cardData.specificationAd
+              ? favorite.cardData.specificationAd.id
+              : favorite.cardData.specification.id || favorite.cardData.series.id,
           }))
         );
         state.mycarsPagination = action.payload.meta;

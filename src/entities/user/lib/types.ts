@@ -162,6 +162,14 @@ export type MycarsFavoriteType = {
       id: number;
       name: NameType;
     };
+    specificationAd?: {
+      id: number;
+      calcVisible: boolean;
+      ownersCount: number;
+      ageDate: string;
+      mileage: number;
+      color: string;
+    };
     description: string;
     year: number;
     parameters: ParametersType;
