@@ -7,8 +7,11 @@ import { AppRoute } from "../../../app/provider/router";
 import { DROPDOWN_CITIES } from "../../../app/settings/cities";
 import { getPrices, getTotal } from "../../../features/choose-options";
 import { getName } from "../../../entities/manufacturer";
+import { getCurrentAd } from "../../../entities/used";
 import { getCurrentCity } from "../../../entities/user";
 import { getSpecificationParams } from "../../../entities/model";
+import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
+import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import {
   getAddItems,
   getAddItemsPrice,
@@ -19,7 +22,6 @@ import {
   postAnswers,
   postUsedAnswers,
 } from "../../../entities/order";
-import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import {
   AddItemType,
   getExtColors,
@@ -27,12 +29,10 @@ import {
   getSpecificationAddProducts,
   getSpecifications,
 } from "../../../entities/specification";
-import { getIsNew } from "../../../entities/settings";
-import { getCurrentAd } from "../../../entities/used";
-import { Modal } from "../../../shared/ui/modal";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { Modal } from "../../../shared/ui/modal";
 import priceFormat from "../../../shared/lib/utils/price-format";
 
 import { Done } from "./done";
@@ -90,13 +90,13 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const currentTax = useAppSelector(getCurrentTax);
+  const mode = useAppSelector(getCurrentSiteMode);
   const specificationName = specifications.find((spec) => spec.id === Number(searchParams.get("spec")))?.name || "";
   const specificationParams = useAppSelector((state) =>
     getSpecificationParams(state, Number(searchParams.get("spec")))
   );
   const order = useAppSelector(getCurrentOrder);
   const adInfo = useAppSelector(getCurrentAd);
-  const isNew = useAppSelector(getIsNew);
 
   // popups
   const [isSupplier, setIsSupplier] = useState(false);
@@ -140,7 +140,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
       return;
     }
 
-    if (isNew) {
+    if (mode === SiteModes.New) {
       dispatch(
         postAnswers({
           statisticsEventId: order,
@@ -492,7 +492,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
           >
             <Done
               onDone={() => {
-                navigate(`${AppRoute.MyCars}/${AppRoute.Orders}`);
+                navigate(`${mode === SiteModes.New ? "" : AppRoute.Used}${AppRoute.MyCars}/${AppRoute.Orders}`);
               }}
             />
           </Modal>

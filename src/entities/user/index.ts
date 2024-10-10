@@ -3,6 +3,8 @@ export { Order } from "./ui/order";
 export { Calculation } from "./ui/calculation";
 export { Favorite } from "./ui/favorite";
 export { UsedFavorite } from "./ui/used-favorite";
+export { UsedCalculation } from "./ui/used-calculation";
+export { UsedOrder } from "./ui/used-order";
 export { NewHeaderUser } from "./ui/new-header-user";
 export {
   getUser,

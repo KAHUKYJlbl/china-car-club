@@ -1,30 +1,30 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosInstance } from 'axios';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosInstance } from "axios";
 
-import { AppDispatch, State } from '../../../../app/provider/store';
-import { APIRoute } from '../../../../shared/api/routes';
+import { AppDispatch, State } from "../../../../app/provider/store";
+import { APIRoute } from "../../../../shared/api/routes";
 
-import { ApiOrderType } from '../../lib/types';
-
-
+import { ApiOrderType } from "../../lib/types";
 
 export const fetchOrders = createAsyncThunk<
   ApiOrderType,
-  number | undefined,
+  {
+    page?: number;
+    mode: number;
+  },
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
-> (
-  'User/fetchOrders',
-  async ( page = 1, {extra: axios}) => {
-    try {
-      const { data } = await axios.get<ApiOrderType>(APIRoute.GetOrders, { params: { page } });
+>("User/fetchOrders", async (reqData, { extra: axios }) => {
+  try {
+    const { data } = await axios.get<ApiOrderType>(APIRoute.GetOrders, {
+      params: { page: reqData.page, site_mode_type_id: reqData.mode },
+    });
 
-      return data;
-    } catch (err) {
-      throw Error('Unable to get Orders');
-    }
-  },
-);
+    return data;
+  } catch (err) {
+    throw Error("Unable to get Orders");
+  }
+});
