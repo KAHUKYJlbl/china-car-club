@@ -5,6 +5,7 @@ import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { getCurrency } from "../../../entities/currency";
+import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
 import {
   Calculation,
   getCalculations,
@@ -12,6 +13,7 @@ import {
   getPagination,
   resetMycars,
   fetchCalculations,
+  UsedCalculation,
 } from "../../../entities/user";
 
 import classes from "./calculations.module.sass";
@@ -27,11 +29,12 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
   const calculationsLoadingStatus = useAppSelector(getCalculationsLoadingStatus);
   const currency = useAppSelector(getCurrency);
   const pagination = useAppSelector(getPagination);
+  const mode = useAppSelector(getCurrentSiteMode);
 
   useEffect(() => {
     if (!calculationsLoadingStatus.isLoading) {
       dispatch(resetMycars());
-      dispatch(fetchCalculations());
+      dispatch(fetchCalculations({ mode }));
     }
   }, []);
 
@@ -52,20 +55,28 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
               : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
           )
-          .map((calculation) => (
-            <Calculation
-              currency={currency}
-              calculation={calculation}
-              key={calculation.id}
-            />
-          ))}
+          .map((calculation) =>
+            mode === SiteModes.New ? (
+              <Calculation
+                currency={currency}
+                calculation={calculation}
+                key={calculation.id}
+              />
+            ) : (
+              <UsedCalculation
+                currency={currency}
+                calculation={calculation}
+                key={calculation.id}
+              />
+            )
+          )}
       </ul>
 
       {pagination.currentPage < pagination.lastPage && (
         <button
           aria-label="показать еще"
           className={classes.button}
-          onClick={() => dispatch(fetchCalculations(pagination.currentPage + 1))}
+          onClick={() => dispatch(fetchCalculations({ page: pagination.currentPage + 1, mode }))}
         >
           {calculationsLoadingStatus.isLoading ? <LoadingSpinner spinnerType="button" /> : "Показать еще"}
         </button>

@@ -8,7 +8,9 @@ import {
   Order,
   getPagination,
   resetMycars,
+  UsedOrder,
 } from "../../../entities/user";
+import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
@@ -25,11 +27,12 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
   const orders = useAppSelector(getOrders);
   const ordersLoadingStatus = useAppSelector(getOrdersLoadingStatus);
   const pagination = useAppSelector(getPagination);
+  const mode = useAppSelector(getCurrentSiteMode);
 
   useEffect(() => {
     if (!ordersLoadingStatus.isLoading) {
       dispatch(resetMycars());
-      dispatch(fetchOrders());
+      dispatch(fetchOrders({ mode }));
     }
   }, []);
 
@@ -50,19 +53,26 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
               : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
           )
-          .map((order) => (
-            <Order
-              order={order}
-              key={order.id}
-            />
-          ))}
+          .map((order) =>
+            mode === SiteModes.New ? (
+              <Order
+                order={order}
+                key={order.id}
+              />
+            ) : (
+              <UsedOrder
+                order={order}
+                key={order.id}
+              />
+            )
+          )}
       </ul>
 
       {pagination.currentPage < pagination.lastPage && (
         <button
           aria-label="показать еще"
           className={classes.button}
-          onClick={() => dispatch(fetchOrders(pagination.currentPage + 1))}
+          onClick={() => dispatch(fetchOrders({ page: pagination.currentPage + 1, mode }))}
         >
           {ordersLoadingStatus.isLoading ? <LoadingSpinner spinnerType="button" /> : "Показать еще"}
         </button>

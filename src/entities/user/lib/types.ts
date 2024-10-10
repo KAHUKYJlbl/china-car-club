@@ -78,6 +78,14 @@ export type MycarsOrderType = {
   priceTypeId: number;
   availabilityOfEpts: boolean;
   addItems: string[];
+  specificationAd?: {
+    id: number;
+    calcVisible: boolean;
+    ownersCount: number;
+    ageDate: string;
+    mileage: number;
+    color: string;
+  };
   specification: {
     id: number;
     name: NameType;
@@ -115,6 +123,14 @@ export type MycarsCalculationType = {
   priceTypeId: number;
   availabilityOfEpts: boolean;
   addItems: string[];
+  specificationAd?: {
+    id: number;
+    calcVisible: boolean;
+    ownersCount: number;
+    ageDate: string;
+    mileage: number;
+    color: string;
+  };
   specification: {
     id: number;
     name: NameType;
