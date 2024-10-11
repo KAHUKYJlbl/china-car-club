@@ -13,7 +13,7 @@ import {
   getUsedSpecificationsLoadingStatus,
   setCurrentPage,
 } from "../../../entities/used";
-import { Dropdown } from "../../../shared/ui/dropdown";
+import { Dropdown, DropdownBlocks } from "../../../shared/ui/dropdown";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 
@@ -111,10 +111,10 @@ export const ChooseUsedModel = memo(
             disabled={seriesLoadingStatus.isLoading}
           />
 
-          <Dropdown
+          <DropdownBlocks
             currentElement={currentSpecification}
             setCurrent={setCurrentSpecification}
-            placeholder={"Комплектация"}
+            placeholder="Комплектация"
             list={specifications}
             disabled={specificationsLoadingStatus.isLoading}
           />

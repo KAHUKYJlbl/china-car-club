@@ -32,6 +32,7 @@ export const getUsedSpecificationsList = createSelector(getUsedSpecifications, (
     name: series.name.ru || series.name.ch,
     id: series.id,
     sublistLength: series.adsCount,
+    year: series.year,
   }))
 );
 

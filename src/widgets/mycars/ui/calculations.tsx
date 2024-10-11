@@ -38,7 +38,7 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
     }
   }, []);
 
-  if (!currency || calculationsLoadingStatus.isIdle || (calculationsLoadingStatus.isLoading && !calculations.length)) {
+  if (!currency || calculationsLoadingStatus.isIdle || calculationsLoadingStatus.isLoading || !calculations.length) {
     return <LoadingSpinner spinnerType="page" />;
   }
 

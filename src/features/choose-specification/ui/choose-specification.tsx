@@ -1,22 +1,22 @@
-import { memo, useEffect } from 'react';
-import cn from 'classnames';
+import { memo, useEffect } from "react";
+import cn from "classnames";
 
-import { useAppDispatch } from '../../../shared/lib/hooks/use-app-dispatch';
-import { useAppSelector } from '../../../shared/lib/hooks/use-app-selector';
-import { LoadingSpinner } from '../../../shared/ui/loading-spinner';
-import { DropdownBlocks } from '../../../shared/ui/dropdown';
-import { getCurrency, getCurrencyLoadingStatus } from '../../../entities/currency';
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+import { DropdownBlocks } from "../../../shared/ui/dropdown";
+import { getCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
 import {
   fetchSpecifications,
   getCheapestSpecification,
   getPrice,
   getSpecifications,
-  getSpecificationsLoadingStatus
-} from '../../../entities/specification';
+  getSpecificationsLoadingStatus,
+} from "../../../entities/specification";
 
-import { FilterId } from '../../filter';
-import classes from './choose-specification.module.sass';
-import priceFormat from '../../../shared/lib/utils/price-format';
+import { FilterId } from "../../filter";
+import classes from "./choose-specification.module.sass";
+import priceFormat from "../../../shared/lib/utils/price-format";
 
 type ChooseSpecificationProps = {
   isPromo: boolean;
@@ -24,7 +24,7 @@ type ChooseSpecificationProps = {
   currentModel: number | null;
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
-  activeFilters: Partial< Record< FilterId, number[] > >;
+  activeFilters: Partial<Record<FilterId, number[]>>;
 };
 
 export const ChooseSpecification = memo(
@@ -34,7 +34,7 @@ export const ChooseSpecification = memo(
     currentModel,
     currentSpecification,
     setCurrentSpecification,
-    activeFilters
+    activeFilters,
   }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
@@ -47,11 +47,13 @@ export const ChooseSpecification = memo(
 
     useEffect(() => {
       if (currentModel && currentManufacturer) {
-        dispatch(fetchSpecifications({
-          manufacturerId: currentManufacturer,
-          modelId: currentModel,
-          filters: activeFilters,
-        }));
+        dispatch(
+          fetchSpecifications({
+            manufacturerId: currentManufacturer,
+            modelId: currentModel,
+            filters: activeFilters,
+          })
+        );
       }
     }, [currentModel]);
 
@@ -64,22 +66,22 @@ export const ChooseSpecification = memo(
     if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
       return (
         <div className={classes.wrapper}>
-          <LoadingSpinner spinnerType='widget' />
+          <LoadingSpinner spinnerType="widget" />
         </div>
-      )
+      );
     }
 
     return (
       <div className={classes.wrapper}>
-        {
-          currentModel
-          ? <>
+        {currentModel ? (
+          <>
             <DropdownBlocks
               currentElement={currentSpecification}
               setCurrent={setCurrentSpecification}
-              placeholder='Комплектация'
+              placeholder="Комплектация"
               list={specifications}
               disabled={specificationsLoadingStatus.isLoading}
+              isYear
             />
 
             <p className={classes.header}>
@@ -89,39 +91,19 @@ export const ChooseSpecification = memo(
             <div className={classes.priceWrapper}>
               <div className={classes.priceList}>
                 <p className={classes.price}>
-                  <b>
-                    {
-                      priceData
-                        ? `${priceFormat( priceData.price.toFixed() )} ¥`
-                        : '0'
-                    }
-                  </b>
+                  <b>{priceData ? `${priceFormat(priceData.price.toFixed())} ¥` : "0"}</b>
                 </p>
 
                 <p className={cn(classes.discountPrice, classes.price)}>
-                  <b>
-                    {
-                      priceData
-                        ? `${priceFormat( priceData.discount.toFixed() )} ¥`
-                        : '0'
-                    }
-                  </b>
+                  <b>{priceData ? `${priceFormat(priceData.discount.toFixed())} ¥` : "0"}</b>
                 </p>
 
                 <p className={cn(classes.price, classes.grey)}>
-                  {
-                    priceData
-                      ? `${priceFormat( (priceData.price * currency.cny).toFixed() )} ₽`
-                      : '0'
-                  }
+                  {priceData ? `${priceFormat((priceData.price * currency.cny).toFixed())} ₽` : "0"}
                 </p>
 
                 <p className={cn(classes.price, classes.grey)}>
-                  {
-                    priceData
-                      ? `${priceFormat( (priceData.price * currency.cny / currency.usd).toFixed() )} $`
-                      : '0'
-                  }
+                  {priceData ? `${priceFormat(((priceData.price * currency.cny) / currency.usd).toFixed())} $` : "0"}
                 </p>
 
                 <p className={cn(classes.small, classes.grey, classes.discount)}>
@@ -130,15 +112,15 @@ export const ChooseSpecification = memo(
               </div>
             </div>
           </>
-          : <p className={classes.big}>
-            ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;— <span className={classes.grey}>покажем цену в&nbsp;Китае на&nbsp;текущий день</span>
+        ) : (
+          <p className={classes.big}>
+            ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;—{" "}
+            <span className={classes.grey}>покажем цену в&nbsp;Китае на&nbsp;текущий день</span>
           </p>
-        }
+        )}
 
-        <p className={classes.contract}>
-          По&nbsp;прямому контракту и&nbsp;курсу продажи валюты
-        </p>
+        <p className={classes.contract}>По&nbsp;прямому контракту и&nbsp;курсу продажи валюты</p>
       </div>
-    )
+    );
   }
 );
