@@ -55,6 +55,7 @@ export type UsedSeriesDataType = DataType & {
 };
 
 export type UsedSpecificationDataType = DataType & {
+  year: number;
   adsCount: number;
   series: DataType;
   manufacturer: DataType;

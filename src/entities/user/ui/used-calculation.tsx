@@ -27,7 +27,7 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
     <div
       className={cn(
         classes.wrapper,
-        !calculation.specificationAd!.calcVisible && classes.opacity,
+        !calculation.specificationAd?.calcVisible && classes.opacity,
         calculation.specification.series.priceListWithLogisticsByCurrentDay.length === 0 && classes.opacity
       )}
     >
@@ -134,15 +134,13 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
       </div>
 
       <div className={classes.buttons}>
-        {calculation.specificationAd!.calcVisible &&
+        {calculation.specificationAd?.calcVisible &&
         calculation.specification.series.priceListWithLogisticsByCurrentDay.length !== 0 ? (
           <button
             aria-label="перейти к расчету"
             onClick={() =>
               navigate(
-                `${AppRoute.Used}${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${
-                  calculation.specification.id
-                }&ad=${calculation.specificationAd!.id}`
+                `${AppRoute.Used}${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}&ad=${calculation.specificationAd?.id}`
               )
             }
           >

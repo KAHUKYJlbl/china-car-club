@@ -153,9 +153,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
           aria-label="рассчитать цену"
           onClick={() =>
             navigate(
-              `${AppRoute.Used}${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${
-                favorite.cardData.specification.id
-              }&ad=${favorite.cardData.specificationAd!.id}`
+              `${AppRoute.Used}${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${favorite.cardData.specification.id}&ad=${favorite.cardData.specificationAd?.id}`
             )
           }
         >

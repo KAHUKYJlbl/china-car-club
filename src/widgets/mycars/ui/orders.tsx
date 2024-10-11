@@ -36,7 +36,7 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
     }
   }, []);
 
-  if (ordersLoadingStatus.isIdle || (ordersLoadingStatus.isLoading && !orders.length)) {
+  if (ordersLoadingStatus.isIdle || ordersLoadingStatus.isLoading || !orders.length) {
     return <LoadingSpinner spinnerType="page" />;
   }
 

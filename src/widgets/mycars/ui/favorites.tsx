@@ -38,12 +38,7 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
     }
   }, []);
 
-  if (
-    !currency ||
-    favoritesLoadingStatus.isIdle ||
-    favoritesLoadingStatus.isLoading ||
-    (favoritesLoadingStatus.isLoading && !favorites.length)
-  ) {
+  if (!currency || favoritesLoadingStatus.isIdle || favoritesLoadingStatus.isLoading || !favorites.length) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
