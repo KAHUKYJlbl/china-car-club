@@ -23,7 +23,13 @@ export const Calculation = memo(({ calculation, currency }: CalculationProps) =>
   const navigate = useNavigate();
 
   return (
-    <div className={cn(classes.wrapper, !calculation.specification.calcVisible && classes.opacity)}>
+    <div
+      className={cn(
+        classes.wrapper,
+        !calculation.specification.calcVisible && classes.opacity,
+        calculation.specification.series.priceListWithLogisticsByCurrentDay.length === 0 && classes.opacity
+      )}
+    >
       <div className={classes.info}>
         <p className={classes.header}>
           <span>Быстрый расчет</span>
@@ -79,35 +85,38 @@ export const Calculation = memo(({ calculation, currency }: CalculationProps) =>
             .join("\u00A0•\u00A0")}
         </p>
 
-        <p className={classes.price}>
-          <span className={classes.grey}>Цена в России с растаможкой</span>
-          <span className={classes.bold}>
-            {priceFormat(
-              getCurrencyExchange(
-                calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
-                  (a, b) => a.price - b.price
-                )[0].price,
-                Currencies.RUB,
-                currency
-              )
-            )}{" "}
-            ₽ —{" "}
-            {priceFormat(
-              getCurrencyExchange(
-                calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
-                  (a, b) => b.price - a.price
-                )[0].price,
-                Currencies.RUB,
-                currency
-              )
-            )}{" "}
-            ₽
-          </span>
-        </p>
+        {calculation.specification.series.priceListWithLogisticsByCurrentDay.length !== 0 && (
+          <p className={classes.price}>
+            <span className={classes.grey}>Цена в России с растаможкой</span>
+            <span className={classes.bold}>
+              {priceFormat(
+                getCurrencyExchange(
+                  calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
+                    (a, b) => a.price - b.price
+                  )[0].price,
+                  Currencies.RUB,
+                  currency
+                )
+              )}{" "}
+              ₽ —{" "}
+              {priceFormat(
+                getCurrencyExchange(
+                  calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
+                    (a, b) => b.price - a.price
+                  )[0].price,
+                  Currencies.RUB,
+                  currency
+                )
+              )}{" "}
+              ₽
+            </span>
+          </p>
+        )}
       </div>
 
       <div className={classes.buttons}>
-        {calculation.specification.calcVisible ? (
+        {calculation.specification.calcVisible &&
+        calculation.specification.series.priceListWithLogisticsByCurrentDay.length !== 0 ? (
           <button
             aria-label="перейти к расчету"
             onClick={() =>
