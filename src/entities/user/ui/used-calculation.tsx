@@ -104,7 +104,7 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
             .join("\u00A0•\u00A0")}
         </p>
 
-        {calculation.specificationAd!.calcVisible && (
+        {calculation.specification.series.priceListWithLogisticsByCurrentDay.length !== 0 && (
           <p className={classes.price}>
             <span className={classes.grey}>Цена в России с растаможкой</span>
             <span className={classes.bold}>
