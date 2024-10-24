@@ -4,7 +4,7 @@ import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { AppRoute } from "../../../app/provider/router";
 import { getTotal } from "../../../features/choose-options/lib/utils/get-total";
 import { getPrices } from "../../../features/choose-options/lib/utils/get-prices";
-import { ChooseOptions } from "../../../features/choose-options/ui/choose-options";
+import { PriceOptions, SpecificationColors, SpecificationOptions } from "../../../features/choose-specification";
 import { SpecificationInfo } from "../../../features/choose-specification/ui/specification-info";
 import {
   fetchSpecificationAddProducts,
@@ -18,13 +18,7 @@ import {
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
-import {
-  Currency,
-  fetchCurrency,
-  getCurrency,
-  getCurrencyLoadingStatus,
-  getCurrentCurrency,
-} from "../../../entities/currency";
+import { fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import { getManufacturerByModel, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax } from "../../../entities/order/index";
 import { setCurrentColor } from "../../../entities/order/model/order-slice";
@@ -40,7 +34,6 @@ import { PriceHistory } from "./price-history";
 import { OrderButtons } from "./order-buttons";
 import { Questions } from "./questions";
 import { InfoBar } from "./info-bar";
-import { Prices } from "./prices";
 import { Techs } from "./techs";
 import { Taxes } from "./taxes";
 import { Adds } from "./adds";
@@ -77,6 +70,8 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const [isTaxes, setIsTaxes] = useState(false);
   const [isPriceHistory, setIsPriceHistory] = useState(false);
   const [isQuestions, setIsQuestions] = useState(false);
+  const [isColors, setIsColors] = useState(false);
+  const [isAddOptions, setIsAddOptions] = useState(false);
 
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(Number(searchParams.get("spec")));
 
@@ -180,22 +175,15 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
       <div className={classes.pricesWrapper}>
         <div className={classes.prices}>
-          <Prices
+          <PriceOptions
             prices={specificationParams.price}
             setIsTaxes={setIsTaxes}
+            colorsCallback={() => setIsColors(true)}
+            optionsCallback={() => setIsAddOptions(true)}
+            addProductsCallback={() => setIsAddProducts(true)}
+            taxesCallback={() => setIsTaxes(true)}
           />
         </div>
-
-        <div className={classes.addOptions}>
-          <ChooseOptions
-            prices={specificationParams.price}
-            setIsAddProducts={setIsAddProducts}
-          />
-        </div>
-      </div>
-
-      <div className={classes.currency}>
-        <Currency />
       </div>
 
       <div className={classes.buttons}>
@@ -283,6 +271,24 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       {isQuestions && (
         <Modal onClose={() => null}>
           <Questions setConfirmation={setConfirmation} />
+        </Modal>
+      )}
+
+      {isColors && (
+        <Modal onClose={() => setIsColors(false)}>
+          <SpecificationColors
+          // colors={colorList}
+          />
+        </Modal>
+      )}
+
+      {isAddOptions && (
+        <Modal onClose={() => setIsAddOptions(false)}>
+          <SpecificationOptions
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+            techs={specificationParams}
+          />
         </Modal>
       )}
     </div>

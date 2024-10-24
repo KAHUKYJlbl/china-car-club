@@ -76,12 +76,9 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
 
   return (
     <div className={classes.wrapper}>
-      <p>
-        <span className={classes.big}>❷ Рассчитайте под&nbsp;ключ доставку и&nbsp;все варианты покупки</span>
-        <br />
-        Сравните все&nbsp;комплектации. Узнайте все&nbsp;цены по&nbsp;способам покупки. Получите персональную спеццену
-        и&nbsp;рекомендации.
-      </p>
+      <p className={classes.big}>❷ Рассчитайте цену авто с&nbsp;растаможиванием</p>
+
+      <p>Выберите все&nbsp;условия заказа и&nbsp;проверьте спеццены по&nbsp;всем способам покупки</p>
 
       <button
         aria-label="рассчитать стоимость"

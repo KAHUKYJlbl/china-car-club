@@ -134,7 +134,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
           aria-label="заказать машину"
           onClick={orderHandler}
         >
-          {adId ? "Хочу цену дешевле" : "Хочу все спеццены"}
+          Узнать спеццены у менеджера
         </button>
       </div>
 

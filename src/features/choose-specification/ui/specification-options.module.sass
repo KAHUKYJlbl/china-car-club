@@ -1,0 +1,77 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 16px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+  font-size: 12px
+  line-height: 13px
+
+  .header
+    padding: 0 4px
+
+    font-size: 18px
+    line-height: 22px
+    font-weight: 700
+
+  .model
+    padding: 0 4px
+
+    font-size: 14px
+    font-weight: 700
+
+    span
+      font-size: 12px
+      line-height: 16px
+      font-weight: 400
+      color: $text-light
+
+  .option
+    display: flex
+    flex-direction: column
+    gap: 8px
+    padding: 12px
+
+    border: 1px solid $border
+    border-radius: 12px
+
+    .option-header
+      font-size: 14px
+      line-height: 16px
+      font-weight: 700
+
+    .option-description
+      color: $text-light
+
+    .price
+      display: flex
+      justify-content: space-between
+
+      p
+        align-self: flex-end
+
+        font-size: 14px
+        line-height: 16px
+
+      button
+        padding: 8px 12px
+
+        border-radius: 8px
+        background-color: $accent
+
+        color: $white
+
+        cursor: pointer
+
+      button:hover
+        background-color: $primary-light
+        color: $text-primary
+
+

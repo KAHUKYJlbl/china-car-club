@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Link } from "react-router-dom";
 
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { getShorts } from "../../../entities/model";
@@ -37,6 +38,15 @@ export const InfoBar = memo(({ currentSpecification, setIsTechs, setIsPriceHisto
         >
           Характеристики
         </button>
+
+        <Link
+          aria-label="Сравнить комплектации"
+          className={classes.button}
+          to={`https://spec.chinacar.club/compare.php?specid=${currentSpecification}`}
+          target="_blank"
+        >
+          Сравнить комплектации
+        </Link>
 
         {!window.location.pathname.includes("used") && (
           <button

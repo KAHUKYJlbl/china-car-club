@@ -1,4 +1,5 @@
 import { memo, useEffect } from "react";
+import { Link } from "react-router-dom";
 import cn from "classnames";
 
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -9,14 +10,14 @@ import { getCurrency, getCurrencyLoadingStatus } from "../../../entities/currenc
 import {
   fetchSpecifications,
   getCheapestSpecification,
-  getPrice,
+  // getPrice,
   getSpecifications,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
 
 import { FilterId } from "../../filter";
 import classes from "./choose-specification.module.sass";
-import priceFormat from "../../../shared/lib/utils/price-format";
+// import priceFormat from "../../../shared/lib/utils/price-format";
 
 type ChooseSpecificationProps = {
   isPromo: boolean;
@@ -25,6 +26,8 @@ type ChooseSpecificationProps = {
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial<Record<FilterId, number[]>>;
+  colorsCallback: () => void;
+  optionsCallback: () => void;
 };
 
 export const ChooseSpecification = memo(
@@ -35,13 +38,15 @@ export const ChooseSpecification = memo(
     currentSpecification,
     setCurrentSpecification,
     activeFilters,
+    colorsCallback,
+    optionsCallback,
   }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
     const specifications = useAppSelector(getSpecifications);
     const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
-    const priceData = useAppSelector((state) => getPrice(state, currentSpecification));
+    // const priceData = useAppSelector((state) => getPrice(state, currentSpecification));
     const currency = useAppSelector(getCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
 
@@ -65,7 +70,7 @@ export const ChooseSpecification = memo(
 
     if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
       return (
-        <div className={classes.wrapper}>
+        <div className={cn(classes.wrapper, classes.center)}>
           <LoadingSpinner spinnerType="widget" />
         </div>
       );
@@ -75,51 +80,78 @@ export const ChooseSpecification = memo(
       <div className={classes.wrapper}>
         {currentModel ? (
           <>
-            <DropdownBlocks
-              currentElement={currentSpecification}
-              setCurrent={setCurrentSpecification}
-              placeholder="Комплектация"
-              list={specifications}
-              disabled={specificationsLoadingStatus.isLoading}
-              isYear
-            />
+            <div className={classes.specification}>
+              <DropdownBlocks
+                currentElement={currentSpecification}
+                setCurrent={setCurrentSpecification}
+                placeholder="Комплектация"
+                list={specifications}
+                disabled={specificationsLoadingStatus.isLoading}
+                isYear
+              />
 
-            <p className={classes.header}>
-              <b>Цена в&nbsp;Китае на&nbsp;сегодня</b> за&nbsp;выбранную комплектацию нового автомобиля
-            </p>
+              <p>
+                Внедорожник • Гибрид REV • Мощность 365 кВт / 496 л.с. • Двигатель 1.5 л • Полный привод •
+                Автоматическая трансмиссия • Разгон 4,3 сек • 5 мест • Запас хода 230 км • Клиренс 120 мм
+              </p>
 
-            <div className={classes.priceWrapper}>
-              <div className={classes.priceList}>
-                <p className={classes.price}>
-                  <b>{priceData ? `${priceFormat(priceData.price.toFixed())} ¥` : "0"}</b>
+              <Link
+                className={classes.button}
+                to={`https://spec.chinacar.club/compare.php?specid=${currentSpecification}`}
+                target="_blank"
+              >
+                Сравнить комплектации
+              </Link>
+            </div>
+
+            <div className={classes.optionsWrapper}>
+              <div className={cn(classes.option, classes.active)}>
+                <div>
+                  <span className={classes.big}>Цвет кузова и салона</span>
+                  <span className={cn(classes.grey, classes.small)}>Выбрано: 1</span>
+                </div>
+                <p
+                  className={classes.grey}
+                  onClick={colorsCallback}
+                >
+                  Изменить
                 </p>
+              </div>
 
-                <p className={cn(classes.discountPrice, classes.price)}>
-                  <b>{priceData ? `${priceFormat(priceData.discount.toFixed())} ¥` : "0"}</b>
+              <div className={classes.option}>
+                <div>
+                  <span className={classes.big}>Доп опции комплектации</span>
+                  <span className={cn(classes.grey, classes.small)}>Не выбрано</span>
+                </div>
+                <p
+                  className={classes.grey}
+                  onClick={optionsCallback}
+                >
+                  Изменить
                 </p>
+              </div>
+            </div>
 
-                <p className={cn(classes.price, classes.grey)}>
-                  {priceData ? `${priceFormat((priceData.price * currency.cny).toFixed())} ₽` : "0"}
-                </p>
-
-                <p className={cn(classes.price, classes.grey)}>
-                  {priceData ? `${priceFormat(((priceData.price * currency.cny) / currency.usd).toFixed())} $` : "0"}
-                </p>
-
-                <p className={cn(classes.small, classes.grey, classes.discount)}>
-                  Действующая скидка на&nbsp;автомобиль у&nbsp;дилера
-                </p>
+            <div className={classes.price}>
+              <p>
+                <span className={cn(classes.big, classes.bold)}>
+                  Цена под заказ в РФ
+                  <br />в городе доставки
+                </span>
+                <span className={cn(classes.big, classes.bold)}>217 930 858 ₽</span>
+              </p>
+              <div>
+                <button>О цене и оплате</button>
+                <button>RUB</button>
               </div>
             </div>
           </>
         ) : (
-          <p className={classes.big}>
+          <p className={classes.xBig}>
             ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;—{" "}
             <span className={classes.grey}>покажем цену в&nbsp;Китае на&nbsp;текущий день</span>
           </p>
         )}
-
-        <p className={classes.contract}>По&nbsp;прямому контракту и&nbsp;курсу продажи валюты</p>
       </div>
     );
   }

@@ -12,4 +12,4 @@ export const getPrices = (taxType: TaxesTypes, prices: PriceType) => {
     case TaxesTypes.VAT:
       return prices.withLogisticsCorp - prices.customsClearanceCorp.nds;
   }
-};
+}
