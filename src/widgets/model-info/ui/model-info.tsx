@@ -287,6 +287,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           <SpecificationOptions
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
+            techs={specificationParams}
           />
         </Modal>
       )}
