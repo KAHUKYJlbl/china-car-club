@@ -20,8 +20,8 @@ import { ChooseModel } from "../../../features/choose-model";
 import { ChooseDelivery } from "../../../features/choose-delivery";
 import { Filter, FilterId } from "../../../features/filter";
 import { ChooseSpecification } from "../../../features/choose-specification/ui/choose-specification";
+import { SpecificationOptions, SpecificationColors } from "../../../features/choose-specification";
 
-import { SpecificationColors } from "./specification-colors";
 import classes from "./calculator.module.sass";
 
 export const Calculator = (): JSX.Element => {
@@ -152,8 +152,9 @@ export const Calculator = (): JSX.Element => {
 
       {isAddOptions && (
         <Modal onClose={() => setIsAddOptions(false)}>
-          <SpecificationColors
-          // colors={colorList}
+          <SpecificationOptions
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
           />
         </Modal>
       )}
