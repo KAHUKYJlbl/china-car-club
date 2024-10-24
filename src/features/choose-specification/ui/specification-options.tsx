@@ -1,8 +1,4 @@
-import cn from "classnames";
-
-import { getShorts, SpecsType } from "../../../entities/model";
 import { getSpecifications, getSpecificationsLoadingStatus } from "../../../entities/specification";
-import { getUsedShorts } from "../../../entities/used";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { DropdownBlocks } from "../../../shared/ui/dropdown";
 
@@ -11,17 +7,9 @@ import classes from "./specification-options.module.sass";
 type SpecificationOptionsProps = {
   currentSpecification?: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
-  techs?: SpecsType;
 };
 
-export const SpecificationOptions = ({
-  currentSpecification,
-  setCurrentSpecification,
-  techs,
-}: SpecificationOptionsProps) => {
-  const shorts = currentSpecification
-    ? useAppSelector((state) => getShorts(state, currentSpecification))
-    : useAppSelector(getUsedShorts);
+export const SpecificationOptions = ({ currentSpecification, setCurrentSpecification }: SpecificationOptionsProps) => {
   const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
 
@@ -47,30 +35,6 @@ export const SpecificationOptions = ({
             disabled={specificationsLoadingStatus.isLoading}
             isPrices
           />
-        )}
-
-        {!!techs && (
-          <div>
-            <div className={cn(classes.row, classes.grey)}>
-              <p>Двигатель:</p>
-              <p>{shorts?.engineType}</p>
-            </div>
-
-            <div className={cn(classes.row, classes.grey)}>
-              <p>Количество мест:</p>
-              <p>{techs.seats}</p>
-            </div>
-
-            <div className={cn(classes.row, classes.grey)}>
-              <p>Передние колеса:</p>
-              <p>{techs.frontWheel}</p>
-            </div>
-
-            <div className={cn(classes.row, classes.grey)}>
-              <p>Задние колеса:</p>
-              <p>{techs.rearWheel}</p>
-            </div>
-          </div>
         )}
       </div>
       <div className={classes.wrapper}>

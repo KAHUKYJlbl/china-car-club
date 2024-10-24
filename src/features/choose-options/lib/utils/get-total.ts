@@ -1,7 +1,5 @@
-import { Currencies } from "../../../../entities/currency/lib/const";
-import { CurrencyType } from "../../../../entities/currency/lib/types";
-import { getCurrencyExchange } from "../../../../entities/currency/lib/utils/get-currency-exchange";
-import { AddsType } from "../../../../widgets/model-info/lib/types";
+import { Currencies, CurrencyType, getCurrencyExchange } from "../../../../entities/currency";
+import { AddsType } from "../../../../widgets/model-info";
 
 type getTotalProps = {
   totalPrice: number;

@@ -1,5 +1,5 @@
-import { PriceType } from "../../../../entities/model/lib/types";
-import { TaxesTypes } from "../../../../widgets/model-info/lib/const";
+import { PriceType } from "../../../../entities/model";
+import { TaxesTypes } from "../../../../widgets/model-info";
 
 export const getPrices = (taxType: TaxesTypes, prices: PriceType) => {
   switch (taxType) {
