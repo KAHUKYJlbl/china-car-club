@@ -1,10 +1,54 @@
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import cn from "classnames";
+
+import { CurrentColorType } from "../../../widgets/model-info";
+import priceFormat from "../../../shared/lib/utils/price-format";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
+import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
+import { getSpecificationAddColors } from "../../../entities/specification";
+import { getCurrentColor, setAddColorPrice, setCurrentColor } from "../../../entities/order";
+import { Currencies, getCurrency, getCurrencyExchange } from "../../../entities/currency";
 
 import classes from "./specification-colors.module.sass";
 
-type SpecificationColorsProps = {};
+type SpecificationColorsProps = {
+  currentSpecification?: number | null;
+};
 
 export const SpecificationColors = ({}: SpecificationColorsProps) => {
+  const dispatch = useAppDispatch();
+  const addColors = useAppSelector(getSpecificationAddColors);
+  const currentColor = useAppSelector(getCurrentColor);
+  const currency = useAppSelector(getCurrency);
+
+  const { register, watch } = useForm<CurrentColorType>({
+    defaultValues: {
+      int: currentColor.int || null,
+      ext: currentColor.ext || null,
+      isInteriorFirst: false,
+    },
+  });
+
+  if (!addColors || !currency) {
+    return (
+      <div className={classes.wrapper}>
+        <LoadingSpinner spinnerType="widget" />
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    dispatch(setCurrentColor({ int: Number(watch("int")), ext: Number(watch("ext")), isInteriorFirst: false }));
+    dispatch(
+      setAddColorPrice(
+        (addColors.groups[0].items.find((color) => color.id == watch("ext"))?.price || 0) +
+          (addColors.groups[1].items.find((color) => color.id == watch("int"))?.price || 0)
+      )
+    );
+  }, [watch("int"), watch("ext")]);
+
   return (
     <>
       <div className={classes.wrapper}>
@@ -20,224 +64,108 @@ export const SpecificationColors = ({}: SpecificationColorsProps) => {
       <div className={classes.wrapper}>
         <p className={classes.header}>Доступные цвета кузова:</p>
         <ul className={classes.radio}>
-          <li>
-            <label>
-              <div className={classes.checkbox}>
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
-                />
-              </div>
+          {addColors.groups[0].items.map((color) => (
+            <li key={color.id}>
+              <label className={cn(watch("ext") == color.id && classes.checked)}>
+                <div className={cn(classes.checkbox, watch("ext") == color.id && classes.checked)}>
+                  {watch("ext") == color.id && (
+                    <svg
+                      width="20"
+                      height="20"
+                      aria-hidden="true"
+                    >
+                      <use xlinkHref="#checked" />
+                    </svg>
+                  )}
 
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>Космический черный метеорит металлик глосс</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#000000" }}></div>
-                  <div style={{ backgroundColor: "#000000" }}></div>
+                  <input
+                    type="radio"
+                    className="visually-hidden"
+                    value={color.id}
+                    {...register("ext")}
+                  />
                 </div>
-                <p className={classes.colorPrice}>10 196 ¥ • 112 615 ₽</p>
-              </div>
 
-              <img
-                src="images/car.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
-          <li>
-            <label>
-              <div className={classes.checkbox}>
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
-                />
-              </div>
-
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>Белая буря</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#ffffff" }}></div>
-                  <div style={{ backgroundColor: "#ffffff" }}></div>
+                <div className={classes.colorInfo}>
+                  <p className={classes.colorName}>{color.name.ru || color.name.ch}</p>
+                  <div className={classes.color}>
+                    <div style={{ backgroundColor: `#${color.hexList[0]}` }}></div>
+                    <div style={{ backgroundColor: `#${color.hexList[1]}` }}></div>
+                  </div>
+                  <p className={classes.colorPrice}>
+                    {color.price
+                      ? `${priceFormat(getCurrencyExchange(color.price, Currencies.CNY, currency))} ${
+                          Currencies.CNY
+                        } • ${priceFormat(getCurrencyExchange(color.price, Currencies.RUB, currency))} ${
+                          Currencies.RUB
+                        }`
+                      : "Бесплатно"}
+                  </p>
                 </div>
-                <p className={classes.colorPrice}>Бесплатно</p>
-              </div>
 
-              <img
-                src="images/2.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
-          <li>
-            <label className={classes.checked}>
-              <div className={classes.checked}>
-                <svg
-                  width="20"
-                  height="20"
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#checked" />
-                </svg>
-
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
+                <img
+                  src={`${process.env.STATIC_URL || `${window.location.origin}/storage`}${color.imageUrl}`}
+                  alt="Car"
+                  width="60"
+                  height="60"
                 />
-              </div>
-
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>Зелено-серый</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#185454" }}></div>
-                  <div style={{ backgroundColor: "#9CA3AC" }}></div>
-                </div>
-                <p className={classes.colorPrice}>10 196 ¥ • 112 615 ₽</p>
-              </div>
-
-              <img
-                src="images/car.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
-          <li>
-            <label>
-              <div className={classes.checkbox}>
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
-                />
-              </div>
-
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>藍色</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#49749C" }}></div>
-                  <div style={{ backgroundColor: "#49749C" }}></div>
-                </div>
-                <p className={classes.colorPrice}>10 196 ¥ • 112 615 ₽</p>
-              </div>
-
-              <img
-                src="images/car.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
-          <li>
-            <label>
-              <div className={classes.checkbox}>
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
-                />
-              </div>
-
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>孔雀石</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#DB2121" }}></div>
-                  <div style={{ backgroundColor: "#DB2121" }}></div>
-                </div>
-                <p className={classes.colorPrice}>10 196 ¥ • 112 615 ₽</p>
-              </div>
-
-              <img
-                src="images/2.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
+              </label>
+            </li>
+          ))}
         </ul>
       </div>
 
       <div className={classes.wrapper}>
         <p className={classes.subheader}>Доступные цвета салона:</p>
         <ul className={classes.radio}>
-          <li>
-            <label>
-              <div className={classes.checkbox}>
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
-                />
-              </div>
+          {addColors.groups[1].items.map((color) => (
+            <li key={color.id}>
+              <label className={cn(watch("int") == color.id && classes.checked)}>
+                <div className={cn(classes.checkbox, watch("int") == color.id && classes.checked)}>
+                  {watch("int") == color.id && (
+                    <svg
+                      width="20"
+                      height="20"
+                      aria-hidden="true"
+                    >
+                      <use xlinkHref="#checked" />
+                    </svg>
+                  )}
 
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>棕 / 黑</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#787173" }}></div>
-                  <div style={{ backgroundColor: "#ffffff" }}></div>
+                  <input
+                    type="radio"
+                    className="visually-hidden"
+                    value={color.id}
+                    {...register("int")}
+                  />
                 </div>
-                <p className={classes.colorPrice}>Бесплатно</p>
-              </div>
 
-              <img
-                src="images/car.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
-          <li>
-            <label className={classes.checked}>
-              <div className={cn(classes.checked)}>
-                <svg
-                  width="20"
-                  height="20"
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#checked" />
-                </svg>
-
-                <input
-                  type="radio"
-                  className="visually-hidden"
-                  value="1"
-                  name="bodyColor"
-                />
-              </div>
-
-              <div className={classes.colorInfo}>
-                <p className={classes.colorName}>Черный</p>
-                <div className={classes.color}>
-                  <div style={{ backgroundColor: "#000000" }}></div>
-                  <div style={{ backgroundColor: "#000000" }}></div>
+                <div className={classes.colorInfo}>
+                  <p className={classes.colorName}>{color.name.ru || color.name.ch}</p>
+                  <div className={classes.color}>
+                    <div style={{ backgroundColor: `#${color.hexList[0]}` }}></div>
+                    <div style={{ backgroundColor: `#${color.hexList[1]}` }}></div>
+                  </div>
+                  <p className={classes.colorPrice}>
+                    {color.price
+                      ? `${priceFormat(getCurrencyExchange(color.price, Currencies.CNY, currency))} ${
+                          Currencies.CNY
+                        } • ${priceFormat(getCurrencyExchange(color.price, Currencies.RUB, currency))} ${
+                          Currencies.RUB
+                        }`
+                      : "Бесплатно"}
+                  </p>
                 </div>
-                <p className={classes.colorPrice}>10 196 ¥ • 112 615 ₽</p>
-              </div>
 
-              <img
-                src="images/2.jpg"
-                alt="Car"
-                width="60"
-                height="60"
-              />
-            </label>
-          </li>
+                <img
+                  src={`${process.env.STATIC_URL || `${window.location.origin}/storage`}${color.imageUrl}`}
+                  alt="Car"
+                  width="60"
+                  height="60"
+                />
+              </label>
+            </li>
+          ))}
         </ul>
       </div>
     </>

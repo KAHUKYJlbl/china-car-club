@@ -16,6 +16,9 @@ type InitialState = {
   adds: Record<AddsType, boolean>;
   addItems: number[];
   addItemsPrice: number;
+  addOptions: number[];
+  addOptionsPrice: number;
+  addColorPrice: number;
   currentColor: CurrentColorType;
   order: number | null;
   orderLoadingStatus: FetchStatus;
@@ -30,7 +33,10 @@ const initialState: InitialState = {
   adds: { epts: false, guarantee: false, options: false },
   addItems: [],
   addItemsPrice: 0,
+  addOptions: [],
+  addOptionsPrice: 0,
   currentColor: { int: null, ext: null, isInteriorFirst: false },
+  addColorPrice: 0,
   order: null,
   orderLoadingStatus: FetchStatus.Idle,
   questionsLoadingStatus: FetchStatus.Idle,
@@ -53,11 +59,14 @@ export const orderSlice = createSlice({
   initialState,
   reducers: {
     resetOrder: (state) => {
+      state.addOptions = initialState.addOptions;
+      state.addOptionsPrice = initialState.addOptionsPrice;
+      state.currentColor = initialState.currentColor;
+      state.addColorPrice = initialState.addColorPrice;
       state.currentTax = initialState.currentTax;
       state.adds = initialState.adds;
       state.addItems = initialState.addItems;
       state.addItemsPrice = initialState.addItemsPrice;
-      state.currentColor = initialState.currentColor;
       state.order = initialState.order;
       state.orderLoadingStatus = initialState.orderLoadingStatus;
       state.questions = {
@@ -90,14 +99,29 @@ export const orderSlice = createSlice({
     removeItem: (state, action: PayloadAction<number>) => {
       state.addItems = [...state.addItems].filter((item) => item !== action.payload);
     },
-    increasePrice: (state, action: PayloadAction<number>) => {
+    increaseItemsPrice: (state, action: PayloadAction<number>) => {
       state.addItemsPrice = state.addItemsPrice + action.payload;
     },
-    decreasePrice: (state, action: PayloadAction<number>) => {
+    decreaseItemsPrice: (state, action: PayloadAction<number>) => {
       state.addItemsPrice = state.addItemsPrice - action.payload;
+    },
+    addOption: (state, action: PayloadAction<number>) => {
+      state.addOptions = [...state.addOptions, action.payload];
+    },
+    removeOption: (state, action: PayloadAction<number>) => {
+      state.addOptions = [...state.addOptions].filter((item) => item !== action.payload);
+    },
+    increaseOptionsPrice: (state, action: PayloadAction<number>) => {
+      state.addOptionsPrice = state.addOptionsPrice + action.payload;
+    },
+    decreaseOptionsPrice: (state, action: PayloadAction<number>) => {
+      state.addOptionsPrice = state.addOptionsPrice - action.payload;
     },
     setCurrentColor: (state, action: PayloadAction<CurrentColorType>) => {
       state.currentColor = action.payload;
+    },
+    setAddColorPrice: (state, action: PayloadAction<number>) => {
+      state.addColorPrice = action.payload;
     },
   },
   extraReducers(builder) {
@@ -159,9 +183,14 @@ export const {
   toggleAdd,
   addItem,
   removeItem,
-  increasePrice,
-  decreasePrice,
+  increaseItemsPrice,
+  decreaseItemsPrice,
+  addOption,
+  removeOption,
+  increaseOptionsPrice,
+  decreaseOptionsPrice,
   setCurrentColor,
+  setAddColorPrice,
   resetOrder,
   setQuestions,
 } = orderSlice.actions;

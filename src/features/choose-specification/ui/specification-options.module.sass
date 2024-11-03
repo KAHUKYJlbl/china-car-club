@@ -33,6 +33,17 @@
       font-weight: 400
       color: $text-light
 
+  .model-spec
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    color: $text-light
+
+    .row
+      display: grid
+      grid-template-columns: 50% 50%
+
   .option
     display: flex
     flex-direction: column
@@ -73,5 +84,11 @@
       button:hover
         background-color: $primary-light
         color: $text-primary
+
+      .added
+        background-color: $additional
+
+        color: $text-primary
+
 
 

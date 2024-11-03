@@ -13,6 +13,7 @@ export type OrderType = {
     cityId: number | null;
   };
   addItems: number[];
+  addOptions?: number[];
   prices: {
     totalPrice: {
       currencyQuantity: number;

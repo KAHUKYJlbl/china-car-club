@@ -2,20 +2,23 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 
-import { getPromoGalleryLoadingStatus, fetchPromo } from "../../../entities/gallery";
-import { Gallery } from "../../../entities/gallery/ui/gallery";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { Modal } from "../../../shared/ui/modal";
 import {
+  fetchSpecificationAddColors,
+  fetchSpecificationAddOptions,
   fetchSpecificationsImage,
   getDefaultImages,
   getSpecificationImgLoadingStatus,
   setSpecsIdle,
 } from "../../../entities/specification";
-import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { setIdle } from "../../../entities/model";
+import { resetOrder } from "../../../entities/order";
+import { Gallery } from "../../../entities/gallery/ui/gallery";
+import { getPromoGalleryLoadingStatus, fetchPromo } from "../../../entities/gallery";
+import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { ChooseModel } from "../../../features/choose-model";
 import { ChooseDelivery } from "../../../features/choose-delivery";
 import { Filter, FilterId } from "../../../features/filter";
@@ -73,7 +76,10 @@ export const Calculator = (): JSX.Element => {
 
   useEffect(() => {
     if (currentSpecification) {
+      dispatch(resetOrder());
       dispatch(fetchSpecificationsImage(currentSpecification));
+      dispatch(fetchSpecificationAddOptions(currentSpecification));
+      dispatch(fetchSpecificationAddColors(currentSpecification));
     }
   }, [currentSpecification]);
 
@@ -144,9 +150,7 @@ export const Calculator = (): JSX.Element => {
 
       {isColors && (
         <Modal onClose={() => setIsColors(false)}>
-          <SpecificationColors
-          // colors={colorList}
-          />
+          <SpecificationColors currentSpecification={currentSpecification} />
         </Modal>
       )}
 

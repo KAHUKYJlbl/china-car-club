@@ -1,30 +1,45 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { NameSpace } from '../../../app/provider/store';
-import { FetchStatus } from '../../../shared/api/fetch-status';
+import { NameSpace } from "../../../app/provider/store";
+import { FetchStatus } from "../../../shared/api/fetch-status";
 
-import { PriceHistoryType, SpecificationAddProductsType, SpecificationImageType, SpecificationType } from '../lib/types';
-import { fetchSpecifications } from './api-actions/fetch-specifications';
-import { fetchSpecificationsInfo } from './api-actions/fetch-specification-info';
-import { fetchSpecificationsImage } from './api-actions/fetch-specification-image';
-import { fetchSpecificationAddProducts } from './api-actions/fetch-specification-add-products';
-import { ADDS_GROUPS } from '../lib/const';
-import { fetchSpecificationPriceHistory } from './api-actions/fetch-specification-price-history';
+import {
+  PriceHistoryType,
+  SpecificationAddColorsType,
+  SpecificationAddOptionsType,
+  SpecificationAddProductsType,
+  SpecificationImageType,
+  SpecificationType,
+} from "../lib/types";
+import { fetchSpecifications } from "./api-actions/fetch-specifications";
+import { fetchSpecificationsInfo } from "./api-actions/fetch-specification-info";
+import { fetchSpecificationsImage } from "./api-actions/fetch-specification-image";
+import { fetchSpecificationAddProducts } from "./api-actions/fetch-specification-add-products";
+import { ADDS_GROUPS } from "../lib/const";
+import { fetchSpecificationPriceHistory } from "./api-actions/fetch-specification-price-history";
+import { fetchSpecificationAddColors } from "./api-actions/fetch-specification-add-colors";
+import { fetchSpecificationAddOptions } from "./api-actions/fetch-specification-add-options";
 
 type InitialState = {
   specifications: SpecificationType[];
   specificationImg: SpecificationImageType;
   specificationAddProducts: SpecificationAddProductsType | null;
+  specificationAddOptions: SpecificationAddOptionsType | null;
+  specificationAddColors: SpecificationAddColorsType | null;
   specificationPriceHistory: PriceHistoryType[];
   specificationsLoadingStatus: FetchStatus;
   specificationImgLoadingStatus: FetchStatus;
   specificationAddProductsLoadingStatus: FetchStatus;
+  specificationAddOptionsLoadingStatus: FetchStatus;
+  specificationAddColorsLoadingStatus: FetchStatus;
   specificationPriceHistoryLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
   specifications: [],
   specificationAddProducts: null,
+  specificationAddOptions: null,
+  specificationAddColors: null,
   specificationImg: {
     external: [],
     interior: [],
@@ -33,6 +48,8 @@ const initialState: InitialState = {
   specificationPriceHistory: [],
   specificationsLoadingStatus: FetchStatus.Idle,
   specificationAddProductsLoadingStatus: FetchStatus.Idle,
+  specificationAddOptionsLoadingStatus: FetchStatus.Idle,
+  specificationAddColorsLoadingStatus: FetchStatus.Idle,
   specificationImgLoadingStatus: FetchStatus.Idle,
   specificationPriceHistoryLoadingStatus: FetchStatus.Idle,
 };
@@ -76,7 +93,7 @@ export const specificationSlice = createSlice({
             description: group.description || ADDS_GROUPS[group.id].description,
             items: group.items.map((item) => ({
               ...item,
-              description: item.description || ADDS_GROUPS[group.id].items[item.id]
+              description: item.description || ADDS_GROUPS[group.id].items[item.id],
             })),
           })),
         };
@@ -87,6 +104,26 @@ export const specificationSlice = createSlice({
       })
       .addCase(fetchSpecificationAddProducts.rejected, (state) => {
         state.specificationAddProductsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationAddOptions.fulfilled, (state, action) => {
+        state.specificationAddOptions = action.payload;
+        state.specificationAddOptionsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationAddOptions.pending, (state) => {
+        state.specificationAddOptionsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationAddOptions.rejected, (state) => {
+        state.specificationAddOptionsLoadingStatus = FetchStatus.Failed;
+      })
+      .addCase(fetchSpecificationAddColors.fulfilled, (state, action) => {
+        state.specificationAddColors = action.payload;
+        state.specificationAddColorsLoadingStatus = FetchStatus.Success;
+      })
+      .addCase(fetchSpecificationAddColors.pending, (state) => {
+        state.specificationAddColorsLoadingStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchSpecificationAddColors.rejected, (state) => {
+        state.specificationAddColorsLoadingStatus = FetchStatus.Failed;
       })
       .addCase(fetchSpecificationsInfo.fulfilled, (state, action) => {
         state.specifications = action.payload;
@@ -122,4 +159,3 @@ export const specificationSlice = createSlice({
 });
 
 export const { setSpecsIdle } = specificationSlice.actions;
-

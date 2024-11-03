@@ -35,6 +35,8 @@
         border: 1px solid $border
         border-radius: 12px
 
+        cursor: pointer
+
         div
           display: flex
           flex-direction: column
@@ -45,8 +47,6 @@
           justify-content: center
           align-items: center
 
-          cursor: pointer
-
           font-size: 12px
 
       .option:hover
@@ -56,6 +56,17 @@
       .active
         border-color: $approved
         background-color: $approved
+
+      .disabled
+        color: $border
+        cursor: auto
+
+        .grey
+          color: $border
+
+      .disabled:hover
+        border-color: $border
+        background-color: transparent
 
     .row
       display: flex
@@ -111,6 +122,9 @@
 
     button:hover
       background-color: $primary-light
+
+    .button-white
+      background-color: $white
 
   .gap
     gap: 12px

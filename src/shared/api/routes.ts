@@ -4,6 +4,8 @@ export enum APIRoute {
   Model = "/calc/series/:id",
   SpecImages = "/calc/specification/:id/images",
   SpecAddProducts = "/calc/specification/:id/additional-products",
+  SpecAddOptions = "/calc/specification/:id/additional-options",
+  SpecAddColors = "/calc/specification/:id/colors",
   SpecPriceHistory = "/calc/specification/:id/price-history",
   PromoGallery = "/calc/specification/promotional",
   AuthHash = "/auth/generate-hash",

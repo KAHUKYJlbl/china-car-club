@@ -6,7 +6,13 @@ import cn from "classnames";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
-import { getCurrentOrder, getQuestionsLoadingStatus, postAnswers, setQuestions } from "../../../entities/order";
+import {
+  getCurrentColor,
+  getCurrentOrder,
+  getQuestionsLoadingStatus,
+  postAnswers,
+  setQuestions,
+} from "../../../entities/order";
 import { getExtColors, getIntColors } from "../../../entities/specification";
 import { OrderFormType } from "../../order-confirmation";
 
@@ -17,11 +23,13 @@ type QuestionsProps = {
 };
 
 export const Questions = memo(({ setConfirmation }: QuestionsProps) => {
+  const dispatch = useAppDispatch();
+
   const extColors = useAppSelector(getExtColors);
   const intColors = useAppSelector(getIntColors);
   const questionsLoadingStatus = useAppSelector(getQuestionsLoadingStatus);
+  const currentColor = useAppSelector(getCurrentColor);
 
-  const dispatch = useAppDispatch();
   const [formStep, setFormStep] = useState(1);
   const { register, watch, handleSubmit } = useForm<OrderFormType>({
     defaultValues: {
@@ -93,8 +101,8 @@ export const Questions = memo(({ setConfirmation }: QuestionsProps) => {
             highPricedOption: data.preferredDeliveryTime.highPricedOption,
           },
           colors: {
-            external: data.colors.external.filter((color) => color.value).map((color) => color.id),
-            interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
+            external: currentColor.ext ? [currentColor.ext] : [],
+            interior: currentColor.int ? [currentColor.int] : [],
           },
         },
       })
