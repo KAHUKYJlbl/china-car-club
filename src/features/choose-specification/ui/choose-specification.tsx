@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
@@ -6,6 +6,8 @@ import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { DropdownBlocks } from "../../../shared/ui/dropdown";
+import priceFormat from "../../../shared/lib/utils/price-format";
+import { Modal } from "../../../shared/ui/modal";
 import {
   Currencies,
   getCurrency,
@@ -22,12 +24,12 @@ import {
   getSpecifications,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
-import { getAddedOptions, getCurrentColor } from "../../../entities/order";
+import { getAddedOptions, getAddedOptionsPrice, getCurrentColor, getCurrentColorPrice } from "../../../entities/order";
 import { getShorts, getSpecificationParams } from "../../../entities/model";
 
 import { FilterId } from "../../filter";
+import { AboutPrice } from "./about-price";
 import classes from "./choose-specification.module.sass";
-import priceFormat from "../../../shared/lib/utils/price-format";
 
 type ChooseSpecificationProps = {
   isPromo: boolean;
@@ -52,6 +54,9 @@ export const ChooseSpecification = memo(
     optionsCallback,
   }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
+
+    const [isAboutPrices, setIsAboutPrices] = useState(false);
+
     const specifications = useAppSelector(getSpecifications);
     const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
@@ -63,6 +68,8 @@ export const ChooseSpecification = memo(
     const addedOptions = useAppSelector(getAddedOptions);
     const currentColor = useAppSelector(getCurrentColor);
     const addOptions = useAppSelector(getSpecificationAddOptions);
+    const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
+    const addColorPrice = useAppSelector(getCurrentColorPrice);
 
     useEffect(() => {
       if (currentModel && currentManufacturer) {
@@ -175,13 +182,24 @@ export const ChooseSpecification = memo(
                 <span className={cn(classes.bold)}>Цена в РФ без растаможивания</span>
                 <span className={cn(classes.bold)}>
                   {priceFormat(
-                    getCurrencyExchange(specificationParams.price.priceInCityOfReceipt, currentCurrency, currency)
+                    getCurrencyExchange(
+                      specificationParams.price.priceInCityOfReceipt + addColorPrice + addedOptionsPrice,
+                      currentCurrency,
+                      currency
+                    )
                   )}{" "}
                   {currentCurrency}
                 </span>
               </p>
+
               <div>
-                <button>О цене и оплате</button>
+                <button
+                  aria-label="подробнее о налогах"
+                  onClick={() => setIsAboutPrices(true)}
+                >
+                  О цене и оплате
+                </button>
+
                 <button
                   aria-label={getCurrencyName(currentCurrency)}
                   className={classes.buttonWhite}
@@ -200,6 +218,16 @@ export const ChooseSpecification = memo(
             </p>
             <p className={classes.paragraph}>По&nbsp;прямому контракту и&nbsp;курсу продажи валюты</p>
           </>
+        )}
+
+        {isAboutPrices && (
+          <Modal
+            onClose={() => setIsAboutPrices(false)}
+            button
+            width
+          >
+            <AboutPrice />
+          </Modal>
         )}
       </div>
     );

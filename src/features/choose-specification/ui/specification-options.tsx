@@ -82,7 +82,6 @@ export const SpecificationOptions = ({
             placeholder="Комплектация"
             list={specifications}
             disabled={specificationsLoadingStatus.isLoading}
-            isPrices
           />
         )}
 

@@ -149,13 +149,20 @@ export const Calculator = (): JSX.Element => {
       </div>
 
       {isColors && (
-        <Modal onClose={() => setIsColors(false)}>
+        <Modal
+          onClose={() => setIsColors(false)}
+          button
+          width
+        >
           <SpecificationColors currentSpecification={currentSpecification} />
         </Modal>
       )}
 
       {isAddOptions && (
-        <Modal onClose={() => setIsAddOptions(false)}>
+        <Modal
+          onClose={() => setIsAddOptions(false)}
+          width
+        >
           <SpecificationOptions
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}

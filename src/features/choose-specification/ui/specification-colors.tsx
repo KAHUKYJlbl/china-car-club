@@ -90,7 +90,9 @@ export const SpecificationColors = ({}: SpecificationColorsProps) => {
                   <p className={classes.colorName}>{color.name.ru || color.name.ch}</p>
                   <div className={classes.color}>
                     <div style={{ backgroundColor: `#${color.hexList[0]}` }}></div>
-                    <div style={{ backgroundColor: `#${color.hexList[1]}` }}></div>
+                    <div
+                      style={{ backgroundColor: color.hexList[1] ? `#${color.hexList[1]}` : `#${color.hexList[0]}` }}
+                    ></div>
                   </div>
                   <p className={classes.colorPrice}>
                     {color.price
@@ -144,7 +146,9 @@ export const SpecificationColors = ({}: SpecificationColorsProps) => {
                   <p className={classes.colorName}>{color.name.ru || color.name.ch}</p>
                   <div className={classes.color}>
                     <div style={{ backgroundColor: `#${color.hexList[0]}` }}></div>
-                    <div style={{ backgroundColor: `#${color.hexList[1]}` }}></div>
+                    <div
+                      style={{ backgroundColor: color.hexList[1] ? `#${color.hexList[1]}` : `#${color.hexList[0]}` }}
+                    ></div>
                   </div>
                   <p className={classes.colorPrice}>
                     {color.price

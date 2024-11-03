@@ -289,13 +289,20 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       )}
 
       {isColors && (
-        <Modal onClose={() => setIsColors(false)}>
+        <Modal
+          onClose={() => setIsColors(false)}
+          button
+          width
+        >
           <SpecificationColors currentSpecification={currentSpecification} />
         </Modal>
       )}
 
       {isAddOptions && (
-        <Modal onClose={() => setIsAddOptions(false)}>
+        <Modal
+          onClose={() => setIsAddOptions(false)}
+          width
+        >
           <SpecificationOptions
             currentSpecification={currentSpecification}
             setCurrentSpecification={setCurrentSpecification}
