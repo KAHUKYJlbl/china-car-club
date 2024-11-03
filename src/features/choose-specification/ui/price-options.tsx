@@ -95,7 +95,13 @@ export const PriceOptions = memo(
           <div className={cn(classes.row, classes.bold)}>
             <p>Цена в РФ без растаможивания</p>
             <p>
-              {priceFormat(getCurrencyExchange(prices.priceInCityOfReceipt, currentCurrency, currency))}{" "}
+              {priceFormat(
+                getCurrencyExchange(
+                  prices.priceInCityOfReceipt + addColorPrice + addedOptionsPrice,
+                  currentCurrency,
+                  currency
+                )
+              )}{" "}
               {currentCurrency}
             </p>
           </div>
