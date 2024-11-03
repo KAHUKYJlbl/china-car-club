@@ -213,7 +213,7 @@ export const PriceOptions = memo(
               className={cn(
                 classes.option,
                 addedOptions.length && classes.active,
-                (!addOptions?.options.length || optionsCallback || mode === SiteModes.Used) && classes.disabled
+                (!addOptions?.options.length || mode === SiteModes.Used) && classes.disabled
               )}
               onClick={addOptions?.options.length ? optionsCallback : undefined}
             >
