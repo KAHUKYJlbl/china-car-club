@@ -1,7 +1,16 @@
 import { memo } from "react";
 import cn from "classnames";
 
-import { getAddItemsPrice, getAdds, getCurrentTax } from "../../../entities/order";
+import {
+  getAddedOptions,
+  getAddedOptionsPrice,
+  getAddItems,
+  getAddItemsPrice,
+  getAdds,
+  getCurrentColor,
+  getCurrentColorPrice,
+  getCurrentTax,
+} from "../../../entities/order";
 import { PriceType } from "../../../entities/model/lib/types";
 import {
   Currencies,
@@ -12,6 +21,8 @@ import {
   getCurrentCurrency,
   setCurrentCurrency,
 } from "../../../entities/currency";
+import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
+import { getSpecificationAddOptions } from "../../../entities/specification";
 import { getTaxes } from "../../../widgets/model-info";
 import priceFormat from "../../../shared/lib/utils/price-format";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
@@ -26,7 +37,7 @@ type PriceOptionsProps = {
   prices: PriceType;
   setIsTaxes: React.Dispatch<React.SetStateAction<boolean>>;
   colorsCallback: () => void;
-  optionsCallback: () => void;
+  optionsCallback?: () => void;
   addProductsCallback: () => void;
   taxesCallback: () => void;
 };
@@ -34,7 +45,7 @@ type PriceOptionsProps = {
 export const PriceOptions = memo(
   ({
     prices,
-    setIsTaxes,
+    // setIsTaxes,
     colorsCallback,
     optionsCallback,
     addProductsCallback,
@@ -47,6 +58,13 @@ export const PriceOptions = memo(
     const currency = useAppSelector(getCurrency);
     const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+    const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
+    const addColorPrice = useAppSelector(getCurrentColorPrice);
+    const currentColor = useAppSelector(getCurrentColor);
+    const addedOptions = useAppSelector(getAddedOptions);
+    const addedItems = useAppSelector(getAddItems);
+    const addOptions = useAppSelector(getSpecificationAddOptions);
+    const mode = useAppSelector(getCurrentSiteMode);
 
     const toggleCurrency = () => {
       switch (currentCurrency) {
@@ -70,35 +88,35 @@ export const PriceOptions = memo(
       <div className={classes.wrapper}>
         <div className={classes.divider}>
           <div className={cn(classes.row, classes.bold)}>
-            <p>Цена в РФ, в городе доставки</p>
+            <p>Цена в РФ без растаможивания</p>
             <p>
               {priceFormat(getCurrencyExchange(prices.priceInCityOfReceipt, currentCurrency, currency))}{" "}
               {currentCurrency}
             </p>
           </div>
 
-          <div className={classes.row}>
-            <p>Растаможивание и утильсбор</p>
-            <p>
-              {priceFormat(getCurrencyExchange(getTaxes(currentTax, prices).final, Currencies.RUB, currency))}{" "}
-              {Currencies.RUB}
-            </p>
-          </div>
+          {mode === SiteModes.New && (
+            <>
+              <div className={classes.row}>
+                <p>Цвет кузова и салона</p>
+                <p>
+                  {addItemsPrice ? priceFormat(getCurrencyExchange(addColorPrice, currentCurrency, currency)) : "0 "}{" "}
+                  {currentCurrency}
+                </p>
+              </div>
 
-          <div className={classes.row}>
-            <p>Цвет кузова и салона</p>
-            <p>
-              {addItemsPrice ? priceFormat(getCurrencyExchange(addItemsPrice, currentCurrency, currency)) : "0 "}{" "}
-              {currentCurrency}
-            </p>
-          </div>
-          <div className={classes.row}>
-            <p>Доп. опции комплектации</p>
-            <p>
-              {addItemsPrice ? priceFormat(getCurrencyExchange(addItemsPrice, currentCurrency, currency)) : "0 "}{" "}
-              {currentCurrency}
-            </p>
-          </div>
+              <div className={classes.row}>
+                <p>Доп. опции комплектации</p>
+                <p>
+                  {addItemsPrice
+                    ? priceFormat(getCurrencyExchange(addedOptionsPrice, currentCurrency, currency))
+                    : "0 "}{" "}
+                  {currentCurrency}
+                </p>
+              </div>
+            </>
+          )}
+
           <div className={classes.row}>
             <p>Доп. товары к авто</p>
             <p>
@@ -108,25 +126,28 @@ export const PriceOptions = memo(
           </div>
 
           <div className={classes.row}>
+            <p>Гарантия на автомобиль</p>
+            <p>0 ₽</p>
+          </div>
+        </div>
+
+        <div className={classes.divider}>
+          <div className={classes.row}>
+            <p>Растаможивание и утильсбор</p>
             <p>
-              <span>Гарантия на автомобиль</span>
-            </p>
-            <p>
-              <span>скоро</span>
+              {priceFormat(getCurrencyExchange(getTaxes(currentTax, prices).final, Currencies.RUB, currency))}{" "}
+              {Currencies.RUB}
             </p>
           </div>
         </div>
 
         <div className={cn(classes.divider, classes.gap)}>
           <div className={cn(classes.row, classes.bold)}>
-            <p>
-              Цена под заказ в РФ
-              <br />с растаможкой
-            </p>
+            <p>Цена в РФ с растаможиванием</p>
             <p>
               {`${priceFormat(
                 getTotal({
-                  totalPrice: getPrices(currentTax, prices),
+                  totalPrice: getPrices(currentTax, prices) + addColorPrice + addedOptionsPrice,
                   options: adds,
                   optionsPrices: {
                     epts: prices.eptsSbktsUtil,
@@ -143,14 +164,14 @@ export const PriceOptions = memo(
           <div className={classes.row}>
             <button
               aria-label="подробнее о налогах"
-              onClick={() => setIsTaxes(true)}
+              // onClick={() => setIsTaxes(true)}
             >
               О цене и оплате
             </button>
 
             <button
               aria-label={getCurrencyName(currentCurrency)}
-              className={classes.button}
+              className={classes.buttonWhite}
               onClick={toggleCurrency}
             >
               {getCurrencyName(currentCurrency)}
@@ -160,62 +181,68 @@ export const PriceOptions = memo(
 
         <div className={classes.divider}>
           <div className={classes.optionsWrapper}>
-            <div className={classes.option}>
+            <div
+              className={cn(classes.option, classes.active)}
+              onClick={taxesCallback}
+            >
               <div>
                 <span className={classes.big}>Растаможивание</span>
-                <span className={cn(classes.grey, classes.small)}>Выбрано: На физлицо</span>
+                <span className={cn(classes.grey, classes.small)}>Выбрано: {currentTax}</span>
               </div>
-              <p
-                className={classes.grey}
-                onClick={taxesCallback}
-              >
-                Изменить
-              </p>
+              <p className={classes.grey}>Изменить</p>
             </div>
 
-            <div className={cn(classes.option, classes.active)}>
+            <div
+              className={cn(
+                classes.option,
+                currentColor.ext && classes.active,
+                mode === SiteModes.Used && classes.disabled
+              )}
+              onClick={mode === SiteModes.Used ? undefined : colorsCallback}
+            >
               <div>
                 <span className={classes.big}>Цвет кузова и салона</span>
-                <span className={cn(classes.grey, classes.small)}>Выбрано: 1</span>
+                <span className={cn(classes.grey, classes.small)}>
+                  {currentColor.ext ? "Выбрано: 2" : "Не выбрано"}
+                </span>
               </div>
-              <p
-                className={classes.grey}
-                onClick={colorsCallback}
-              >
-                Изменить
-              </p>
+              <p className={classes.grey}>Изменить</p>
             </div>
 
-            <div className={classes.option}>
+            <div
+              className={cn(
+                classes.option,
+                addedOptions.length && classes.active,
+                (!addOptions?.options.length || optionsCallback || mode === SiteModes.Used) && classes.disabled
+              )}
+              onClick={addOptions?.options.length ? optionsCallback : undefined}
+            >
               <div>
                 <span className={classes.big}>Доп опции комплектации</span>
-                <span className={cn(classes.grey, classes.small)}>Не выбрано</span>
+                <span className={cn(classes.grey, classes.small)}>
+                  {addedOptions.length ? `Выбрано: ${addedOptions.length}` : "Не выбрано"}
+                </span>
               </div>
-              <p
-                className={classes.grey}
-                onClick={optionsCallback}
-              >
-                Изменить
-              </p>
+              <p className={classes.grey}>Изменить</p>
             </div>
 
-            <div className={classes.option}>
+            <div
+              className={cn(classes.option, addedItems.length && classes.active)}
+              onClick={addProductsCallback}
+            >
               <div>
                 <span className={classes.big}>Доп товары к авто</span>
-                <span className={cn(classes.grey, classes.small)}>Не выбрано</span>
+                <span className={cn(classes.grey, classes.small)}>
+                  {addedItems.length ? `Выбрано: ${addedItems.length}` : "Не выбрано"}
+                </span>
               </div>
-              <p
-                className={classes.grey}
-                onClick={addProductsCallback}
-              >
-                Изменить
-              </p>
+              <p className={classes.grey}>Изменить</p>
             </div>
 
-            <div className={classes.option}>
+            <div className={cn(classes.option, classes.disabled)}>
               <div>
                 <span className={classes.big}>Гарантия</span>
-                <span className={cn(classes.grey, classes.small)}>Скоро появится</span>
+                <span className={classes.small}>Скоро появится</span>
               </div>
             </div>
           </div>

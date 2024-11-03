@@ -20,8 +20,15 @@ import {
 } from "../../../entities/specification";
 import { fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import { getManufacturerByModel, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
-import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax } from "../../../entities/order/index";
-import { setCurrentColor } from "../../../entities/order/model/order-slice";
+import {
+  getAddedOptionsPrice,
+  getAddItemsPrice,
+  getAdds,
+  getCurrentColor,
+  getCurrentColorPrice,
+  getCurrentTax,
+} from "../../../entities/order/index";
+import { resetOrder, setCurrentColor } from "../../../entities/order/model/order-slice";
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from "../../../entities/model";
 import { Gallery } from "../../../entities/gallery/ui/gallery";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -38,6 +45,8 @@ import { Techs } from "./techs";
 import { Taxes } from "./taxes";
 import { Adds } from "./adds";
 import classes from "./model-info.module.sass";
+import { fetchSpecificationAddOptions } from "../../../entities/specification/model/api-actions/fetch-specification-add-options";
+import { fetchSpecificationAddColors } from "../../../entities/specification/model/api-actions/fetch-specification-add-colors";
 
 type ModelInfoProps = {
   setConfirmation: () => void;
@@ -63,6 +72,8 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currentColor = useAppSelector(getCurrentColor);
   const specificationAddProductsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
+  const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
+  const addColorPrice = useAppSelector(getCurrentColorPrice);
 
   // popups
   const [isTechs, setIsTechs] = useState(false);
@@ -84,7 +95,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       dispatch(
         setCurrentColor({
           int: intColors ? intColors[0].color.id : null,
-          ext: extColors ? extColors[0].color?.id : null,
+          ext: extColors ? extColors[0].color.id : null,
           isInteriorFirst: false,
         })
       );
@@ -105,8 +116,11 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
   useEffect(() => {
     if (currentSpecification && !specificationAddProductsLoadingStatus.isLoading) {
+      dispatch(resetOrder());
       dispatch(fetchSpecificationsImage(currentSpecification));
       dispatch(fetchSpecificationAddProducts(currentSpecification));
+      dispatch(fetchSpecificationAddOptions(currentSpecification));
+      dispatch(fetchSpecificationAddColors(currentSpecification));
     }
   }, [currentSpecification]);
 
@@ -194,7 +208,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           prices={{
             totalPrice: Number(
               getTotal({
-                totalPrice: getPrices(currentTax, specificationParams.price),
+                totalPrice: getPrices(currentTax, specificationParams.price) + addColorPrice + addedOptionsPrice,
                 options,
                 optionsPrices: {
                   epts: specificationParams.price.eptsSbktsUtil,
@@ -276,9 +290,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
       {isColors && (
         <Modal onClose={() => setIsColors(false)}>
-          <SpecificationColors
-          // colors={colorList}
-          />
+          <SpecificationColors currentSpecification={currentSpecification} />
         </Modal>
       )}
 

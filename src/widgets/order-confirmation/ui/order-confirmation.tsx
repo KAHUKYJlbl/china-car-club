@@ -16,6 +16,7 @@ import {
   getAddItems,
   getAddItemsPrice,
   getAdds,
+  getCurrentColor,
   getCurrentOrder,
   getCurrentTax,
   getQuestions,
@@ -97,6 +98,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   );
   const order = useAppSelector(getCurrentOrder);
   const adInfo = useAppSelector(getCurrentAd);
+  const currentColor = useAppSelector(getCurrentColor);
 
   // popups
   const [isSupplier, setIsSupplier] = useState(false);
@@ -158,8 +160,8 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               highPricedOption: data.preferredDeliveryTime.highPricedOption,
             },
             colors: {
-              external: data.colors.external.filter((color) => color.value).map((color) => color.id),
-              interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
+              external: currentColor.ext ? [currentColor.ext] : [],
+              interior: currentColor.int ? [currentColor.int] : [],
             },
           },
         })
@@ -421,8 +423,8 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
                   methods.watch("colors.external").some((color) => color.value) && classes.filled,
                   methods.watch("colors.interior").some((color) => color.value) && classes.filled
                 )}
-                onClick={() => setIsColors(true)}
-                disabled={!extColors || extColors.length === 0}
+                onClick={() => setIsColors(false)}
+                disabled
               >
                 Предпочтительные цвета машины
                 {(methods.watch("colors.external").some((color) => color.value) ||

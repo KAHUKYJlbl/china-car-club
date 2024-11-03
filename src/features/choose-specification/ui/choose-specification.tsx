@@ -6,18 +6,28 @@ import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { DropdownBlocks } from "../../../shared/ui/dropdown";
-import { getCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
+import {
+  Currencies,
+  getCurrency,
+  getCurrencyExchange,
+  getCurrencyLoadingStatus,
+  getCurrencyName,
+  getCurrentCurrency,
+  setCurrentCurrency,
+} from "../../../entities/currency";
 import {
   fetchSpecifications,
   getCheapestSpecification,
-  // getPrice,
+  getSpecificationAddOptions,
   getSpecifications,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
+import { getAddedOptions, getCurrentColor } from "../../../entities/order";
+import { getShorts, getSpecificationParams } from "../../../entities/model";
 
 import { FilterId } from "../../filter";
 import classes from "./choose-specification.module.sass";
-// import priceFormat from "../../../shared/lib/utils/price-format";
+import priceFormat from "../../../shared/lib/utils/price-format";
 
 type ChooseSpecificationProps = {
   isPromo: boolean;
@@ -45,10 +55,14 @@ export const ChooseSpecification = memo(
     const specifications = useAppSelector(getSpecifications);
     const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-
-    // const priceData = useAppSelector((state) => getPrice(state, currentSpecification));
     const currency = useAppSelector(getCurrency);
+    const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+    const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
+    const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
+    const addedOptions = useAppSelector(getAddedOptions);
+    const currentColor = useAppSelector(getCurrentColor);
+    const addOptions = useAppSelector(getSpecificationAddOptions);
 
     useEffect(() => {
       if (currentModel && currentManufacturer) {
@@ -68,6 +82,20 @@ export const ChooseSpecification = memo(
       }
     }, [cheapest?.id]);
 
+    const toggleCurrency = () => {
+      switch (currentCurrency) {
+        case Currencies.RUB:
+          dispatch(setCurrentCurrency(Currencies.USD));
+          break;
+        case Currencies.USD:
+          dispatch(setCurrentCurrency(Currencies.CNY));
+          break;
+        case Currencies.CNY:
+          dispatch(setCurrentCurrency(Currencies.RUB));
+          break;
+      }
+    };
+
     if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
       return (
         <div className={cn(classes.wrapper, classes.center)}>
@@ -77,8 +105,8 @@ export const ChooseSpecification = memo(
     }
 
     return (
-      <div className={classes.wrapper}>
-        {currentModel ? (
+      <div className={cn(classes.wrapper, specificationParams && classes.light)}>
+        {currentModel && shorts && specificationParams ? (
           <>
             <div className={classes.specification}>
               <DropdownBlocks
@@ -91,8 +119,9 @@ export const ChooseSpecification = memo(
               />
 
               <p>
-                Внедорожник • Гибрид REV • Мощность 365 кВт / 496 л.с. • Двигатель 1.5 л • Полный привод •
-                Автоматическая трансмиссия • Разгон 4,3 сек • 5 мест • Запас хода 230 км • Клиренс 120 мм
+                {Object.values(shorts)
+                  .filter((value) => !!value)
+                  .join(" • ")}
               </p>
 
               <Link
@@ -105,10 +134,15 @@ export const ChooseSpecification = memo(
             </div>
 
             <div className={classes.optionsWrapper}>
-              <div className={cn(classes.option, classes.active)}>
+              <div
+                className={cn(classes.option, currentColor.ext && classes.active)}
+                onClick={colorsCallback}
+              >
                 <div>
                   <span className={classes.big}>Цвет кузова и салона</span>
-                  <span className={cn(classes.grey, classes.small)}>Выбрано: 1</span>
+                  <span className={cn(classes.grey, classes.small)}>
+                    {currentColor.ext ? "Выбрано: 2" : "Не выбрано"}
+                  </span>
                 </div>
                 <p
                   className={classes.grey}
@@ -118,39 +152,54 @@ export const ChooseSpecification = memo(
                 </p>
               </div>
 
-              <div className={classes.option}>
+              <div
+                className={cn(
+                  classes.option,
+                  addedOptions.length && classes.active,
+                  !addOptions?.options.length && classes.disabled
+                )}
+                onClick={addOptions?.options.length ? optionsCallback : undefined}
+              >
                 <div>
                   <span className={classes.big}>Доп опции комплектации</span>
-                  <span className={cn(classes.grey, classes.small)}>Не выбрано</span>
+                  <span className={cn(classes.grey, classes.small)}>
+                    {addedOptions.length ? `Выбрано: ${addedOptions.length}` : "Не выбрано"}
+                  </span>
                 </div>
-                <p
-                  className={classes.grey}
-                  onClick={optionsCallback}
-                >
-                  Изменить
-                </p>
+                <p className={classes.grey}>Изменить</p>
               </div>
             </div>
 
             <div className={classes.price}>
               <p>
-                <span className={cn(classes.big, classes.bold)}>
-                  Цена под заказ в РФ
-                  <br />в городе доставки
+                <span className={cn(classes.bold)}>Цена в РФ без растаможивания</span>
+                <span className={cn(classes.bold)}>
+                  {priceFormat(
+                    getCurrencyExchange(specificationParams.price.priceInCityOfReceipt, currentCurrency, currency)
+                  )}{" "}
+                  {currentCurrency}
                 </span>
-                <span className={cn(classes.big, classes.bold)}>217 930 858 ₽</span>
               </p>
               <div>
                 <button>О цене и оплате</button>
-                <button>RUB</button>
+                <button
+                  aria-label={getCurrencyName(currentCurrency)}
+                  className={classes.buttonWhite}
+                  onClick={toggleCurrency}
+                >
+                  {getCurrencyName(currentCurrency)}
+                </button>
               </div>
             </div>
           </>
         ) : (
-          <p className={classes.xBig}>
-            ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;—{" "}
-            <span className={classes.grey}>покажем цену в&nbsp;Китае на&nbsp;текущий день</span>
-          </p>
+          <>
+            <p className={cn(classes.xBig, classes.paragraph)}>
+              ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;—
+              <span className={classes.grey}>покажем комплектации доступные для&nbsp;заказа из&nbsp;Китая</span>
+            </p>
+            <p className={classes.paragraph}>По&nbsp;прямому контракту и&nbsp;курсу продажи валюты</p>
+          </>
         )}
       </div>
     );

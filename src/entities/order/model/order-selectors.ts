@@ -1,10 +1,10 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { createSelector } from "@reduxjs/toolkit";
 
-import { NameSpace, State } from '../../../app/provider/store';
-import { AddsType, CurrentColorType, TaxesTypes } from '../../../widgets/model-info';
-import { FetchStatus } from '../../../shared/api/fetch-status';
+import { NameSpace, State } from "../../../app/provider/store";
+import { AddsType, CurrentColorType, TaxesTypes } from "../../../widgets/model-info";
+import { FetchStatus } from "../../../shared/api/fetch-status";
 
-import { OfferType, QuestionsType } from '../lib/types';
+import { OfferType, QuestionsType } from "../lib/types";
 
 export const getCurrentTax = (state: State): TaxesTypes => state[NameSpace.Order].currentTax;
 
@@ -14,7 +14,13 @@ export const getAddItems = (state: State): number[] => state[NameSpace.Order].ad
 
 export const getAddItemsPrice = (state: State): number => state[NameSpace.Order].addItemsPrice;
 
+export const getAddedOptions = (state: State): number[] => state[NameSpace.Order].addOptions;
+
+export const getAddedOptionsPrice = (state: State): number => state[NameSpace.Order].addOptionsPrice;
+
 export const getCurrentColor = (state: State): CurrentColorType => state[NameSpace.Order].currentColor;
+
+export const getCurrentColorPrice = (state: State): number => state[NameSpace.Order].addColorPrice;
 
 export const getCurrentOrder = (state: State): number | null => state[NameSpace.Order].order;
 

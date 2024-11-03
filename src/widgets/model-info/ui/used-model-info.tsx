@@ -4,18 +4,12 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { AppRoute } from "../../../app/provider/router";
 import { getTotal } from "../../../features/choose-options/lib/utils/get-total";
 import { getPrices } from "../../../features/choose-options/lib/utils/get-prices";
-import { ChooseOptions } from "../../../features/choose-options/ui/choose-options";
+import { PriceOptions } from "../../../features/choose-specification";
 import {
   fetchSpecificationAddProducts,
   getSpecificationAddProductsLoadingStatus,
 } from "../../../entities/specification";
-import {
-  Currency,
-  fetchCurrency,
-  getCurrency,
-  getCurrencyLoadingStatus,
-  getCurrentCurrency,
-} from "../../../entities/currency";
+import { fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import { UsedGallery } from "../../../entities/gallery";
 import { getAddItemsPrice, getAdds, getCurrentTax } from "../../../entities/order/index";
 import {
@@ -37,7 +31,6 @@ import { PriceHistory } from "./price-history";
 import { OrderButtons } from "./order-buttons";
 import { Questions } from "./questions";
 import { InfoBar } from "./info-bar";
-import { Prices } from "./prices";
 import { Techs } from "./techs";
 import { Taxes } from "./taxes";
 import { Adds } from "./adds";
@@ -50,6 +43,7 @@ type ModelInfoProps = {
 export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [searchParams, _setSearchParams] = useSearchParams();
+  const [_isColors, setIsColors] = useState(false);
 
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
   const adInfo = useAppSelector(getCurrentAd);
@@ -135,22 +129,14 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
 
       <div className={classes.pricesWrapper}>
         <div className={classes.prices}>
-          <Prices
+          <PriceOptions
             prices={adInfo.prices}
             setIsTaxes={setIsTaxes}
+            colorsCallback={() => setIsColors(true)}
+            addProductsCallback={() => setIsAddProducts(true)}
+            taxesCallback={() => setIsTaxes(true)}
           />
         </div>
-
-        <div className={classes.addOptions}>
-          <ChooseOptions
-            prices={adInfo.prices}
-            setIsAddProducts={setIsAddProducts}
-          />
-        </div>
-      </div>
-
-      <div className={classes.currency}>
-        <Currency />
       </div>
 
       <div className={classes.buttons}>

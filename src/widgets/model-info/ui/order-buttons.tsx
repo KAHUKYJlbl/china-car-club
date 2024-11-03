@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { getAddItems, getCurrentTax, postOrder, postUsedOrder } from "../../../entities/order";
+import { getAddedOptions, getAddItems, getCurrentTax, postOrder, postUsedOrder } from "../../../entities/order";
 import { Currencies, getCurrentCurrency } from "../../../entities/currency";
 import { getCurrentCity, getGeolocation } from "../../../entities/user";
 import { getIsNew } from "../../../entities/settings";
@@ -34,6 +34,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
   const addItems = useAppSelector(getAddItems);
   const isNew = useAppSelector(getIsNew);
   const currentCurrency = Object.values(Currencies).indexOf(useAppSelector(getCurrentCurrency)) + 1;
+  const addedOptions = useAppSelector(getAddedOptions);
 
   if (!specificationId) {
     return <LoadingSpinner spinnerType="widget" />;
@@ -51,6 +52,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
             cityId: city,
           },
           addItems: addItems,
+          addOptions: addedOptions,
           prices: {
             totalPrice: {
               currencyQuantity: prices.totalPrice,
@@ -134,7 +136,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
           aria-label="заказать машину"
           onClick={orderHandler}
         >
-          Узнать спеццены у менеджера
+          Получить скидку у менеджера
         </button>
       </div>
 

@@ -10,8 +10,9 @@
   justify-content: space-between
   gap: 16px
 
-  min-height: 404px
+  min-height: 375px
   padding: 12px
+  border-radius: 16px
 
   font-size: 12px
   line-height: 14px
@@ -44,6 +45,8 @@
       border: 1px solid $border
       border-radius: 12px
 
+      cursor: pointer
+
       div
         display: flex
         flex-direction: column
@@ -54,8 +57,6 @@
         justify-content: center
         align-items: center
 
-        cursor: pointer
-
     .option:hover
       background-color: $primary-light
       border-color: $primary-light
@@ -63,6 +64,17 @@
     .active
       border-color: $approved
       background-color: $approved
+
+    .disabled
+      color: $border
+      cursor: auto
+
+      .grey
+        color: $border
+
+    .disabled:hover
+      border-color: $border
+      background-color: transparent
 
   .price
     display: flex
@@ -90,14 +102,18 @@
     button:hover
       background-color: $primary-light
 
+    .button-white
+      background-color: $white
+
   .grey
     color: $text-secondary
 
   .x-big
-    padding-left: 4px
-
     font-size: 24px
     line-height: 27px
+
+  .paragraph
+    padding-left: 4px
 
   .big
     font-size: 14px
@@ -109,3 +125,6 @@
 
   .bold
     font-weight: 700
+
+.light
+  background-color: $primary
