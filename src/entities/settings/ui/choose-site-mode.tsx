@@ -27,16 +27,20 @@ export const ChooseSiteMode = ({}: ChooseSiteModeProps) => {
   };
 
   return (
-    <div className={classes.wrapper}>
-      {siteModes.map((mode) => (
-        <button
-          key={mode.id}
-          className={cn(mode.id === currentSiteMode && classes.active)}
-          onClick={() => clickHandler(mode)}
-        >
-          {mode.name}
-        </button>
-      ))}
-    </div>
+    <>
+      {siteModes.length > 1 && (
+        <div className={classes.wrapper}>
+          {siteModes.map((mode) => (
+            <button
+              key={mode.id}
+              className={cn(mode.id === currentSiteMode && classes.active)}
+              onClick={() => clickHandler(mode)}
+            >
+              {mode.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   );
 };

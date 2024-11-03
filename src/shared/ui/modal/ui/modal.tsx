@@ -1,33 +1,39 @@
-import { PropsWithChildren, useEffect, useRef } from 'react';
-import cn from 'classnames';
-import ReactModal from 'react-modal';
-import Modal from 'react-modal';
+import { PropsWithChildren, useEffect, useRef } from "react";
+import cn from "classnames";
+import ReactModal from "react-modal";
+import Modal from "react-modal";
 
-import useClickOutside from '../../../lib/hooks/use-click-outside';
+import useClickOutside from "../../../lib/hooks/use-click-outside";
 
-import classes from './modal.module.sass';
+import classes from "./modal.module.sass";
 
-ReactModal.setAppElement('#root');
+ReactModal.setAppElement("#root");
 
 type ModalProps = {
   onClose: () => void;
   button?: boolean;
-}
+  width?: boolean;
+};
 
-export function CustomModal ({onClose, button = false, children}: PropsWithChildren<ModalProps>): JSX.Element {
+export function CustomModal({
+  onClose,
+  button = false,
+  width = false,
+  children,
+}: PropsWithChildren<ModalProps>): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside([ref], onClose);
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     if (document.getElementById("layout")) {
-      document.getElementById("layout")!.style.filter = 'blur(12px)';
+      document.getElementById("layout")!.style.filter = "blur(12px)";
     }
 
     return () => {
-      document.body.style.overflow = 'visible';
+      document.body.style.overflow = "visible";
       if (document.getElementById("layout")) {
-        document.getElementById("layout")!.style.filter = '';
+        document.getElementById("layout")!.style.filter = "";
       }
     };
   });
@@ -38,46 +44,55 @@ export function CustomModal ({onClose, button = false, children}: PropsWithChild
       onRequestClose={onClose}
       style={{
         overlay: {
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0)'
+          backgroundColor: "rgba(255, 255, 255, 0)",
         },
         content: {
-          position: 'absolute',
-          border: 'none',
-          background: '#fff0',
-          overflow: 'auto',
-          WebkitOverflowScrolling: 'touch',
-          borderRadius: '4px',
-          outline: 'none',
-          padding: '20px'
-        }
+          position: "absolute",
+          border: "none",
+          background: "#fff0",
+          overflow: "auto",
+          WebkitOverflowScrolling: "touch",
+          borderRadius: "4px",
+          outline: "none",
+          padding: "20px",
+        },
       }}
     >
       <div className={cn([classes.modal, classes.isActive])}>
         <div className={classes.modalWrapper}>
-          <div className={classes.modalOverlay} onClick={() => onClose}>
-          </div>
+          <div
+            className={classes.modalOverlay}
+            onClick={() => onClose}
+          ></div>
 
-          <div className={classes.modalContent} ref={ref}>
+          <div
+            className={classes.modalContent}
+            ref={ref}
+            style={{ width: width ? "350px" : "310px" }}
+          >
             {children}
 
-            {
-              button &&
+            {button && (
               <button
                 className={classes.crossBtn}
                 type="button"
                 aria-label="Закрыть попап"
                 onClick={onClose}
               >
-                <svg width="10" height="10" aria-hidden="true">
+                <svg
+                  width="10"
+                  height="10"
+                  aria-hidden="true"
+                >
                   <use xlinkHref="#icon-close"></use>
                 </svg>
               </button>
-            }
+            )}
           </div>
         </div>
       </div>

@@ -141,11 +141,11 @@ export const DropdownBlocks = memo(
                           >
                             <p>
                               <span>{item.name}</span>
-                              {item.price && item.chinaPrice && (
+                              {item.price && item.rusPrice && (
                                 <span className={classes.price}>
                                   {isPrices
                                     ? `Под ключ: ${priceFormat((item.price * currency!.cny).toFixed())} ₽`
-                                    : `В Китае: ${priceFormat((item.chinaPrice * currency!.cny).toFixed())} ₽`}
+                                    : `В РФ: ${priceFormat((item.rusPrice * currency!.cny).toFixed())} ₽`}
                                 </span>
                               )}
                             </p>

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import cn from "classnames";
 
 import {
@@ -24,6 +24,7 @@ import {
 import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
 import { getSpecificationAddOptions } from "../../../entities/specification";
 import { getTaxes } from "../../../widgets/model-info";
+import { Modal } from "../../../shared/ui/modal";
 import priceFormat from "../../../shared/lib/utils/price-format";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
@@ -31,6 +32,7 @@ import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
 import { getPrices } from "../lib/utils/get-prices";
 import { getTotal } from "../lib/utils/get-total";
+import { AboutPrice } from "./about-price";
 import classes from "./price-options.module.sass";
 
 type PriceOptionsProps = {
@@ -52,6 +54,9 @@ export const PriceOptions = memo(
     taxesCallback,
   }: PriceOptionsProps): JSX.Element => {
     const dispatch = useAppDispatch();
+
+    const [isAboutPrices, setIsAboutPrices] = useState(false);
+
     const currentTax = useAppSelector(getCurrentTax);
     const adds = useAppSelector(getAdds);
     const addItemsPrice = useAppSelector(getAddItemsPrice);
@@ -135,7 +140,9 @@ export const PriceOptions = memo(
           <div className={classes.row}>
             <p>Растаможивание и утильсбор</p>
             <p>
-              {priceFormat(getCurrencyExchange(getTaxes(currentTax, prices).final, Currencies.RUB, currency))}{" "}
+              {priceFormat(
+                getCurrencyExchange(getTaxes(currentTax, prices).final + prices.eptsSbktsUtil, Currencies.RUB, currency)
+              )}{" "}
               {Currencies.RUB}
             </p>
           </div>
@@ -147,7 +154,7 @@ export const PriceOptions = memo(
             <p>
               {`${priceFormat(
                 getTotal({
-                  totalPrice: getPrices(currentTax, prices) + addColorPrice + addedOptionsPrice,
+                  totalPrice: getPrices(currentTax, prices) + addColorPrice + addedOptionsPrice + prices.eptsSbktsUtil,
                   options: adds,
                   optionsPrices: {
                     epts: prices.eptsSbktsUtil,
@@ -164,7 +171,7 @@ export const PriceOptions = memo(
           <div className={classes.row}>
             <button
               aria-label="подробнее о налогах"
-              // onClick={() => setIsTaxes(true)}
+              onClick={() => setIsAboutPrices(true)}
             >
               О цене и оплате
             </button>
@@ -247,6 +254,15 @@ export const PriceOptions = memo(
             </div>
           </div>
         </div>
+
+        {isAboutPrices && (
+          <Modal
+            onClose={() => setIsAboutPrices(false)}
+            button
+          >
+            <AboutPrice />
+          </Modal>
+        )}
       </div>
     );
   }
