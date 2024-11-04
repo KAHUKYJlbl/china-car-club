@@ -1,13 +1,11 @@
 import { memo } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 
 import { AppRoute } from "../../../app/provider/router";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { DropdownBlocks } from "../../../shared/ui/dropdown";
 import {
-  getExtColors,
-  getIntColors,
   getSpecificationImgLoadingStatus,
   getSpecifications,
   getSpecificationsLoadingStatus,
@@ -27,8 +25,6 @@ type TechsProps = {
 
 export const Techs = memo(({ techs, currentSpecification, setCurrentSpecification }: TechsProps): JSX.Element => {
   const [searchParams, _setSearchParams] = useSearchParams();
-  const extColors = useAppSelector(getExtColors);
-  const intColors = useAppSelector(getIntColors);
   const specifications = useAppSelector(getSpecifications);
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
@@ -93,7 +89,16 @@ export const Techs = memo(({ techs, currentSpecification, setCurrentSpecificatio
         </ul>
       </div>
 
-      {extColors && extColors[0].color && (
+      <Link
+        aria-label="Сравнить комплектации"
+        className={classes.button}
+        to={`https://spec.chinacar.club/compare.php?specid=${currentSpecification}`}
+        target="_blank"
+      >
+        Сравнить комплектации
+      </Link>
+
+      {/* {extColors && extColors[0].color && (
         <div className={classes.block}>
           <p>Доступные цвета кузова</p>
 
@@ -149,7 +154,7 @@ export const Techs = memo(({ techs, currentSpecification, setCurrentSpecificatio
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 });

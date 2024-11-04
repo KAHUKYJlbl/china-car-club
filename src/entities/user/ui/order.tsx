@@ -54,6 +54,10 @@ export const Order = memo(({ order }: OrderProps) => {
           ))} */}
 
           {order.addItems.length > 0 && <span>Доп. товары на автомобиль</span>}
+
+          {order.hasAddOptions && <span>Доп. опции на автомобиль</span>}
+
+          {order.warranity && <span>{order.warranity.name.ru || order.warranity.name.ch}</span>}
         </p>
       </div>
 

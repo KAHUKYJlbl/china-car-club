@@ -18,4 +18,5 @@ export type SettingsApiType = {
   colorPallet: PaletteType;
   name: string;
   siteModeTypes: SiteModeType[];
+  compareSpecHost: string;
 };

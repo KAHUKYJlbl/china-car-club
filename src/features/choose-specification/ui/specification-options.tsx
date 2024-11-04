@@ -115,30 +115,38 @@ export const SpecificationOptions = ({
       </div>
 
       <div className={classes.wrapper}>
-        {addOptions.options.map((option) => (
-          <div
-            className={classes.option}
-            key={option.id}
-          >
-            <p className={classes.optionHeader}>{option.name.ru || option.name.ch}</p>
-            <p className={classes.optionDescription}>{option.description}</p>
-            <div className={classes.price}>
-              <p>
-                {option.price
-                  ? `${priceFormat(getCurrencyExchange(option.price, Currencies.CNY, currency))} ${
-                      Currencies.CNY
-                    } • ${priceFormat(getCurrencyExchange(option.price, Currencies.RUB, currency))} ${Currencies.RUB}`
-                  : "Бесплатно"}
-              </p>
-              <button
-                className={cn(addedOptions.includes(option.id) && classes.added)}
-                onClick={() => addItemHandler(option.id)}
-              >
-                {addedOptions.includes(option.id) ? "Удалить" : "Добавить"}
-              </button>
+        {!!addOptions.options.length ? (
+          addOptions.options.map((option) => (
+            <div
+              className={classes.option}
+              key={option.id}
+            >
+              <p className={classes.optionHeader}>{option.name.ru || option.name.ch}</p>
+              <p className={classes.optionDescription}>{option.description}</p>
+              <div className={classes.price}>
+                <p>
+                  {option.price
+                    ? `${priceFormat(getCurrencyExchange(option.price, Currencies.CNY, currency))} ${
+                        Currencies.CNY
+                      } • ${priceFormat(getCurrencyExchange(option.price, Currencies.RUB, currency))} ${Currencies.RUB}`
+                    : "Бесплатно"}
+                </p>
+                <button
+                  className={cn(addedOptions.includes(option.id) && classes.added)}
+                  onClick={() => addItemHandler(option.id)}
+                >
+                  {addedOptions.includes(option.id) ? "Удалить" : "Добавить"}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className={classes.empty}>
+            Для выбранной комплектации
+            <br />
+            сейчас нет платных опций
+          </p>
+        )}
       </div>
     </>
   );

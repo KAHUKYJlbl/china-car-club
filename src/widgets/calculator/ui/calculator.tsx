@@ -162,6 +162,7 @@ export const Calculator = (): JSX.Element => {
         <Modal
           onClose={() => setIsAddOptions(false)}
           width
+          button
         >
           <SpecificationOptions
             currentSpecification={currentSpecification}

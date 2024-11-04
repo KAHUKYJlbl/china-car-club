@@ -78,6 +78,13 @@ export type MycarsOrderType = {
   priceTypeId: number;
   availabilityOfEpts: boolean;
   addItems: string[];
+  hasAddOptions: boolean;
+  warranity: {
+    name: {
+      ru?: string;
+      ch: string;
+    };
+  };
   specificationAd?: {
     id: number;
     calcVisible: boolean;

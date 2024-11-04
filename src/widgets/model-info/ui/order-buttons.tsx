@@ -1,6 +1,13 @@
 import { memo } from "react";
 
-import { getAddedOptions, getAddItems, getCurrentTax, postOrder, postUsedOrder } from "../../../entities/order";
+import {
+  getAddedOptions,
+  getAddItems,
+  getCurrentColor,
+  getCurrentTax,
+  postOrder,
+  postUsedOrder,
+} from "../../../entities/order";
 import { Currencies, getCurrentCurrency } from "../../../entities/currency";
 import { getCurrentCity, getGeolocation } from "../../../entities/user";
 import { getIsNew } from "../../../entities/settings";
@@ -35,6 +42,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
   const isNew = useAppSelector(getIsNew);
   const currentCurrency = Object.values(Currencies).indexOf(useAppSelector(getCurrentCurrency)) + 1;
   const addedOptions = useAppSelector(getAddedOptions);
+  const currentColor = useAppSelector(getCurrentColor);
 
   if (!specificationId) {
     return <LoadingSpinner spinnerType="widget" />;
@@ -53,6 +61,13 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
           },
           addItems: addItems,
           addOptions: addedOptions,
+          colors:
+            currentColor.ext && currentColor.int
+              ? {
+                  external: [currentColor.ext],
+                  inerior: [currentColor.int],
+                }
+              : undefined,
           prices: {
             totalPrice: {
               currencyQuantity: prices.totalPrice,
@@ -140,7 +155,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
         </button>
       </div>
 
-      <p className={classes.info}>Проверим и покажем все спеццены. Выберите лучшее предложение.</p>
+      <p className={classes.info}>Назначим персонального менеджера для&nbsp;проверки скидок и&nbsp;консультации</p>
     </div>
   );
 });
