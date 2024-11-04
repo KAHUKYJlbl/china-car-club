@@ -1,11 +1,20 @@
 import cn from "classnames";
+import { useSearchParams } from "react-router-dom";
 
 import {
   getSpecificationAddOptions,
   getSpecifications,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
+import {
+  addOption,
+  decreaseOptionsPrice,
+  getAddedOptions,
+  increaseOptionsPrice,
+  removeOption,
+} from "../../../entities/order";
 import { getUsedShorts } from "../../../entities/used";
+import { getName } from "../../../entities/manufacturer";
 import { getShorts, SpecsType } from "../../../entities/model";
 import { Currencies, getCurrency, getCurrencyExchange } from "../../../entities/currency";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
@@ -15,13 +24,6 @@ import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import priceFormat from "../../../shared/lib/utils/price-format";
 
 import classes from "./specification-options.module.sass";
-import {
-  addOption,
-  decreaseOptionsPrice,
-  getAddedOptions,
-  increaseOptionsPrice,
-  removeOption,
-} from "../../../entities/order";
 
 type SpecificationOptionsProps = {
   currentSpecification?: number | null;
@@ -35,6 +37,7 @@ export const SpecificationOptions = ({
   techs,
 }: SpecificationOptionsProps) => {
   const dispatch = useAppDispatch();
+  const [searchParams, _setSearchParams] = useSearchParams();
   const shorts = currentSpecification
     ? useAppSelector((state) => getShorts(state, currentSpecification))
     : useAppSelector(getUsedShorts);
@@ -43,8 +46,9 @@ export const SpecificationOptions = ({
   const addOptions = useAppSelector(getSpecificationAddOptions);
   const addedOptions = useAppSelector(getAddedOptions);
   const currency = useAppSelector(getCurrency);
+  const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
 
-  if (!addOptions || !currency) {
+  if (!addOptions || !currency || !name) {
     return (
       <div className={classes.wrapper}>
         <LoadingSpinner spinnerType="widget" />
@@ -70,9 +74,9 @@ export const SpecificationOptions = ({
         <p className={classes.model}>
           <span>Автомобиль:</span>
           <br />
-          Aito (Hima)
+          {name.manufacturer}
           <br />
-          M5
+          {name.model}
         </p>
 
         {currentSpecification && (
