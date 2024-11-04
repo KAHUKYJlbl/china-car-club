@@ -6,6 +6,7 @@ import { getShorts } from "../../../entities/model";
 import { getUsedShorts } from "../../../entities/used";
 
 import classes from "./info-bar.module.sass";
+import { getCompareSpec } from "../../../entities/settings";
 
 type InfoBarProps = {
   currentSpecification?: number | null;
@@ -13,7 +14,8 @@ type InfoBarProps = {
   setIsPriceHistory: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const InfoBar = memo(({ currentSpecification, setIsTechs, setIsPriceHistory }: InfoBarProps): JSX.Element => {
+export const InfoBar = memo(({ currentSpecification, setIsTechs }: InfoBarProps): JSX.Element => {
+  const compareSpec = useAppSelector(getCompareSpec);
   const shorts = currentSpecification
     ? useAppSelector((state) => getShorts(state, currentSpecification))
     : useAppSelector(getUsedShorts);
@@ -42,13 +44,13 @@ export const InfoBar = memo(({ currentSpecification, setIsTechs, setIsPriceHisto
         <Link
           aria-label="Сравнить комплектации"
           className={classes.button}
-          to={`https://spec.chinacar.club/compare.php?specid=${currentSpecification}`}
+          to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
           target="_blank"
         >
           Сравнить комплектации
         </Link>
 
-        {!window.location.pathname.includes("used") && (
+        {/* {!window.location.pathname.includes("used") && (
           <button
             aria-label="история цены"
             className={classes.button}
@@ -63,7 +65,7 @@ export const InfoBar = memo(({ currentSpecification, setIsTechs, setIsPriceHisto
           className={classes.button}
         >
           Следить за скидками
-        </button>
+        </button> */}
       </div>
     </div>
   );

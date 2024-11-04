@@ -14,6 +14,10 @@ export type OrderType = {
   };
   addItems: number[];
   addOptions?: number[];
+  colors?: {
+    external: number[];
+    inerior: number[];
+  };
   prices: {
     totalPrice: {
       currencyQuantity: number;

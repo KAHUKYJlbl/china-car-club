@@ -30,6 +30,7 @@ import { getShorts, getSpecificationParams } from "../../../entities/model";
 import { FilterId } from "../../filter";
 import { AboutPrice } from "./about-price";
 import classes from "./choose-specification.module.sass";
+import { getCompareSpec } from "../../../entities/settings";
 
 type ChooseSpecificationProps = {
   isPromo: boolean;
@@ -70,6 +71,7 @@ export const ChooseSpecification = memo(
     const addOptions = useAppSelector(getSpecificationAddOptions);
     const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
     const addColorPrice = useAppSelector(getCurrentColorPrice);
+    const compareSpec = useAppSelector(getCompareSpec);
 
     useEffect(() => {
       if (currentModel && currentManufacturer) {
@@ -133,7 +135,7 @@ export const ChooseSpecification = memo(
 
               <Link
                 className={classes.button}
-                to={`https://spec.chinacar.club/compare.php?specid=${currentSpecification}`}
+                to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
                 target="_blank"
               >
                 Сравнить комплектации
@@ -170,10 +172,14 @@ export const ChooseSpecification = memo(
                 <div>
                   <span className={classes.big}>Доп опции комплектации</span>
                   <span className={cn(classes.grey, classes.small)}>
-                    {addedOptions.length ? `Выбрано: ${addedOptions.length}` : "Не выбрано"}
+                    {addOptions?.options.length
+                      ? addedOptions.length
+                        ? `Выбрано: ${addedOptions.length}`
+                        : "Не выбрано"
+                      : "Отсутствуют"}
                   </span>
                 </div>
-                <p className={classes.grey}>Изменить</p>
+                <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
               </div>
             </div>
 

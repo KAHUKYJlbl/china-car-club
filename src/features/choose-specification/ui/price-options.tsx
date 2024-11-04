@@ -111,7 +111,7 @@ export const PriceOptions = memo(
               <div className={classes.row}>
                 <p>Цвет кузова и салона</p>
                 <p>
-                  {addItemsPrice ? priceFormat(getCurrencyExchange(addColorPrice, currentCurrency, currency)) : "0 "}{" "}
+                  {addColorPrice ? priceFormat(getCurrencyExchange(addColorPrice, currentCurrency, currency)) : "0 "}{" "}
                   {currentCurrency}
                 </p>
               </div>
@@ -119,7 +119,7 @@ export const PriceOptions = memo(
               <div className={classes.row}>
                 <p>Доп. опции комплектации</p>
                 <p>
-                  {addItemsPrice
+                  {addedOptionsPrice
                     ? priceFormat(getCurrencyExchange(addedOptionsPrice, currentCurrency, currency))
                     : "0 "}{" "}
                   {currentCurrency}
@@ -233,10 +233,14 @@ export const PriceOptions = memo(
               <div>
                 <span className={classes.big}>Доп опции комплектации</span>
                 <span className={cn(classes.grey, classes.small)}>
-                  {addedOptions.length ? `Выбрано: ${addedOptions.length}` : "Не выбрано"}
+                  {addOptions?.options.length
+                    ? addedOptions.length
+                      ? `Выбрано: ${addedOptions.length}`
+                      : "Не выбрано"
+                    : "Отсутствуют"}
                 </span>
               </div>
-              <p className={classes.grey}>Изменить</p>
+              <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
             </div>
 
             <div

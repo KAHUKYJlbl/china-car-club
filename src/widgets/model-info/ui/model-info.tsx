@@ -302,6 +302,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
         <Modal
           onClose={() => setIsAddOptions(false)}
           width
+          button
         >
           <SpecificationOptions
             currentSpecification={currentSpecification}
