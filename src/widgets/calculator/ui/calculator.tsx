@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 
-import { getPromoGalleryLoadingStatus, fetchPromo } from "../../../entities/gallery";
-import { Gallery } from "../../../entities/gallery/ui/gallery";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
+import { Modal } from "../../../shared/ui/modal";
 import {
+  fetchSpecificationAddColors,
+  fetchSpecificationAddOptions,
   fetchSpecificationsImage,
   getDefaultImages,
   getSpecificationImgLoadingStatus,
   setSpecsIdle,
 } from "../../../entities/specification";
-import { Currency } from "../../../entities/currency";
-import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { setIdle } from "../../../entities/model";
+import { resetOrder } from "../../../entities/order";
+import { Gallery } from "../../../entities/gallery/ui/gallery";
+import { getPromoGalleryLoadingStatus, fetchPromo } from "../../../entities/gallery";
+import { fetchFiltered, getFiltersLoadingStatus, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import { ChooseModel } from "../../../features/choose-model";
 import { ChooseDelivery } from "../../../features/choose-delivery";
 import { Filter, FilterId } from "../../../features/filter";
 import { ChooseSpecification } from "../../../features/choose-specification/ui/choose-specification";
+import { SpecificationOptions, SpecificationColors } from "../../../features/choose-specification";
 
 import classes from "./calculator.module.sass";
-import { useDebounce } from "use-debounce";
 
 export const Calculator = (): JSX.Element => {
   const [_searchParams, setSearchParams] = useSearchParams();
@@ -37,6 +41,10 @@ export const Calculator = (): JSX.Element => {
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(null);
   const [promoMode, setPromoMode] = useState(false);
   const [filtersToFetch] = useDebounce(activeFilters, 650);
+
+  // popups
+  const [isColors, setIsColors] = useState(false);
+  const [isAddOptions, setIsAddOptions] = useState(false);
 
   const imgList = useAppSelector(getDefaultImages);
 
@@ -68,7 +76,10 @@ export const Calculator = (): JSX.Element => {
 
   useEffect(() => {
     if (currentSpecification) {
+      dispatch(resetOrder());
       dispatch(fetchSpecificationsImage(currentSpecification));
+      dispatch(fetchSpecificationAddOptions(currentSpecification));
+      dispatch(fetchSpecificationAddColors(currentSpecification));
     }
   }, [currentSpecification]);
 
@@ -125,11 +136,9 @@ export const Calculator = (): JSX.Element => {
           currentSpecification={currentSpecification}
           setCurrentSpecification={setCurrentSpecification}
           activeFilters={activeFilters}
+          colorsCallback={() => setIsColors(true)}
+          optionsCallback={() => setIsAddOptions(true)}
         />
-      </div>
-
-      <div className={classes.currency}>
-        <Currency />
       </div>
 
       <div className={classes.delivery}>
@@ -138,6 +147,29 @@ export const Calculator = (): JSX.Element => {
           specificationId={currentSpecification}
         />
       </div>
+
+      {isColors && (
+        <Modal
+          onClose={() => setIsColors(false)}
+          button
+          width
+        >
+          <SpecificationColors currentSpecification={currentSpecification} />
+        </Modal>
+      )}
+
+      {isAddOptions && (
+        <Modal
+          onClose={() => setIsAddOptions(false)}
+          width
+          button
+        >
+          <SpecificationOptions
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

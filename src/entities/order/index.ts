@@ -5,11 +5,16 @@ export {
   toggleAdd,
   addItem,
   removeItem,
-  increasePrice,
-  decreasePrice,
-  setCurrentColor,
+  increaseItemsPrice,
+  decreaseItemsPrice,
   resetOrder,
   setQuestions,
+  addOption,
+  removeOption,
+  increaseOptionsPrice,
+  decreaseOptionsPrice,
+  setCurrentColor,
+  setAddColorPrice,
 } from "./model/order-slice";
 export {
   getCurrentTax,
@@ -23,6 +28,9 @@ export {
   getQuestions,
   getOffers,
   getOffersLoadingStatus,
+  getAddedOptions,
+  getAddedOptionsPrice,
+  getCurrentColorPrice,
 } from "./model/order-selectors";
 export { postUsedOrder } from "./model/api-actions/post-used-order";
 export { postUsedAnswers } from "./model/api-actions/post-used-answers";

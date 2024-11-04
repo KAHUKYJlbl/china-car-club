@@ -12,10 +12,10 @@ import {
 import { Currencies, getCurrency, getCurrencyExchange } from "../../../entities/currency";
 import {
   addItem,
-  decreasePrice,
+  decreaseItemsPrice,
   getAddItems,
   getAddItemsPrice,
-  increasePrice,
+  increaseItemsPrice,
   removeItem,
   setAdd,
 } from "../../../entities/order";
@@ -57,14 +57,14 @@ export const Adds = memo(({ currentSpecification, setCurrentSpecification, techs
   const addItemHandler = (items: AddItemType[]) => {
     if (addItems.includes(getCurrentItem(activeItems, items)!.id)) {
       dispatch(removeItem(getCurrentItem(activeItems, items)!.id));
-      dispatch(decreasePrice(getCurrentItem(activeItems, items)!.price));
+      dispatch(decreaseItemsPrice(getCurrentItem(activeItems, items)!.price));
       if (addItemsPrice - getCurrentItem(activeItems, items)!.price === 0) {
         dispatch(setAdd({ add: "options", value: false }));
       }
       return;
     }
     dispatch(addItem(getCurrentItem(activeItems, items)!.id));
-    dispatch(increasePrice(getCurrentItem(activeItems, items)!.price));
+    dispatch(increaseItemsPrice(getCurrentItem(activeItems, items)!.price));
     dispatch(setAdd({ add: "options", value: true }));
   };
 
@@ -172,11 +172,11 @@ export const Adds = memo(({ currentSpecification, setCurrentSpecification, techs
           <div className={classes.priceWrapper}>
             <p className={classes.price}>
               {`
-                      ${getCurrencyExchange(getCurrentItem(activeItems, group.items)!.price, Currencies.CNY, currency)}
-                      ${Currencies.CNY} •
-                      ${getCurrencyExchange(getCurrentItem(activeItems, group.items)!.price, Currencies.RUB, currency)}
-                      ${Currencies.RUB}
-                    `}
+                ${getCurrencyExchange(getCurrentItem(activeItems, group.items)!.price, Currencies.CNY, currency)}
+                ${Currencies.CNY} •
+                ${getCurrencyExchange(getCurrentItem(activeItems, group.items)!.price, Currencies.RUB, currency)}
+                ${Currencies.RUB}
+              `}
             </p>
 
             <button

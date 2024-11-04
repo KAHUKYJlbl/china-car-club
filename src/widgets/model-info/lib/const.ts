@@ -1,24 +1,18 @@
-import { TechNameType, TechsByTypes } from './types';
+import { TechNameType, TechsByTypes } from "./types";
 
 export enum TaxesTypes {
-  PERS = 'Физлицо',
-  SELL = 'На перепродажу',
-  CORP = 'Юрлицо',
-  VAT = 'Без НДС',
-};
+  PERS = "На физлицо",
+  SELL = "На перепродажу",
+  CORP = "На юрлицо",
+  VAT = "Без НДС",
+}
 
 export enum PriceTypes {
-  Factory = 'завода',
-  Dealer = 'дилера',
-};
+  Factory = "завода",
+  Dealer = "дилера",
+}
 
-export const Statuses = [
-  '',
-  'В продаже',
-  'Снят с производства и в продаже',
-  'Продажи прекращены',
-  'Скоро',
-];
+export const Statuses = ["", "В продаже", "Снят с производства и в продаже", "Продажи прекращены", "Скоро"];
 
 export const ELECTRO = [3];
 
@@ -107,79 +101,79 @@ export const TECHS_BY_TYPES: Record<string, TechsByTypes> = {
     hybrid: true,
     ice: true,
   },
-}
+};
 
 export const TECH_NAMES: Record<string, TechNameType> = {
   bodyType: {
-    name: 'Кузов',
-    measure: '',
+    name: "Кузов",
+    measure: "",
   },
   driveType: {
-    name: 'Привод',
-    measure: '',
+    name: "Привод",
+    measure: "",
   },
   transmissionType: {
-    name: 'Коробка',
-    measure: '',
+    name: "Коробка",
+    measure: "",
   },
   power: {
-    name: 'Мощность двигателя',
-    measure: 'кВт',
+    name: "Мощность двигателя",
+    measure: "кВт",
   },
   torque: {
-    name: 'Крутящий момент',
-    measure: 'Н ⋅ м',
+    name: "Крутящий момент",
+    measure: "Н ⋅ м",
   },
   batteryCapacity: {
-    name: 'Батарея',
-    measure: 'кВт ⋅ ч'
+    name: "Батарея",
+    measure: "кВт ⋅ ч",
   },
   electricPowerReserve: {
-    name: 'Запас хода на батарее',
-    measure: 'км',
+    name: "Запас хода на батарее",
+    measure: "км",
   },
   powerReserve: {
-    name: 'Запас хода на топливе',
-    measure: 'км',
+    name: "Запас хода на топливе",
+    measure: "км",
   },
   engineCount: {
-    name: 'Количество двигателей',
-    measure: '',
+    name: "Количество двигателей",
+    measure: "",
   },
   seats: {
-    name: 'Количество мест',
-    measure: '',
+    name: "Количество мест",
+    measure: "",
   },
   lengthWidthHeight: {
-    name: 'Длина * Ширина * Высота',
-    measure: 'мм',
+    name: "Длина * Ширина * Высота",
+    measure: "мм",
   },
   groundClearance: {
-    name: 'Клиренс',
-    measure: 'мм',
+    name: "Клиренс",
+    measure: "мм",
   },
   curbWeight: {
-    name: 'Снаряженная масса',
-    measure: 'кг',
+    name: "Снаряженная масса",
+    measure: "кг",
   },
   acceleration: {
-    name: 'Разгон до 100',
-    measure: 'с',
+    name: "Разгон до 100",
+    measure: "с",
   },
   totalFuelConsumption: {
-    name: 'Расход на 100км',
-    measure: 'л',
+    name: "Расход на 100км",
+    measure: "л",
   },
   engineCapacity: {
-    name: 'Объем двигателя',
-    measure: 'см.куб',
+    name: "Объем двигателя",
+    measure: "см.куб",
   },
   frontWheel: {
-    name: 'Передние колеса',
-    measure: '',
+    name: "Передние колеса",
+    measure: "",
   },
   rearWheel: {
-    name: 'Задние колеса',
-    measure: '',
+    name: "Задние колеса",
+    measure: "",
   },
-}
+};

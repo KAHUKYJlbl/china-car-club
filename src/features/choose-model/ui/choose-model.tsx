@@ -16,6 +16,7 @@ import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 
 import { FilterId } from "../../filter/lib/types";
 import classes from "./choose-model.module.sass";
+import { fetchModel } from "../../../entities/model";
 
 type ChooseModelProps = {
   isPromo: boolean;
@@ -60,6 +61,12 @@ export const ChooseModel = memo(
         );
       }
     }, [currentManufacturer]);
+
+    useEffect(() => {
+      if (currentModel) {
+        dispatch(fetchModel(currentModel.toString()));
+      }
+    }, [currentModel]);
 
     useEffect(() => {
       if (!isPromo) {

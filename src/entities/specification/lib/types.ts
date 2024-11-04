@@ -56,6 +56,35 @@ export type AddItemType = {
   tags: string[];
 };
 
+export type AddOptionType = {
+  id: number;
+  name: {
+    ru?: string;
+    ch: string;
+  };
+  description: string;
+  price: number;
+};
+
+export type AddColorType = {
+  id: number;
+  name: {
+    ru?: string;
+    ch: string;
+  };
+  hexList: string[];
+  price: number;
+  imageUrl: string;
+};
+
+export type SpecificationAddOptionsApiType = {
+  groups: {
+    id: number;
+    name: string;
+    items: AddOptionType[];
+  };
+};
+
 export type SpecificationAddProductsApiType = {
   groups: {
     id: number;
@@ -63,6 +92,23 @@ export type SpecificationAddProductsApiType = {
     description: string;
     items: AddItemType[];
   }[];
+};
+
+export type SpecificationAddColorsApiType = {
+  groups: {
+    id: number;
+    name: string;
+    items: AddColorType[];
+  }[];
+};
+
+export type SpecificationAddOptionsType = {
+  specId: number;
+  options: AddOptionType[];
+};
+
+export type SpecificationAddColorsType = SpecificationAddColorsApiType & {
+  specId: number;
 };
 
 export type SpecificationAddProductsType = SpecificationAddProductsApiType & {

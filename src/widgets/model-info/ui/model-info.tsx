@@ -4,7 +4,7 @@ import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { AppRoute } from "../../../app/provider/router";
 import { getTotal } from "../../../features/choose-options/lib/utils/get-total";
 import { getPrices } from "../../../features/choose-options/lib/utils/get-prices";
-import { ChooseOptions } from "../../../features/choose-options/ui/choose-options";
+import { PriceOptions, SpecificationColors, SpecificationOptions } from "../../../features/choose-specification";
 import { SpecificationInfo } from "../../../features/choose-specification/ui/specification-info";
 import {
   fetchSpecificationAddProducts,
@@ -18,16 +18,17 @@ import {
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
-import {
-  Currency,
-  fetchCurrency,
-  getCurrency,
-  getCurrencyLoadingStatus,
-  getCurrentCurrency,
-} from "../../../entities/currency";
+import { fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import { getManufacturerByModel, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
-import { getAddItemsPrice, getAdds, getCurrentColor, getCurrentTax } from "../../../entities/order/index";
-import { setCurrentColor } from "../../../entities/order/model/order-slice";
+import {
+  getAddedOptionsPrice,
+  getAddItemsPrice,
+  getAdds,
+  getCurrentColor,
+  getCurrentColorPrice,
+  getCurrentTax,
+} from "../../../entities/order/index";
+import { resetOrder, setCurrentColor } from "../../../entities/order/model/order-slice";
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from "../../../entities/model";
 import { Gallery } from "../../../entities/gallery/ui/gallery";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -40,11 +41,12 @@ import { PriceHistory } from "./price-history";
 import { OrderButtons } from "./order-buttons";
 import { Questions } from "./questions";
 import { InfoBar } from "./info-bar";
-import { Prices } from "./prices";
 import { Techs } from "./techs";
 import { Taxes } from "./taxes";
 import { Adds } from "./adds";
 import classes from "./model-info.module.sass";
+import { fetchSpecificationAddOptions } from "../../../entities/specification/model/api-actions/fetch-specification-add-options";
+import { fetchSpecificationAddColors } from "../../../entities/specification/model/api-actions/fetch-specification-add-colors";
 
 type ModelInfoProps = {
   setConfirmation: () => void;
@@ -70,6 +72,8 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currentColor = useAppSelector(getCurrentColor);
   const specificationAddProductsLoadingStatus = useAppSelector(getSpecificationAddProductsLoadingStatus);
+  const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
+  const addColorPrice = useAppSelector(getCurrentColorPrice);
 
   // popups
   const [isTechs, setIsTechs] = useState(false);
@@ -77,6 +81,8 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const [isTaxes, setIsTaxes] = useState(false);
   const [isPriceHistory, setIsPriceHistory] = useState(false);
   const [isQuestions, setIsQuestions] = useState(false);
+  const [isColors, setIsColors] = useState(false);
+  const [isAddOptions, setIsAddOptions] = useState(false);
 
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(Number(searchParams.get("spec")));
 
@@ -89,7 +95,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       dispatch(
         setCurrentColor({
           int: intColors ? intColors[0].color.id : null,
-          ext: extColors ? extColors[0].color?.id : null,
+          ext: extColors ? extColors[0].color.id : null,
           isInteriorFirst: false,
         })
       );
@@ -110,8 +116,11 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
   useEffect(() => {
     if (currentSpecification && !specificationAddProductsLoadingStatus.isLoading) {
+      dispatch(resetOrder());
       dispatch(fetchSpecificationsImage(currentSpecification));
       dispatch(fetchSpecificationAddProducts(currentSpecification));
+      dispatch(fetchSpecificationAddOptions(currentSpecification));
+      dispatch(fetchSpecificationAddColors(currentSpecification));
     }
   }, [currentSpecification]);
 
@@ -180,22 +189,15 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
 
       <div className={classes.pricesWrapper}>
         <div className={classes.prices}>
-          <Prices
+          <PriceOptions
             prices={specificationParams.price}
             setIsTaxes={setIsTaxes}
+            colorsCallback={() => setIsColors(true)}
+            optionsCallback={() => setIsAddOptions(true)}
+            addProductsCallback={() => setIsAddProducts(true)}
+            taxesCallback={() => setIsTaxes(true)}
           />
         </div>
-
-        <div className={classes.addOptions}>
-          <ChooseOptions
-            prices={specificationParams.price}
-            setIsAddProducts={setIsAddProducts}
-          />
-        </div>
-      </div>
-
-      <div className={classes.currency}>
-        <Currency />
       </div>
 
       <div className={classes.buttons}>
@@ -206,7 +208,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           prices={{
             totalPrice: Number(
               getTotal({
-                totalPrice: getPrices(currentTax, specificationParams.price),
+                totalPrice: getPrices(currentTax, specificationParams.price) + addColorPrice + addedOptionsPrice,
                 options,
                 optionsPrices: {
                   epts: specificationParams.price.eptsSbktsUtil,
@@ -283,6 +285,30 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       {isQuestions && (
         <Modal onClose={() => null}>
           <Questions setConfirmation={setConfirmation} />
+        </Modal>
+      )}
+
+      {isColors && (
+        <Modal
+          onClose={() => setIsColors(false)}
+          button
+          width
+        >
+          <SpecificationColors currentSpecification={currentSpecification} />
+        </Modal>
+      )}
+
+      {isAddOptions && (
+        <Modal
+          onClose={() => setIsAddOptions(false)}
+          width
+          button
+        >
+          <SpecificationOptions
+            currentSpecification={currentSpecification}
+            setCurrentSpecification={setCurrentSpecification}
+            techs={specificationParams}
+          />
         </Modal>
       )}
     </div>

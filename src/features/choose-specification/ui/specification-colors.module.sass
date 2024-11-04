@@ -1,0 +1,100 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 16px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+  font-size: 12px
+  line-height: 13px
+
+  .header
+    font-size: 18px
+    line-height: 20px
+
+  .subheader
+    font-size: 18px
+    line-height: 24px
+
+  ul
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    list-style: none
+
+    label
+      display: flex
+      align-items: center
+      gap: 12px
+
+      padding: 12px 16px
+      border: 1px solid $border
+      border-radius: 12px
+
+      .checkbox
+        height: 20px
+        width: 20px
+        flex-shrink: 0
+
+        border-radius: 50%
+        border: 2px solid $border
+
+      .checkbox:hover
+        border-color: $accent
+
+      .checked
+        border: none
+        background-color: $primary-light
+
+      div
+        display: flex
+        justify-content: center
+        align-items: center
+
+      .color-info
+        flex-direction: column
+        justify-content: space-between
+        align-items: start
+        gap: 6px
+
+        width: 190px
+
+        .color
+          display: grid
+          grid-template-columns: 50% 50%
+
+          height: 24px
+          width: 190px
+          border: 1px solid $text-light
+
+          div
+            height: 100%
+
+        .colorName
+          width: 100%
+
+          text-overflow: ellipsis
+          overflow: hidden
+          white-space: nowrap
+
+        .colorPrice
+          font-size: 14px
+          line-height: 16px
+
+      img
+        object-fit: cover
+        border-radius: 8px
+
+    .checked
+      background-color: $approved
+      border-color: $approved
+
+  .bold
+    font-weight: 700

@@ -1,22 +1,36 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import cn from "classnames";
 
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { DropdownBlocks } from "../../../shared/ui/dropdown";
-import { getCurrency, getCurrencyLoadingStatus } from "../../../entities/currency";
+import priceFormat from "../../../shared/lib/utils/price-format";
+import { Modal } from "../../../shared/ui/modal";
+import {
+  Currencies,
+  getCurrency,
+  getCurrencyExchange,
+  getCurrencyLoadingStatus,
+  getCurrencyName,
+  getCurrentCurrency,
+  setCurrentCurrency,
+} from "../../../entities/currency";
 import {
   fetchSpecifications,
   getCheapestSpecification,
-  getPrice,
+  getSpecificationAddOptions,
   getSpecifications,
   getSpecificationsLoadingStatus,
 } from "../../../entities/specification";
+import { getAddedOptions, getAddedOptionsPrice, getCurrentColor, getCurrentColorPrice } from "../../../entities/order";
+import { getShorts, getSpecificationParams } from "../../../entities/model";
 
 import { FilterId } from "../../filter";
+import { AboutPrice } from "./about-price";
 import classes from "./choose-specification.module.sass";
-import priceFormat from "../../../shared/lib/utils/price-format";
+import { getCompareSpec } from "../../../entities/settings";
 
 type ChooseSpecificationProps = {
   isPromo: boolean;
@@ -25,6 +39,8 @@ type ChooseSpecificationProps = {
   currentSpecification: number | null;
   setCurrentSpecification: React.Dispatch<React.SetStateAction<number | null>>;
   activeFilters: Partial<Record<FilterId, number[]>>;
+  colorsCallback: () => void;
+  optionsCallback: () => void;
 };
 
 export const ChooseSpecification = memo(
@@ -35,15 +51,27 @@ export const ChooseSpecification = memo(
     currentSpecification,
     setCurrentSpecification,
     activeFilters,
+    colorsCallback,
+    optionsCallback,
   }: ChooseSpecificationProps): JSX.Element => {
     const dispatch = useAppDispatch();
+
+    const [isAboutPrices, setIsAboutPrices] = useState(false);
+
     const specifications = useAppSelector(getSpecifications);
     const cheapest = useAppSelector(getCheapestSpecification);
     const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
-
-    const priceData = useAppSelector((state) => getPrice(state, currentSpecification));
     const currency = useAppSelector(getCurrency);
+    const currentCurrency = useAppSelector(getCurrentCurrency);
     const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
+    const shorts = useAppSelector((state) => getShorts(state, currentSpecification));
+    const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
+    const addedOptions = useAppSelector(getAddedOptions);
+    const currentColor = useAppSelector(getCurrentColor);
+    const addOptions = useAppSelector(getSpecificationAddOptions);
+    const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
+    const addColorPrice = useAppSelector(getCurrentColorPrice);
+    const compareSpec = useAppSelector(getCompareSpec);
 
     useEffect(() => {
       if (currentModel && currentManufacturer) {
@@ -63,63 +91,150 @@ export const ChooseSpecification = memo(
       }
     }, [cheapest?.id]);
 
+    const toggleCurrency = () => {
+      switch (currentCurrency) {
+        case Currencies.RUB:
+          dispatch(setCurrentCurrency(Currencies.USD));
+          break;
+        case Currencies.USD:
+          dispatch(setCurrentCurrency(Currencies.CNY));
+          break;
+        case Currencies.CNY:
+          dispatch(setCurrentCurrency(Currencies.RUB));
+          break;
+      }
+    };
+
     if (specificationsLoadingStatus.isLoading || currencyLoadingStatus.isLoading || !currency) {
       return (
-        <div className={classes.wrapper}>
+        <div className={cn(classes.wrapper, classes.center)}>
           <LoadingSpinner spinnerType="widget" />
         </div>
       );
     }
 
     return (
-      <div className={classes.wrapper}>
-        {currentModel ? (
+      <div className={cn(classes.wrapper, specificationParams && classes.light)}>
+        {currentModel && shorts && specificationParams ? (
           <>
-            <DropdownBlocks
-              currentElement={currentSpecification}
-              setCurrent={setCurrentSpecification}
-              placeholder="Комплектация"
-              list={specifications}
-              disabled={specificationsLoadingStatus.isLoading}
-              isYear
-            />
+            <div className={classes.specification}>
+              <DropdownBlocks
+                currentElement={currentSpecification}
+                setCurrent={setCurrentSpecification}
+                placeholder="Комплектация"
+                list={specifications}
+                disabled={specificationsLoadingStatus.isLoading}
+                isYear
+              />
 
-            <p className={classes.header}>
-              <b>Цена в&nbsp;Китае на&nbsp;сегодня</b> за&nbsp;выбранную комплектацию нового автомобиля
-            </p>
+              <p>
+                {Object.values(shorts)
+                  .filter((value) => !!value)
+                  .join(" • ")}
+              </p>
 
-            <div className={classes.priceWrapper}>
-              <div className={classes.priceList}>
-                <p className={classes.price}>
-                  <b>{priceData ? `${priceFormat(priceData.price.toFixed())} ¥` : "0"}</b>
+              <Link
+                className={classes.button}
+                to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
+                target="_blank"
+              >
+                Сравнить комплектации
+              </Link>
+            </div>
+
+            <div className={classes.optionsWrapper}>
+              <div
+                className={cn(classes.option, currentColor.ext && classes.active)}
+                onClick={colorsCallback}
+              >
+                <div>
+                  <span className={classes.big}>Цвет кузова и салона</span>
+                  <span className={cn(classes.grey, classes.small)}>
+                    {currentColor.ext ? "Выбрано: 2" : "Не выбрано"}
+                  </span>
+                </div>
+                <p
+                  className={classes.grey}
+                  onClick={colorsCallback}
+                >
+                  Изменить
                 </p>
+              </div>
 
-                <p className={cn(classes.discountPrice, classes.price)}>
-                  <b>{priceData ? `${priceFormat(priceData.discount.toFixed())} ¥` : "0"}</b>
-                </p>
+              <div
+                className={cn(
+                  classes.option,
+                  addedOptions.length && classes.active,
+                  !addOptions?.options.length && classes.disabled
+                )}
+                onClick={addOptions?.options.length ? optionsCallback : undefined}
+              >
+                <div>
+                  <span className={classes.big}>Доп опции комплектации</span>
+                  <span className={cn(classes.grey, classes.small)}>
+                    {addOptions?.options.length
+                      ? addedOptions.length
+                        ? `Выбрано: ${addedOptions.length}`
+                        : "Не выбрано"
+                      : "Отсутствуют"}
+                  </span>
+                </div>
+                <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
+              </div>
+            </div>
 
-                <p className={cn(classes.price, classes.grey)}>
-                  {priceData ? `${priceFormat((priceData.price * currency.cny).toFixed())} ₽` : "0"}
-                </p>
+            <div className={classes.price}>
+              <p>
+                <span className={cn(classes.bold)}>Цена в РФ без растаможивания</span>
+                <span className={cn(classes.bold)}>
+                  {priceFormat(
+                    getCurrencyExchange(
+                      specificationParams.price.priceInCityOfReceipt + addColorPrice + addedOptionsPrice,
+                      currentCurrency,
+                      currency
+                    )
+                  )}{" "}
+                  {currentCurrency}
+                </span>
+              </p>
 
-                <p className={cn(classes.price, classes.grey)}>
-                  {priceData ? `${priceFormat(((priceData.price * currency.cny) / currency.usd).toFixed())} $` : "0"}
-                </p>
+              <div>
+                <button
+                  aria-label="подробнее о налогах"
+                  onClick={() => setIsAboutPrices(true)}
+                >
+                  О цене и оплате
+                </button>
 
-                <p className={cn(classes.small, classes.grey, classes.discount)}>
-                  Действующая скидка на&nbsp;автомобиль у&nbsp;дилера
-                </p>
+                <button
+                  aria-label={getCurrencyName(currentCurrency)}
+                  className={classes.buttonWhite}
+                  onClick={toggleCurrency}
+                >
+                  {getCurrencyName(currentCurrency)}
+                </button>
               </div>
             </div>
           </>
         ) : (
-          <p className={classes.big}>
-            ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;—{" "}
-            <span className={classes.grey}>покажем цену в&nbsp;Китае на&nbsp;текущий день</span>
-          </p>
+          <>
+            <p className={cn(classes.xBig, classes.paragraph)}>
+              ❶ Выберите марку и&nbsp;модель автомобиля&nbsp;—
+              <span className={classes.grey}>покажем комплектации доступные для&nbsp;заказа из&nbsp;Китая</span>
+            </p>
+            <p className={classes.paragraph}>По&nbsp;прямому контракту и&nbsp;курсу продажи валюты</p>
+          </>
         )}
 
-        <p className={classes.contract}>По&nbsp;прямому контракту и&nbsp;курсу продажи валюты</p>
+        {isAboutPrices && (
+          <Modal
+            onClose={() => setIsAboutPrices(false)}
+            button
+            width
+          >
+            <AboutPrice />
+          </Modal>
+        )}
       </div>
     );
   }

@@ -76,12 +76,9 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
 
   return (
     <div className={classes.wrapper}>
-      <p>
-        <span className={classes.big}>❷ Рассчитайте под&nbsp;ключ доставку и&nbsp;все варианты покупки</span>
-        <br />
-        Сравните все&nbsp;комплектации. Узнайте все&nbsp;цены по&nbsp;способам покупки. Получите персональную спеццену
-        и&nbsp;рекомендации.
-      </p>
+      <p className={classes.big}>❷ Рассчитайте цену авто с&nbsp;растаможиванием</p>
+
+      <p>Выберите условия поставки и&nbsp;запросите скидку у&nbsp;менеджера на&nbsp;заказ автомобиля</p>
 
       <button
         aria-label="рассчитать стоимость"
@@ -92,8 +89,16 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
       </button>
 
       <p className={classes.small}>
-        Нажимая кнопку, даю согласие на&nbsp;обработку моих персональных данных в&nbsp;соответствии с&nbsp;политикой
-        конфиденциальности
+        Нажимая кнопку, даю согласие на&nbsp;обработку моих персональных данных в&nbsp;соответствии
+        <br />
+        <span>с&nbsp;политикой конфиденциальности</span>
+        {/* <Link
+                // className={classes.button}
+                to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
+                target="_blank"
+              >
+        с&nbsp;политикой конфиденциальности
+              </Link> */}
       </p>
 
       {isLogin && (

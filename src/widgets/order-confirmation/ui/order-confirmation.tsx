@@ -13,9 +13,10 @@ import { getSpecificationParams } from "../../../entities/model";
 import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
 import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import {
-  getAddItems,
+  getAddedOptions,
   getAddItemsPrice,
   getAdds,
+  getCurrentColor,
   getCurrentOrder,
   getCurrentTax,
   getQuestions,
@@ -23,9 +24,9 @@ import {
   postUsedAnswers,
 } from "../../../entities/order";
 import {
-  AddItemType,
   getExtColors,
   getIntColors,
+  getSpecificationAddColors,
   getSpecificationAddProducts,
   getSpecifications,
 } from "../../../entities/specification";
@@ -84,7 +85,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   const options = useAppSelector(getAdds);
   const city = useAppSelector(getCurrentCity);
   const adds = useAppSelector(getSpecificationAddProducts);
-  const addItems = useAppSelector(getAddItems);
+  // const addItems = useAppSelector(getAddItems);
   const addItemsPrice = useAppSelector(getAddItemsPrice);
   const currency = useAppSelector(getCurrency);
   const currencyLoadingStatus = useAppSelector(getCurrencyLoadingStatus);
@@ -97,6 +98,9 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   );
   const order = useAppSelector(getCurrentOrder);
   const adInfo = useAppSelector(getCurrentAd);
+  const currentColor = useAppSelector(getCurrentColor);
+  const addedOptions = useAppSelector(getAddedOptions);
+  const addColors = useAppSelector(getSpecificationAddColors);
 
   // popups
   const [isSupplier, setIsSupplier] = useState(false);
@@ -158,8 +162,8 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               highPricedOption: data.preferredDeliveryTime.highPricedOption,
             },
             colors: {
-              external: data.colors.external.filter((color) => color.value).map((color) => color.id),
-              interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
+              external: currentColor.ext ? [currentColor.ext] : [],
+              interior: currentColor.int ? [currentColor.int] : [],
             },
           },
         })
@@ -262,10 +266,26 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
 
                 {options.epts && <li>Получение ЭПТС и СБКТС</li>}
 
+                {currentColor.ext && (
+                  <li>
+                    Цвет кузова:{" "}
+                    {addColors?.groups[0].items.find((color) => color.id == currentColor.ext)?.name.ru ||
+                      addColors?.groups[0].items.find((color) => color.id == currentColor.ext)?.name.ch}
+                  </li>
+                )}
+
+                {currentColor.int && (
+                  <li>
+                    Цвет кузова:{" "}
+                    {addColors?.groups[1].items.find((color) => color.id == currentColor.int)?.name.ru ||
+                      addColors?.groups[1].items.find((color) => color.id == currentColor.int)?.name.ch}
+                  </li>
+                )}
+
                 {options.options && (
                   <li>
                     Доп. товары на автомобиль
-                    <ul className={classes.nestedList}>
+                    {/* <ul className={classes.nestedList}>
                       {adds.groups
                         .reduce<AddItemType[]>((acc, group) => {
                           return [...acc, ...group.items];
@@ -278,9 +298,11 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
                             <span>{item.fullName}</span>
                           </li>
                         ))}
-                    </ul>
+                    </ul> */}
                   </li>
                 )}
+
+                {!!addedOptions.length && <li>Доп. опции на автомобиль</li>}
 
                 {options.guarantee && <li>Гарантия на автомобиль</li>}
               </ul>
@@ -296,6 +318,32 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
           </div>
 
           <div className={classes.block}>
+            <label className={classes.checkboxLabel}>
+              <div
+                className={cn(
+                  classes.checkbox,
+                  methods.watch("preferredDeliveryTime.highPricedOption") && classes.checked
+                )}
+              >
+                {methods.watch("preferredDeliveryTime.highPricedOption") && (
+                  <svg
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+                  >
+                    <use xlinkHref="#v" />
+                  </svg>
+                )}
+
+                <input
+                  type="checkbox"
+                  className="visually-hidden"
+                  {...methods.register("preferredDeliveryTime.highPricedOption")}
+                />
+              </div>
+              Могу рассмотреть варианты в&nbsp;России с&nbsp;ценой выше
+            </label>
+
             <label className={classes.checkboxLabel}>
               <div className={cn(classes.checkbox, methods.watch("recommendOtherModels") && classes.checked)}>
                 {methods.watch("recommendOtherModels") && (
@@ -391,7 +439,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               )}
             </button>
 
-            <button
+            {/* <button
               aria-label="предпочтительный срок покупки"
               type="button"
               className={cn(
@@ -421,8 +469,8 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
                   methods.watch("colors.external").some((color) => color.value) && classes.filled,
                   methods.watch("colors.interior").some((color) => color.value) && classes.filled
                 )}
-                onClick={() => setIsColors(true)}
-                disabled={!extColors || extColors.length === 0}
+                onClick={() => setIsColors(false)}
+                disabled
               >
                 Предпочтительные цвета машины
                 {(methods.watch("colors.external").some((color) => color.value) ||
@@ -436,7 +484,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
                   </svg>
                 )}
               </button>
-            )}
+            )} */}
           </div>
 
           <div className={classes.block}>

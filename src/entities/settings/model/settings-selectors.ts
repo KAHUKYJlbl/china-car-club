@@ -9,6 +9,8 @@ export const getLogo = (state: State): LogoType => state[NameSpace.Settings].log
 
 export const getDealerName = (state: State): string => state[NameSpace.Settings].name;
 
+export const getCompareSpec = (state: State): string => state[NameSpace.Settings].compareSpec;
+
 export const getPhone = (state: State): string => state[NameSpace.Settings].phone;
 
 export const getPalette = (state: State): PaletteType => state[NameSpace.Settings].palette;
