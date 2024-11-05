@@ -17,6 +17,7 @@ type InitialState = {
   currentSiteMode: number;
   settingsLoadingStatus: FetchStatus;
   compareSpec: string;
+  policyUrl: string;
 };
 
 const initialState: InitialState = {
@@ -34,6 +35,7 @@ const initialState: InitialState = {
   currentSiteMode: SiteModes.New,
   settingsLoadingStatus: FetchStatus.Idle,
   compareSpec: "",
+  policyUrl: "",
 };
 
 export const settingsSlice = createSlice({
@@ -59,6 +61,7 @@ export const settingsSlice = createSlice({
         state.palette = action.payload.colorPallet;
         state.siteModes = action.payload.siteModeTypes;
         state.compareSpec = action.payload.compareSpecHost;
+        state.policyUrl = action.payload.policy;
         state.settingsLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchSettings.pending, (state) => {

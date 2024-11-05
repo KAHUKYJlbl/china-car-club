@@ -65,7 +65,7 @@ export const Order = memo(({ order }: OrderProps) => {
       // onClick={() => setIsOffers(true)}
       >
         {/* {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены */}
-        {"Предложения цены (скоро)"}
+        Скидка запрошена, ожидайте
       </button>
 
       {isOffers && (
