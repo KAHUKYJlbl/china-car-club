@@ -65,7 +65,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
             currentColor.ext && currentColor.int
               ? {
                   external: [currentColor.ext],
-                  inerior: [currentColor.int],
+                  interior: [currentColor.int],
                 }
               : undefined,
           prices: {

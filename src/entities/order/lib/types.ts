@@ -16,7 +16,7 @@ export type OrderType = {
   addOptions?: number[];
   colors?: {
     external: number[];
-    inerior: number[];
+    interior: number[];
   };
   prices: {
     totalPrice: {
