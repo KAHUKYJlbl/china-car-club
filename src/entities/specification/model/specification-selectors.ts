@@ -73,7 +73,7 @@ export const getSpecifications = createSelector(getRawSpecifications, (specifica
     price: specification.priceWithLogisticsByCurrentDay?.price,
     year: specification.year,
     chinaPrice: specification.priceByCurrentDay.dealerPrice || specification.priceByCurrentDay.factoryPrice,
-    rusPrice: specification.priceWithLogisticsByCurrentDay?.price,
+    rusPrice: specification.priceWithLogisticsByCurrentDay?.priceInCityOfReceipt,
   }))
 );
 

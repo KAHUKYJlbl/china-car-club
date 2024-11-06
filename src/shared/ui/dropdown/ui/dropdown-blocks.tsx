@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
 
-import { getCurrency } from "../../../../entities/currency";
+import { Currencies, getCurrency, getCurrencyExchange } from "../../../../entities/currency";
 
 import useClickOutside from "../../../lib/hooks/use-click-outside";
 import priceFormat from "../../../lib/utils/price-format";
@@ -144,8 +144,12 @@ export const DropdownBlocks = memo(
                               {item.price && item.rusPrice && (
                                 <span className={classes.price}>
                                   {isPrices
-                                    ? `Под ключ: ${priceFormat((item.price * currency!.cny).toFixed())} ₽`
-                                    : `В РФ: ${priceFormat((item.rusPrice * currency!.cny).toFixed())} ₽`}
+                                    ? `Под ключ: ${priceFormat(
+                                        getCurrencyExchange(item.price, Currencies.RUB, currency!)
+                                      )} ₽`
+                                    : `В РФ: ${priceFormat(
+                                        getCurrencyExchange(item.rusPrice, Currencies.RUB, currency!)
+                                      )} ₽`}
                                 </span>
                               )}
                             </p>

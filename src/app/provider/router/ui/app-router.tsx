@@ -6,6 +6,7 @@ import { ModelPage } from "../../../../pages/model-page";
 import { MycarsPage } from "../../../../pages/mycars-page";
 import { UsedListPage } from "../../../../pages/used-list-page";
 import { Mycars } from "../../../../widgets/mycars";
+import { Policy } from "../../../../shared/ui/policy/ui/policy";
 
 import { AppRoute } from "../lib/routes";
 import { PrivateRoute } from "./private-route";
@@ -83,6 +84,11 @@ export const AppRouter = createBrowserRouter(
             <ModelPage />
           </PrivateRoute>
         }
+      />
+
+      <Route
+        path={AppRoute.Policy}
+        element={<Policy />}
       />
 
       <Route

@@ -9,4 +9,5 @@ export enum AppRoute {
   Favorites = "favorites",
   Orders = "orders",
   Calculations = "calculations",
+  Policy = "/policy",
 }

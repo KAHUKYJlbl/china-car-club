@@ -18,7 +18,6 @@ import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { useUtm } from "../../../shared/lib/hooks/use-utm";
 
 import classes from "./choose-delivery.module.sass";
-import { getPolicy } from "../../../entities/settings";
 
 type ChooseDeliveryProps = {
   modelId: number | null;
@@ -32,7 +31,6 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
   const isAuth = useAppSelector(getAuthStatus);
   const geolocation = useAppSelector(getGeolocation);
   const city = useAppSelector(getCurrentCity);
-  const policyUrl = useAppSelector(getPolicy);
   const utm = useUtm();
 
   const loginHandler = () => {
@@ -93,8 +91,7 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
       <p className={classes.small}>
         Нажимая кнопку, даю согласие на&nbsp;обработку моих&nbsp;персональных данных в&nbsp;соответствии&thinsp;
         <Link
-          // className={classes.button}
-          to={`${process.env.STATIC_URL || `${window.location.origin}/storage`}${policyUrl}`}
+          to={AppRoute.Policy}
           target="_blank"
         >
           с&nbsp;политикой&nbsp;конфиденциальности`
