@@ -17,7 +17,7 @@ export const getSpecificationAddColors = (state: State) => state[NameSpace.Speci
 export const getSpecificationPriceHistory = (state: State) => state[NameSpace.Specification].specificationPriceHistory;
 
 export const getExtColors = createSelector(getSpecificationImg, (images) =>
-  images.external.length > 0 ? images.external : null
+  images.external.length > 0 ? images.external : null,
 );
 
 export const getIntColors = createSelector(getSpecificationImg, (images) => {
@@ -47,12 +47,12 @@ export const getImagesByColor = createSelector(
         ?.urls.concat(
           images.interior.find((image) => image.color?.id === colorId.int)
             ? images.interior.find((image) => image.color?.id === colorId.int)!.urls
-            : []
+            : [],
         );
     }
 
     return images.official[0]?.urls;
-  }
+  },
 );
 
 export const getInitSlide = createSelector(
@@ -62,7 +62,7 @@ export const getInitSlide = createSelector(
       return images.external.find((image) => image.color?.id === colorId.ext)?.urls.length;
     }
     return 0;
-  }
+  },
 );
 
 export const getSpecifications = createSelector(getRawSpecifications, (specifications) =>
@@ -73,7 +73,7 @@ export const getSpecifications = createSelector(getRawSpecifications, (specifica
     year: specification.year,
     chinaPrice: specification.priceByCurrentDay.dealerPrice || specification.priceByCurrentDay.factoryPrice,
     rusPrice: specification.priceWithLogisticsByCurrentDay?.priceInCityOfReceipt,
-  }))
+  })),
 );
 
 export const getSpecificationName = createSelector(
@@ -88,7 +88,7 @@ export const getSpecificationName = createSelector(
     }
 
     return "";
-  }
+  },
 );
 
 export const getPrice = createSelector(
@@ -110,15 +110,15 @@ export const getPrice = createSelector(
     }
 
     return null;
-  }
+  },
 );
 
 export const getCheapestSpecification = createSelector(
   getRawSpecifications,
   (specifications) =>
     specifications.toSorted(
-      (a, b) => b.year - a.year || a.priceWithLogisticsByCurrentDay?.price - b.priceWithLogisticsByCurrentDay?.price
-    )[0]
+      (a, b) => b.year - a.year || a.priceWithLogisticsByCurrentDay?.price - b.priceWithLogisticsByCurrentDay?.price,
+    )[0],
 );
 
 export const getSpecificationsLoadingStatus = createSelector(
@@ -128,7 +128,7 @@ export const getSpecificationsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getSpecificationImgLoadingStatus = createSelector(
@@ -138,7 +138,7 @@ export const getSpecificationImgLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getSpecificationAddProductsLoadingStatus = createSelector(
@@ -148,7 +148,7 @@ export const getSpecificationAddProductsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getSpecificationAddOptionsLoadingStatus = createSelector(
@@ -158,7 +158,7 @@ export const getSpecificationAddOptionsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getSpecificationAddColorsLoadingStatus = createSelector(
@@ -168,7 +168,7 @@ export const getSpecificationAddColorsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getSpecificationPriceHistoryLoadingStatus = createSelector(
@@ -178,5 +178,5 @@ export const getSpecificationPriceHistoryLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );

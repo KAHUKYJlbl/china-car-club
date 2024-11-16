@@ -21,7 +21,7 @@ import {
   getCurrentCurrency,
   setCurrentCurrency,
 } from "../../../entities/currency";
-import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
+import { getCurrentSiteMode, getDealerName, SiteModes } from "../../../entities/settings";
 import { getSpecificationAddOptions } from "../../../entities/specification";
 import { getTaxes } from "../../../widgets/model-info";
 import { Modal } from "../../../shared/ui/modal";
@@ -70,6 +70,7 @@ export const PriceOptions = memo(
     const addedItems = useAppSelector(getAddItems);
     const addOptions = useAppSelector(getSpecificationAddOptions);
     const mode = useAppSelector(getCurrentSiteMode);
+    const dealer = useAppSelector(getDealerName);
 
     const toggleCurrency = () => {
       switch (currentCurrency) {
@@ -99,8 +100,8 @@ export const PriceOptions = memo(
                 getCurrencyExchange(
                   prices.priceInCityOfReceipt + addColorPrice + addedOptionsPrice,
                   currentCurrency,
-                  currency
-                )
+                  currency,
+                ),
               )}{" "}
               {currentCurrency}
             </p>
@@ -128,13 +129,15 @@ export const PriceOptions = memo(
             </>
           )}
 
-          <div className={classes.row}>
-            <p>Доп. товары к авто</p>
-            <p>
-              {addItemsPrice ? priceFormat(getCurrencyExchange(addItemsPrice, currentCurrency, currency)) : "0 "}{" "}
-              {currentCurrency}
-            </p>
-          </div>
+          {!dealer.toLowerCase().includes("rolf") && (
+            <div className={classes.row}>
+              <p>Доп. товары к авто</p>
+              <p>
+                {addItemsPrice ? priceFormat(getCurrencyExchange(addItemsPrice, currentCurrency, currency)) : "0 "}{" "}
+                {currentCurrency}
+              </p>
+            </div>
+          )}
 
           <div className={classes.row}>
             <p>Гарантия на автомобиль</p>
@@ -147,7 +150,11 @@ export const PriceOptions = memo(
             <p>Растаможивание и утильсбор</p>
             <p>
               {priceFormat(
-                getCurrencyExchange(getTaxes(currentTax, prices).final + prices.eptsSbktsUtil, Currencies.RUB, currency)
+                getCurrencyExchange(
+                  getTaxes(currentTax, prices).final + prices.eptsSbktsUtil,
+                  Currencies.RUB,
+                  currency,
+                ),
               )}{" "}
               {Currencies.RUB}
             </p>
@@ -169,7 +176,7 @@ export const PriceOptions = memo(
                   },
                   currency,
                   currentCurrency,
-                })
+                }),
               )} ${currentCurrency}`}
             </p>
           </div>
@@ -209,7 +216,7 @@ export const PriceOptions = memo(
               className={cn(
                 classes.option,
                 currentColor.ext && classes.active,
-                mode === SiteModes.Used && classes.disabled
+                mode === SiteModes.Used && classes.disabled,
               )}
               onClick={mode === SiteModes.Used ? undefined : colorsCallback}
             >
@@ -226,7 +233,7 @@ export const PriceOptions = memo(
               className={cn(
                 classes.option,
                 addedOptions.length && classes.active,
-                (!addOptions?.options.length || mode === SiteModes.Used) && classes.disabled
+                (!addOptions?.options.length || mode === SiteModes.Used) && classes.disabled,
               )}
               onClick={addOptions?.options.length ? optionsCallback : undefined}
             >
@@ -243,18 +250,20 @@ export const PriceOptions = memo(
               <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
             </div>
 
-            <div
-              className={cn(classes.option, addedItems.length && classes.active)}
-              onClick={addProductsCallback}
-            >
-              <div>
-                <span className={classes.big}>Доп товары к авто</span>
-                <span className={cn(classes.grey, classes.small)}>
-                  {addedItems.length ? `Выбрано: ${addedItems.length}` : "Не выбрано"}
-                </span>
+            {!dealer.toLowerCase().includes("rolf") && (
+              <div
+                className={cn(classes.option, addedItems.length && classes.active)}
+                onClick={addProductsCallback}
+              >
+                <div>
+                  <span className={classes.big}>Доп товары к авто</span>
+                  <span className={cn(classes.grey, classes.small)}>
+                    {addedItems.length ? `Выбрано: ${addedItems.length}` : "Не выбрано"}
+                  </span>
+                </div>
+                <p className={classes.grey}>Изменить</p>
               </div>
-              <p className={classes.grey}>Изменить</p>
-            </div>
+            )}
 
             <div className={cn(classes.option, classes.disabled)}>
               <div>
@@ -275,5 +284,5 @@ export const PriceOptions = memo(
         )}
       </div>
     );
-  }
+  },
 );

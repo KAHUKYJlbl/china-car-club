@@ -30,5 +30,5 @@ export const getSettingsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );

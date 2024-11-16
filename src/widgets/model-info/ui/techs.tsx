@@ -12,6 +12,7 @@ import {
 } from "../../../entities/specification";
 import { SpecsType } from "../../../entities/model";
 import { getName } from "../../../entities/manufacturer";
+import { getCompareSpec } from "../../../entities/settings";
 
 import { Statuses } from "../lib/const";
 import getTechList from "../lib/utils/get-tech-list";
@@ -29,6 +30,7 @@ export const Techs = memo(({ techs, currentSpecification, setCurrentSpecificatio
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const name = useAppSelector((state) => getName(state, Number(searchParams.get("model"))));
+  const compareSpec = useAppSelector(getCompareSpec);
 
   const techsList = getTechList(techs);
 
@@ -92,7 +94,7 @@ export const Techs = memo(({ techs, currentSpecification, setCurrentSpecificatio
       <Link
         aria-label="Сравнить комплектации"
         className={classes.button}
-        to={`https://spec.chinacar.club/compare.php?specid=${currentSpecification}`}
+        to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
         target="_blank"
       >
         Сравнить комплектации

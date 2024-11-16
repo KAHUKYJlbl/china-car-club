@@ -98,14 +98,14 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
 
         <div className={classes.block}>
           <div className={cn(classes.flexRow, classes.bold)}>
-            <p>Итого, растаможка автомобиля</p>
+            <p>Растаможивание и утильсбор</p>
             <p>
               {priceFormat(
                 getCurrencyExchange(
                   getTaxes(currentTax, techs.price).final + techs.price.eptsSbktsUtil,
                   Currencies.RUB,
-                  currency
-                )
+                  currency,
+                ),
               )}{" "}
               {Currencies.RUB}
             </p>
@@ -154,7 +154,7 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
               <p>акциз</p>
               <p>
                 {priceFormat(
-                  getCurrencyExchange(getTaxes(currentTax, techs.price).exciseTax, Currencies.RUB, currency)
+                  getCurrencyExchange(getTaxes(currentTax, techs.price).exciseTax, Currencies.RUB, currency),
                 )}{" "}
                 {Currencies.RUB}
               </p>
@@ -172,27 +172,7 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
               <p>утилизационный сбор</p>
               <p>
                 {priceFormat(
-                  getCurrencyExchange(getTaxes(currentTax, techs.price).recyclingFee, Currencies.RUB, currency)
-                )}{" "}
-                {Currencies.RUB}
-              </p>
-            </div>
-
-            <div className={classes.flexRow}>
-              <p>парковка СВХ + эвакуатор</p>
-              <p>
-                {priceFormat(
-                  getCurrencyExchange(getTaxes(currentTax, techs.price).parkingTowTruck, Currencies.RUB, currency)
-                )}{" "}
-                {Currencies.RUB}
-              </p>
-            </div>
-
-            <div className={classes.flexRow}>
-              <p>услуги таможенного брокера</p>
-              <p>
-                {priceFormat(
-                  getCurrencyExchange(getTaxes(currentTax, techs.price).customsBrokerServices, Currencies.RUB, currency)
+                  getCurrencyExchange(getTaxes(currentTax, techs.price).recyclingFee, Currencies.RUB, currency),
                 )}{" "}
                 {Currencies.RUB}
               </p>
@@ -202,20 +182,6 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
               <p>получение ЭПТС и СБКТС</p>
               <p>
                 {priceFormat(getCurrencyExchange(techs.price.eptsSbktsUtil, Currencies.RUB, currency))} {Currencies.RUB}
-              </p>
-            </div>
-
-            <div className={cn(classes.flexRow, classes.bold)}>
-              <p>Итого, растаможка автомобиля</p>
-              <p>
-                {priceFormat(
-                  getCurrencyExchange(
-                    getTaxes(currentTax, techs.price).final + techs.price.eptsSbktsUtil,
-                    Currencies.RUB,
-                    currency
-                  )
-                )}{" "}
-                {Currencies.RUB}
               </p>
             </div>
           </div>

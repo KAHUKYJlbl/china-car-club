@@ -122,7 +122,7 @@ export const Layout = ({
                 : `${mode === SiteModes.New ? "новый автомобиль" : "автомобиль с пробегом"}`
             } из\u00A0Китая по\u00A0лучшей цене в\u00A0${rne.decline(
               { text: CITIES[city], gender: "женский" },
-              "винительный"
+              "винительный",
             )}`}
         </h1>
 

@@ -57,7 +57,7 @@ export const ChooseModel = memo(
           fetchManufacturersWithSpectsCount({
             manufacturerId: currentManufacturer,
             filters: activeFilters,
-          })
+          }),
         );
       }
     }, [currentManufacturer]);
@@ -112,5 +112,5 @@ export const ChooseModel = memo(
         </div>
       </div>
     );
-  }
+  },
 );
