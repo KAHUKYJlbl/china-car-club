@@ -62,7 +62,7 @@ export const SpecificationOptions = ({
       dispatch(decreaseOptionsPrice(addOptions.options.find((option) => option.id === item)!.price));
       return;
     }
-    dispatch(addOption(item));
+    dispatch(addOption([item]));
     dispatch(increaseOptionsPrice(addOptions.options.find((option) => option.id === item)!.price));
   };
 

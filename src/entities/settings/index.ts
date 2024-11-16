@@ -11,5 +11,6 @@ export {
   getCurrentSiteMode,
   getSiteModes,
   getCompareSpec,
+  getPolicy,
 } from "./model/settings-selectors";
 export { setNew, setUsed, setCurrentSiteMode, settingsSlice } from "./model/settings-slice";

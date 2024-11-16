@@ -21,6 +21,8 @@ export const getSiteModes = (state: State): SiteModeType[] => state[NameSpace.Se
 
 export const getCurrentSiteMode = (state: State): number => state[NameSpace.Settings].currentSiteMode;
 
+export const getPolicy = (state: State): string => state[NameSpace.Settings].policyUrl;
+
 export const getSettingsLoadingStatus = createSelector(
   (state: State) => state[NameSpace.Settings].settingsLoadingStatus,
   (status) => ({
@@ -28,5 +30,5 @@ export const getSettingsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );

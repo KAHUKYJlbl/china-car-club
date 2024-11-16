@@ -12,15 +12,15 @@ export const getModelLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getShorts = createSelector(
   [(state: State) => state[NameSpace.Model].shorts, (_state: State, id: number | null | undefined) => id],
-  (shorts, id) => (id ? shorts?.find((short) => short.id === id)?.params : null)
+  (shorts, id) => (id ? shorts?.find((short) => short.id === id)?.params : null),
 );
 
 export const getSpecificationParams = createSelector(
   [getModel, (_state: State, id: number | null) => id],
-  (model, id) => (id ? model?.specifications.find((spec) => spec.id === id) : null)
+  (model, id) => (id ? model?.specifications.find((spec) => spec.id === id) : null),
 );

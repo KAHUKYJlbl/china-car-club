@@ -12,6 +12,7 @@ export type SpecificationType = {
   priceWithLogisticsByCurrentDay: {
     specificationId: number;
     price: number;
+    priceInCityOfReceipt: number;
   };
   priceByCurrentDay: {
     specificationId: number;

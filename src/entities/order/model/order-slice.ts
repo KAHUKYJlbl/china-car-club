@@ -105,8 +105,8 @@ export const orderSlice = createSlice({
     decreaseItemsPrice: (state, action: PayloadAction<number>) => {
       state.addItemsPrice = state.addItemsPrice - action.payload;
     },
-    addOption: (state, action: PayloadAction<number>) => {
-      state.addOptions = [...state.addOptions, action.payload];
+    addOption: (state, action: PayloadAction<number[]>) => {
+      state.addOptions = [...state.addOptions, ...action.payload];
     },
     removeOption: (state, action: PayloadAction<number>) => {
       state.addOptions = [...state.addOptions].filter((item) => item !== action.payload);

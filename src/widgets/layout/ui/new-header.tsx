@@ -63,14 +63,14 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
         </p>
 
         <p>
-          <span>Бесплатно по России: </span>
+          <span>Закажите по телефону: </span>
           <Link
             aria-label="позвонить нам"
             to={`tel:+${phone}`}
             className={classes.phone}
           >
             {`+${phone[0]} ${phone.substring(1, 4)} ${phone.substring(4, 7)} ${phone.substring(7, 9)} ${phone.substring(
-              9
+              9,
             )}`}
           </Link>
         </p>

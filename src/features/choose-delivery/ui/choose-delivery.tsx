@@ -1,6 +1,6 @@
-import { memo, useState } from "react";
+import { useState, memo } from "react";
 import queryString from "query-string";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { AppRoute } from "../../../app/provider/router";
@@ -13,9 +13,10 @@ import {
   getAuthStatus,
   postRefresh,
 } from "../../../entities/user";
+import { getAddedOptions, getAddedOptionsPrice, getCurrentColor, getCurrentColorPrice } from "../../../entities/order";
+import { useUtm } from "../../../shared/lib/hooks/use-utm";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
-import { useUtm } from "../../../shared/lib/hooks/use-utm";
 
 import classes from "./choose-delivery.module.sass";
 
@@ -27,11 +28,17 @@ type ChooseDeliveryProps = {
 export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDeliveryProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const utm = useUtm();
+
   const [isLogin, setIsLogin] = useState(false);
+
   const isAuth = useAppSelector(getAuthStatus);
   const geolocation = useAppSelector(getGeolocation);
   const city = useAppSelector(getCurrentCity);
-  const utm = useUtm();
+  const options = useAppSelector(getAddedOptions);
+  const optionsPrice = useAppSelector(getAddedOptionsPrice);
+  const color = useAppSelector(getCurrentColor);
+  const colorPrice = useAppSelector(getCurrentColorPrice);
 
   const loginHandler = () => {
     if (modelId && specificationId) {
@@ -44,7 +51,7 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
             cityId: city,
           },
           utm,
-        })
+        }),
       ).then(() => {
         dispatch(postRefresh());
       });
@@ -55,8 +62,13 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
           query: {
             model: modelId.toString(),
             spec: specificationId.toString(),
+            int: color.int,
+            ext: color.ext,
+            colorPrice,
+            options: options.join(","),
+            optionsPrice,
           },
-        })
+        }),
       );
     }
   };
@@ -89,16 +101,13 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
       </button>
 
       <p className={classes.small}>
-        Нажимая кнопку, даю согласие на&nbsp;обработку моих персональных данных в&nbsp;соответствии
-        <br />
-        <span>с&nbsp;политикой конфиденциальности</span>
-        {/* <Link
-                // className={classes.button}
-                to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
-                target="_blank"
-              >
-        с&nbsp;политикой конфиденциальности
-              </Link> */}
+        Нажимая кнопку, даю согласие на&nbsp;обработку моих&nbsp;персональных данных в&nbsp;соответствии&thinsp;
+        <Link
+          to={AppRoute.Policy}
+          target="_blank"
+        >
+          с&nbsp;политикой&nbsp;конфиденциальности`
+        </Link>
       </p>
 
       {isLogin && (

@@ -19,4 +19,5 @@ export type SettingsApiType = {
   name: string;
   siteModeTypes: SiteModeType[];
   compareSpecHost: string;
+  policy: string;
 };

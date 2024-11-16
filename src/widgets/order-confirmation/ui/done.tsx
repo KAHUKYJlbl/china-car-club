@@ -9,9 +9,11 @@ export const Done = memo(({ onDone }: DoneProps) => {
   return (
     <div className={classes.wrapper}>
       <div>
-        <p className={classes.header}>Ищем спеццены</p>
+        <p className={classes.header}>Скидка запрошена</p>
 
-        <p className={classes.subheader}>Передали запрос, проверяем, ожидайте предложений и&nbsp;выбирайте лучшее</p>
+        <p className={classes.subheader}>
+          Передали запрос, проверяем, ожидайте предложения и&nbsp;следите за&nbsp;заказом
+        </p>
       </div>
 
       <button

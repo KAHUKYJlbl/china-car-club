@@ -50,14 +50,14 @@ export const modelSlice = createSlice({
             driveType: specification.parameters?.driveType.id
               ? `${
                   FILTERS.drive!.elements.find(
-                    (element) => element.elementId === specification.parameters?.driveType.id
+                    (element) => element.elementId === specification.parameters?.driveType.id,
                   )?.name
                 } привод`
               : "",
             transmissionType: specification.parameters?.transmissionType.id
               ? `${
                   FILTERS.transmission!.elements.find(
-                    (element) => element.elementId === specification.parameters?.transmissionType.id
+                    (element) => element.elementId === specification.parameters?.transmissionType.id,
                   )?.name
                 } коробка передач`
               : "",

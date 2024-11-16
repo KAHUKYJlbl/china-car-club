@@ -37,11 +37,11 @@ export const fetchSpecifications = createAsyncThunk<
         }),
         "&",
         getFiltersQuery(filters),
-      ].join("")
+      ].join(""),
     );
 
     return specificationsBySeriesId;
-  } catch (err) {
+  } catch (_err) {
     throw Error("Unable to fetch Specification");
   }
 });

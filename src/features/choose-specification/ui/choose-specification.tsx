@@ -80,7 +80,7 @@ export const ChooseSpecification = memo(
             manufacturerId: currentManufacturer,
             modelId: currentModel,
             filters: activeFilters,
-          })
+          }),
         );
       }
     }, [currentModel]);
@@ -115,107 +115,113 @@ export const ChooseSpecification = memo(
 
     return (
       <div className={cn(classes.wrapper, specificationParams && classes.light)}>
-        {currentModel && shorts && specificationParams ? (
-          <>
-            <div className={classes.specification}>
-              <DropdownBlocks
-                currentElement={currentSpecification}
-                setCurrent={setCurrentSpecification}
-                placeholder="Комплектация"
-                list={specifications}
-                disabled={specificationsLoadingStatus.isLoading}
-                isYear
-              />
+        {currentModel ? (
+          shorts && specificationParams ? (
+            <>
+              <div className={classes.specification}>
+                <DropdownBlocks
+                  currentElement={currentSpecification}
+                  setCurrent={setCurrentSpecification}
+                  placeholder="Комплектация"
+                  list={specifications}
+                  disabled={specificationsLoadingStatus.isLoading}
+                  isYear
+                />
 
-              <p>
-                {Object.values(shorts)
-                  .filter((value) => !!value)
-                  .join(" • ")}
-              </p>
+                <p>
+                  {Object.values(shorts)
+                    .filter((value) => !!value)
+                    .join(" • ")}
+                </p>
 
-              <Link
-                className={classes.button}
-                to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
-                target="_blank"
-              >
-                Сравнить комплектации
-              </Link>
-            </div>
+                <Link
+                  className={classes.button}
+                  to={`${compareSpec}/compare.php?specid=${currentSpecification}`}
+                  target="_blank"
+                >
+                  Сравнить комплектации
+                </Link>
+              </div>
 
-            <div className={classes.optionsWrapper}>
-              <div
-                className={cn(classes.option, currentColor.ext && classes.active)}
-                onClick={colorsCallback}
-              >
-                <div>
-                  <span className={classes.big}>Цвет кузова и салона</span>
-                  <span className={cn(classes.grey, classes.small)}>
-                    {currentColor.ext ? "Выбрано: 2" : "Не выбрано"}
-                  </span>
-                </div>
-                <p
-                  className={classes.grey}
+              <div className={classes.optionsWrapper}>
+                <div
+                  className={cn(classes.option, currentColor.ext && classes.active)}
                   onClick={colorsCallback}
                 >
-                  Изменить
-                </p>
-              </div>
-
-              <div
-                className={cn(
-                  classes.option,
-                  addedOptions.length && classes.active,
-                  !addOptions?.options.length && classes.disabled
-                )}
-                onClick={addOptions?.options.length ? optionsCallback : undefined}
-              >
-                <div>
-                  <span className={classes.big}>Доп опции комплектации</span>
-                  <span className={cn(classes.grey, classes.small)}>
-                    {addOptions?.options.length
-                      ? addedOptions.length
-                        ? `Выбрано: ${addedOptions.length}`
-                        : "Не выбрано"
-                      : "Отсутствуют"}
-                  </span>
+                  <div>
+                    <span className={classes.big}>Цвет кузова и салона</span>
+                    <span className={cn(classes.grey, classes.small)}>
+                      {currentColor.ext ? "Выбрано: 2" : "Не выбрано"}
+                    </span>
+                  </div>
+                  <p
+                    className={classes.grey}
+                    onClick={colorsCallback}
+                  >
+                    Изменить
+                  </p>
                 </div>
-                <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
-              </div>
-            </div>
 
-            <div className={classes.price}>
-              <p>
-                <span className={cn(classes.bold)}>Цена в РФ без растаможивания</span>
-                <span className={cn(classes.bold)}>
-                  {priceFormat(
-                    getCurrencyExchange(
-                      specificationParams.price.priceInCityOfReceipt + addColorPrice + addedOptionsPrice,
-                      currentCurrency,
-                      currency
-                    )
-                  )}{" "}
-                  {currentCurrency}
-                </span>
-              </p>
-
-              <div>
-                <button
-                  aria-label="подробнее о налогах"
-                  onClick={() => setIsAboutPrices(true)}
+                <div
+                  className={cn(
+                    classes.option,
+                    addedOptions.length && classes.active,
+                    !addOptions?.options.length && classes.disabled,
+                  )}
+                  onClick={addOptions?.options.length ? optionsCallback : undefined}
                 >
-                  О цене и оплате
-                </button>
-
-                <button
-                  aria-label={getCurrencyName(currentCurrency)}
-                  className={classes.buttonWhite}
-                  onClick={toggleCurrency}
-                >
-                  {getCurrencyName(currentCurrency)}
-                </button>
+                  <div>
+                    <span className={classes.big}>Доп опции комплектации</span>
+                    <span className={cn(classes.grey, classes.small)}>
+                      {addOptions?.options.length
+                        ? addedOptions.length
+                          ? `Выбрано: ${addedOptions.length}`
+                          : "Не выбрано"
+                        : "Отсутствуют"}
+                    </span>
+                  </div>
+                  <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
+                </div>
               </div>
+
+              <div className={classes.price}>
+                <p>
+                  <span className={cn(classes.bold)}>Цена в РФ без растаможивания</span>
+                  <span className={cn(classes.bold)}>
+                    {priceFormat(
+                      getCurrencyExchange(
+                        specificationParams.price.priceInCityOfReceipt + addColorPrice + addedOptionsPrice,
+                        currentCurrency,
+                        currency,
+                      ),
+                    )}{" "}
+                    {currentCurrency}
+                  </span>
+                </p>
+
+                <div>
+                  <button
+                    aria-label="подробнее о налогах"
+                    onClick={() => setIsAboutPrices(true)}
+                  >
+                    О цене и оплате
+                  </button>
+
+                  <button
+                    aria-label={getCurrencyName(currentCurrency)}
+                    className={classes.buttonWhite}
+                    onClick={toggleCurrency}
+                  >
+                    {getCurrencyName(currentCurrency)}
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className={classes.center}>
+              <LoadingSpinner spinnerType="widget" />
             </div>
-          </>
+          )
         ) : (
           <>
             <p className={cn(classes.xBig, classes.paragraph)}>
@@ -237,5 +243,5 @@ export const ChooseSpecification = memo(
         )}
       </div>
     );
-  }
+  },
 );
