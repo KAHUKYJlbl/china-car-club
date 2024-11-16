@@ -83,7 +83,7 @@ export const Gallery = memo(
               name: name?.manufacturer as string,
             },
             url,
-          }))
+          })),
         );
       }
 
@@ -98,7 +98,7 @@ export const Gallery = memo(
           fetchFavoritesById({
             typeId: 1,
             favorableIds: Array.from(new Set(gallery.map((element) => element.specificationId))),
-          })
+          }),
         );
       }
     }, [gallery, isAuth]);
@@ -112,7 +112,7 @@ export const Gallery = memo(
             img.onload = () =>
               resolve(`${process.env.STATIC_URL || `${window.location.origin}/storage`}${image.url.big}`);
             img.onerror = () => reject();
-          })
+          }),
       );
 
       const preload = async () => {
@@ -137,7 +137,7 @@ export const Gallery = memo(
         handlePromo(
           gallery[currentImage].manufacturer.id,
           gallery[currentImage].model.id,
-          gallery[currentImage].specificationId
+          gallery[currentImage].specificationId,
         );
       }
     };
@@ -175,7 +175,7 @@ export const Gallery = memo(
           postFavorite({
             typeId: 1,
             favorableId: gallery[id || currentImage].specificationId,
-          })
+          }),
         );
         return;
       }
@@ -289,5 +289,5 @@ export const Gallery = memo(
         )}
       </div>
     );
-  }
+  },
 );

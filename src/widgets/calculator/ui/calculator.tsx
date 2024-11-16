@@ -28,7 +28,7 @@ import { SpecificationOptions, SpecificationColors } from "../../../features/cho
 import classes from "./calculator.module.sass";
 
 export const Calculator = (): JSX.Element => {
-  const [_searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
@@ -66,6 +66,14 @@ export const Calculator = (): JSX.Element => {
     setCurrentSpecification(null);
     dispatch(setIdle());
     dispatch(setSpecsIdle());
+
+    if (searchParams.get("manufacturer") && searchParams.get("model") && searchParams.get("specification")) {
+      handlePromo(
+        Number(searchParams.get("manufacturer")),
+        Number(searchParams.get("model")),
+        Number(searchParams.get("specification")),
+      );
+    }
   }, []);
 
   useEffect(() => {
