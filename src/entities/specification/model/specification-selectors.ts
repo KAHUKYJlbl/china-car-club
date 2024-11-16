@@ -21,7 +21,6 @@ export const getExtColors = createSelector(getSpecificationImg, (images) =>
 );
 
 export const getIntColors = createSelector(getSpecificationImg, (images) => {
-  console.log(images);
   return images.interior.length > 0 ? images.interior : null;
 });
 

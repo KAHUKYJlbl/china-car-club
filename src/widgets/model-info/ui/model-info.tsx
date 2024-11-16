@@ -7,6 +7,8 @@ import { getPrices } from "../../../features/choose-options/lib/utils/get-prices
 import { PriceOptions, SpecificationColors, SpecificationOptions } from "../../../features/choose-specification";
 import { SpecificationInfo } from "../../../features/choose-specification/ui/specification-info";
 import {
+  fetchSpecificationAddColors,
+  fetchSpecificationAddOptions,
   fetchSpecificationAddProducts,
   fetchSpecificationsImage,
   fetchSpecificationsInfo,
@@ -21,14 +23,18 @@ import {
 import { fetchCurrency, getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import { getManufacturerByModel, getManufacturersLoadingStatus } from "../../../entities/manufacturer";
 import {
+  addOption,
   getAddedOptionsPrice,
   getAddItemsPrice,
   getAdds,
   getCurrentColor,
   getCurrentColorPrice,
   getCurrentTax,
-} from "../../../entities/order/index";
-import { resetOrder, setCurrentColor } from "../../../entities/order/model/order-slice";
+  increaseOptionsPrice,
+  resetOrder,
+  setAddColorPrice,
+  setCurrentColor,
+} from "../../../entities/order";
 import { fetchModel, getModelLoadingStatus, getSpecificationParams } from "../../../entities/model";
 import { Gallery } from "../../../entities/gallery/ui/gallery";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -45,8 +51,6 @@ import { Techs } from "./techs";
 import { Taxes } from "./taxes";
 import { Adds } from "./adds";
 import classes from "./model-info.module.sass";
-import { fetchSpecificationAddOptions } from "../../../entities/specification/model/api-actions/fetch-specification-add-options";
-import { fetchSpecificationAddColors } from "../../../entities/specification/model/api-actions/fetch-specification-add-colors";
 
 type ModelInfoProps = {
   setConfirmation: () => void;
@@ -97,7 +101,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           int: intColors ? intColors[0].color.id : null,
           ext: extColors ? extColors[0].color.id : null,
           isInteriorFirst: false,
-        })
+        }),
       );
     }
   }, [specificationImgLoadingStatus.isSuccess]);
@@ -109,7 +113,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
         fetchSpecificationsInfo({
           modelId: Number(searchParams.get("model")),
           filters: {},
-        })
+        }),
       );
     }
   }, []);
@@ -117,6 +121,38 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   useEffect(() => {
     if (currentSpecification && !specificationAddProductsLoadingStatus.isLoading) {
       dispatch(resetOrder());
+
+      if (searchParams.get("options")) {
+        const optionsArr = searchParams
+          .get("options")!
+          .split(",")
+          .map((option) => Number(option));
+        dispatch(addOption(optionsArr));
+      }
+
+      if (searchParams.get("optionsPrice")) {
+        dispatch(increaseOptionsPrice(Number(searchParams.get("optionsPrice"))));
+      }
+
+      if (searchParams.get("int") && searchParams.get("ext")) {
+        dispatch(
+          setCurrentColor({
+            int: Number(searchParams.get("int")),
+            ext: Number(searchParams.get("ext")),
+            isInteriorFirst: false,
+          }),
+        );
+      }
+
+      if (searchParams.get("colorPrice")) {
+        dispatch(setAddColorPrice(Number(searchParams.get("colorPrice"))));
+      }
+
+      setSearchParams({
+        model: searchParams.get("model")!,
+        spec: currentSpecification.toString(),
+      });
+
       dispatch(fetchSpecificationsImage(currentSpecification));
       dispatch(fetchSpecificationAddProducts(currentSpecification));
       dispatch(fetchSpecificationAddOptions(currentSpecification));
@@ -129,15 +165,6 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
       dispatch(fetchCurrency());
     }
   }, []);
-
-  useEffect(() => {
-    if (currentSpecification) {
-      setSearchParams({
-        model: searchParams.get("model")!,
-        spec: currentSpecification.toString(),
-      });
-    }
-  }, [currentSpecification]);
 
   useEffect(() => {
     if (modelLoadingStatus.isFailed) {
@@ -217,7 +244,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
                 },
                 currency,
                 currentCurrency,
-              })
+              }),
             ),
             minPrice: specificationParams.price.inChina,
             tax: specificationParams.price.tax,
@@ -294,7 +321,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
           button
           width
         >
-          <SpecificationColors currentSpecification={currentSpecification} />
+          <SpecificationColors />
         </Modal>
       )}
 

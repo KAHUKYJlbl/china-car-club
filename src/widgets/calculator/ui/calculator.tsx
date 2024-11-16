@@ -154,7 +154,7 @@ export const Calculator = (): JSX.Element => {
           button
           width
         >
-          <SpecificationColors currentSpecification={currentSpecification} />
+          <SpecificationColors />
         </Modal>
       )}
 

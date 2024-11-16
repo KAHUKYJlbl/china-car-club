@@ -13,11 +13,8 @@ import { Currencies, getCurrency, getCurrencyExchange } from "../../../entities/
 
 import classes from "./specification-colors.module.sass";
 
-type SpecificationColorsProps = {
-  currentSpecification?: number | null;
-};
-
-export const SpecificationColors = ({}: SpecificationColorsProps) => {
+// eslint-disable-next-line no-empty-pattern
+export const SpecificationColors = () => {
   const dispatch = useAppDispatch();
   const addColors = useAppSelector(getSpecificationAddColors);
   const currentColor = useAppSelector(getCurrentColor);
@@ -44,8 +41,8 @@ export const SpecificationColors = ({}: SpecificationColorsProps) => {
     dispatch(
       setAddColorPrice(
         (addColors.groups[0].items.find((color) => color.id == watch("ext"))?.price || 0) +
-          (addColors.groups[1].items.find((color) => color.id == watch("int"))?.price || 0)
-      )
+        (addColors.groups[1].items.find((color) => color.id == watch("int"))?.price || 0),
+      ),
     );
   }, [watch("int"), watch("ext")]);
 
@@ -96,11 +93,7 @@ export const SpecificationColors = ({}: SpecificationColorsProps) => {
                   </div>
                   <p className={classes.colorPrice}>
                     {color.price
-                      ? `${priceFormat(getCurrencyExchange(color.price, Currencies.CNY, currency))} ${
-                          Currencies.CNY
-                        } • ${priceFormat(getCurrencyExchange(color.price, Currencies.RUB, currency))} ${
-                          Currencies.RUB
-                        }`
+                      ? `${priceFormat(getCurrencyExchange(color.price, Currencies.CNY, currency))} ${Currencies.CNY} • ${priceFormat(getCurrencyExchange(color.price, Currencies.RUB, currency))} ${Currencies.RUB}`
                       : "Бесплатно"}
                   </p>
                 </div>
@@ -152,11 +145,7 @@ export const SpecificationColors = ({}: SpecificationColorsProps) => {
                   </div>
                   <p className={classes.colorPrice}>
                     {color.price
-                      ? `${priceFormat(getCurrencyExchange(color.price, Currencies.CNY, currency))} ${
-                          Currencies.CNY
-                        } • ${priceFormat(getCurrencyExchange(color.price, Currencies.RUB, currency))} ${
-                          Currencies.RUB
-                        }`
+                      ? `${priceFormat(getCurrencyExchange(color.price, Currencies.CNY, currency))} ${Currencies.CNY} • ${priceFormat(getCurrencyExchange(color.price, Currencies.RUB, currency))} ${Currencies.RUB}`
                       : "Бесплатно"}
                   </p>
                 </div>
