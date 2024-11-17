@@ -14,9 +14,11 @@ import { getCurrentSiteMode, SiteModes } from "../../../entities/settings";
 import { getCurrency, getCurrencyLoadingStatus, getCurrentCurrency } from "../../../entities/currency";
 import {
   getAddedOptions,
+  getAddedOptionsPrice,
   getAddItemsPrice,
   getAdds,
   getCurrentColor,
+  getCurrentColorPrice,
   getCurrentOrder,
   getCurrentTax,
   getQuestions,
@@ -56,7 +58,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [searchParams, _setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [fieldErrors, setFieldErrors] = useState({
     carSupplier: false,
     paymentType: false,
@@ -94,13 +96,15 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
   const mode = useAppSelector(getCurrentSiteMode);
   const specificationName = specifications.find((spec) => spec.id === Number(searchParams.get("spec")))?.name || "";
   const specificationParams = useAppSelector((state) =>
-    getSpecificationParams(state, Number(searchParams.get("spec")))
+    getSpecificationParams(state, Number(searchParams.get("spec"))),
   );
   const order = useAppSelector(getCurrentOrder);
   const adInfo = useAppSelector(getCurrentAd);
-  const currentColor = useAppSelector(getCurrentColor);
-  const addedOptions = useAppSelector(getAddedOptions);
   const addColors = useAppSelector(getSpecificationAddColors);
+  const currentColor = useAppSelector(getCurrentColor);
+  const addColorPrice = useAppSelector(getCurrentColorPrice);
+  const addedOptions = useAppSelector(getAddedOptions);
+  const addedOptionsPrice = useAppSelector(getAddedOptionsPrice);
 
   // popups
   const [isSupplier, setIsSupplier] = useState(false);
@@ -166,7 +170,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               interior: currentColor.int ? [currentColor.int] : [],
             },
           },
-        })
+        }),
       ).then(() => {
         setIsDone(true);
       });
@@ -192,7 +196,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               interior: data.colors.interior.filter((color) => color.value).map((color) => color.id),
             },
           },
-        })
+        }),
       ).then(() => {
         setIsDone(true);
       });
@@ -217,7 +221,18 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
 
           <button
             aria-label="вернуться назад"
-            onClick={cancelConfirmation}
+            onClick={() => {
+              setSearchParams({
+                model: searchParams.get("model")!,
+                spec: searchParams.get("spec")!,
+                int: currentColor.int?.toString()!,
+                ext: currentColor.ext?.toString()!,
+                colorPrice: addColorPrice.toString()!,
+                options: addedOptions.join(","),
+                optionsPrice: addedOptionsPrice.toString(),
+              });
+              cancelConfirmation();
+            }}
           >
             Назад
           </button>
@@ -243,7 +258,11 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               <b>
                 {`${priceFormat(
                   getTotal({
-                    totalPrice: getPrices(currentTax, specificationParams?.price || adInfo!.prices),
+                    totalPrice:
+                      getPrices(currentTax, specificationParams?.price || adInfo!.prices) +
+                      addColorPrice +
+                      addedOptionsPrice +
+                      (specificationParams?.price.eptsSbktsUtil || 0),
                     options,
                     optionsPrices: {
                       epts: specificationParams?.price.eptsSbktsUtil || adInfo!.prices.eptsSbktsUtil,
@@ -252,7 +271,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
                     },
                     currency,
                     currentCurrency,
-                  })
+                  }),
                 )} ${currentCurrency}`}
               </b>
             </p>
@@ -322,7 +341,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               <div
                 className={cn(
                   classes.checkbox,
-                  methods.watch("preferredDeliveryTime.highPricedOption") && classes.checked
+                  methods.watch("preferredDeliveryTime.highPricedOption") && classes.checked,
                 )}
               >
                 {methods.watch("preferredDeliveryTime.highPricedOption") && (
@@ -401,7 +420,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               className={cn(
                 classes.conditionButton,
                 methods.watch("carSupplier") && classes.filled,
-                fieldErrors.carSupplier && classes.buttonError
+                fieldErrors.carSupplier && classes.buttonError,
               )}
               onClick={() => setIsSupplier(true)}
             >
@@ -423,7 +442,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
               className={cn(
                 classes.conditionButton,
                 !isPaymentTypeEmpty() && classes.filled,
-                fieldErrors.paymentType && classes.buttonError
+                fieldErrors.paymentType && classes.buttonError,
               )}
               onClick={() => setIsPayment(true)}
             >

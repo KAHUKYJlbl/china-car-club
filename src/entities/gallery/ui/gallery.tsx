@@ -1,6 +1,5 @@
 import { memo, useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
-import cn from "classnames";
 
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
@@ -216,11 +215,38 @@ export const Gallery = memo(
               />
             )}
 
-            <p>
-              {name
-                ? `${name?.manufacturer} ${name?.model}`
-                : `${gallery[currentImage].manufacturer.name} ${gallery[currentImage].model.name}`}
-            </p>
+            <div className={classes.nameWrapper}>
+              <p>
+                {name
+                  ? `${name?.manufacturer} ${name?.model}`
+                  : `${gallery[currentImage].manufacturer.name} ${gallery[currentImage].model.name}`}
+              </p>
+
+              <div className={classes.buttons}>
+                {handlePromo && (
+                  <button
+                    aria-label="рассчитать"
+                    onClick={handlePromoClick}
+                  >
+                    Рассчитать
+                  </button>
+                )}
+
+                <button
+                  aria-label="добавить в избранное"
+                  className={classes.favorite}
+                  onClick={() => handleFavorite(currentImage)}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+                  >
+                    <use xlinkHref={useFavoriteList(currentImage) ? "#favorite-remove" : "#favorite-add"} />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className={classes.controls}>
@@ -253,31 +279,6 @@ export const Gallery = memo(
                 </button>
               </div>
             )}
-
-            <div className={cn(classes.buttons, classes.end)}>
-              {handlePromo && (
-                <button
-                  aria-label="рассчитать спеццену"
-                  onClick={handlePromoClick}
-                >
-                  Рассчитать спеццену
-                </button>
-              )}
-
-              <button
-                aria-label="добавить в избранное"
-                className={classes.favorite}
-                onClick={() => handleFavorite(currentImage)}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  aria-hidden="true"
-                >
-                  <use xlinkHref={useFavoriteList(currentImage) ? "#favorite-remove" : "#favorite-add"} />
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
 
