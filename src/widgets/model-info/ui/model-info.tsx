@@ -12,10 +12,8 @@ import {
   fetchSpecificationAddProducts,
   fetchSpecificationsImage,
   fetchSpecificationsInfo,
-  getExtColors,
-  getImagesByColor,
+  getDefaultImages,
   getInitSlide,
-  getIntColors,
   getSpecificationAddProductsLoadingStatus,
   getSpecificationImgLoadingStatus,
   getSpecificationsLoadingStatus,
@@ -66,8 +64,6 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const specificationsLoadingStatus = useAppSelector(getSpecificationsLoadingStatus);
   const specificationImgLoadingStatus = useAppSelector(getSpecificationImgLoadingStatus);
   const modelLoadingStatus = useAppSelector(getModelLoadingStatus);
-  const extColors = useAppSelector(getExtColors);
-  const intColors = useAppSelector(getIntColors);
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
   const manufacturerId = useAppSelector((state) => getManufacturerByModel(state, Number(searchParams.get("model"))));
@@ -91,20 +87,21 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   const [currentSpecification, setCurrentSpecification] = useState<number | null>(Number(searchParams.get("spec")));
 
   const specificationParams = useAppSelector((state) => getSpecificationParams(state, currentSpecification));
-  const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
+  // const imgList = useAppSelector((state) => getImagesByColor(state, currentColor));
+  const imgList = useAppSelector(getDefaultImages);
   const initSlide = useAppSelector((state) => getInitSlide(state, currentColor));
 
-  useEffect(() => {
-    if (specificationImgLoadingStatus.isSuccess) {
-      dispatch(
-        setCurrentColor({
-          int: intColors ? intColors[0].color.id : null,
-          ext: extColors ? extColors[0].color.id : null,
-          isInteriorFirst: false,
-        }),
-      );
-    }
-  }, [specificationImgLoadingStatus.isSuccess]);
+  // useEffect(() => {
+  //   if (specificationImgLoadingStatus.isSuccess) {
+  //     dispatch(
+  //       setCurrentColor({
+  //         int: intColors ? intColors[0].color.id : null,
+  //         ext: extColors ? extColors[0].color.id : null,
+  //         isInteriorFirst: false,
+  //       }),
+  //     );
+  //   }
+  // }, [specificationImgLoadingStatus.isSuccess]);
 
   useEffect(() => {
     if (searchParams.get("model") && !modelLoadingStatus.isLoading) {

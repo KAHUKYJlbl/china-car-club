@@ -10,18 +10,6 @@
   @media screen and (max-width: 640px)
     min-height: 228px
 
-  p
-    margin-top: 8px
-
-    color: $text-secondary
-    text-shadow: -1px 0 1px #ffffff80, 1px 0 1px #00000099
-    font-size: 15px
-    line-height: 18px
-
-    @media screen and (max-width: 640px)
-      font-size: 12px
-      line-height: 15px
-
 .background
   position: absolute
   left: 0
@@ -47,25 +35,40 @@
   display: flex
   flex-direction: column
   justify-content: space-between
+  gap: 12px
 
   padding: 12px
   height: 100%
   border-radius: 16px
 
+  .name-wrapper
+    display: flex
+    gap: 4px
 
-.controls
-  display: flex
-  justify-content: space-between
+    margin-top: 8px
 
-  .end
-    margin-left: auto
+    p
+      display: flex
+      justify-content: center
+      align-items: center
+
+      height: 40px
+      padding: 0 12px
+      border-radius: 8px
+      background-color: $gallery-button
+
+      font-size: 15px
+      line-height: 18px
+
+      @media screen and (max-width: 640px)
+        font-size: 12px
+        line-height: 15px
 
   .buttons
     display: flex
     gap: 4px
 
     .favorite
-      padding: 8px 12px
       color: $text-primary
 
     button
@@ -73,12 +76,20 @@
       align-items: center
       justify-content: center
 
-      padding: 8px 16px
-
+      height: 40px
+      min-width: 40px
+      padding: 0 12px
       border-radius: 8px
+      background-color: $gallery-button
 
       cursor: pointer
+
+      &:hover
+        background-color: $hover
 
       @media screen and (max-width: 640px)
         font-size: 12px
 
+  .controls
+    display: flex
+    justify-content: space-between

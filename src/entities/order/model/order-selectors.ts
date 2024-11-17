@@ -34,7 +34,7 @@ export const getOffersLoadingStatus = createSelector(
     isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getOrderLoadingStatus = createSelector(
@@ -43,7 +43,7 @@ export const getOrderLoadingStatus = createSelector(
     isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getQuestionsLoadingStatus = createSelector(
@@ -52,5 +52,5 @@ export const getQuestionsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );

@@ -11,7 +11,7 @@ type GalleryPaginationProps = {
 
 export const GalleryPagination = memo(({ count, current, onClick }: GalleryPaginationProps): JSX.Element => {
   useEffect(() => {
-    const timeout = setTimeout(() => onClick(current + 1 === count ? 0 : current + 1), 11000);
+    const timeout = setTimeout(() => onClick(current + 1 === count ? 0 : current + 1), 10100);
 
     return () => clearTimeout(timeout);
   }, [current]);
