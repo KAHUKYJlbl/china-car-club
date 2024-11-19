@@ -18,6 +18,7 @@ type InitialState = {
   settingsLoadingStatus: FetchStatus;
   compareSpec: string;
   policyUrl: string;
+  tgBotName: string;
 };
 
 const initialState: InitialState = {
@@ -36,6 +37,7 @@ const initialState: InitialState = {
   settingsLoadingStatus: FetchStatus.Idle,
   compareSpec: "",
   policyUrl: "",
+  tgBotName: "",
 };
 
 export const settingsSlice = createSlice({
@@ -62,6 +64,7 @@ export const settingsSlice = createSlice({
         state.siteModes = action.payload.siteModeTypes;
         state.compareSpec = action.payload.compareSpecHost;
         state.policyUrl = action.payload.policy;
+        state.tgBotName = action.payload.tgBotName;
         state.settingsLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchSettings.pending, (state) => {

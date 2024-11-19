@@ -200,7 +200,7 @@ export const userSlice = createSlice({
             favorableId: favorite.cardData.specificationAd
               ? favorite.cardData.specificationAd.id
               : favorite.cardData.specification.id || favorite.cardData.series.id,
-          }))
+          })),
         );
         state.mycarsPagination = action.payload.meta;
         state.mycarsFavoritesLoadingStatus = FetchStatus.Success;
@@ -243,7 +243,7 @@ export const userSlice = createSlice({
         const update = state.mycarsFavorites.find(
           (favorite) =>
             action.payload.favorableId ===
-            (action.payload.typeId === 1 ? favorite.cardData.specification.id : favorite.cardData.series.id)
+            (action.payload.typeId === 1 ? favorite.cardData.specification.id : favorite.cardData.series.id),
         );
         if (update) {
           state.mycarsFavorites = [...state.mycarsFavorites]

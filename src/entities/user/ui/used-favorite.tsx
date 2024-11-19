@@ -35,7 +35,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
 
   const useFavoriteList = () => {
     return favoritesList.find(
-      (element) => element.favorableId === (favorite.cardData.specificationAd?.id || favorite.cardData.series.id)
+      (element) => element.favorableId === (favorite.cardData.specificationAd?.id || favorite.cardData.series.id),
     )?.id;
   };
 
@@ -51,7 +51,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
       postFavorite({
         typeId: FavoriteTypes.Ad,
         favorableId: favorite.cardData.specificationAd!.id,
-      })
+      }),
     );
   };
 
@@ -93,7 +93,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
                       favorite.cardData.specificationAd?.ownersCount,
                       "%d владелец",
                       "%d владельца",
-                      "%d владельцев"
+                      "%d владельцев",
                     )
                   : "На учет не вставал"}
               </span>
@@ -106,7 +106,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
                         dayjs().diff(dayjs(favorite.cardData.specificationAd?.ageDate), "years"),
                         "%d год",
                         "%d года",
-                        "%d лет"
+                        "%d лет",
                       )
                 } ${(dayjs().diff(dayjs(favorite.cardData.specificationAd?.ageDate), "M") % 12) + 1} мес`}
               </span>
@@ -118,18 +118,18 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
           {favorite.cardData.specification
             ? [
                 FILTERS.engine!.elements.find(
-                  (element) => element.elementId === favorite.cardData.parameters.engineTypeId
+                  (element) => element.elementId === favorite.cardData.parameters.engineTypeId,
                 )?.name || null,
                 FILTERS.body!.elements.find((element) => element.elementId === favorite.cardData.parameters?.bodyTypeId)
                   ?.name || null,
                 `${
                   FILTERS.drive!.elements.find(
-                    (element) => element.elementId === favorite.cardData.parameters?.driveTypeId
+                    (element) => element.elementId === favorite.cardData.parameters?.driveTypeId,
                   )?.name
                 } привод` || null,
                 `${
                   FILTERS.transmission!.elements.find(
-                    (element) => element.elementId === favorite.cardData.parameters?.transmissionTypeId
+                    (element) => element.elementId === favorite.cardData.parameters?.transmissionTypeId,
                   )?.name
                 } коробка передач` || null,
                 favorite.cardData.parameters.powerReserve &&
@@ -141,7 +141,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
         </p>
 
         <p className={classes.price}>
-          <span className={classes.grey}>Цена в китае</span>
+          <span className={classes.grey}>Цена в РФ без растаможивания</span>
           <span className={classes.bold}>
             {priceFormat(getCurrencyExchange(favorite.cardData.price.min, Currencies.RUB, currency))} ₽
           </span>
@@ -153,7 +153,7 @@ export const UsedFavorite = memo(({ favorite, currency }: FavoriteProps) => {
           aria-label="рассчитать цену"
           onClick={() =>
             navigate(
-              `${AppRoute.Used}${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${favorite.cardData.specification.id}&ad=${favorite.cardData.specificationAd?.id}`
+              `${AppRoute.Used}${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${favorite.cardData.specification.id}&ad=${favorite.cardData.specificationAd?.id}`,
             )
           }
         >

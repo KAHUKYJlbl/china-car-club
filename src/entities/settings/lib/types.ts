@@ -20,4 +20,5 @@ export type SettingsApiType = {
   siteModeTypes: SiteModeType[];
   compareSpecHost: string;
   policy: string;
+  tgBotName: string;
 };

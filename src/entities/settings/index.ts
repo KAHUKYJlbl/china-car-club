@@ -12,5 +12,6 @@ export {
   getSiteModes,
   getCompareSpec,
   getPolicy,
+  getBotName,
 } from "./model/settings-selectors";
 export { setNew, setUsed, setCurrentSiteMode, settingsSlice } from "./model/settings-slice";

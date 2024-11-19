@@ -96,7 +96,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
               currencyId: 1,
             },
           },
-        })
+        }),
       );
     } else {
       dispatch(
@@ -137,7 +137,7 @@ export const OrderButtons = memo(({ specificationId, epts, prices, onOrder, adId
               currencyId: 1,
             },
           },
-        })
+        }),
       );
     }
 

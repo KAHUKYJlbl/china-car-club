@@ -2,8 +2,10 @@ import { memo, useState } from "react";
 import cn from "classnames";
 
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
-import { FILTERS } from "../../../app/settings/filters";
+import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { resetFiltersStatus } from "../../../entities/manufacturer";
+import { getDealerName } from "../../../entities/settings";
+import { FILTERS, FILTERS_ROLF } from "../../../app/settings/filters";
 
 import useActiveFilters from "../lib/hooks/use-active-filters";
 import { FilterId } from "../lib/types";
@@ -19,6 +21,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
   const dispatch = useAppDispatch();
   const [currentFilter, setCurrentFilter] = useState(Object.keys(FILTERS)[0] as FilterId);
   const isActiveFilters = useActiveFilters(activeFilters);
+  const dealer = useAppSelector(getDealerName);
 
   const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
     const newFilters = {
@@ -95,7 +98,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
       </div>
 
       <div className={classes.row}>
-        {Object.entries(FILTERS)
+        {Object.entries(dealer.toLowerCase().includes("rolf") ? FILTERS_ROLF : FILTERS)
           .filter((filter) => filter[1].isNew || !isNewFilters)
           .map((filter) => (
             <button
@@ -115,7 +118,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
                     (element) =>
                       element.filterId &&
                       activeFilters[element.filterId] &&
-                      activeFilters[element.filterId]?.length !== 0
+                      activeFilters[element.filterId]?.length !== 0,
                   ))) && <div className={classes.activeFilter} />}
             </button>
           ))}
@@ -136,7 +139,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
                   currentFilter === "other" &&
                   element.filterId &&
                   activeFilters[element.filterId]?.some((filter) => filter === element.elementId),
-              }
+              },
             )}
             onClick={() => handleActiveFiltersClick(element.filterId || currentFilter, element.elementId)}
           >
@@ -148,7 +151,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
           (currentFilter === "other" &&
             FILTERS.other?.elements.some(
               (element) =>
-                element.filterId && activeFilters[element.filterId] && activeFilters[element.filterId]?.length !== 0
+                element.filterId && activeFilters[element.filterId] && activeFilters[element.filterId]?.length !== 0,
             ))) && (
           <button
             aria-label="очистить фильтры этого типа"

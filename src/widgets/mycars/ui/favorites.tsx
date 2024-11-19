@@ -54,7 +54,7 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
           .toSorted((a, b) =>
             currentSort === "increase"
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
-              : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+              : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
           )
           .map((favorite) =>
             mode === SiteModes.New ? (
@@ -69,7 +69,7 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
                 favorite={favorite}
                 key={favorite.id}
               />
-            )
+            ),
           )}
       </ul>
 

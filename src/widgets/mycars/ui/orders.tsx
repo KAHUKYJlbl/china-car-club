@@ -51,7 +51,7 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
           .toSorted((a, b) =>
             currentSort === "increase"
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
-              : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+              : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
           )
           .map((order) =>
             mode === SiteModes.New ? (
@@ -64,7 +64,7 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
                 order={order}
                 key={order.id}
               />
-            )
+            ),
           )}
       </ul>
 

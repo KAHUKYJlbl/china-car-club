@@ -245,3 +245,168 @@ export const FILTERS: Partial<Record<FilterId, FilterType>> = {
     ],
   },
 };
+
+export const FILTERS_ROLF: Partial<Record<FilterId, FilterType>> = {
+  price: {
+    isNew: true,
+    name: "Цена в России",
+    elements: [
+      {
+        elementId: 3,
+        name: "3-5 млн",
+      },
+      {
+        elementId: 4,
+        name: "5-10 млн",
+      },
+      {
+        elementId: 5,
+        name: "10+ млн",
+      },
+    ],
+  },
+  mileage: {
+    isNew: false,
+    name: "Пробег",
+    elements: [
+      {
+        elementId: 1,
+        name: "до 10 тыс.",
+      },
+      {
+        elementId: 2,
+        name: "от 10 до 30 тыс",
+      },
+      {
+        elementId: 3,
+        name: "от 30 до 60 тыс",
+      },
+      {
+        elementId: 4,
+        name: "от 60 до 100 тыс",
+      },
+      {
+        elementId: 5,
+        name: "от 100 тыс",
+      },
+    ],
+  },
+  age: {
+    isNew: false,
+    name: "Возраст ТС",
+    elements: [
+      {
+        elementId: 1,
+        name: "до 1 года",
+      },
+      {
+        elementId: 2,
+        name: "1-3 года",
+      },
+      {
+        elementId: 3,
+        name: "3-5 лет",
+      },
+    ],
+  },
+  engine: {
+    isNew: true,
+    name: "Двигатель",
+    elements: [
+      {
+        elementId: 3,
+        name: "Электро",
+      },
+      {
+        elementId: 10,
+        name: "Гибрид REV",
+      },
+    ],
+  },
+  body: {
+    isNew: true,
+    name: "Кузов",
+    elements: [
+      {
+        elementId: 1,
+        name: "Внедорожник",
+      },
+      {
+        elementId: 6,
+        name: "Седан",
+      },
+      {
+        elementId: 9,
+        name: "MPV",
+      },
+    ],
+  },
+  transmission: {
+    isNew: true,
+    name: "Коробка",
+    elements: [
+      {
+        elementId: 1,
+        name: "Автоматическая",
+      },
+    ],
+  },
+  drive: {
+    isNew: true,
+    name: "Привод",
+    elements: [
+      {
+        elementId: 3,
+        name: "Полный",
+      },
+      {
+        elementId: 1,
+        name: "Передний",
+      },
+      {
+        elementId: 2,
+        name: "Задний",
+      },
+    ],
+  },
+  region: {
+    isNew: true,
+    name: "Страна",
+    elements: [
+      {
+        elementId: 5,
+        name: "Китай",
+      },
+      {
+        elementId: 2,
+        name: "Америка",
+      },
+    ],
+  },
+  other: {
+    isNew: true,
+    name: "Отличие",
+    elements: [
+      {
+        filterId: "seats",
+        elementId: 2,
+        name: "Больше 5 мест",
+      },
+      {
+        filterId: "powerReserve",
+        elementId: 3,
+        name: "Запас хода 600+ км",
+      },
+      {
+        filterId: "acceleration",
+        elementId: 4,
+        name: "0-100 до 7 секунд",
+      },
+      {
+        filterId: "date",
+        elementId: 5,
+        name: "Свежее поколение",
+      },
+    ],
+  },
+};

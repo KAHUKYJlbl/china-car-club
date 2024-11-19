@@ -53,7 +53,7 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
           .toSorted((a, b) =>
             currentSort === "increase"
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
-              : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+              : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
           )
           .map((calculation) =>
             mode === SiteModes.New ? (
@@ -68,7 +68,7 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
                 calculation={calculation}
                 key={calculation.id}
               />
-            )
+            ),
           )}
       </ul>
 

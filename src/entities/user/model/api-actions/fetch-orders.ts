@@ -24,7 +24,7 @@ export const fetchOrders = createAsyncThunk<
     });
 
     return data;
-  } catch (err) {
+  } catch (_err) {
     throw Error("Unable to get Orders");
   }
 });

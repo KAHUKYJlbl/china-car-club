@@ -23,6 +23,8 @@ export const getCurrentSiteMode = (state: State): number => state[NameSpace.Sett
 
 export const getPolicy = (state: State): string => state[NameSpace.Settings].policyUrl;
 
+export const getBotName = (state: State): string => state[NameSpace.Settings].tgBotName;
+
 export const getSettingsLoadingStatus = createSelector(
   (state: State) => state[NameSpace.Settings].settingsLoadingStatus,
   (status) => ({

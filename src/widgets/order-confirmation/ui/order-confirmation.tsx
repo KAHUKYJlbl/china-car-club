@@ -253,7 +253,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
 
           <div className={classes.block}>
             <p>
-              Быстрый расчет цены:
+              Цена в РФ с растаможиванием:
               <br />
               <b>
                 {`${priceFormat(
@@ -410,8 +410,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
         <div className={cn(classes.subwrapper, classes.conditions)}>
           <div className={classes.block}>
             <p className={classes.header}>
-              ❷ Укажите предпочтительные условия продажи автомобиля, чтобы получить предложения с&nbsp;максимальной
-              выгодой
+              ❷ Укажите дополнительную информацию, чтобы получить предложения с&nbsp;максимальной выгодой
             </p>
 
             <button
@@ -524,7 +523,7 @@ export const OrderConfirmation = memo(({ cancelConfirmation }: OrderConfirmation
         </div>
 
         <div className={cn(classes.subwrapper, classes.confirm)}>
-          <button type="submit">Отправить предпочтения</button>
+          <button type="submit">Отправить</button>
         </div>
 
         {isSupplier && (

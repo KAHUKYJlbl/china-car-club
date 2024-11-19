@@ -10,6 +10,7 @@ import { getCurrentCity, NewHeaderUser, setCity } from "../../../entities/user";
 import {
   ChooseSiteMode,
   getCurrentSiteMode,
+  getDealerName,
   getLogo,
   getPhone,
   getSettingsLoadingStatus,
@@ -38,6 +39,7 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
   const manufacturersLoadingStatus = useAppSelector(getManufacturersLoadingStatus);
   const settingsLoadingstatus = useAppSelector(getSettingsLoadingStatus);
   const mode = useAppSelector(getCurrentSiteMode);
+  const dealer = useAppSelector(getDealerName);
 
   useEffect(() => {
     if (manufacturersLoadingStatus.isIdle) {
@@ -63,7 +65,7 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
         </p>
 
         <p>
-          <span>Закажите по телефону: </span>
+          <span>{dealer.toLowerCase().includes("rolf") ? "Закажите по телефону: " : "Бесплатно по России: "}</span>
           <Link
             aria-label="позвонить нам"
             to={`tel:+${phone}`}
