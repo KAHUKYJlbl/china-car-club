@@ -22,6 +22,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
   const [currentFilter, setCurrentFilter] = useState(Object.keys(FILTERS)[0] as FilterId);
   const isActiveFilters = useActiveFilters(activeFilters);
   const dealer = useAppSelector(getDealerName);
+  const filters = dealer.toLowerCase().includes("rolf") ? FILTERS_ROLF : FILTERS;
 
   const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
     const newFilters = {
@@ -98,23 +99,23 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
       </div>
 
       <div className={classes.row}>
-        {Object.entries(dealer.toLowerCase().includes("rolf") ? FILTERS_ROLF : FILTERS)
+        {Object.entries(filters)
           .filter((filter) => filter[1].isNew || !isNewFilters)
           .map((filter) => (
             <button
-              aria-label={FILTERS[filter[0] as FilterId]?.name}
+              aria-label={filters[filter[0] as FilterId]?.name}
               key={filter[0]}
               className={cn(classes.filterButton, {
                 [classes.active]: filter[0] === currentFilter,
               })}
               onClick={() => setCurrentFilter(filter[0] as FilterId)}
             >
-              {FILTERS[filter[0] as FilterId]?.name}
+              {filters[filter[0] as FilterId]?.name}
 
               {((activeFilters[filter[0] as FilterId] !== undefined &&
                 activeFilters[filter[0] as FilterId]?.length !== 0) ||
                 (filter[0] === "other" &&
-                  FILTERS.other?.elements.some(
+                  filters.other?.elements.some(
                     (element) =>
                       element.filterId &&
                       activeFilters[element.filterId] &&
@@ -125,7 +126,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
       </div>
 
       <div className={classes.row}>
-        {FILTERS[currentFilter]?.elements.map((element) => (
+        {filters[currentFilter]?.elements.map((element) => (
           <button
             aria-label={element.name}
             key={element.elementId}
