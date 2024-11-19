@@ -65,7 +65,7 @@ export const NewHeader = ({ isUsedSwitch = false, isCitySwitch = false }: NewHea
         </p>
 
         <p>
-          <span>{dealer.toLowerCase().includes("rolf") ? "Закажите по телефону: " : "Бесплатно по России: "}</span>
+          <span>{dealer.toLowerCase().includes("рольф") ? "Закажите по телефону: " : "Бесплатно по России: "}</span>
           <Link
             aria-label="позвонить нам"
             to={`tel:+${phone}`}

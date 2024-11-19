@@ -22,7 +22,7 @@ export const Filter = memo(({ activeFilters, setActiveFilters, isNewFilters = fa
   const [currentFilter, setCurrentFilter] = useState(Object.keys(FILTERS)[0] as FilterId);
   const isActiveFilters = useActiveFilters(activeFilters);
   const dealer = useAppSelector(getDealerName);
-  const filters = dealer.toLowerCase().includes("rolf") ? FILTERS_ROLF : FILTERS;
+  const filters = dealer.toLowerCase().includes("рольф") ? FILTERS_ROLF : FILTERS;
 
   const handleActiveFiltersClick = (filter: FilterId, elementId: number) => {
     const newFilters = {

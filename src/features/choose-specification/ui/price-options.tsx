@@ -129,7 +129,7 @@ export const PriceOptions = memo(
             </>
           )}
 
-          {!dealer.toLowerCase().includes("rolf") && (
+          {!dealer.toLowerCase().includes("рольф") && (
             <div className={classes.row}>
               <p>Доп. товары к авто</p>
               <p>
