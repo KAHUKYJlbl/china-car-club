@@ -250,7 +250,7 @@ export const PriceOptions = memo(
               <p className={classes.grey}>{!!addOptions?.options.length && "Изменить"}</p>
             </div>
 
-            {!dealer.toLowerCase().includes("rolf") && (
+            {!dealer.toLowerCase().includes("рольф") && (
               <div
                 className={cn(classes.option, addedItems.length && classes.active)}
                 onClick={addProductsCallback}
