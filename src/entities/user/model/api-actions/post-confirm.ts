@@ -1,12 +1,11 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosInstance } from 'axios';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosInstance } from "axios";
 
-import { AppDispatch, State } from '../../../../app/provider/store';
-import { APIRoute } from '../../../../shared/api/routes';
+import { AppDispatch, State } from "../../../../app/provider/store";
+import { APIRoute } from "../../../../shared/api/routes";
 
-import { ConfirmType, TokenType } from '../../lib/types';
-import { setToken } from '../../../../shared/api/token';
-
+import { ConfirmType, TokenType } from "../../lib/types";
+import { setToken } from "../../../../shared/api/token";
 
 export const postConfirm = createAsyncThunk<
   void,
@@ -16,14 +15,11 @@ export const postConfirm = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
-> (
-  'User/postConfirm',
-  async ( pin, {extra: axios}) => {
-    try {
-      const { data } = await axios.post<TokenType>(APIRoute.AuthConfirm, pin);
-      setToken(data.accessToken);
-    } catch (err) {
-      throw Error('Unable to post Auth Confirm');
-    }
-  },
-);
+>("User/postConfirm", async (pin, { extra: axios }) => {
+  try {
+    const { data } = await axios.post<TokenType>(APIRoute.AuthConfirm, pin);
+    setToken(data.accessToken);
+  } catch (_err) {
+    throw Error("Unable to post Auth Confirm");
+  }
+});

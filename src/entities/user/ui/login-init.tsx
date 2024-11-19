@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useAppSelector } from "../../../shared/lib/hooks/use-app-selector";
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
-import { getDealerName } from "../../settings";
+import { getBotName, getDealerName } from "../../settings";
 
 import { getUser, getUserLoadingStatus } from "../model/user-selectors";
 import { LoginModeType } from "../lib/types";
@@ -17,6 +17,7 @@ export const LoginInit = ({ setMode }: LoginInitProps) => {
   const user = useAppSelector(getUser);
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
   const dealerName = useAppSelector(getDealerName);
+  const bot = useAppSelector(getBotName);
 
   if (userLoadingStatus.isLoading || !user) {
     return <LoadingSpinner spinnerType="widget" />;
@@ -47,7 +48,7 @@ export const LoginInit = ({ setMode }: LoginInitProps) => {
 
           <Link
             aria-label="войти через телеграм"
-            to={`tg://resolve?domain=ID_ChinaCarClub_bot&start=auth_hash_${user.hash}`}
+            to={`tg://resolve?domain=${bot}&start=auth_hash_${user!.hash}`}
             className={cn(classes.button, classes.telegram)}
             onClick={() => setMode("confirm-telegram")}
           >

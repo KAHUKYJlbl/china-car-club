@@ -101,7 +101,7 @@ export const ConfirmTelegram = ({ onClose, onLogin, setMode }: ConfirmPhoneProps
             ) : (
               <Link
                 aria-label="запросить новый код"
-                to={`tg://resolve?domain=${process.env.TELEGRAM_BOT}&start=auth_hash_${user!.hash}`}
+                to={`tg://resolve?domain=${bot}&start=auth_hash_${user!.hash}`}
                 className={cn(classes.small, classes.timer, classes.new)}
                 onClick={() => timer.restart(dayjs().add(NEW_PIN_TIME, "s").toDate())}
               >
