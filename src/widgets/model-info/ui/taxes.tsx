@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import cn from "classnames";
 
 import { getSpecifications, getSpecificationsLoadingStatus } from "../../../entities/specification";
-import { Currencies, getCurrency, getCurrencyExchange } from "../../../entities/currency";
+import { Currencies, Currency, getCurrency, getCurrencyExchange } from "../../../entities/currency";
 import { getCurrentTax, setCurrentTax } from "../../../entities/order";
 import { getShorts, SpecsType } from "../../../entities/model";
 import { getName } from "../../../entities/manufacturer";
@@ -239,6 +239,10 @@ export const Taxes = memo(({ currentSpecification, setCurrentSpecification, tech
             </>
           )}
         </div>
+      </div>
+
+      <div className={classes.wrapper}>
+        <Currency />
       </div>
     </>
   );

@@ -85,6 +85,8 @@ export type MycarsOrderType = {
       ch: string;
     };
   };
+  dealerOfferState: number;
+  colors: [{ items: [{ name: { ch: string; ru?: string } }] }, { items: [{ name: { ch: string; ru?: string } }] }];
   specificationAd?: {
     id: number;
     calcVisible: boolean;

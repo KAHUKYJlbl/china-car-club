@@ -28,7 +28,7 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
       className={cn(
         classes.wrapper,
         !calculation.specificationAd?.calcVisible && classes.opacity,
-        calculation.specification.series.priceListWithLogisticsByCurrentDay.length === 0 && classes.opacity
+        calculation.specification.series.priceListWithLogisticsByCurrentDay.length === 0 && classes.opacity,
       )}
     >
       <div className={classes.info}>
@@ -69,7 +69,7 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
                     dayjs().diff(dayjs(calculation.specificationAd?.ageDate), "years"),
                     "%d год",
                     "%d года",
-                    "%d лет"
+                    "%d лет",
                   )
             } ${(dayjs().diff(dayjs(calculation.specificationAd?.ageDate), "M") % 12) + 1} мес`}
           </span>
@@ -78,22 +78,22 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
         <p className={classes.properties}>
           {[
             FILTERS.engine!.elements.find(
-              (element) => element.elementId === calculation.specification.parameters?.engineTypeId
+              (element) => element.elementId === calculation.specification.parameters?.engineTypeId,
             )?.name || null,
             FILTERS.body!.elements.find(
-              (element) => element.elementId === calculation.specification.parameters?.bodyTypeId
+              (element) => element.elementId === calculation.specification.parameters?.bodyTypeId,
             )?.name || null,
             calculation.specification.parameters?.driveTypeId
               ? `${
                   FILTERS.drive!.elements.find(
-                    (element) => element.elementId === calculation.specification.parameters?.driveTypeId
+                    (element) => element.elementId === calculation.specification.parameters?.driveTypeId,
                   )?.name
                 } привод`
               : null,
             calculation.specification.parameters?.transmissionTypeId
               ? `${
                   FILTERS.transmission!.elements.find(
-                    (element) => element.elementId === calculation.specification.parameters?.transmissionTypeId
+                    (element) => element.elementId === calculation.specification.parameters?.transmissionTypeId,
                   )?.name
                 } коробка передач`
               : null,
@@ -106,26 +106,26 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
 
         {calculation.specification.series.priceListWithLogisticsByCurrentDay.length !== 0 && (
           <p className={classes.price}>
-            <span className={classes.grey}>Цена в России с растаможкой</span>
+            <span className={classes.grey}>Цена в России с растаможиванием</span>
             <span className={classes.bold}>
               {priceFormat(
                 getCurrencyExchange(
                   calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
-                    (a, b) => a.price - b.price
+                    (a, b) => a.price - b.price,
                   )[0].price,
                   Currencies.RUB,
-                  currency
-                )
+                  currency,
+                ),
               )}{" "}
               ₽ —{" "}
               {priceFormat(
                 getCurrencyExchange(
                   calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
-                    (a, b) => b.price - a.price
+                    (a, b) => b.price - a.price,
                   )[0].price,
                   Currencies.RUB,
-                  currency
-                )
+                  currency,
+                ),
               )}{" "}
               ₽
             </span>
@@ -140,7 +140,7 @@ export const UsedCalculation = memo(({ calculation, currency }: CalculationProps
             aria-label="перейти к расчету"
             onClick={() =>
               navigate(
-                `${AppRoute.Used}${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}&ad=${calculation.specificationAd?.id}`
+                `${AppRoute.Used}${AppRoute.Model}?model=${calculation.specification.series.id}&spec=${calculation.specification.id}&ad=${calculation.specificationAd?.id}`,
               )
             }
           >

@@ -8,15 +8,15 @@ export const getManufacturers = (state: State) => state[NameSpace.Manufacturer].
 export const getFullList = (state: State) => state[NameSpace.Manufacturer].fullListManufacturers;
 
 export const getCarsCount = createSelector(getManufacturers, (manufacturers) => ({
-  manufacturersCount: manufacturers?.manufacturersCount || 100,
-  seriesCount: manufacturers?.seriesCount || 1000,
-  specificationsCount: manufacturers?.specificationsCount || 9000,
+  manufacturersCount: manufacturers?.manufacturersCount || 0,
+  seriesCount: manufacturers?.seriesCount || 0,
+  specificationsCount: manufacturers?.specificationsCount || 0,
 }));
 
 export const getFullListCount = createSelector(getFullList, (manufacturers) => ({
-  manufacturersCount: manufacturers?.manufacturersCount || 100,
-  seriesCount: manufacturers?.seriesCount || 1000,
-  specificationsCount: manufacturers?.specificationsCount || 9000,
+  manufacturersCount: manufacturers?.manufacturersCount || 0,
+  seriesCount: manufacturers?.seriesCount || 0,
+  specificationsCount: manufacturers?.specificationsCount || 0,
 }));
 
 export const getManufacturersLoadingStatus = createSelector(
@@ -26,7 +26,7 @@ export const getManufacturersLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getFiltersLoadingStatus = createSelector(
@@ -36,7 +36,7 @@ export const getFiltersLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getSpecsLoadingStatus = createSelector(
@@ -45,7 +45,7 @@ export const getSpecsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getManuacturersList = createSelector(getManufacturers, (manufacturers) =>
@@ -54,7 +54,7 @@ export const getManuacturersList = createSelector(getManufacturers, (manufacture
     id: manufacturer.id,
     sublistLength: manufacturer.seriesList.length,
     isHighlight: manufacturer.top,
-  }))
+  })),
 );
 
 export const getModelsList = createSelector(
@@ -70,13 +70,13 @@ export const getModelsList = createSelector(
               ? manufacturers.specificationsCountBySeries[model.id]
               : null,
           }))
-      : null
+      : null,
 );
 
 export const getName = createSelector([getFullList, (_state: State, id: number | null) => id], (manufacturers, id) => {
   if (id) {
     const manufacturer = manufacturers?.manufacturers?.find((manufacturer) =>
-      manufacturer.seriesList.some((series) => series.id === id)
+      manufacturer.seriesList.some((series) => series.id === id),
     );
 
     if (manufacturer) {
@@ -100,10 +100,10 @@ export const getManufacturerByModel = createSelector(
   (manufacturers, id) => {
     if (id) {
       return manufacturers?.manufacturers?.find((manufacturer) =>
-        manufacturer.seriesList.some((series) => series.id === id)
+        manufacturer.seriesList.some((series) => series.id === id),
       )?.id;
     }
 
     return null;
-  }
+  },
 );

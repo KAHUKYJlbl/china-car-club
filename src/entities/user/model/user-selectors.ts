@@ -39,7 +39,7 @@ export const getUserLoadingStatus = createSelector(
     isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getOrdersLoadingStatus = createSelector(
@@ -49,7 +49,7 @@ export const getOrdersLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getCalculationsLoadingStatus = createSelector(
@@ -59,7 +59,7 @@ export const getCalculationsLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getFavoritesLoadingStatus = createSelector(
@@ -69,7 +69,7 @@ export const getFavoritesLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getFavoritesCountLoadingStatus = createSelector(
@@ -79,7 +79,7 @@ export const getFavoritesCountLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );
 
 export const getFavoritesByIdLoadingStatus = createSelector(
@@ -89,5 +89,5 @@ export const getFavoritesByIdLoadingStatus = createSelector(
     isLoading: status === FetchStatus.Pending,
     isSuccess: status === FetchStatus.Success,
     isFailed: status === FetchStatus.Failed,
-  })
+  }),
 );

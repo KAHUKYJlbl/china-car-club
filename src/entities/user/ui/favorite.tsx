@@ -32,7 +32,7 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
 
   const useFavoriteList = () => {
     return favoritesList.find(
-      (element) => element.favorableId === (favorite.cardData.specification.id || favorite.cardData.series.id)
+      (element) => element.favorableId === (favorite.cardData.specification.id || favorite.cardData.series.id),
     )?.id;
   };
 
@@ -48,7 +48,7 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
       postFavorite({
         typeId: favorite.type,
         favorableId: favorite.cardData.specification.id || favorite.cardData.series.id,
-      })
+      }),
     );
   };
 
@@ -92,18 +92,18 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
           {favorite.cardData.specification
             ? [
                 FILTERS.engine!.elements.find(
-                  (element) => element.elementId === favorite.cardData.parameters.engineTypeId
+                  (element) => element.elementId === favorite.cardData.parameters.engineTypeId,
                 )?.name || null,
                 FILTERS.body!.elements.find((element) => element.elementId === favorite.cardData.parameters?.bodyTypeId)
                   ?.name || null,
                 `${
                   FILTERS.drive!.elements.find(
-                    (element) => element.elementId === favorite.cardData.parameters?.driveTypeId
+                    (element) => element.elementId === favorite.cardData.parameters?.driveTypeId,
                   )?.name
                 } привод` || null,
                 `${
                   FILTERS.transmission!.elements.find(
-                    (element) => element.elementId === favorite.cardData.parameters?.transmissionTypeId
+                    (element) => element.elementId === favorite.cardData.parameters?.transmissionTypeId,
                   )?.name
                 } коробка передач` || null,
                 favorite.cardData.parameters.powerReserve &&
@@ -115,7 +115,7 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
         </p>
 
         <p className={classes.price}>
-          <span className={classes.grey}>Мин. цена в китае</span>
+          <span className={classes.grey}>Цена в РФ без растаможивания</span>
           <span className={classes.bold}>
             {priceFormat(getCurrencyExchange(favorite.cardData.price.min, Currencies.RUB, currency))} ₽
             {favorite.cardData.price.max &&
@@ -130,7 +130,7 @@ export const Favorite = memo(({ favorite, currency }: FavoriteProps) => {
           aria-label="рассчитать цену"
           onClick={() =>
             navigate(
-              `${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${favorite.cardData.specification.id}`
+              `${AppRoute.Model}?model=${favorite.cardData.series.id}&spec=${favorite.cardData.specification.id}`,
             )
           }
         >
