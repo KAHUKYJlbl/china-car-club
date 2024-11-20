@@ -106,7 +106,7 @@ export const ChooseDelivery = memo(({ modelId, specificationId }: ChooseDelivery
           to={AppRoute.Policy}
           target="_blank"
         >
-          с&nbsp;политикой&nbsp;конфиденциальности`
+          с&nbsp;политикой&nbsp;конфиденциальности
         </Link>
       </p>
 
