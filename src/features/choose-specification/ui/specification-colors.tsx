@@ -61,7 +61,7 @@ export const SpecificationColors = () => {
       <div className={classes.wrapper}>
         <p className={classes.header}>Доступные цвета кузова:</p>
         <ul className={classes.radio}>
-          {addColors.groups[0].items.map((color) => (
+          {addColors.groups[0] && addColors.groups[0].items.map((color) => (
             <li key={color.id}>
               <label className={cn(watch("ext") == color.id && classes.checked)}>
                 <div className={cn(classes.checkbox, watch("ext") == color.id && classes.checked)}>
@@ -113,7 +113,7 @@ export const SpecificationColors = () => {
       <div className={classes.wrapper}>
         <p className={classes.subheader}>Доступные цвета салона:</p>
         <ul className={classes.radio}>
-          {addColors.groups[1].items.map((color) => (
+          {addColors.groups[1] && addColors.groups[1].items.map((color) => (
             <li key={color.id}>
               <label className={cn(watch("int") == color.id && classes.checked)}>
                 <div className={cn(classes.checkbox, watch("int") == color.id && classes.checked)}>
