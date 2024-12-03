@@ -79,7 +79,7 @@ export type MycarsOrderType = {
   availabilityOfEpts: boolean;
   addItems: string[];
   hasAddOptions: boolean;
-  warranity: {
+  warranty: {
     name: {
       ru?: string;
       ch: string;

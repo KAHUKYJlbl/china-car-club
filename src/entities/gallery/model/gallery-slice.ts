@@ -1,11 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { NameSpace } from '../../../app/provider/store';
-import { FetchStatus } from '../../../shared/api/fetch-status';
+import { NameSpace } from "../../../app/provider/store";
+import { FetchStatus } from "../../../shared/api/fetch-status";
 
-import { GalleryType } from '../lib/types';
-import { fetchPromo } from './api-actions/fetch-promo';
-
+import { GalleryType } from "../lib/types";
+import { fetchPromo } from "./api-actions/fetch-promo";
 
 type InitialState = {
   promoGallery: GalleryType[];
@@ -35,7 +34,7 @@ export const gallerySlice = createSlice({
             id: promo.manufacturer.id,
           },
           url: promo.imageUrls,
-        }))
+        }));
         state.promoGalleryLoadingStatus = FetchStatus.Success;
       })
       .addCase(fetchPromo.pending, (state) => {

@@ -49,6 +49,7 @@ import { Techs } from "./techs";
 import { Taxes } from "./taxes";
 import { Adds } from "./adds";
 import classes from "./model-info.module.sass";
+import { Warranty } from "./warranty";
 
 type ModelInfoProps = {
   setConfirmation: () => void;
@@ -78,6 +79,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
   // popups
   const [isTechs, setIsTechs] = useState(false);
   const [isAddProducts, setIsAddProducts] = useState(false);
+  const [isWarranty, setIsWarranty] = useState(false);
   const [isTaxes, setIsTaxes] = useState(false);
   const [isPriceHistory, setIsPriceHistory] = useState(false);
   const [isQuestions, setIsQuestions] = useState(false);
@@ -219,6 +221,7 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
             colorsCallback={() => setIsColors(true)}
             optionsCallback={() => setIsAddOptions(true)}
             addProductsCallback={() => setIsAddProducts(true)}
+            addWarrantyCallback={() => setIsWarranty(true)}
             taxesCallback={() => setIsTaxes(true)}
           />
         </div>
@@ -333,6 +336,16 @@ export const ModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element => {
             setCurrentSpecification={setCurrentSpecification}
             techs={specificationParams}
           />
+        </Modal>
+      )}
+
+      {isWarranty && (
+        <Modal
+          onClose={() => setIsWarranty(false)}
+          width
+          button
+        >
+          <Warranty />
         </Modal>
       )}
     </div>

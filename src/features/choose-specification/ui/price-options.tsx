@@ -41,6 +41,7 @@ type PriceOptionsProps = {
   colorsCallback: () => void;
   optionsCallback?: () => void;
   addProductsCallback: () => void;
+  addWarrantyCallback: () => void;
   taxesCallback: () => void;
 };
 
@@ -51,6 +52,7 @@ export const PriceOptions = memo(
     colorsCallback,
     optionsCallback,
     addProductsCallback,
+    addWarrantyCallback,
     taxesCallback,
   }: PriceOptionsProps): JSX.Element => {
     const dispatch = useAppDispatch();
@@ -265,11 +267,17 @@ export const PriceOptions = memo(
               </div>
             )}
 
-            <div className={cn(classes.option, classes.disabled)}>
+            <div
+              className={cn(classes.option, classes.active)}
+              onClick={addWarrantyCallback}
+            >
               <div>
                 <span className={classes.big}>Гарантия</span>
-                <span className={classes.small}>Скоро появится</span>
+                <span className={cn(classes.grey, classes.small)}>
+                  Выбрано: {dealer.toLowerCase().includes("рольф") ? 2 : 1}
+                </span>
               </div>
+              <p className={classes.grey}>Изменить</p>
             </div>
           </div>
         </div>

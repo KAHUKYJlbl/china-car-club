@@ -53,19 +53,19 @@ export const Order = memo(({ order }: OrderProps) => {
             <span key={item}>{item}</span>
           ))} */}
 
-          <span>
-            {order.colors[0] && `Цвет кузова: ${order.colors[0].items[0].name.ru || order.colors[0].items[0].name.ru}`}
-          </span>
+          {order.colors[0] && (
+            <span>Цвет кузова: {order.colors[0].items[0].name.ru || order.colors[0].items[0].name.ru}</span>
+          )}
 
-          <span>
-            {order.colors[1] && `Цвет салона: ${order.colors[1].items[0].name.ru || order.colors[0].items[0].name.ru}`}
-          </span>
+          {order.colors[1] && (
+            <span>Цвет салона: {order.colors[1].items[0].name.ru || order.colors[0].items[0].name.ru}</span>
+          )}
 
           {order.addItems.length > 0 && <span>Доп. товары на автомобиль</span>}
 
           {order.hasAddOptions && <span>Доп. опции на автомобиль</span>}
 
-          {order.warranity && <span>{order.warranity.name.ru || order.warranity.name.ch}</span>}
+          {!!order.warranty && <span>{order.warranty.name.ru || order.warranty.name.ch}</span>}
         </p>
       </div>
 
