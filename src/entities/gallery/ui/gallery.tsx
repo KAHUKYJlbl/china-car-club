@@ -44,8 +44,8 @@ export const Gallery = memo(
     const dispatch = useAppDispatch();
 
     const [currentImage, setCurrentImage] = useState(initSlide);
-    const [preloadedImages, setPreloadedImages] = useState<string[]>([]);
     const [gallery, setGallery] = useState<GalleryType[]>([]);
+    const [preloadedImages, setPreloadedImages] = useState<string[]>([]);
     const [isLogin, setIsLogin] = useState(false);
     const [favoriteIdToAdd, setFavoriteIdToAdd] = useState<number | null>(null);
     const isAuth = useAppSelector(getAuthStatus);
@@ -103,6 +103,10 @@ export const Gallery = memo(
     }, [gallery, isAuth]);
 
     useEffect(() => {
+      if (gallery.length > 0) {
+        setPreloadedImages([gallery[0].url.big]);
+      }
+
       const promises = gallery.map(
         (image) =>
           new Promise<string>((resolve, reject) => {
