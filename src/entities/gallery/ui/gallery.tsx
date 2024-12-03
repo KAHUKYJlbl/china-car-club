@@ -196,12 +196,12 @@ export const Gallery = memo(
       >
         <div
           className={classes.background}
-          style={{
-            backgroundImage: `url(${process.env.STATIC_URL || `${window.location.origin}/storage`}${
-              gallery[currentImage].url.original
-            })`,
-            backgroundSize: "cover",
-          }}
+          // style={{
+          //   backgroundImage: `url(${process.env.STATIC_URL || `${window.location.origin}/storage`}${
+          //     gallery[currentImage].url.original
+          //   })`,
+          //   backgroundSize: "cover",
+          // }}
         >
           <img
             src={preloadedImages[currentImage]}
