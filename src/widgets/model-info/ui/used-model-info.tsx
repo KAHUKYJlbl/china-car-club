@@ -134,6 +134,7 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
             setIsTaxes={setIsTaxes}
             colorsCallback={() => setIsColors(true)}
             addProductsCallback={() => setIsAddProducts(true)}
+            addWarrantyCallback={() => null}
             taxesCallback={() => setIsTaxes(true)}
           />
         </div>
@@ -157,7 +158,7 @@ export const UsedModelInfo = ({ setConfirmation }: ModelInfoProps): JSX.Element 
                 },
                 currency,
                 currentCurrency,
-              })
+              }),
             ),
             minPrice: adInfo.prices.inChina,
             tax: adInfo.prices.tax,
