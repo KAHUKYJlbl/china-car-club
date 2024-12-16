@@ -3,6 +3,7 @@
 .wrapper
   display: flex
   flex-direction: column
+  text-align: start
   gap: 12px
 
   padding: 16px 12px
@@ -10,58 +11,71 @@
   border-radius: 16px
   background-color: $primary
 
-  text-align: start
-  font-size: 12px
+  font-size: 14px
   line-height: 16px
 
-  .header
+  p
     display: flex
     flex-direction: column
-    gap: 8px
+    gap: 4px
 
-    font-size: 18px
-    line-height: 22px
+  .header
     font-weight: 700
 
-  .contacts
+  .grey
+    font-size: 12px
+    line-height: 14px
+    color: $text-light
+
+  div
     display: flex
-    flex-direction: column
-    align-items: center
-    gap: 8px
+    gap: 4px
 
     button
-      background-color: transparent
+      flex-grow: 1
+      padding: 8px 0
+
+      background-color: $secondary
+      border-radius: 8px
+
       cursor: pointer
+
+    button:hover
+      background-color: $hover
+
+    .current
+      background-color: $white
+
+    .current:hover
+      background-color: $white
+
+.manager
+  display: flex
+  flex-direction: column
+  gap: 16px
+
+  background-color: $white
+
+  .name
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+
+  .buttons
+    display: grid
+    gap: 2%
+    grid-template-columns: 49% 49%
 
     a
       display: flex
       justify-content: center
       align-items: center
-      gap: 12px
-      width: max-content
 
-      cursor: pointer
-
-    .contact-button
       height: 40px
-      width: 100%
 
-      border-radius: 12px
       background-color: $secondary
+      border-radius: 8px
 
-      font-size: 14px
-      line-height: 18px
-      font-weight: 700
-
-    .contact-button:hover
+    a:hover
       background-color: $hover
 
-      color: $text-primary
-
-    .telegram
-      background-color: #229ED9
-      color: $white
-
-    .whatsapp
-      background-color: #25d366
-      color: $white

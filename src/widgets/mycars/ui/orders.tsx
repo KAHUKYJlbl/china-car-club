@@ -47,8 +47,8 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
   return (
     <>
       <ul className={classes.list}>
-        {orders
-          .toSorted((a, b) =>
+        {[...orders]
+          .sort((a, b) =>
             currentSort === "increase"
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
               : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
