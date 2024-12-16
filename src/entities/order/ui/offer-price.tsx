@@ -17,6 +17,7 @@ import {
 import { getDiscount } from "../lib/utils/get-discount";
 import { OfferType } from "../lib/types";
 import classes from "./offer-price.module.sass";
+import { useState } from "react";
 
 type OfferPriceProps = {
   offer: OfferType;
@@ -27,6 +28,8 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
 
   const currency = useAppSelector(getCurrency);
   const currentCurrency = useAppSelector(getCurrentCurrency);
+
+  const [isTaxes, setIsTaxes] = useState(false);
 
   const toggleCurrency = () => {
     switch (currentCurrency) {
@@ -79,8 +82,8 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
                 {priceFormat(
                   getCurrencyExchange(
                     offer.price.priceInCityOfReceipt +
-                      offer.colors[0]?.items[0].price +
-                      offer.colors[1]?.items[0].price +
+                      (offer.colors[0].items[0].price || 0) +
+                      (offer.colors[1].items[0].price || 0) +
                       offer.addOptions.reduce((acc, option) => acc + option.price, 0) +
                       offer.addItems.reduce((acc, item) => acc + item.price, 0),
                     Currencies.RUB,
@@ -111,7 +114,7 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
               <span>
                 {priceFormat(
                   getCurrencyExchange(
-                    offer.colors[0]?.items[0].price + offer.colors[1]?.items[0].price,
+                    (offer.colors[0].items[0].price || 0) + (offer.colors[1].items[0].price || 0),
                     Currencies.RUB,
                     currency,
                   ),
@@ -177,84 +180,94 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
             растаможивания зависит от&nbsp;курса в&nbsp;день её&nbsp;оплаты
           </p>
 
-          <p>Скрыть подробный расчёт растаможивания ↑ ↓</p>
+          <p
+            className={classes.taxes}
+            onClick={() => setIsTaxes((current) => !current)}
+          >
+            {`${isTaxes ? "Скрыть" : "Показать"} подробный расчёт растаможивания ${isTaxes ? "↑" : "↓"}`}
+          </p>
 
-          <div className={classes.list}>
-            <p className={classes.columns}>
-              <span>сбор за таможенное оформление</span>
+          {isTaxes && (
+            <div className={classes.list}>
+              <p className={classes.columns}>
+                <span>сбор за таможенное оформление</span>
 
-              <span>
-                {priceFormat(getCurrencyExchange(offer.price.customsClearance.fee, Currencies.RUB, currency))}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(getCurrencyExchange(offer.price.customsClearance.fee, Currencies.RUB, currency))}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>таможенная пошлина</span>
+              <p className={classes.columns}>
+                <span>таможенная пошлина</span>
 
-              <span>
-                {priceFormat(getCurrencyExchange(offer.price.customsClearance.duty, Currencies.RUB, currency))}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(getCurrencyExchange(offer.price.customsClearance.duty, Currencies.RUB, currency))}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>акциз</span>
+              <p className={classes.columns}>
+                <span>акциз</span>
 
-              <span>
-                {priceFormat(getCurrencyExchange(offer.price.customsClearance.exciseTax, Currencies.RUB, currency))}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(getCurrencyExchange(offer.price.customsClearance.exciseTax, Currencies.RUB, currency))}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>ндс</span>
+              <p className={classes.columns}>
+                <span>ндс</span>
 
-              <span>
-                {priceFormat(getCurrencyExchange(offer.price.customsClearance.nds, Currencies.RUB, currency))}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(getCurrencyExchange(offer.price.customsClearance.nds, Currencies.RUB, currency))}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>утилизационный сбор</span>
+              <p className={classes.columns}>
+                <span>утилизационный сбор</span>
 
-              <span>
-                {priceFormat(getCurrencyExchange(offer.price.customsClearance.recyclingFee, Currencies.RUB, currency))}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(
+                    getCurrencyExchange(offer.price.customsClearance.recyclingFee, Currencies.RUB, currency),
+                  )}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>парковка СВХ + эвакуатор</span>
+              <p className={classes.columns}>
+                <span>парковка СВХ + эвакуатор</span>
 
-              <span>
-                {priceFormat(
-                  getCurrencyExchange(offer.price.customsClearance.parkingTowTruck, Currencies.RUB, currency),
-                )}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(
+                    getCurrencyExchange(offer.price.customsClearance.parkingTowTruck, Currencies.RUB, currency),
+                  )}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>услуги таможенного брокера</span>
+              <p className={classes.columns}>
+                <span>услуги таможенного брокера</span>
 
-              <span>
-                {priceFormat(
-                  getCurrencyExchange(offer.price.customsClearance.customsBrokerServices, Currencies.RUB, currency),
-                )}{" "}
-                {Currencies.RUB}
-              </span>
-            </p>
+                <span>
+                  {priceFormat(
+                    getCurrencyExchange(offer.price.customsClearance.customsBrokerServices, Currencies.RUB, currency),
+                  )}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
 
-            <p className={classes.columns}>
-              <span>получение ЭПТС и СБКТС</span>
+              <p className={classes.columns}>
+                <span>получение ЭПТС и СБКТС</span>
 
-              <span>
-                {priceFormat(getCurrencyExchange(offer.price.eptsSbktsUtil, Currencies.RUB, currency))} {Currencies.RUB}
-              </span>
-            </p>
-          </div>
+                <span>
+                  {priceFormat(getCurrencyExchange(offer.price.eptsSbktsUtil, Currencies.RUB, currency))}{" "}
+                  {Currencies.RUB}
+                </span>
+              </p>
+            </div>
+          )}
 
           <p className={cn(classes.grey, classes.small)}>
             * Физическое лицо может ввозить один автомобиль в&nbsp;год, объёмом двигателя до&nbsp;3&nbsp;л, который
@@ -271,8 +284,8 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
               {priceFormat(
                 getCurrencyExchange(
                   offer.price.priceInCityOfReceipt +
-                    offer.colors[0]?.items[0].price +
-                    offer.colors[1]?.items[0].price +
+                    (offer.colors[0]?.items[0].price || 0) +
+                    (offer.colors[1]?.items[0].price || 0) +
                     offer.addOptions.reduce((acc, option) => acc + option.price, 0) +
                     offer.addItems.reduce((acc, item) => acc + item.price, 0) +
                     offer.price.eptsSbktsUtil +
