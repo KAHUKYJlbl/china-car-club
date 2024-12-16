@@ -87,25 +87,27 @@ export const Offer = ({ orderId, offerState, setOfferState }: OffersProps) => {
         </div>
       </div>
 
-      <div className={cn(classes.wrapper, classes.manager)}>
-        <div className={classes.name}>
-          <span className={classes.grey}>Персональный менежер:</span>
-          <span>{offer.manager.name}</span>
-        </div>
+      {offer.manager && (
+        <div className={cn(classes.wrapper, classes.manager)}>
+          <div className={classes.name}>
+            <span className={classes.grey}>Персональный менежер:</span>
+            <span>{offer.manager.name}</span>
+          </div>
 
-        <div className={classes.buttons}>
-          <Link to={`tel:${offer.manager.contacts[0].contact} target="_self"`}>
-            {`+${offer.manager.contacts[0].contact[1]} ${offer.manager.contacts[0].contact.substring(2, 5)} ${offer.manager.contacts[0].contact.substring(5, 8)} ${offer.manager.contacts[0].contact.substring(8, 10)} ${offer.manager.contacts[0].contact.substring(10)}`}
-          </Link>
+          <div className={classes.buttons}>
+            <Link to={`tel:${offer.manager.contacts[0].contact} target="_self"`}>
+              {`+${offer.manager.contacts[0].contact[1]} ${offer.manager.contacts[0].contact.substring(2, 5)} ${offer.manager.contacts[0].contact.substring(5, 8)} ${offer.manager.contacts[0].contact.substring(8, 10)} ${offer.manager.contacts[0].contact.substring(10)}`}
+            </Link>
 
-          <Link
-            to={`https://wa.me/${offer.manager.contacts[0].contact.slice(1)}`}
-            target="_blank"
-          >
-            Написать в WhatsApp
-          </Link>
+            <Link
+              to={`https://wa.me/${offer.manager.contacts[0].contact.slice(1)}`}
+              target="_blank"
+            >
+              Написать в WhatsApp
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
 
       {offerState === "order" && <OfferOrder offer={offer} />}
 
