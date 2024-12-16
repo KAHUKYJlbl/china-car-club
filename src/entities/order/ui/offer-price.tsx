@@ -79,8 +79,8 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
                 {priceFormat(
                   getCurrencyExchange(
                     offer.price.priceInCityOfReceipt +
-                      offer.colors[0].items[0].price +
-                      offer.colors[1].items[0].price +
+                      offer.colors[0]?.items[0].price +
+                      offer.colors[1]?.items[0].price +
                       offer.addOptions.reduce((acc, option) => acc + option.price, 0) +
                       offer.addItems.reduce((acc, item) => acc + item.price, 0),
                     Currencies.RUB,
@@ -111,7 +111,7 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
               <span>
                 {priceFormat(
                   getCurrencyExchange(
-                    offer.colors[0].items[0].price + offer.colors[1].items[0].price,
+                    offer.colors[0]?.items[0].price + offer.colors[1]?.items[0].price,
                     Currencies.RUB,
                     currency,
                   ),
@@ -271,8 +271,8 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
               {priceFormat(
                 getCurrencyExchange(
                   offer.price.priceInCityOfReceipt +
-                    offer.colors[0].items[0].price +
-                    offer.colors[1].items[0].price +
+                    offer.colors[0]?.items[0].price +
+                    offer.colors[1]?.items[0].price +
                     offer.addOptions.reduce((acc, option) => acc + option.price, 0) +
                     offer.addItems.reduce((acc, item) => acc + item.price, 0) +
                     offer.price.eptsSbktsUtil +
