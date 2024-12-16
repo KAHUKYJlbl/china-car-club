@@ -7,7 +7,7 @@ import { AddsType, CurrentColorType, TaxesTypes } from "../../../widgets/model-i
 import { OfferType, QuestionsType } from "../lib/types";
 import { postOrder } from "./api-actions/post-order";
 import { postAnswers } from "./api-actions/post-answers";
-import { fetchOffers } from "./api-actions/fetch-offers";
+import { fetchOffer } from "./api-actions/fetch-offer";
 import { postUsedOrder } from "./api-actions/post-used-order";
 import { postUsedAnswers } from "./api-actions/post-used-answers";
 
@@ -24,8 +24,8 @@ type InitialState = {
   orderLoadingStatus: FetchStatus;
   questions: QuestionsType;
   questionsLoadingStatus: FetchStatus;
-  offers: OfferType[];
-  offersLoadingStatus: FetchStatus;
+  offer: OfferType | null;
+  offerLoadingStatus: FetchStatus;
 };
 
 const initialState: InitialState = {
@@ -50,8 +50,8 @@ const initialState: InitialState = {
       7: false,
     },
   },
-  offers: [],
-  offersLoadingStatus: FetchStatus.Idle,
+  offer: null,
+  offerLoadingStatus: FetchStatus.Idle,
 };
 
 export const orderSlice = createSlice({
@@ -164,15 +164,15 @@ export const orderSlice = createSlice({
       .addCase(postUsedAnswers.rejected, (state) => {
         state.questionsLoadingStatus = FetchStatus.Failed;
       })
-      .addCase(fetchOffers.fulfilled, (state, action) => {
-        state.offers = action.payload;
-        state.offersLoadingStatus = FetchStatus.Success;
+      .addCase(fetchOffer.fulfilled, (state, action) => {
+        state.offer = action.payload;
+        state.offerLoadingStatus = FetchStatus.Success;
       })
-      .addCase(fetchOffers.pending, (state) => {
-        state.offersLoadingStatus = FetchStatus.Pending;
+      .addCase(fetchOffer.pending, (state) => {
+        state.offerLoadingStatus = FetchStatus.Pending;
       })
-      .addCase(fetchOffers.rejected, (state) => {
-        state.offersLoadingStatus = FetchStatus.Failed;
+      .addCase(fetchOffer.rejected, (state) => {
+        state.offerLoadingStatus = FetchStatus.Failed;
       });
   },
 });

@@ -49,9 +49,9 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
   return (
     <>
       <ul className={classes.list}>
-        {favorites
+        {[...favorites]
           // .filter((favorite) => favorite.type === 1)
-          .toSorted((a, b) =>
+          .sort((a, b) =>
             currentSort === "increase"
               ? dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf()
               : dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),

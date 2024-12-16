@@ -1,4 +1,4 @@
 export type NameType = {
   ch: string;
-  ru: string;
+  ru?: string;
 };

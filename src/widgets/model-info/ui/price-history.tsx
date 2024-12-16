@@ -141,7 +141,7 @@ export const PriceHistory = memo(({ currentSpecification, setCurrentSpecificatio
             <p>
               {priceFormat(
                 getCurrencyExchange(
-                  getPriceChanges(priceHistory, currentPrice).toSorted(
+                  [...getPriceChanges(priceHistory, currentPrice)].sort(
                     (a, b) =>
                       a[currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"] -
                       b[currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"],
@@ -160,7 +160,7 @@ export const PriceHistory = memo(({ currentSpecification, setCurrentSpecificatio
             <p>
               {priceFormat(
                 getCurrencyExchange(
-                  priceHistory.toSorted(
+                  [...priceHistory].sort(
                     (a, b) =>
                       b[currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"] -
                       a[currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"],
@@ -207,7 +207,7 @@ export const PriceHistory = memo(({ currentSpecification, setCurrentSpecificatio
                     <use
                       xlinkHref={
                         price[currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"] >
-                          array[index + 1][currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"]
+                        array[index + 1][currentPrice === PriceTypes.Factory ? "factoryPrice" : "dealerPrice"]
                           ? "#price-up"
                           : "#price-down"
                       }

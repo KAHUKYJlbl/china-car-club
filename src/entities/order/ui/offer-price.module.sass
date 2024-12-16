@@ -1,0 +1,97 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  text-align: start
+
+  .header
+    font-size: 18px
+    line-height: 20px
+    font-weight: 700
+
+  .divider
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    padding-bottom: 12px
+    border-bottom: 1px solid $border
+
+    .list
+      display: flex
+      flex-direction: column
+      gap: 4px
+
+  .final
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    .row
+      display: flex
+      justify-content: space-between
+
+      button
+        padding: 8px 10px
+
+        border-radius: 8px
+        background-color: $secondary
+
+        cursor: pointer
+
+      button:hover
+        background-color: $hover
+
+      .button-white
+        background-color: $white
+
+  .columns
+    display: flex
+    justify-content: space-between
+
+    p:last-child,
+    span:last-child
+      text-align: end
+
+  .discount
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    padding: 12px 0
+
+    border: 1px solid $border
+    border-radius: 12px
+
+    text-align: center
+
+  .active
+    background-color: $approved
+
+    .bold
+      color: #1FC551
+
+  .approved
+    background-color: #1FC551
+    color: $white
+
+  .bold
+    font-weight: 700
+
+  .green
+    color: #1FC551
+
+  .grey
+    color: $text-light
+
+  .small
+    font-size: 10px
+    line-height: 11px

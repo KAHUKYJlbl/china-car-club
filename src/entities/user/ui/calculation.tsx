@@ -91,7 +91,7 @@ export const Calculation = memo(({ calculation, currency }: CalculationProps) =>
             <span className={classes.bold}>
               {priceFormat(
                 getCurrencyExchange(
-                  calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
+                  [...calculation.specification.series.priceListWithLogisticsByCurrentDay].sort(
                     (a, b) => a.price - b.price,
                   )[0].price,
                   Currencies.RUB,
@@ -101,7 +101,7 @@ export const Calculation = memo(({ calculation, currency }: CalculationProps) =>
               ₽ —{" "}
               {priceFormat(
                 getCurrencyExchange(
-                  calculation.specification.series.priceListWithLogisticsByCurrentDay.toSorted(
+                  [...calculation.specification.series.priceListWithLogisticsByCurrentDay].sort(
                     (a, b) => b.price - a.price,
                   )[0].price,
                   Currencies.RUB,

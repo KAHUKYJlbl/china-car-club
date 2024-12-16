@@ -6,7 +6,7 @@ import { getToken } from "./token";
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
     baseURL: process.env.API_URL || `${window.location.origin}/api`,
-    timeout: 6000,
+    timeout: 10000,
   });
 
   api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
