@@ -37,9 +37,7 @@ import { Modal } from "../../../shared/ui/modal";
 import { USED_SORT } from "../lib/const";
 import classes from "./used-list.module.sass";
 
-type UsedListProps = {};
-
-export const UsedList = ({}: UsedListProps) => {
+export const UsedList = () => {
   const dispatch = useAppDispatch();
   const [_searchParams, setSearchParams] = useSearchParams();
 
@@ -72,7 +70,7 @@ export const UsedList = ({}: UsedListProps) => {
         fetchFavoritesById({
           typeId: FavoriteTypes.Ad,
           favorableIds: Array.from(new Set(adsList.map((element) => element.id))),
-        })
+        }),
       );
     }
   }, [adsList, isAuth]);
@@ -88,7 +86,7 @@ export const UsedList = ({}: UsedListProps) => {
         fetchUsedSeries({
           manufacturerId: [currentManufacturer],
           filters: activeFilters,
-        })
+        }),
       );
     }
 
@@ -97,7 +95,7 @@ export const UsedList = ({}: UsedListProps) => {
         fetchUsedSpecifications({
           seriesIds: [currentModel],
           filters: activeFilters,
-        })
+        }),
       );
     }
   }, [filtersToFetch]);
@@ -118,7 +116,7 @@ export const UsedList = ({}: UsedListProps) => {
           filters: filtersToFetch,
           currentPage: pagination.currentPage,
           sort: currentSort,
-        })
+        }),
       );
     }
   }, [
@@ -144,7 +142,7 @@ export const UsedList = ({}: UsedListProps) => {
           filters: filtersToFetch,
           currentPage: 1,
           sort: currentSort,
-        })
+        }),
       );
     }
   }, [filtersToFetch, currentSort]);

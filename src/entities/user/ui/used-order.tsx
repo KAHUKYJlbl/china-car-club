@@ -1,9 +1,6 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 import dayjs from "dayjs";
 import plural from "plural-ru";
-
-import { Modal } from "../../../shared/ui/modal";
-import { Offers } from "../../order";
 
 import { MycarsOrderType } from "../lib/types";
 import classes from "./order.module.sass";
@@ -13,8 +10,6 @@ type OrderProps = {
 };
 
 export const UsedOrder = memo(({ order }: OrderProps) => {
-  const [isOffers, setIsOffers] = useState(false);
-
   return (
     <div className={classes.wrapper}>
       <div className={classes.info}>
@@ -78,12 +73,6 @@ export const UsedOrder = memo(({ order }: OrderProps) => {
         {/* {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены */}
         {"Предложения цены (скоро)"}
       </button>
-
-      {isOffers && (
-        <Modal onClose={() => setIsOffers(false)}>
-          <Offers orderId={order.id} />
-        </Modal>
-      )}
     </div>
   );
 });

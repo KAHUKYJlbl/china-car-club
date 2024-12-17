@@ -1,3 +1,4 @@
+import { NameType } from "../../../shared/lib/types";
 import { LocationType } from "../../user";
 
 export type OrderResponseType = {
@@ -85,17 +86,128 @@ export type ContactType = {
   contact: string;
 };
 
+export type ManagerType = {
+  name: string;
+  contacts: {
+    typeId: number;
+    prioroty: boolean;
+    contact: string;
+  }[];
+};
+
 export type OfferType = {
   id: number;
-  priority: number;
-  price: number;
+  statisticEventId: number;
   comment: string;
-  created_at: string;
-  statistic_event_id: number;
-  dealer_id: number;
-  dealer: {
+  manager: ManagerType;
+  colors: {
     id: number;
     name: string;
-    contacts: ContactType[];
+    items: [
+      {
+        id: number;
+        name: NameType;
+        hexList: [string, string];
+        price: number;
+        imageUrl: string;
+      },
+    ];
+  }[];
+  addOptions: {
+    id: number;
+    name: NameType;
+    description: string;
+    price: number;
+  }[];
+  addItems: {
+    id: 1;
+    name: string;
+    fullName: string;
+    description: string;
+    price: number;
+    tags: [];
+  }[];
+  price: {
+    inChina: number;
+    withLogistics: number;
+    tax: number;
+    eptsSbktsUtil: number;
+    borderPrice: number;
+    commission: number;
+    priceInCityOfReceipt: number;
+    customsClearance: {
+      final: number;
+      fee: number;
+      duty: number;
+      recyclingFee: number;
+      exciseTax: number;
+      nds: number;
+      parkingTowTruck: number;
+      customsBrokerServices: number;
+    };
+  };
+  priceTypeId: number;
+  discount: {
+    statusId: number;
+    expiredAt: string;
+    value: number;
+  };
+  delivery: {
+    firstDate: string;
+    lastDate: string;
+    statusList: {
+      name: string;
+      description: string;
+      active: boolean;
+    }[];
+  };
+  specification: {
+    id: number;
+    name: NameType;
+    parameters: {
+      engineType: {
+        id: number;
+        name: string;
+      };
+      bodyType: {
+        id: number;
+        name: string;
+      };
+      driveType: {
+        id: number;
+        name: string;
+      };
+      transmissionType: {
+        id: number;
+        name: string;
+      };
+      power: number;
+      torque: number;
+      batteryCapacity: number;
+      powerReserve: number;
+      electricPowerReserve: number;
+      engineCount: string;
+      seats: number[];
+      lengthWidthHeight: string;
+      groundClearance: number;
+      curbWeight: number;
+      acceleration: number;
+      engineCapacity: number;
+      totalFuelConsumption: number;
+      wheelSize: {
+        front: string;
+        rear: string;
+      };
+    };
+  };
+  series: {
+    id: number;
+    name: NameType;
+  };
+  manufacturer: {
+    id: number;
+    name: NameType;
   };
 };
+
+export type OfferStateType = "order" | "price" | "delivery";

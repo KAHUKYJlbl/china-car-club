@@ -1,0 +1,116 @@
+@use '../../../assets/styles/_variables' as *
+
+.wrapper
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+  padding: 16px 12px
+
+  border-radius: 16px
+  background-color: $primary
+
+  .header
+    font-size: 18px
+    line-height: 20px
+    font-weight: 700
+
+  .divider
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    padding-bottom: 12px
+    border-bottom: 1px solid $border
+
+  .date
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    padding: 12px 0
+
+    border: 1px solid $white
+    border-radius: 12px
+
+    text-align: center
+
+    span
+      font-weight: 700
+
+    span:first-child
+      color: #1FC551
+
+    span:last-child
+      font-size: 18px
+      line-height: 20px
+
+  .active
+    background-color: $approved
+    border-color: $approved
+
+  .approved
+    background-color: #1FC551
+    border-color: #1FC551
+    color: $white
+
+  .status-wrapper
+    position: relative
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    margin-left: 6px
+    padding-left: 20px
+    padding-bottom: 30px
+    border-left: 2px solid $border
+
+    color: $border
+
+    .status-header
+      font-weight: 700
+
+    .status-text
+      font-size: 12px
+      line-height: 14px
+
+    .point
+      position: absolute
+      left: -11px
+      top: -1px
+
+      height: 20px
+      width: 20px
+      border-radius: 50%
+      border: 4px solid $primary
+      background-color: $border
+
+  .status-wrapper:last-child
+    border-color: $primary
+
+  .status-wrapper:first-child > .point
+    background-color: #F2994A
+
+  .status-wrapper:has(+ .active-status)
+    border-color: #1FC551
+
+    .point
+      background-color: #1FC551
+
+  .active-status
+    .status-header
+      color: $text-primary
+
+    .status-text
+      color: $text-light
+
+    .point
+      background-color: #1FC551
+
+  .bold
+    font-weight: 700
+
+  p
+    text-align: start
+
+
