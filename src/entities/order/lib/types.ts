@@ -158,7 +158,7 @@ export type OfferType = {
     statusList: {
       name: string;
       description: string;
-      active: true;
+      active: boolean;
     }[];
   };
   specification: {

@@ -79,7 +79,7 @@ export const Offer = ({ orderId, offerState, setOfferState }: OffersProps) => {
           </button>
 
           <button
-            // onClick={() => setOfferState("delivery")}
+            onClick={() => setOfferState("delivery")}
             className={cn(offerState === "delivery" && classes.current)}
           >
             Доставка

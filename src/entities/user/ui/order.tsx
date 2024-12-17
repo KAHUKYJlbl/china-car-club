@@ -77,7 +77,7 @@ export const Order = memo(({ order }: OrderProps) => {
           {!!order.dealerOffersCount && <p className={classes.offersCount}>{order.dealerOffersCount}</p>}
         </button>
 
-        <button onClick={() => setIsOffer(null)}>Доставка</button>
+        <button onClick={() => setIsOffer("delivery")}>Доставка</button>
       </div>
 
       {isOffer && (

@@ -58,7 +58,7 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
       <div className={classes.wrapper}>
         <p className={cn(classes.header, classes.divider)}>Покупка автомобиля под заказ</p>
 
-        <p
+        <div
           className={cn(
             classes.discount,
             offer.discount.statusId === 1 && classes.active,
@@ -67,7 +67,7 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
         >
           <span className={classes.bold}>{getDiscount(offer).header}</span>
           <span>{getDiscount(offer).subheader}</span>
-        </p>
+        </div>
 
         <p className={classes.divider}>
           <div className={classes.columns}>

@@ -23,7 +23,7 @@ export function LoadingSpinner({ spinnerType }: LoadingSpinnerProps): JSX.Elemen
   return (
     <div
       className={classes.wrapper}
-      style={{ paddingTop: spinnerType === "page" ? "30vh" : "0" }}
+      style={{ paddingTop: spinnerType === "page" ? "30vh" : "40px", paddingBottom: "40px" }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

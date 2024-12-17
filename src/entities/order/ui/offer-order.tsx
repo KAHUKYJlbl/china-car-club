@@ -82,15 +82,17 @@ export const OfferOrder = ({ offer }: OfferOrderProps) => {
         </div>
       </div>
 
-      {false && (
+      {offer.colors[0] && offer.colors[1] && (
         <div className={classes.wrapper}>
           <p className={classes.header}>Цвет кузова и салона</p>
 
-          <p className={classes.colorType}>Цвет кузова</p>
+          <p className={classes.colorType}>{offer.colors[0].name}</p>
 
           <div className={classes.color}>
             <div>
-              <p className={classes.colorName}>{offer.colors[0].name}</p>
+              <p className={classes.colorName}>
+                {offer.colors[0].items[0].name.ru || offer.colors[0].items[0].name.ch}
+              </p>
 
               <div className={classes.colorBox}>
                 <div style={{ backgroundColor: `#${offer.colors[0].items[0].hexList[0]}` }}></div>
@@ -112,11 +114,13 @@ export const OfferOrder = ({ offer }: OfferOrderProps) => {
             />
           </div>
 
-          <p className={classes.colorType}>Цвет салона</p>
+          <p className={classes.colorType}>{offer.colors[1].name}</p>
 
           <div className={classes.color}>
             <div>
-              <p className={classes.colorName}>{offer.colors[1].name}</p>
+              <p className={classes.colorName}>
+                {offer.colors[1].items[0].name.ru || offer.colors[1].items[0].name.ch}
+              </p>
 
               <div className={classes.colorBox}>
                 <div style={{ backgroundColor: `#${offer.colors[1].items[0].hexList[0]}` }}></div>
