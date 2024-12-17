@@ -26,8 +26,8 @@ export {
   getQuestionsLoadingStatus,
   getOrderLoadingStatus,
   getQuestions,
-  getOffers,
-  getOffersLoadingStatus,
+  getOffer,
+  getOfferLoadingStatus,
   getAddedOptions,
   getAddedOptionsPrice,
   getCurrentColorPrice,
@@ -36,5 +36,6 @@ export { postUsedOrder } from "./model/api-actions/post-used-order";
 export { postUsedAnswers } from "./model/api-actions/post-used-answers";
 export { postOrder } from "./model/api-actions/post-order";
 export { postAnswers } from "./model/api-actions/post-answers";
-export { fetchOffers } from "./model/api-actions/fetch-offers";
-export { Offers } from "./ui/offers";
+export { fetchOffer } from "./model/api-actions/fetch-offer";
+export { Offer } from "./ui/offer";
+export type { OfferStateType } from "./lib/types";

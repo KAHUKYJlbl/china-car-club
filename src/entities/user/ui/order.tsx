@@ -2,18 +2,18 @@ import { memo, useState } from "react";
 import dayjs from "dayjs";
 // import plural from 'plural-ru';
 
-import { Modal } from "../../../shared/ui/modal";
-import { Offers } from "../../order";
+import { Offer, OfferStateType } from "../../order";
 
 import { MycarsOrderType } from "../lib/types";
 import classes from "./order.module.sass";
+import { Modal } from "../../../shared/ui/modal";
 
 type OrderProps = {
   order: MycarsOrderType;
 };
 
 export const Order = memo(({ order }: OrderProps) => {
-  const [isOffers, setIsOffers] = useState(false);
+  const [isOffer, setIsOffer] = useState<OfferStateType | null>(null);
 
   return (
     <div className={classes.wrapper}>
@@ -69,16 +69,28 @@ export const Order = memo(({ order }: OrderProps) => {
         </p>
       </div>
 
-      <button
-      // onClick={() => setIsOffers(true)}
-      >
-        {/* {plural(order.dealerOffersCount, '%d предложение', '%d предложения', '%d предложений')} цены */}
-        Скидка запрошена, ожидайте
-      </button>
+      <div className={classes.buttonWrapper}>
+        <button onClick={() => setIsOffer("order")}>Заказ</button>
 
-      {isOffers && (
-        <Modal onClose={() => setIsOffers(false)}>
-          <Offers orderId={order.id} />
+        <button onClick={() => setIsOffer("price")}>
+          Цены
+          {!!order.dealerOffersCount && <p className={classes.offersCount}>{order.dealerOffersCount}</p>}
+        </button>
+
+        <button onClick={() => setIsOffer(null)}>Доставка</button>
+      </div>
+
+      {isOffer && (
+        <Modal
+          onClose={() => setIsOffer(null)}
+          width
+          button
+        >
+          <Offer
+            orderId={order.id}
+            offerState={isOffer}
+            setOfferState={setIsOffer}
+          />
         </Modal>
       )}
     </div>

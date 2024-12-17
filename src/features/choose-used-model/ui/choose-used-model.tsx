@@ -60,7 +60,7 @@ export const ChooseUsedModel = memo(
           fetchUsedSeries({
             manufacturerId: [currentManufacturer],
             filters: activeFilters,
-          })
+          }),
         );
       }
     }, [currentManufacturer]);
@@ -73,7 +73,7 @@ export const ChooseUsedModel = memo(
           fetchUsedSpecifications({
             seriesIds: [currentModel],
             filters: activeFilters,
-          })
+          }),
         );
       }
     }, [currentModel]);
@@ -121,5 +121,5 @@ export const ChooseUsedModel = memo(
         </div>
       </div>
     );
-  }
+  },
 );

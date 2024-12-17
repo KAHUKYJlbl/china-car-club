@@ -1,31 +1,31 @@
 export const getContactProvider = (id: number) => {
   switch (id) {
     case 2:
-      return 'telegram';
+      return "telegram";
     case 3:
-      return 'whatsapp';
+      return "whatsapp";
     default:
-      return 'phone';
-  };
+      return "phone";
+  }
 };
 
 export const getContactUrl = (id: number) => {
   switch (id) {
     case 2:
-      return 'https://t.me/';
+      return "https://t.me/";
     case 3:
-      return 'https://wa.me/';
+      return "https://wa.me/";
     default:
-      return 'tel:+';
-  };
+      return "tel:+";
+  }
 };
 
 export const getUrlTarget = (id: number) => {
   switch (id) {
     case 2:
     case 3:
-      return '_blank';
+      return "_blank";
     default:
-      return '_self';
-  };
-}
+      return "_self";
+  }
+};

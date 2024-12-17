@@ -25,9 +25,7 @@ import { fetchCity } from "../model/api-actions/fetch-city";
 import { fetchFavoritesCount } from "../model/api-actions/fetch-favorites-count";
 import classes from "./new-header-user.module.sass";
 
-type NewHeaderUserProps = {};
-
-export const NewHeaderUser = ({}: NewHeaderUserProps) => {
+export const NewHeaderUser = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const storedLocation = useAppSelector(getGeolocation);

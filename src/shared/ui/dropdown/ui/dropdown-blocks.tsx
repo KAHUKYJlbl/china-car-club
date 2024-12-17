@@ -109,8 +109,8 @@ export const DropdownBlocks = memo(
             isOpen
               ? { transform: "rotate(180deg)", transitionDuration: "100ms" }
               : !list || disabled
-              ? { transitionDuration: "100ms", cursor: "default" }
-              : { transitionDuration: "100ms" }
+                ? { transitionDuration: "100ms", cursor: "default" }
+                : { transitionDuration: "100ms" }
           }
         >
           <use xlinkHref="#dropdown" />
@@ -122,7 +122,7 @@ export const DropdownBlocks = memo(
             ref={listRef}
           >
             {Array.from(new Set(list?.map((element) => element.year)))
-              .toSorted((a, b) => (a && b ? b - a : 0))
+              .sort((a, b) => (a && b ? b - a : 0))
               .map((year) => (
                 <div key={year}>
                   <p className={classes.listHeader}>{`${year} поколение${isYear ? " • 2024 выпуск" : ""}`}</p>
@@ -145,10 +145,10 @@ export const DropdownBlocks = memo(
                                 <span className={classes.price}>
                                   {isPrices
                                     ? `Под ключ: ${priceFormat(
-                                        getCurrencyExchange(item.price, Currencies.RUB, currency!)
+                                        getCurrencyExchange(item.price, Currencies.RUB, currency!),
                                       )} ₽`
                                     : `В РФ: ${priceFormat(
-                                        getCurrencyExchange(item.rusPrice, Currencies.RUB, currency!)
+                                        getCurrencyExchange(item.rusPrice, Currencies.RUB, currency!),
                                       )} ₽`}
                                 </span>
                               )}
@@ -165,5 +165,5 @@ export const DropdownBlocks = memo(
         )}
       </div>
     );
-  }
+  },
 );

@@ -26,10 +26,10 @@ export const getCurrentOrder = (state: State): number | null => state[NameSpace.
 
 export const getQuestions = (state: State): QuestionsType => state[NameSpace.Order].questions;
 
-export const getOffers = (state: State): OfferType[] => state[NameSpace.Order].offers;
+export const getOffer = (state: State): OfferType | null => state[NameSpace.Order].offer;
 
-export const getOffersLoadingStatus = createSelector(
-  (state: State): FetchStatus => state[NameSpace.Order].offersLoadingStatus,
+export const getOfferLoadingStatus = createSelector(
+  (state: State): FetchStatus => state[NameSpace.Order].offerLoadingStatus,
   (status) => ({
     isLoading: [FetchStatus.Pending, FetchStatus.Idle].includes(status),
     isSuccess: status === FetchStatus.Success,
