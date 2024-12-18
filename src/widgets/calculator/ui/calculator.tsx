@@ -55,10 +55,13 @@ export const Calculator = (): JSX.Element => {
   }, [filtersToFetch]);
 
   useEffect(() => {
-    setSearchParams({
-      manufacturer: currentManufacturer?.toString() || "",
-      model: currentModel?.toString() || "",
-      specification: currentSpecification?.toString() || "",
+    setSearchParams((prev) => {
+      return {
+        ...Object.fromEntries(prev),
+        manufacturer: currentManufacturer?.toString() || "",
+        model: currentModel?.toString() || "",
+        specification: currentSpecification?.toString() || "",
+      };
     });
   }, [currentManufacturer, currentModel, currentSpecification]);
 
