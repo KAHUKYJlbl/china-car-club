@@ -1,5 +1,6 @@
 import { memo, useEffect } from "react";
 import dayjs from "dayjs";
+import cn from "classnames";
 
 import {
   fetchOrders,
@@ -36,7 +37,7 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
     }
   }, []);
 
-  if (ordersLoadingStatus.isIdle || ordersLoadingStatus.isLoading || !orders.length) {
+  if (ordersLoadingStatus.isIdle || (ordersLoadingStatus.isLoading && !orders.length)) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -71,7 +72,8 @@ export const Orders = memo(({ currentSort }: OrdersProps) => {
       {pagination.currentPage < pagination.lastPage && (
         <button
           aria-label="показать еще"
-          className={classes.button}
+          className={cn(classes.button, ordersLoadingStatus.isLoading && classes.disabled)}
+          disabled={ordersLoadingStatus.isLoading}
           onClick={() => dispatch(fetchOrders({ page: pagination.currentPage + 1, mode }))}
         >
           {ordersLoadingStatus.isLoading ? <LoadingSpinner spinnerType="button" /> : "Показать еще"}

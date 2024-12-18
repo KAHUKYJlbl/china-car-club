@@ -1,5 +1,6 @@
 import { memo, useEffect } from "react";
 import dayjs from "dayjs";
+import cn from "classnames";
 
 import {
   Favorite,
@@ -38,7 +39,7 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
     }
   }, []);
 
-  if (!currency || favoritesLoadingStatus.isIdle || favoritesLoadingStatus.isLoading || !favorites.length) {
+  if (!currency || favoritesLoadingStatus.isIdle || (favoritesLoadingStatus.isLoading && !favorites.length)) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -76,7 +77,8 @@ export const Favorites = memo(({ currentSort }: FavoritesProps) => {
       {pagination.currentPage < pagination.lastPage && (
         <button
           aria-label="показать еще"
-          className={classes.button}
+          className={cn(classes.button, favoritesLoadingStatus.isLoading && classes.disabled)}
+          disabled={favoritesLoadingStatus.isLoading}
           onClick={() => dispatch(fetchFavorites({ page: pagination.currentPage + 1, mode }))}
         >
           {favoritesLoadingStatus.isLoading ? <LoadingSpinner spinnerType="button" /> : "Показать еще"}

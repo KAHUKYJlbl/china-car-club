@@ -1,5 +1,6 @@
 import { memo, useEffect } from "react";
 import dayjs from "dayjs";
+import cn from "classnames";
 
 import { LoadingSpinner } from "../../../shared/ui/loading-spinner";
 import { useAppDispatch } from "../../../shared/lib/hooks/use-app-dispatch";
@@ -38,7 +39,7 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
     }
   }, []);
 
-  if (!currency || calculationsLoadingStatus.isIdle || calculationsLoadingStatus.isLoading || !calculations.length) {
+  if (!currency || calculationsLoadingStatus.isIdle || (calculationsLoadingStatus.isLoading && !calculations.length)) {
     return <LoadingSpinner spinnerType="page" />;
   }
 
@@ -75,7 +76,8 @@ export const Calculations = memo(({ currentSort }: CalculationsProps) => {
       {pagination.currentPage < pagination.lastPage && (
         <button
           aria-label="показать еще"
-          className={classes.button}
+          className={cn(classes.button, calculationsLoadingStatus.isLoading && classes.disabled)}
+          disabled={calculationsLoadingStatus.isLoading}
           onClick={() => dispatch(fetchCalculations({ page: pagination.currentPage + 1, mode }))}
         >
           {calculationsLoadingStatus.isLoading ? <LoadingSpinner spinnerType="button" /> : "Показать еще"}
