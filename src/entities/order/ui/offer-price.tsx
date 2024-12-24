@@ -66,7 +66,7 @@ export const OfferPrice = ({ offer }: OfferPriceProps) => {
           )}
         >
           <span className={classes.bold}>{getDiscount(offer).header}</span>
-          <span>{getDiscount(offer).subheader}</span>
+          <span className={classes.discountTime}>{getDiscount(offer).subheader}</span>
         </div>
 
         <p className={classes.divider}>

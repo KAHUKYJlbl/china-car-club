@@ -49,7 +49,7 @@ export const Offer = ({ orderId, offerState, setOfferState }: OffersProps) => {
 
         <p>
           <span className={classes.grey}>Комплектация</span>
-          <span className={classes.header}>
+          {/* <span className={classes.header}>
             {[
               `Двигатель ${offer.specification.parameters.engineType.name}`,
               offer.specification.parameters.transmissionType.name,
@@ -59,7 +59,7 @@ export const Offer = ({ orderId, offerState, setOfferState }: OffersProps) => {
             ]
               .filter((value) => !!value)
               .join(" • ")}
-          </span>
+          </span> */}
           <span>{offer.specification.name.ru || offer.specification.name.ch}</span>
         </p>
 
